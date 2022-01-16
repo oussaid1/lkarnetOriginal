@@ -45,8 +45,11 @@ class _ShopDetailsState extends State<ShopDetails> {
         ),
       ],
       gradientColors: [
-        Color.fromARGB(255, 48, 199, 237),
-        Color.fromARGB(255, 48, 199, 237),
+        Color.fromARGB(255, 237, 155, 48),
+        Color.fromARGB(255, 220, 157, 75),
+        Color.fromARGB(255, 227, 237, 48),
+        // Color.fromARGB(255, 48, 199, 237),
+        // Color.fromARGB(255, 48, 199, 237),
       ],
       centerWidget: ShopsDetailsBody(shopsData: widget.shopsData!),
     );

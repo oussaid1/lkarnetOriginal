@@ -62,7 +62,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.bottomRight,
         clipBehavior: Clip.none,
         children: [
           _buildTapToCloseFab(),
@@ -79,6 +79,7 @@ class _ExpandableFabState extends State<ExpandableFab>
       height: 56.0,
       child: Center(
         child: Material(
+          color: Theme.of(context).primaryColor,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
@@ -99,7 +100,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   List<Widget> _buildExpandingActionButtons() {
     final children = <Widget>[];
     final count = widget.children.length;
-    final step = 90.0 / (count);
+    final step = 136.0 / (count);
     for (var i = 0, angleInDegrees = 0.0;
         i < count;
         i++, angleInDegrees += step) {
@@ -132,6 +133,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            elevation: 12,
             onPressed: _toggle,
             child: const Icon(Icons.add_shopping_cart_rounded),
           ),

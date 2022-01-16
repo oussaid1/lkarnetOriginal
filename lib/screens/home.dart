@@ -633,17 +633,17 @@ class MyExpandableFab extends StatelessWidget {
 AppBar buildAppBar(BuildContext context, {String? title}) {
   return AppBar(
     actions: [
-      IconButton(
-        icon: Icon(Icons.add_box_outlined),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SettingsPage(),
-            ),
-          );
-        },
-      ),
+      // IconButton(
+      //   icon: Icon(Icons.add_box_outlined),
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => SettingsPage(),
+      //       ),
+      //     );
+      //   },
+      // ),
     ],
     leading: Icon(Icons.home, color: Colors.black),
     title: Text(

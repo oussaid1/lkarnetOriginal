@@ -13,6 +13,7 @@ class DashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.transparent,
       margin: const EdgeInsets.all(8),
       child: ExpansionTile(
         leading: CircleAvatar(

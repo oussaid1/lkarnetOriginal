@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
+import 'package:lkarnet/widgets/glasswidget.dart';
 import 'package:lkarnet/widgets/items_listview.dart';
 
 final mlistIndex = StateProvider<int>((ref) {
@@ -59,26 +60,31 @@ class DailyDash extends ConsumerWidget {
                 itemCount: _tagged.shopDataList.length,
                 itemBuilder: (context, index) {
                   ShopsData shopsData = _tagged.shopDataList[index];
-                  return ExpansionTile(
-                    title: Text('${shopsData.shop.shopName}'),
-                    trailing: Text('${shopsData.itemsSum}'),
-                    subtitle: Text(
-                      'N° items : ' + '${shopsData.countItems}',
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    leading: CircleAvatar(
-                      child: Icon(
-                        Icons.account_circle,
-                        color: Colors.grey,
+                  return BluredContainer(
+                    child: ExpansionTile(
+                      collapsedTextColor: Colors.white,
+                      textColor: Colors.white,
+                      title: Text('${shopsData.shop.shopName}'),
+                      trailing: Text('${shopsData.itemsSum}'),
+                      subtitle: Text(
+                        'N° items : ' + '${shopsData.countItems}',
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      leading: CircleAvatar(
+                        child: Icon(
+                          Icons.account_circle,
+                          color: Colors.grey,
+                        ),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                      ),
+                      children: [
+                        Container(
+                            width: 400,
+                            height: 400,
+                            child: ItemsListWidget(items: shopsData.allItems)),
+                      ],
                     ),
-                    children: [
-                      Container(
-                          width: 400,
-                          height: 400,
-                          child: ItemsListWidget(items: shopsData.allItems)),
-                    ],
                   );
                 }),
           ),
@@ -92,11 +98,12 @@ class DailyDash extends ConsumerWidget {
 
   Container _buildMonthlyCard(BuildContext context, Tagged tagged) {
     return Container(
+      height: 100,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BluredContainer(
           child: Column(
             children: [
               Padding(

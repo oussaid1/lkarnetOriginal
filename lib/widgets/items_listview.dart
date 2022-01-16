@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:lkarnet/widgets/glasswidget.dart';
 
 class ItemsListWidget extends StatelessWidget {
   final List<Item> items;
@@ -23,9 +24,12 @@ class ItemsListWidget extends StatelessWidget {
             startActionPane: ActionPane(
               motion: ScrollMotion(),
               children: [
-                SlidableAction(onPressed: (context) {
-                  Dialogs.botomPopUpDialog(context, AddItem(item: item));
-                })
+                SlidableAction(
+                    icon: (Icons.edit),
+                    label: 'Edit',
+                    onPressed: (context) {
+                      Dialogs.botomPopUpDialog(context, AddItem(item: item));
+                    })
               ],
             ),
             endActionPane: ActionPane(
@@ -110,45 +114,47 @@ class ItemsListWidget extends StatelessWidget {
                 ),
               ],
             ),
-            child: Card(
-              elevation: 6,
-              margin: EdgeInsets.all(4),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6.0),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                //color: Theme.of(context).colorScheme.secondary,
               ),
-              child: ListTile(
-                contentPadding: EdgeInsets.only(left: 4, right: 4),
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    borderRadius: BorderRadius.circular(999.0),
-                    boxShadow: [],
+              child: BluredContainer(
+                child: ListTile(
+                  contentPadding: EdgeInsets.only(left: 4, right: 4),
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: BorderRadius.circular(999.0),
+                      boxShadow: [],
+                    ),
+                    height: 45,
+                    width: 45,
+                    child: Icon(Icons.shopping_bag_rounded),
                   ),
-                  height: 45,
-                  width: 45,
-                  child: Icon(Icons.shopping_bag_rounded),
-                ),
-                title: Text(
-                  item.itemName!,
-                ),
-                trailing: Text(
-                  '\$ ${item.itemPrix}',
-                ),
-                subtitle: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        item.quantity.toString(),
-                      ),
-                      Text(
-                        ' ${item.shopName.toString()}',
-                      ),
-                      Text(
-                        item.formattedDate,
-                      ),
-                    ],
+                  title: Text(
+                    item.itemName!,
+                  ),
+                  trailing: Text(
+                    '\$ ${item.itemPrix}',
+                  ),
+                  subtitle: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          item.quantity.toString(),
+                        ),
+                        Text(
+                          ' ${item.shopName.toString()}',
+                        ),
+                        Text(
+                          item.formattedDate,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

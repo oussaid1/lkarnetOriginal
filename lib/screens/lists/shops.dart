@@ -5,6 +5,7 @@ import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/screens/add/add_shop.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:lkarnet/widgets/glasswidget.dart';
 
 class ShopsList extends ConsumerWidget {
   ShopsList({
@@ -129,28 +130,34 @@ class ShopsList extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.only(left: 8, right: 8),
-                  leading: Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.background,
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: BluredContainer(
+                  child: Card(
+                    color: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(
-                    ' ${shopsData.shop.shopName}',
-                  ),
-                  trailing: Text(
-                    '${(shopsData.shop.limit)}',
-                    style: Theme.of(context).textTheme.subtitle2,
+                    child: ListTile(
+                      dense: true,
+                      contentPadding: EdgeInsets.only(left: 8, right: 8),
+                      leading: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                        child: Icon(Icons.person),
+                      ),
+                      title: Text(
+                        ' ${shopsData.shop.shopName}',
+                      ),
+                      trailing: Text(
+                        '${(shopsData.shop.limit)}',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ),
                   ),
                 ),
               ));
