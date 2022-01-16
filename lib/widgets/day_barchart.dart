@@ -1,0 +1,72 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/models/statistics/statistics_model.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+class SemiPeiWidget extends ConsumerWidget {
+  final List<ChartData> chartData;
+  final Widget widget;
+  SemiPeiWidget(this.chartData, this.widget);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCircularChart(
+      annotations: <CircularChartAnnotation>[
+        CircularChartAnnotation(
+          widget: Container(child: widget),
+        )
+      ],
+      margin: EdgeInsets.zero,
+      
+      series: <CircularSeries>[
+        DoughnutSeries<ChartData, String>(
+            innerRadius: '80',
+            dataSource: chartData,
+            xValueMapper: (ChartData data, _) => data.tag,
+            yValueMapper: (ChartData data, _) => data.value,
+            dataLabelMapper: (ChartData data, _) => data.tag,
+
+            // All the segments will be exploded
+
+            dataLabelSettings: DataLabelSettings(
+                isVisible: true,
+                labelPosition: ChartDataLabelPosition.outside,
+                // Renders background rectangle and fills it with series color
+                useSeriesColor: true),
+          //angle of pie
+            ),
+      ],
+    );
+  }
+}
+
+class PeiWidget extends ConsumerWidget {
+  final List<ChartData> chartData;
+
+  PeiWidget(this.chartData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCircularChart(
+      margin: EdgeInsets.zero,
+      //  centerY: '220',
+      series: <CircularSeries>[
+        PieSeries<ChartData, String>(
+          dataSource: chartData,
+          xValueMapper: (ChartData data, _) => data.tag,
+          yValueMapper: (ChartData data, _) => data.value,
+          dataLabelMapper: (ChartData data, _) => data.tag,
+          explode: true,
+          // All the segments will be exploded
+          explodeAll: true,
+          dataLabelSettings: DataLabelSettings(
+              isVisible: true,
+              // Positioning the data label
+              labelPosition: ChartDataLabelPosition.outside),
+          // ending angle of pie
+        ),
+      ],
+    );
+  }
+}
