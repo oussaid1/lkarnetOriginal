@@ -34,7 +34,7 @@ class _AddItemState extends ConsumerState<AddItem> {
         itemPrice = widget.item!.itemPrice;
         slectedShopBesoinTitle = widget.item!.besoinTitle.toString();
         selectedShop = widget.item!.shopName.toString();
-        quantity = widget.item!.quantity!;
+        quantity = widget.item!.quantity;
         selectedDateTime = widget.item!.dateBought;
       });
     }

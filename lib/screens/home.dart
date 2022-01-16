@@ -6,6 +6,7 @@ import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
+import 'package:lkarnet/screens/tabs/dashboard_tab.dart';
 import 'package:lkarnet/screens/tabs/list_tab.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 
@@ -112,7 +113,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   all: all,
                   shopsDataList: shopsDataList,
                   recentOperations: recentOperations),
-              // DashBoardTab(),
+              DashBoardTab(),
               ListTab(),
               StatsTab(),
               SettingsPage(),
@@ -142,6 +143,11 @@ class _HomePageState extends ConsumerState<HomePage> {
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         BottomNavigationBarItem(
+          icon: const Icon(Icons.dashboard),
+          label: 'Dashboard',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+        BottomNavigationBarItem(
           icon: const Icon(Icons.list),
           label: 'Lists',
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -154,7 +160,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.settings),
           label: 'Settings',
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     );

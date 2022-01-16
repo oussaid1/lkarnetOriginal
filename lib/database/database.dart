@@ -87,11 +87,11 @@ class Database {
     return _users.collection("Payments").snapshots().map((QuerySnapshot query) {
       List<Payment> retVal = [];
       for (var element in query.docs) {
-        logger.d(element.data());
+        // logger.d(element.data());
         retVal.add(Payment.fromDocumentSnapshot(element));
       }
       // logger.d(retVal);
-      logger.d(retVal.length);
+      // logger.d(retVal.length);
       return retVal;
     });
   }

@@ -7,12 +7,12 @@ class Item {
   String? shopName;
   String? itemName;
   String? quantifier;
-  double? quantity;
+  double quantity = 1;
   double itemPrice = 0;
   int count = 1;
   DateTime dateBought = DateTime.now();
 
-  double get itemPrix => itemPrice * count;
+  double get itemPrix => itemPrice * quantity;
 
   static List<Item> fakeItems = [
     Item(
@@ -45,7 +45,7 @@ class Item {
       this.itemName,
       this.besoinTitle,
       this.quantifier,
-      this.quantity,
+      required this.quantity,
       this.itemPrice = 0,
       this.shopName,
       required this.dateBought,
