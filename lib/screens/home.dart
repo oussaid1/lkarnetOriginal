@@ -6,15 +6,14 @@ import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
-import 'package:lkarnet/screens/tabs/dashboard_tab.dart';
 import 'package:lkarnet/screens/tabs/list_tab.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-
 import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
 import '../providers/streamproviders/shops_stream_provider.dart';
 import 'add/add_shop.dart';
+import 'dashboard.dart';
 import 'lists/payments.dart';
 import 'shop_details.dart';
 import 'tabs/stats_tab.dart';
@@ -27,7 +26,6 @@ class HomePage extends ConsumerStatefulWidget {
   HomePage({
     Key? key,
   }) : super(key: key);
-
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
@@ -76,8 +74,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
         gradientColors: [
-          const Color(0xFFED8530),
-          const Color(0xFFEB8B3C),
+          Color.fromARGB(255, 134, 32, 230),
+          Color.fromARGB(255, 224, 101, 101),
+          Color.fromARGB(255, 224, 101, 101),
         ],
         centerWidget: Scaffold(
             bottomNavigationBar: buildNavigationBar(
@@ -113,7 +112,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   all: all,
                   shopsDataList: shopsDataList,
                   recentOperations: recentOperations),
-              DashBoardTab(),
+              //DashBoardTab(),
+              ShopDetailsMain(),
               ListTab(),
               StatsTab(),
               SettingsPage(),
@@ -127,6 +127,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   BottomNavigationBar buildNavigationBar(context, int _selectedPageIndex,
       PageController _pageController, WidgetRef ref) {
     return BottomNavigationBar(
+      backgroundColor: Colors.transparent,
       type: BottomNavigationBarType.shifting,
       currentIndex: _selectedPageIndex,
       elevation: 8,
@@ -140,27 +141,27 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.home),
           label: 'Home',
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Color.fromARGB(255, 224, 101, 101),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.dashboard),
           label: 'Dashboard',
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Color.fromARGB(255, 224, 160, 101),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list),
           label: 'Lists',
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Color.fromARGB(255, 101, 224, 148),
         ),
         const BottomNavigationBarItem(
           icon: const Icon(Icons.add_chart),
           label: 'Stats',
-          backgroundColor: const Color(0xFFFFC148),
+          backgroundColor: Color.fromARGB(255, 101, 185, 224),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.settings),
           label: 'Settings',
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Color.fromARGB(255, 148, 101, 224),
         ),
       ],
     );
@@ -195,37 +196,39 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   buildShopsWidget(
       BuildContext context, List<ShopsData> _shopsDataList, String currency) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
-              const SizedBox(width: 8),
-              Text('Shops',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline2),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
+                const SizedBox(width: 8),
+                Text('Shops',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline2),
+              ],
+            ),
           ),
-        ),
-        BluredContainer(
-          child: SizedBox(
+          SizedBox(
             width: 390,
-            height: 160,
+            height: 120,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 8),
                 Expanded(
                   child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       final ShopsData shopsData = _shopsDataList[index];
 
-                      return ShopTile(
+                      return ShopCircleTile(
                         currency: currency,
                         shopData: shopsData,
                         onTap: () {
@@ -246,8 +249,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -262,36 +265,35 @@ class _HomePageState extends ConsumerState<HomePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.receipt_long_sharp, color: Colors.white),
+                Icon(Icons.dashboard_customize,
+                    color: Color.fromRGBO(255, 255, 255, 1)),
                 const SizedBox(width: 8),
-                Text(
-                  'Recent Operations',
-                  style: Theme.of(context).textTheme.headline3,
-                ),
+                Text('Recent Operations',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline2),
               ],
             ),
           ),
-          BluredContainer(
-            child: SizedBox(
-              width: 390,
-              height: 340,
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  final OperationsAdapter recentOperation =
-                      recentOperations.recentOperationsList[index];
-                  return recentOperation.isItem
-                      ? ItemTileWidget(
-                          //currency: currency,
-                          item: recentOperation.item!,
-                        )
-                      : PaymentTile(
-                          payment: recentOperation.payment!,
-                        );
-                },
-                itemCount: recentOperations.recentOperationsList.length,
-              ),
+          SizedBox(
+            width: 390,
+            height: 340,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final OperationsAdapter recentOperation =
+                    recentOperations.recentOperationsList[index];
+                return recentOperation.isItem
+                    ? ItemTileWidget(
+                        //currency: currency,
+                        item: recentOperation.item!,
+                      )
+                    : PaymentTile(
+                        payment: recentOperation.payment!,
+                      );
+              },
+              itemCount: recentOperations.recentOperationsList.length,
             ),
           ),
           const SizedBox(
@@ -305,24 +307,22 @@ class _HomePageState extends ConsumerState<HomePage> {
   buildTopWidget(OverAlls all, String currency) {
     return SizedBox(
       width: 390,
-      height: 80,
+      height: 120,
       child: BluredContainer(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // buildCircularProgress(),
-            // const SizedBox(width: 12),
+            //
+
             Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Spendings',
-                  style: GoogleFonts.sansita(
-                    color: Color.fromARGB(255, 170, 0, 79),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 30,
-                  ),
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                      ),
                 ),
                 SizedBox(
                   height: 8,
@@ -349,6 +349,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 )
               ],
             ),
+            buildCircularProgress(),
           ],
         ),
       ),
@@ -360,12 +361,13 @@ class _HomePageState extends ConsumerState<HomePage> {
       animateFromLastPercent: true,
       animation: true,
       curve: Curves.linear,
-      radius: 80.0,
-      lineWidth: 4.0,
+      radius: 90.0,
+      lineWidth: 8.0,
       percent: 0.6,
-      center: new Text("60 %"),
-      progressColor: Color(0xFFAA2585),
-      backgroundColor: Colors.white.withOpacity(0.6),
+      center: new Text("60 %", style: Theme.of(context).textTheme.headline6),
+      circularStrokeCap: CircularStrokeCap.round,
+      progressColor: Colors.white,
+      backgroundColor: Colors.white.withOpacity(0.2),
     );
   }
 
@@ -375,7 +377,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.radius),
       ),
-      color: Colors.white.withOpacity(0.4),
+      color: AppConstants.whiteOpacity,
       child: SizedBox(
         height: 50,
         child: Row(
@@ -531,6 +533,62 @@ class ShopTile extends StatelessWidget {
   }
 }
 
+class ShopCircleTile extends StatelessWidget {
+  const ShopCircleTile({
+    Key? key,
+    required this.onTap,
+    required this.shopData,
+    required this.currency,
+  }) : super(key: key);
+
+  final VoidCallback? onTap;
+  final ShopsData shopData;
+  final String currency;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: BluredContainer(
+          child: SizedBox(
+            width: 120,
+            height: 120,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.person_outline_sharp,
+                  color: Colors.white.withOpacity(0.5),
+                  size: 40,
+                ),
+                Text(
+                  '${shopData.shop.shopName}',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: '${shopData.itemsSumAfterPayment}',
+                    style: Theme.of(context).textTheme.headline4,
+                    children: [
+                      TextSpan(
+                        text: ' $currency',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class MyExpandableFab extends StatelessWidget {
   const MyExpandableFab({
     Key? key,
@@ -654,7 +712,7 @@ AppBar buildAppBar(BuildContext context, {String? title}) {
     shadowColor: Colors.transparent,
     excludeHeaderSemantics: true,
     toolbarHeight: 40,
-    backgroundColor: Colors.white.withOpacity(0.4),
+    backgroundColor: AppConstants.whiteOpacity,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(AppConstants.radius),

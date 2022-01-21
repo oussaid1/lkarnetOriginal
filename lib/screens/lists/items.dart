@@ -93,15 +93,18 @@ class ItemTileWidget extends ConsumerWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-              onPressed: (context) {
-                Dialogs.botomPopUpDialog(
-                  context,
-                  AddItem(
-                    item: item,
-                  ),
-                );
-              },
-              icon: Icons.delete),
+            backgroundColor: Colors.transparent,
+            onPressed: (context) {
+              Dialogs.botomPopUpDialog(
+                context,
+                AddItem(
+                  item: item,
+                ),
+              );
+            },
+            icon: Icons.delete,
+            label: 'Edit',
+          ),
         ],
       ),
 
@@ -110,6 +113,8 @@ class ItemTileWidget extends ConsumerWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
+              backgroundColor: Colors.transparent,
+              label: 'Delete',
               onPressed: (context) {
                 Dialogs
                     .dialogSimple(context, title: 'Are you sure !!?', widgets: [
@@ -180,7 +185,7 @@ class ItemTileWidget extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.radius),
         ),
-        color: Colors.white.withOpacity(0.4),
+        color: AppConstants.whiteOpacity,
         child: SizedBox(
           height: 50,
           child: Row(
@@ -193,7 +198,7 @@ class ItemTileWidget extends ConsumerWidget {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(120, 217, 135, 228),
+                      color: Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(AppConstants.radius),
                         bottomLeft: Radius.circular(AppConstants.radius),

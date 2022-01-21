@@ -185,7 +185,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.radius),
       ),
-      color: Colors.white.withOpacity(0.4),
+      color: AppConstants.whiteOpacity,
       child: SizedBox(
         height: 50,
         child: Row(

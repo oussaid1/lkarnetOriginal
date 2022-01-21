@@ -72,7 +72,7 @@ class ShopsDetailsBody extends StatelessWidget {
     return Scaffold(
       floatingActionButton: MyExpandableFab(),
       backgroundColor: Colors.transparent,
-      appBar: buildAppBar(context, title: 'Shop Details'),
+      appBar: buildAppBar(context, title: '${shopsData.shop.shopName}'),
       body: SingleChildScrollView(
         child: BluredContainer(
           start: 0,
@@ -82,114 +82,158 @@ class ShopsDetailsBody extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${shopsData.shop.shopName}',
-                          style: Theme.of(context).textTheme.headline2),
-                      Container(
-                        width: 100,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Center(
-                          child: Text('Today',
-                              style: Theme.of(context).textTheme.headline3!
-                              // .copyWith(color: Colors.white),
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 390,
-                  height: 300,
-                  child: BluredContainer(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Items',
-                                    style:
-                                        Theme.of(context).textTheme.headline3!
-                                    // .copyWith(color: Colors.white),
-                                    ),
-                                Text('count :${shopsData.countItems} ',
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                                Text('total : ${shopsData.itemsSum} ',
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return ItemTileWidget(
-                                  item: shopsData.allItems[index]);
-                            },
-                            itemCount: shopsData.allItems.length,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 20),
-                SizedBox(
-                  width: 390,
-                  height: 260,
-                  child: BluredContainer(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Payments',
-                                    style:
-                                        Theme.of(context).textTheme.headline3!
-                                    // .copyWith(color: Colors.white),
-                                    ),
-                                Text('count :${shopsData.countPayments} ',
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                                Text('total : ${shopsData.paymentsSum} ',
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return PaymentTile(
-                                  payment: shopsData.allPayments[index]);
-                            },
-                            itemCount: shopsData.allPayments.length,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: [
+                //       Container(
+                //         width: 100,
+                //         height: 40,
+                //         decoration: BoxDecoration(
+                //           color: Colors.white.withOpacity(0.5),
+                //           borderRadius: BorderRadius.circular(50),
+                //         ),
+                //         child: Center(
+                //           child: Text('${shopsData.shop.shopName}',
+                //               style: Theme.of(context).textTheme.headline2),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                ShopItemsDetailsWidget(shopsData: shopsData),
+                const SizedBox(height: 30),
+                ShopPaymentsDetailWidget(shopsData: shopsData),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShopItemsDetailsWidget extends StatelessWidget {
+  const ShopItemsDetailsWidget({
+    Key? key,
+    required this.shopsData,
+  }) : super(key: key);
+
+  final ShopsData shopsData;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 390,
+      height: 300,
+      child: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Items', style: Theme.of(context).textTheme.headline3!
+                        // .copyWith(color: Colors.white),
+                        ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'count :',
+                          style: Theme.of(context).textTheme.bodyText1!),
+                      TextSpan(
+                          text: ' ${shopsData.countItems}',
+                          style: Theme.of(context).textTheme.headline3!),
+                    ])),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'total :',
+                          style: Theme.of(context).textTheme.bodyText1!),
+                      TextSpan(
+                          text: ' ${shopsData.itemsSum}',
+                          style: Theme.of(context).textTheme.headline3!),
+                    ])),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return ItemTileWidget(item: shopsData.allItems[index]);
+                },
+                itemCount: shopsData.allItems.length,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShopPaymentsDetailWidget extends StatelessWidget {
+  const ShopPaymentsDetailWidget({
+    Key? key,
+    required this.shopsData,
+  }) : super(key: key);
+
+  final ShopsData shopsData;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 390,
+      height: 260,
+      child: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Payments',
+                        style: Theme.of(context).textTheme.headline3!
+                        // .copyWith(color: Colors.white),
+                        ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'count :',
+                          style: Theme.of(context).textTheme.bodyText1!),
+                      TextSpan(
+                          text: ' ${shopsData.countPayments}',
+                          style: Theme.of(context).textTheme.headline3!),
+                    ])),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'total :',
+                          style: Theme.of(context).textTheme.bodyText1!),
+                      TextSpan(
+                          text: ' ${shopsData.paymentsSum}',
+                          style: Theme.of(context).textTheme.headline3!),
+                    ])),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return PaymentTile(payment: shopsData.allPayments[index]);
+                },
+                itemCount: shopsData.allPayments.length,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -88,14 +88,11 @@ class PaymentTile extends ConsumerWidget {
         startActionPane: ActionPane(
           motion: ScrollMotion(),
           children: [
-            IconButton(
-                icon: Icon(
-                  Icons.mode_edit,
-                  size: 30,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                color: Colors.transparent,
-                onPressed: () {
+            SlidableAction(
+                backgroundColor: Colors.transparent,
+                icon: Icons.mode_edit,
+                label: 'Edit',
+                onPressed: (context) {
                   Dialogs.botomPopUpDialog(
                       context,
                       AddPayment(
@@ -107,14 +104,11 @@ class PaymentTile extends ConsumerWidget {
         endActionPane: ActionPane(
           motion: ScrollMotion(),
           children: [
-            IconButton(
-              icon: Icon(
-                Icons.delete_forever,
-                size: 30,
-                color: Theme.of(context).errorColor,
-              ),
-              color: Colors.transparent,
-              onPressed: () {
+            SlidableAction(
+              icon: Icons.delete_forever,
+              label: 'Delete',
+              backgroundColor: Colors.transparent,
+              onPressed: (context) {
                 Dialogs
                     .dialogSimple(context, title: 'Are you sure !!?', widgets: [
                   Container(
@@ -183,7 +177,7 @@ class PaymentTile extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.radius),
           ),
-          color: Colors.white.withOpacity(0.4),
+          color: AppConstants.whiteOpacity,
           child: SizedBox(
             height: 50,
             child: Row(
