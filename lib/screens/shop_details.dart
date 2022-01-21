@@ -75,6 +75,8 @@ class ShopsDetailsBody extends StatelessWidget {
       appBar: buildAppBar(context, title: '${shopsData.shop.shopName}'),
       body: SingleChildScrollView(
         child: BluredContainer(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           start: 0,
           end: 0,
           borderColorOpacity: 0,

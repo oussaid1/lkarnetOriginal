@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/overalls.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/dataprovider/data_providers.dart';
-import 'package:lkarnet/widgets/dash_widget.dart';
 import 'package:lkarnet/widgets/day_barchart.dart';
 
 class AllDash extends ConsumerWidget {
@@ -61,9 +60,11 @@ class AllDash extends ConsumerWidget {
                 itemCount: _shopsDataList.length,
                 itemBuilder: (context, index) {
                   ShopsData shopsData = _shopsDataList[index];
-                  return DashWidget(
-                    shopsData: shopsData,
-                  );
+                  // return DashWidget(
+                  //   shopsData: shopsData,
+                  // );
+
+                  return SizedBox.shrink();
                 }),
           ),
         ),

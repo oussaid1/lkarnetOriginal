@@ -29,6 +29,11 @@ class ListTab extends ConsumerWidget {
                           listOfItems: ref.watch(itemsProvider.state).state))),
             ],
             bottom: TabBar(
+              overlayColor: MaterialStateColor.resolveWith(
+                  (Set<MaterialState> states) =>
+                      states.contains(MaterialState.selected)
+                          ? Colors.white
+                          : Colors.transparent),
               indicatorColor: Colors.white,
               unselectedLabelColor: Theme.of(context).dividerColor,
               tabs: [

@@ -43,11 +43,9 @@ class _ShopDetailsState extends State<ShopDetailsMain> {
         ),
       ],
       gradientColors: [
-        Color.fromARGB(255, 237, 155, 48),
-        Color.fromARGB(255, 220, 157, 75),
-        Color.fromARGB(255, 227, 237, 48),
-        // Color.fromARGB(255, 48, 199, 237),
-        // Color.fromARGB(255, 48, 199, 237),
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
       ],
       centerWidget: MonthlyDash(),
     );

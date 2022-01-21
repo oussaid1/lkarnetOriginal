@@ -1,67 +1,103 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
-import 'package:lkarnet/widgets/dash_widget.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 
-final listIndex = StateProvider<int>((ref) {
+import '../home.dart';
+import '../shop_details.dart';
+
+final tagedProvider = StateProvider<Tagged?>((ref) {
+  return null;
+});
+final tagIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-class MonthlyDash extends ConsumerWidget {
+class MonthlyDash extends ConsumerStatefulWidget {
   const MonthlyDash({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<MonthlyDash> createState() => _MonthlyDashState();
+}
+
+class _MonthlyDashState extends ConsumerState<MonthlyDash> {
+  // Tagged? _tagged;
+  @override
+  Widget build(BuildContext context) {
     var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
-    var _currentIndex = ref.watch(listIndex.state).state;
-
-    final _tagged = _listOfTagged[_currentIndex];
-
+    //var _currentIndex = ref.watch(listIndex.state).state;
+    var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
     return new SingleChildScrollView(
       child: Column(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_rounded),
-                    onPressed: () {
-                      if (_currentIndex > 0) ref.read(listIndex.state).state--;
-                    }),
-                Row(
-                  children: [
-                    Text(
-                      'Month: ',
-                      style: Theme.of(context).textTheme.headline2,
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 48,
+            width: 400,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _listOfTagged.length,
+              itemBuilder: (context, index) {
+                Tagged tagged = _listOfTagged[index];
+                // ref.read(tagedProvider.state).state = tagged;
+                // _tagged = tagged;
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 80,
+                    child: BluredContainer(
+                      start: 0.3,
+                      end: 0.3,
+                      child: GestureDetector(
+                        onTap: () =>
+                            ref.read(tagIndexProvider.state).state = index,
+                        child: Text('${tagged.tag}',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline4),
+                      ),
                     ),
-                    Text('${_tagged.tag}'),
-                  ],
-                ),
-                IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios_rounded),
-                    onPressed: () {
-                      if (_currentIndex < _listOfTagged.length - 1) {
-                        ref.read(listIndex.state).state += 1;
-                      }
-                    }),
-              ],
+                  ),
+                );
+              },
             ),
           ),
-          _buildMonthlyCard(context, _tagged),
-          Container(
-            width: 420,
-            height: 300,
-            child: ListView.builder(
-                itemCount: _tagged.shopDataList.length,
-                itemBuilder: (context, index) {
-                  ShopsData shopsData = _tagged.shopDataList[index];
-                  return DashWidget(shopsData: shopsData);
-                }),
+          Column(
+            children: [
+              const SizedBox(height: 10),
+              _buildMonthlyCard(context, _tagged),
+              const SizedBox(height: 10),
+              BluredContainer(
+                width: 420,
+                height: 400,
+                child: GridView.count(
+                    childAspectRatio: 1.9,
+                    crossAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: _tagged.shopDataList.map((shopsData) {
+                      return SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: ShopCircleTile(
+                          currency: '\$',
+                          shopData: shopsData,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShopDetails(
+                                  shopsData: shopsData,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }).toList()),
+              ),
+            ],
           ),
           const SizedBox(
             height: 50,
@@ -72,9 +108,11 @@ class MonthlyDash extends ConsumerWidget {
   }
 
   _buildMonthlyCard(BuildContext context, Tagged tagged) {
-    return BluredContainer(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BluredContainer(
+        width: 420,
+        height: 130,
         child: Column(
           children: [
             Padding(
@@ -82,13 +120,13 @@ class MonthlyDash extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Total-amount',
-                    //style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   Text(
                     ' ${tagged.itemsSumAfterPayment}',
-                    //style: AkThemeData.darkThemeData.textTheme.headline4,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                 ],
               ),

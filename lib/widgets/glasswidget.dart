@@ -58,6 +58,8 @@ class BluredContainer extends StatelessWidget {
   final Widget child;
   final double start;
   final double end;
+  final double width;
+  final double height;
 
   final double borderColorOpacity;
 
@@ -66,6 +68,8 @@ class BluredContainer extends StatelessWidget {
     required this.child,
     this.start = 0.15,
     this.end = 0.15,
+    this.width = 420,
+    this.height = 400,
     this.borderColorOpacity = 0.1,
   }) : super(key: key);
 
@@ -75,6 +79,8 @@ class BluredContainer extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
         child: Container(
+          width: width,
+          height: height,
           decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.all(Radius.circular(AppConstants.radius)),

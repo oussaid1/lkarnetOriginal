@@ -551,10 +551,10 @@ class ShopCircleTile extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: BluredContainer(
-          child: SizedBox(
-            width: 120,
-            height: 120,
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: BluredContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
