@@ -18,37 +18,7 @@ class _ShopDetailsState extends State<ShopDetailsMain> {
 
   @override
   Widget build(BuildContext context) {
-    return GlassMaterial(
-      circleWidgets: [
-        Positioned(
-          width: 140,
-          height: 140,
-          left: 10,
-          top: 120,
-          child: AppAssets.blueCircleWidget,
-        ),
-        Positioned(
-          width: 180,
-          height: 180,
-          right: 80,
-          top: 200,
-          child: AppAssets.purpleCircleWidget,
-        ),
-        Positioned(
-          width: 180,
-          height: 180,
-          left: 40,
-          bottom: 80,
-          child: AppAssets.pinkCircleWidget,
-        ),
-      ],
-      gradientColors: [
-        Color.fromARGB(255, 134, 32, 230),
-        Color.fromARGB(255, 224, 101, 101),
-        Color.fromARGB(255, 224, 101, 101),
-      ],
-      centerWidget: MonthlyDash(),
-    );
+    return MonthlyDash();
   }
 
 // build custom listTile

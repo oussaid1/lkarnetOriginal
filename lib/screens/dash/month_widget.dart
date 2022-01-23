@@ -37,7 +37,7 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
           children: [
             const SizedBox(height: 10),
             SizedBox(
-              height: 48,
+              height: 70,
               width: 400,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -47,19 +47,23 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
                   // ref.read(tagedProvider.state).state = tagged;
                   // _tagged = tagged;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 80,
-                      child: BluredContainer(
-                        start: 0.3,
-                        end: 0.3,
-                        child: GestureDetector(
-                          onTap: () =>
-                              ref.read(tagIndexProvider.state).state = index,
+                  return SizedBox(
+                    width: 100,
+                    height: 60,
+                    child: Card(
+                      color: Color.fromARGB(226, 214, 148, 148),
+                      child: GestureDetector(
+                        onTap: () =>
+                            ref.read(tagIndexProvider.state).state = index,
+                        child: Center(
                           child: Text('${tagged.tag}',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline4),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4!
+                                  .copyWith(
+                                      color:
+                                          Color.fromARGB(214, 247, 247, 247))),
                         ),
                       ),
                     ),

@@ -1,6 +1,5 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
-import 'package:lkarnet/models/overalls.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/screens/add/add_payment.dart';
@@ -49,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     var _recentOperations = ref.watch(recentOperationsProvider.state).state;
     // var chartData = ref.watch(shopsChartsDataProvider.state).state;
     //final _db = ref.watch(databaseProvider);
-    OverAlls all = OverAlls(shops: shops, items: items, payments: payments);
+
     return GlassMaterial(
         circleWidgets: [
           Positioned(
@@ -87,14 +86,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             appBar: buildAppBar(context, title: 'Home', items: items),
             body: buildPageView(_pageController, ref, context,
                 currency: _currency,
-                all: all,
+                dataSink: dataSink,
                 shopsDataList: _shopsDataList,
                 recentOperations: _recentOperations)));
   }
 
   buildPageView(
       PageController _pageController, WidgetRef ref, BuildContext context,
-      {required OverAlls all,
+      {required DataSink dataSink,
       required List<ShopsData> shopsDataList,
       required RecentOperation recentOperations,
       required String currency}) {
@@ -110,7 +109,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               buildBody(context,
                   currency: currency,
-                  all: all,
+                  dataSink: dataSink,
                   shopsDataList: shopsDataList,
                   recentOperations: recentOperations),
               //DashBoardTab(),
@@ -153,12 +152,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.list),
           label: 'Lists',
-          backgroundColor: Color.fromARGB(255, 101, 224, 148),
+          backgroundColor: Color.fromARGB(255, 224, 201, 101),
         ),
         const BottomNavigationBarItem(
           icon: const Icon(Icons.add_chart),
           label: 'Stats',
-          backgroundColor: Color.fromARGB(255, 101, 185, 224),
+          backgroundColor: Color.fromARGB(255, 224, 101, 183),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.settings),
@@ -170,7 +169,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   buildBody(BuildContext context,
-      {required OverAlls all,
+      {required DataSink dataSink,
       required List<ShopsData> shopsDataList,
       required RecentOperation recentOperations,
       required String currency}) {
@@ -182,7 +181,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            buildTopWidget(all, currency),
+            buildTopWidget(dataSink, currency),
             // const SizedBox(height: 20),
             buildShopsWidget(context, shopsDataList, currency),
             buildRecentOpeerationsWidget(
@@ -306,7 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  buildTopWidget(OverAlls all, String currency) {
+  buildTopWidget(DataSink dataSink, String currency) {
     return SizedBox(
       width: 390,
       height: 120,
@@ -331,7 +330,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 Text.rich(
                   TextSpan(
-                    text: '${all.itemsSumAfterPayment}',
+                    text: '${dataSink.itemsSumAfterPayment}',
                     style: GoogleFonts.roboto(
                       color: Color(0xFF1A1619),
                       fontWeight: FontWeight.bold,
@@ -351,22 +350,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                 )
               ],
             ),
-            buildCircularProgress(),
+            buildCircularProgress(dataSink),
           ],
         ),
       ),
     );
   }
 
-  CircularPercentIndicator buildCircularProgress() {
+  CircularPercentIndicator buildCircularProgress(DataSink dataSink) {
     return CircularPercentIndicator(
       animateFromLastPercent: true,
       animation: true,
       curve: Curves.linear,
       radius: 90.0,
       lineWidth: 8.0,
-      percent: 0.6,
-      center: new Text("60 %", style: Theme.of(context).textTheme.headline6),
+      percent: dataSink.spendingsUnitinterval,
+      center: new Text("${dataSink.spendingsPecentage} %",
+          style: Theme.of(context).textTheme.headline6),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: Colors.white,
       backgroundColor: Colors.white.withOpacity(0.2),
@@ -606,21 +606,30 @@ class MyExpandableFab extends StatelessWidget {
             context,
             AddPayment(),
           ),
-          icon: const Icon(Icons.monetization_on),
+          icon: const Icon(
+            Icons.monetization_on,
+            size: 32,
+          ),
         ),
         ActionButton(
           onPressed: () => Dialogs.botomPopUpDialog(
             context,
             AddShop(),
           ),
-          icon: const Icon(Icons.person_add),
+          icon: const Icon(
+            Icons.person_add,
+            size: 30,
+          ),
         ),
         ActionButton(
           onPressed: () => Dialogs.botomPopUpDialog(
             context,
             AddItem(),
           ),
-          icon: const Icon(Icons.add_shopping_cart_sharp),
+          icon: const Icon(
+            Icons.add_shopping_cart_sharp,
+            size: 30,
+          ),
         ),
       ],
     );

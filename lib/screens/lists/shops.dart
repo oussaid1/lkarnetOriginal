@@ -19,7 +19,7 @@ class ShopsList extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     //  final lista = ref.watch(shopsProvider.state).state;
     var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    return Container(
+    return BluredContainer(
       margin: EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 8),
       child: ListView.builder(
         itemCount: _shopsDataList.length,
