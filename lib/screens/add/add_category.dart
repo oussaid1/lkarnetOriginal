@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lkarnet/settings/theme.dart';
 
 class AddCategory extends StatelessWidget {
   @override
@@ -119,17 +120,7 @@ class AddCategory extends StatelessWidget {
                     child: TextButton(
                       child: Text('Cancel'),
                       onPressed: () {},
-                      style: TextButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.headline3,
-                        minimumSize: Size(88, 36),
-                        elevation: 0,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        shape: RoundedRectangleBorder(
-                          side:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                        ),
-                      ),
+                      style: MThemeData.textButtonStyleCancel,
                     ),
                   ),
                   Container(
@@ -140,20 +131,7 @@ class AddCategory extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline3,
                       ),
                       onPressed: () {},
-                      style: TextButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.headline3,
-                        minimumSize: Size(88, 36),
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        elevation: 0,
-                        onSurface: Theme.of(context).colorScheme.primary,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        shape: RoundedRectangleBorder(
-                          side:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                        ),
-                      ),
+                      style: MThemeData.textButtonStyleSave,
                     ),
                   ),
                 ],

@@ -6,6 +6,7 @@ import 'package:lkarnet/models/payment/payments_filtered.dart';
 import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
 import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
+import '../item/items_data.dart';
 import 'shop_model.dart';
 
 final shopsDataListProvider = StateProvider<List<ShopsData>>((ref) {
@@ -80,6 +81,10 @@ class ShopsData {
     int _x = 0;
     allPayments.forEach((element) => _x += element.count);
     return _x;
+  }
+
+  ItemsData get itemsData {
+    return ItemsData(items: itemsFiltered.allItems);
   }
 }
 

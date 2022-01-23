@@ -289,16 +289,7 @@ class _AddShopState extends ConsumerState<AddShop> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.headline3,
-              minimumSize: Size(88, 36),
-              elevation: 0,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Theme.of(context).primaryColor),
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-              ),
-            ),
+            style: MThemeData.textButtonStyleCancel,
           ),
         ),
         Container(

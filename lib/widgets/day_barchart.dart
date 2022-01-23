@@ -18,24 +18,23 @@ class SemiPeiWidget extends ConsumerWidget {
         )
       ],
       margin: EdgeInsets.zero,
-      
       series: <CircularSeries>[
         DoughnutSeries<ChartData, String>(
-            innerRadius: '80',
-            dataSource: chartData,
-            xValueMapper: (ChartData data, _) => data.tag,
-            yValueMapper: (ChartData data, _) => data.value,
-            dataLabelMapper: (ChartData data, _) => data.tag,
+          innerRadius: '80',
+          dataSource: chartData,
+          xValueMapper: (ChartData data, _) => data.tag,
+          yValueMapper: (ChartData data, _) => data.value,
+          dataLabelMapper: (ChartData data, _) => data.tag,
 
-            // All the segments will be exploded
+          // All the segments will be exploded
 
-            dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                labelPosition: ChartDataLabelPosition.outside,
-                // Renders background rectangle and fills it with series color
-                useSeriesColor: true),
+          dataLabelSettings: DataLabelSettings(
+              isVisible: true,
+              labelPosition: ChartDataLabelPosition.outside,
+              // Renders background rectangle and fills it with series color
+              useSeriesColor: true),
           //angle of pie
-            ),
+        ),
       ],
     );
   }
@@ -65,6 +64,72 @@ class PeiWidget extends ConsumerWidget {
               // Positioning the data label
               labelPosition: ChartDataLabelPosition.outside),
           // ending angle of pie
+        ),
+      ],
+    );
+  }
+}
+
+class LineChartWidget extends ConsumerWidget {
+  final List<ChartData> chartData;
+
+  LineChartWidget(this.chartData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCartesianChart(
+      //primaryXAxis: DateTimeAxis(),
+      primaryXAxis: CategoryAxis(),
+      series: <ChartSeries>[
+        // Renders spline chart
+        SplineSeries<ChartData, String>(
+          dataSource: chartData,
+          xValueMapper: (ChartData sales, _) => sales.tag,
+          yValueMapper: (ChartData sales, _) => sales.value,
+        ),
+      ],
+    );
+  }
+}
+
+class BarChartWidget extends ConsumerWidget {
+  final List<ChartData> chartData;
+
+  BarChartWidget(this.chartData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCartesianChart(
+      //primaryXAxis: DateTimeAxis(),
+      primaryXAxis: CategoryAxis(),
+      series: <ChartSeries>[
+        // Renders spline chart
+        BarSeries<ChartData, String>(
+          dataSource: chartData,
+          xValueMapper: (ChartData sales, _) => sales.tag,
+          yValueMapper: (ChartData sales, _) => sales.value,
+        ),
+      ],
+    );
+  }
+}
+
+class ColumnChartWidget extends ConsumerWidget {
+  final List<ChartData> chartData;
+
+  ColumnChartWidget(this.chartData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCartesianChart(
+      //primaryXAxis: DateTimeAxis(),
+      primaryXAxis: CategoryAxis(),
+      series: <ChartSeries>[
+        // Renders spline chart
+        ColumnSeries<ChartData, String>(
+          dataSource: chartData,
+          xValueMapper: (ChartData sales, _) => sales.tag,
+          yValueMapper: (ChartData sales, _) => sales.value,
         ),
       ],
     );

@@ -4,8 +4,8 @@ import 'package:intl/intl.dart' as df;
 class Item {
   String? id;
   String? besoinTitle;
-  String? shopName;
-  String? itemName;
+  late String shopName;
+  late String itemName;
   String? quantifier;
   double quantity = 1;
   double itemPrice = 0;
@@ -14,40 +14,14 @@ class Item {
 
   double get itemPrix => itemPrice * quantity;
 
-  static List<Item> fakeItems = [
-    Item(
-        besoinTitle: 'Lhanot',
-        dateBought: DateTime.now(),
-        itemName: 'Milk',
-        itemPrice: 230,
-        quantifier: 'kilo',
-        quantity: 2,
-        shopName: 'Momo'),
-    Item(
-        besoinTitle: 'Vegies',
-        dateBought: DateTime.now(),
-        itemName: 'Tomates',
-        itemPrice: 450,
-        quantifier: 'kilo',
-        quantity: 2,
-        shopName: 'Momo'),
-    Item(
-        besoinTitle: 'Fruits',
-        dateBought: DateTime.now(),
-        itemName: 'Apples',
-        itemPrice: 230,
-        quantifier: 'kilo',
-        quantity: 2,
-        shopName: 'Momo'),
-  ];
   Item(
       {this.id,
-      this.itemName,
+      required this.itemName,
       this.besoinTitle,
       this.quantifier,
       required this.quantity,
       this.itemPrice = 0,
-      this.shopName,
+      required this.shopName,
       required this.dateBought,
       count = 1}) {
     if (quantifier!.trim().isEmpty) {

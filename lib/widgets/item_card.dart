@@ -28,7 +28,7 @@ class ItemCard extends StatelessWidget {
           child: Icon(Icons.shopping_bag_rounded),
         ),
         title: Text(
-          item.itemName!,
+          item.itemName,
         ),
         trailing: Text(
           '\$ ${item.itemPrix}',

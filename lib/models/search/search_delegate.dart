@@ -51,7 +51,7 @@ class ItemsListSearch extends SearchDelegate {
     BuildContext context,
   ) {
     var _searchResult = listOfItems
-        .where((element) => element.itemName!.startsWith(query))
+        .where((element) => element.itemName.startsWith(query))
         .toList();
     // switch (listOfItems.length) {
     //   case 0:

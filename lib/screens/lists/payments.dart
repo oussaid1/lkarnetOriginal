@@ -6,6 +6,7 @@ import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 
 import '../../components.dart';
+import '../../settings/theme.dart';
 
 class PaymentsList extends ConsumerWidget {
   final List<Payment>? lista;
@@ -109,66 +110,43 @@ class PaymentTile extends ConsumerWidget {
               label: 'Delete',
               backgroundColor: Colors.transparent,
               onPressed: (context) {
-                Dialogs
-                    .dialogSimple(context, title: 'Are you sure !!?', widgets: [
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 120,
-                          child: TextButton(
-                            child: Text('Cancel'),
-                            onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(
-                              textStyle: Theme.of(context).textTheme.headline3,
-                              minimumSize: Size(88, 36),
-                              elevation: 0,
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
+                Dialogs.dialogSimple(context,
+                    title: 'Are you sure !!?',
+                    widgets: [
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 120,
+                              child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () => Navigator.pop(context),
+                                style: MThemeData.textButtonStyleCancel,
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 120,
-                          child: TextButton(
-                            child: Text(
-                              'Ok',
-                              style: Theme.of(context).textTheme.headline3,
+                            SizedBox(
+                              width: 20,
                             ),
-                            onPressed: () => ref
-                                .read(operationsProvider)
-                                .deletePayment(payment)
-                                .then((value) => Navigator.of(context).pop()),
-                            style: TextButton.styleFrom(
-                              textStyle: Theme.of(context).textTheme.headline3,
-                              minimumSize: Size(88, 36),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              elevation: 0,
-                              onSurface: Theme.of(context).colorScheme.primary,
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
+                            Container(
+                              width: 120,
+                              child: TextButton(
+                                child: Text(
+                                  'Ok',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () => ref
+                                    .read(operationsProvider)
+                                    .deletePayment(payment)
+                                    .then(
+                                        (value) => Navigator.of(context).pop()),
+                                style: MThemeData.textButtonStyleSave,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ]);
+                      ),
+                    ]);
               },
             ),
           ],

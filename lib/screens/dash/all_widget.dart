@@ -59,7 +59,7 @@ class AllDash extends ConsumerWidget {
                 physics: BouncingScrollPhysics(),
                 itemCount: _shopsDataList.length,
                 itemBuilder: (context, index) {
-                  ShopsData shopsData = _shopsDataList[index];
+                  // ShopsData shopsData = _shopsDataList[index];
                   // return DashWidget(
                   //   shopsData: shopsData,
                   // );

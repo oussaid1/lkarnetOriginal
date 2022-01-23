@@ -6,6 +6,7 @@ import 'package:lkarnet/root.dart';
 import 'package:lkarnet/settings/theme/theme_provider.dart';
 
 import '../../components.dart';
+import '../../settings/theme.dart';
 
 class SettingsPage extends ConsumerWidget {
   @override
@@ -222,17 +223,7 @@ class SettingsPage extends ConsumerWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.headline3,
-                          minimumSize: Size(88, 36),
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                        ),
+                        style: MThemeData.textButtonStyleCancel,
                       ),
                     ),
                     SizedBox(
@@ -252,20 +243,7 @@ class SettingsPage extends ConsumerWidget {
                                       builder: (context) => Root()),
                                   (Route<dynamic> route) => false));
                         },
-                        style: TextButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.headline3,
-                          minimumSize: Size(88, 36),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          elevation: 0,
-                          onSurface: Theme.of(context).colorScheme.primary,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                        ),
+                        style: MThemeData.textButtonStyleSave,
                       ),
                     ),
                   ],

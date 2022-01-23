@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/overalls.dart';
@@ -6,8 +9,9 @@ import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
-import 'package:lkarnet/screens/tabs/list_tab.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../models/item/item.dart';
 import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
@@ -15,7 +19,9 @@ import '../providers/streamproviders/shops_stream_provider.dart';
 import 'add/add_shop.dart';
 import 'dashboard.dart';
 import 'lists/payments.dart';
+import 'lists/shops.dart';
 import 'shop_details.dart';
+import 'stats/stats_all.dart';
 import 'tabs/stats_tab.dart';
 
 final currencyProvider = StateProvider<String>((ref) {
@@ -83,7 +89,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 context, _selectedPageIndex, _pageController, ref),
             floatingActionButton: MyExpandableFab(),
             backgroundColor: Colors.transparent,
-            appBar: buildAppBar(context, title: 'Home'),
+            appBar: buildAppBar(context, title: 'Home', items: items),
             body: buildPageView(_pageController, ref, context,
                 currency: _currency,
                 all: all,
@@ -114,8 +120,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   recentOperations: recentOperations),
               //DashBoardTab(),
               ShopDetailsMain(),
-              ListTab(),
-              StatsTab(),
+              // ListTab(),
+              ShopsList(),
+              StatsAll(),
               SettingsPage(),
             ],
           ),
@@ -124,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  BottomNavigationBar buildNavigationBar(context, int _selectedPageIndex,
+  buildNavigationBar(context, int _selectedPageIndex,
       PageController _pageController, WidgetRef ref) {
     return BottomNavigationBar(
       backgroundColor: Colors.transparent,
@@ -688,18 +695,16 @@ class MyExpandableFab extends StatelessWidget {
 //     return File(filePath).writeAsString(data);
 //   }
 // }
-AppBar buildAppBar(BuildContext context, {String? title}) {
+AppBar buildAppBar(BuildContext context, {String? title, List<Item>? items}) {
   return AppBar(
     actions: [
       // IconButton(
       //   icon: Icon(Icons.add_box_outlined),
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => SettingsPage(),
-      //       ),
-      //     );
+      //   onPressed: () async {
+      //     var logger = Logger();
+      //     for (var item in items!) {
+      //       logger.d(item.toMap());
+      //     }
       //   },
       // ),
     ],

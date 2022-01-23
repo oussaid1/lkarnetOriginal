@@ -16,7 +16,7 @@ class ItemDistincts {
   List<String> get distinctItemNames {
     List<String> _distincts = [];
     items.forEach((element) {
-      _distincts.add(element.itemName!);
+      _distincts.add(element.itemName);
     });
     return _distincts.toSet().toList();
   }
@@ -24,7 +24,7 @@ class ItemDistincts {
   List<String> get distinctItemShops {
     List<String> _distincts = [];
     items.forEach((element) {
-      _distincts.add(element.shopName!);
+      _distincts.add(element.shopName);
     });
     return _distincts.toSet().toList();
   }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lkarnet/const/constents.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/screens/add/add_shop.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
+
+import '../../settings/theme.dart';
 
 class ShopsList extends ConsumerWidget {
   ShopsList({
@@ -63,22 +66,7 @@ class ShopsList extends ConsumerWidget {
                                     child: TextButton(
                                       child: Text('Cancel'),
                                       onPressed: () => Navigator.pop(context),
-                                      style: TextButton.styleFrom(
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .headline3,
-                                        minimumSize: Size(88, 36),
-                                        elevation: 0,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 8),
-                                        shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(6)),
-                                        ),
-                                      ),
+                                      style: MThemeData.textButtonStyleCancel,
                                     ),
                                   ),
                                   SizedBox(
@@ -98,28 +86,7 @@ class ShopsList extends ConsumerWidget {
                                           .deleteShopData(shopsData)
                                           .then((value) =>
                                               Navigator.of(context).pop()),
-                                      style: TextButton.styleFrom(
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .headline3,
-                                        minimumSize: Size(88, 36),
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        elevation: 0,
-                                        onSurface: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 8),
-                                        shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(6)),
-                                        ),
-                                      ),
+                                      style: MThemeData.textButtonStyleSave,
                                     ),
                                   ),
                                 ],
@@ -133,6 +100,8 @@ class ShopsList extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: BluredContainer(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
                   child: Card(
                     color: Colors.transparent,
                     shape: RoundedRectangleBorder(
@@ -146,16 +115,17 @@ class ShopsList extends ConsumerWidget {
                         width: 45,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.background,
+                          color: AppConstants.whiteOpacity,
                         ),
                         child: Icon(Icons.person),
                       ),
                       title: Text(
                         ' ${shopsData.shop.shopName}',
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                       trailing: Text(
                         '${(shopsData.shop.limit)}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                     ),
                   ),

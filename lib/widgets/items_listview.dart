@@ -5,6 +5,8 @@ import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 
+import '../settings/theme.dart';
+
 class ItemsListWidget extends StatelessWidget {
   final List<Item> items;
   const ItemsListWidget({
@@ -50,21 +52,7 @@ class ItemsListWidget extends StatelessWidget {
                                   child: TextButton(
                                     child: Text('Cancel'),
                                     onPressed: () => Navigator.pop(context),
-                                    style: TextButton.styleFrom(
-                                      textStyle:
-                                          Theme.of(context).textTheme.headline3,
-                                      minimumSize: Size(88, 36),
-                                      elevation: 0,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(6)),
-                                      ),
-                                    ),
+                                    style: MThemeData.textButtonStyleCancel,
                                   ),
                                 ),
                                 SizedBox(
@@ -84,26 +72,7 @@ class ItemsListWidget extends StatelessWidget {
                                     //     .deleteItem(item)
                                     //     .then((value) =>
                                     //         Navigator.of(context).pop()),
-                                    style: TextButton.styleFrom(
-                                      textStyle:
-                                          Theme.of(context).textTheme.headline3,
-                                      minimumSize: Size(88, 36),
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      elevation: 0,
-                                      onSurface:
-                                          Theme.of(context).colorScheme.primary,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(6)),
-                                      ),
-                                    ),
+                                    style: MThemeData.textButtonStyleSave,
                                   ),
                                 ),
                               ],
@@ -134,7 +103,7 @@ class ItemsListWidget extends StatelessWidget {
                     child: Icon(Icons.shopping_bag_rounded),
                   ),
                   title: Text(
-                    item.itemName!,
+                    item.itemName,
                   ),
                   trailing: Text(
                     '\$ ${item.itemPrix}',
