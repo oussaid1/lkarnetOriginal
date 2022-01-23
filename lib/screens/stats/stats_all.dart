@@ -12,11 +12,11 @@ class StatsAll extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     var chartData = ref.watch(frequentItemsProvider.state).state;
     var chartData2 = ref.watch(shopsChartsDataProvider.state).state;
-    return SingleChildScrollView(
-      child: BluredContainer(
-        margin: EdgeInsets.all(8),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+    return BluredContainer(
+      margin: EdgeInsets.all(8),
+      width: MediaQuery.of(context).size.width,
+      height: double.infinity,
+      child: SingleChildScrollView(
         child: Column(
           children: [
             BluredContainer(
@@ -72,6 +72,16 @@ class StatsAll extends ConsumerWidget {
                       height: 200,
                       child: ColumnChartWidget(chartData2)),
                 ],
+              ),
+            ),
+            BluredContainer(
+              margin: EdgeInsets.all(8),
+              width: 410,
+              height: 220,
+              child: SizedBox(
+                width: 420,
+                height: 300,
+                child: PeiWidget(chartData),
               ),
             ),
           ],

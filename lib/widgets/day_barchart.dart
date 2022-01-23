@@ -56,9 +56,11 @@ class PeiWidget extends ConsumerWidget {
           xValueMapper: (ChartData data, _) => data.tag,
           yValueMapper: (ChartData data, _) => data.value,
           dataLabelMapper: (ChartData data, _) => data.tag,
-          explode: true,
+          explode: false,
           // All the segments will be exploded
           explodeAll: true,
+          enableTooltip: true,
+          name: 'Home',
           dataLabelSettings: DataLabelSettings(
               isVisible: true,
               // Positioning the data label
