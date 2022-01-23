@@ -28,7 +28,7 @@ final pickedShop = StateProvider<String?>((ref) {
   return null;
 });
 //for the quantifier spinner,
-String selectedQuantifier = '';
+String selectedQuantifier = 'واحدة';
 final selectedQuantifierProvider = StateProvider<String?>((ref) {
   return 'واحدة';
 });

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/overalls.dart';
@@ -10,7 +7,6 @@ import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../models/item/item.dart';
 import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
@@ -22,7 +18,6 @@ import 'lists/payments.dart';
 import 'lists/shops.dart';
 import 'shop_details.dart';
 import 'stats/stats_all.dart';
-import 'tabs/stats_tab.dart';
 
 final currencyProvider = StateProvider<String>((ref) {
   return 'DH';

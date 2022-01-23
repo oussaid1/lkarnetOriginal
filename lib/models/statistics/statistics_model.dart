@@ -11,7 +11,7 @@ final itemStatisticsProvider = StateProvider<List<ItemStatistics>>((ref) {
   var distincts = ref.watch(itemDistinctsProvider.state).state;
   distincts.distinctItemNames.forEach((dist) {
     list.add(ItemStatistics(
-        dist, items.where((element) => element.itemName == dist).toList()));
+        dist, items.where((element) => element.itemName));
   });
   list.sort((b, a) => a.itemsSum.compareTo(b.itemsSum));
   return list;

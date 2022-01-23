@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart' as df;
+import 'package:lkarnet/components.dart';
 
 class Item {
   String? id;
@@ -56,8 +56,7 @@ class Item {
   }
 
   String get formattedDate {
-    final df.DateFormat _formatter = df.DateFormat('dd-MM-yy');
-    return _formatter.format(dateBought).toString();
+    return dateBought.formatted();
   }
 
   Item.fromDocumentSnapshot(QueryDocumentSnapshot documentSnapshot) {
@@ -72,18 +71,15 @@ class Item {
     dateBought = f.toDate();
   }
   String get toYY {
-    final df.DateFormat _formatter = df.DateFormat('yy');
-    return _formatter.format(dateBought);
+    return dateBought.yyyy();
   }
 
   String get toMMYY {
-    final df.DateFormat _formatter = df.DateFormat('MM-yy');
-    return _formatter.format(dateBought);
+    return dateBought.mmyyyy();
   }
 
   String get toDDMMYY {
-    final df.DateFormat _formatter = df.DateFormat('dd-MM-yy');
-    return _formatter.format(dateBought);
+    return dateBought.ddmmyyyy();
   }
 
   void toPrint() {

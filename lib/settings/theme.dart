@@ -7,7 +7,7 @@ class MThemeData {
   static const primaryVarient = Color(0xFFCA950F);
   static const secondaryColor = Color.fromARGB(255, 235, 166, 150);
   static const secondaryVarient = Color(0xFF7E3BC1);
-  static const hintColor = Color(0xFF757575);
+  static const hintColor = Color.fromARGB(255, 43, 43, 43);
   static const almostWhiteColor = Color(0xFFF6FBFF);
   static const errorColor = Color(0xFFE17979);
   ////// Dark Theme

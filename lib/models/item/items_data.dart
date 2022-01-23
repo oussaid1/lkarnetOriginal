@@ -1,5 +1,6 @@
 import '../statistics/statistics_model.dart';
 import 'item.dart';
+import 'package:lkarnet/components.dart';
 
 class ItemsData {
   List<Item> items;
@@ -13,6 +14,45 @@ class ItemsData {
       }
     }
     return count;
+  }
+
+  // get distinct mmyyy from items
+  List<String> get mmyyyDistincts {
+    var _list = <String>[];
+    for (var item in items) {
+      _list.add(item.dateBought.mmyyyy());
+    }
+    return _list.toSet().toList();
+  }
+
+  // get distinct ddmmyyyy
+  List<String> get ddmmyyyDistincts {
+    var _list = <String>[];
+    for (var item in items) {
+      _list.add(item.dateBought.ddmmyyyy());
+    }
+    return _list.toSet().toList();
+  }
+
+// get distinct yyyy
+  List<String> get yyyDistincts {
+    var _list = <String>[];
+    for (var item in items) {
+      _list.add(item.dateBought.ddmmyyyy());
+    }
+    return _list.toSet().toList();
+  }
+
+// get mmyyy ItemsData
+  List<ItemsData> get mmyyyItemsChartData {
+    var _list = <ItemsData>[];
+    for (var distinctItem in mmyyyDistincts) {
+      _list.add(ItemsData(
+          items: items
+              .where((element) => element.dateBought.mmyyyy() == distinctItem)
+              .toList()));
+    }
+    return _list;
   }
 
   // get how many items for each itemName
@@ -29,7 +69,7 @@ class ItemsData {
         map2[element.itemName] += element.itemPrix;
       }
     }
-    ;
+
     mapCount.forEach((key, element) {
       _lista.add(ItemsChartData(
           itemName: key, itemCount: element, itemPrix: map2[key]));
