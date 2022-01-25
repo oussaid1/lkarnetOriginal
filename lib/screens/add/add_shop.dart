@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/providers/varproviders/add_shop_provider.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 
@@ -25,13 +24,14 @@ class _AddShopState extends ConsumerState<AddShop> {
   final TextEditingController _shopEmailController = TextEditingController();
   final TextEditingController _shopPhoneController = TextEditingController();
   final TextEditingController _shopLimitController = TextEditingController();
+  final TextEditingController _shopBesoinController = TextEditingController();
   void _update(BuildContext context) {
     if (widget.shop != null) {
-      _shopNameController.text = shopName = widget.shop!.shopName.toString();
-      _shopEmailController.text = shopEmail = widget.shop!.email.toString();
+      _shopNameController.text = widget.shop!.shopName.toString();
+      _shopEmailController.text = widget.shop!.email.toString();
       _shopLimitController.text = (widget.shop!.limit.toString());
-      shopLimit = widget.shop!.limit!;
-      _shopPhoneController.text = shopPhone = widget.shop!.phone.toString();
+      _shopBesoinController.text = widget.shop!.besoinTitle.toString();
+      _shopPhoneController.text = widget.shop!.phone.toString();
     }
   }
 
@@ -64,7 +64,8 @@ class _AddShopState extends ConsumerState<AddShop> {
                           }
                           return null;
                         },
-                        onChanged: (text) => shopName = text.trim(),
+                        onChanged: (text) =>
+                            _shopNameController.text = text.trim(),
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(6.0),
@@ -95,7 +96,8 @@ class _AddShopState extends ConsumerState<AddShop> {
                           }
                           return null;
                         },
-                        onChanged: (text) => shopEmail = text.trim(),
+                        onChanged: (text) =>
+                            _shopEmailController.text = text.trim(),
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(6.0),
@@ -129,7 +131,8 @@ class _AddShopState extends ConsumerState<AddShop> {
                           }
                           return null;
                         },
-                        onChanged: (text) => shopPhone = text.trim(),
+                        onChanged: (text) =>
+                            _shopPhoneController.text = text.trim(),
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(6.0),
@@ -157,7 +160,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         onChanged: (text) {
-                          slectedShopBesoinTitle = text.trim();
+                          _shopBesoinController.text = text.trim();
                         },
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
@@ -166,7 +169,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                                 color: Theme.of(context).primaryColor,
                                 style: BorderStyle.none),
                           ),
-                          hintText: 'shopping',
+                          hintText: 'category',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
                           prefixIcon: Icon(
@@ -175,7 +178,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                           ),
                           filled: true,
                           label: Text(
-                            'shopping',
+                            'category',
                             style: GoogleFonts.robotoSlab(),
                           ),
                           fillColor: MThemeData.blurWhite,
@@ -204,7 +207,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
                         onChanged: (text) =>
-                            shopLimit = double.tryParse(text.trim())!,
+                            _shopLimitController.text = text.trim(),
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
@@ -266,8 +269,15 @@ class _AddShopState extends ConsumerState<AddShop> {
               ),
               onPressed: () {
                 final _op = ref.read(operationsProvider);
+                final ShopModel _shop = ShopModel(
+                  id: widget.shop!.id,
+                  shopName: _shopNameController.text.trim(),
+                  phone: _shopPhoneController.text.trim(),
+                  besoinTitle: _shopBesoinController.text.trim(),
+                  limit: double.parse(_shopLimitController.text.trim()),
+                );
                 if (_formKeyShop.currentState!.validate()) {
-                  _op.addShop().then((value) {
+                  _op.addShop(_shop).then((value) {
                     if (value) _formKeyShop.currentState!.reset();
                   });
                 }
@@ -301,8 +311,15 @@ class _AddShopState extends ConsumerState<AddShop> {
             ),
             onPressed: () {
               final _op = ref.read(operationsProvider);
+              final ShopModel _shop = ShopModel(
+                id: widget.shop!.id,
+                shopName: _shopNameController.text.trim(),
+                phone: _shopPhoneController.text.trim(),
+                besoinTitle: _shopBesoinController.text.trim(),
+                limit: double.parse(_shopLimitController.text.trim()),
+              );
               if (_formKeyShop.currentState!.validate()) {
-                _op.updateShop(widget.shop!.id!).then((value) {
+                _op.updateShop(_shop).then((value) {
                   if (value) Navigator.pop(context);
                 });
               }

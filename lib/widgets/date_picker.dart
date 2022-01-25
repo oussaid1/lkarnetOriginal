@@ -15,7 +15,7 @@ class SelectDate extends ConsumerWidget {
       lastDate: DateTime(2025),
     ))!;
     if (picked != DateTime.now()) {
-      ref.read(pickedDateTime.state).state = selectedDateTime = picked;
+      ref.read(pickedDateTime.state).state = picked;
     }
   }
 

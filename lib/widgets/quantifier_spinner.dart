@@ -30,7 +30,6 @@ class QuantifierSpinner extends ConsumerWidget {
               value: _slectedQuantifier,
               onChanged: (value) {
                 ref.read(selectedQuantifierProvider.state).state = value;
-                selectedQuantifier = value.toString();
               },
               items: _list.toSet().map((itemName) {
                 return DropdownMenuItem<String>(

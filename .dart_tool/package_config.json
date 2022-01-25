@@ -74,12 +74,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "downloads_path_provider_28",
-      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/downloads_path_provider_28-0.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "equatable",
       "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3",
       "packageUri": "lib/",
@@ -536,7 +530,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-01-23T09:11:01.414402Z",
+  "generated": "2022-01-23T19:08:31.007171Z",
   "generator": "pub",
   "generatorVersion": "2.16.0-134.1.beta"
 }

@@ -19,7 +19,7 @@ import 'shop_details.dart';
 import 'stats/stats_all.dart';
 
 final currencyProvider = StateProvider<String>((ref) {
-  return 'DH';
+  return 'ريال';
 });
 
 class HomePage extends ConsumerStatefulWidget {

@@ -110,3 +110,42 @@ extension DtExtension on DateTime {
 extension Ex on double {
   double toPrecision() => double.parse(toStringAsFixed(2));
 }
+
+extension CountMatch on String {
+  matches(
+    String str2, {
+    bool ignoreCase = true,
+    bool ignoreSpaces = true,
+  }) {
+    toLowerCase();
+    str2.toLowerCase();
+    var list = [];
+    var count = 0;
+    for (var item in split('')) {
+      if (!item.isAlpha()) {
+        if (str2.contains(item) && !list.contains(item)) {
+          count++;
+          list.add(item);
+        }
+      }
+    }
+    // print(count);
+    // check if totalLetters is not zero to avoid division by zero
+    if ((length + str2.length) > 0) {
+      return ((count * 2) / (length + str2.length)) * 100;
+    } else {
+      return 0;
+    }
+  }
+}
+
+extension on String {
+  bool isAlpha() {
+    if (isEmpty) {
+      return false;
+    }
+    return codeUnits.every((codeUnit) =>
+        (codeUnit >= 65 && codeUnit <= 90) ||
+        (codeUnit >= 97 && codeUnit <= 122));
+  }
+}

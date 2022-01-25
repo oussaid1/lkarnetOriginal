@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-import 'package:lkarnet/widgets/glasswidget.dart';
 
+import '../components.dart';
+import '../providers/varproviders/var_providers.dart';
 import '../settings/theme.dart';
 
-class ItemsListWidget extends StatelessWidget {
+class ItemsListWidget extends ConsumerWidget {
   final List<Item> items;
   const ItemsListWidget({
     Key? key,
@@ -15,7 +15,7 @@ class ItemsListWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Container(
       margin: EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 40),
       child: ListView.builder(
@@ -30,6 +30,11 @@ class ItemsListWidget extends StatelessWidget {
                     icon: (Icons.edit),
                     label: 'Edit',
                     onPressed: (context) {
+                      ref.read(pickedDateTime.state).state = item.dateBought;
+                      ref.read(selectedQuantifierProvider.state).state =
+                          item.quantifier;
+                      ref.read(pickedShop.state).state = item.shopName;
+
                       Dialogs.botomPopUpDialog(context, AddItem(item: item));
                     })
               ],

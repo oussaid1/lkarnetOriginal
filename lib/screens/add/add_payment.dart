@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/providers/varproviders/add_payment.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
@@ -27,8 +25,6 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
     if (widget.payment != null) {
       setState(() {
         _paidAmountController.text = widget.payment!.paidAmount.toString();
-        paidAmount = widget.payment!.paidAmount;
-        selectedShop = widget.payment!.paidShopName.toString();
       });
     }
   }
@@ -77,7 +73,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                       ],
                       controller: _paidAmountController,
                       onChanged: (text) =>
-                          paidAmount = double.tryParse(text.trim())!,
+                          _paidAmountController.text = text.trim(),
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: true),
                       textAlign: TextAlign.center,

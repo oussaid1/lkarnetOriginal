@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
@@ -164,5 +163,10 @@ class DataSink {
       return 0;
     }
     return _percentage.toPrecision();
+  }
+
+  // get itemsData
+  ItemsData get itemsDataForAll {
+    return ItemsData(items: items);
   }
 }

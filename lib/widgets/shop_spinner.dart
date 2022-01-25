@@ -39,7 +39,6 @@ class ShopSpinner extends ConsumerWidget {
             ),
             value: _selectedShop,
             onChanged: (value) {
-              selectedShop = value.toString();
               ref.read(pickedShop.state).state = value;
             },
             items: [

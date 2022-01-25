@@ -23,17 +23,14 @@ final selectedPageIndex = StateProvider<int>((ref) {
   return 0;
 });
 //for the shop spinner
-String selectedShop = 'Unknown';
 final pickedShop = StateProvider<String?>((ref) {
   return null;
 });
 //for the quantifier spinner,
-String selectedQuantifier = 'واحدة';
 final selectedQuantifierProvider = StateProvider<String?>((ref) {
   return 'واحدة';
 });
 //for the DateTime Picker ,
-DateTime selectedDateTime = DateTime.now();
 final pickedDateTime = StateProvider<DateTime>((ref) {
   return DateTime.now();
 });

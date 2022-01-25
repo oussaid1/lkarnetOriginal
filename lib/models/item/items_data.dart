@@ -56,23 +56,27 @@ class ItemsData {
   }
 
   // get how many items for each itemName
-  List<ItemsChartData> getCountSumItems() {
-    var mapCount = {};
-    var map2 = {};
+  List<ItemsChartData> get countSumItems {
+    var map = {};
+    int count = 1;
+    var sum = 0.0;
     var _lista = <ItemsChartData>[];
+
     for (Item element in items) {
-      if (!mapCount.containsKey(element.itemName)) {
-        mapCount[element.itemName] = 1;
-        map2[element.itemName] = element.itemPrix;
+      if (!map.containsKey(element.itemName)) {
+        map[element.itemName] = {'count': 1, 'sum': element.itemPrix};
       } else {
-        mapCount[element.itemName] += 1;
-        map2[element.itemName] += element.itemPrix;
+        count = map[element.itemName]['count'] + 1;
+        sum = map[element.itemName]['sum'] + element.itemPrix;
+        map[element.itemName] = {'count': count, 'sum': sum};
       }
     }
 
-    mapCount.forEach((key, element) {
+    map.forEach((key, element) {
       _lista.add(ItemsChartData(
-          itemName: key, itemCount: element, itemPrix: map2[key]));
+          itemName: key,
+          itemCount: element['count'],
+          itemPrix: element['sum']));
     });
     //_lista.sort((b, a) => a.sumAll.compareTo(b.sumAll));
     // if (_lista.length >= 17) return _lista.sublist(0, 17);
@@ -81,19 +85,19 @@ class ItemsData {
 
   // get 10 most frequent items
   List<ItemsChartData> getMostFrequentItems() {
-    getCountSumItems().sort((a, b) => b.itemCount!.compareTo(a.itemCount!));
-    if (getCountSumItems().length >= 10) {
-      return getCountSumItems().sublist(0, 10);
+    countSumItems.sort((a, b) => b.itemCount!.compareTo(a.itemCount!));
+    if (countSumItems.length >= 10) {
+      return countSumItems.sublist(0, 10);
     }
-    return getCountSumItems();
+    return countSumItems;
   }
 
   // get 10 most expensive items
   List<ItemsChartData> getMostExpensiveItems() {
-    getCountSumItems().sort((a, b) => b.itemPrix!.compareTo(a.itemPrix!));
-    if (getCountSumItems().length >= 10) {
-      return getCountSumItems().sublist(0, 10);
+    countSumItems.sort((a, b) => b.itemPrix!.compareTo(a.itemPrix!));
+    if (countSumItems.length >= 10) {
+      return countSumItems.sublist(0, 10);
     }
-    return getCountSumItems();
+    return countSumItems;
   }
 }
