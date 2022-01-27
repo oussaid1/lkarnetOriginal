@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/settings/theme.dart';
+
+import 'package:lkarnet/components.dart';
 
 class ShopSpinner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     var _list = ref.watch(shopsProvider.state).state;
-    var _selectedShop = ref.watch(pickedShop.state).state;
+    // var _selectedShop = ref.watch(pickedShop.state).state;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: MThemeData.blurWhite,
+        color: AppConstants.whiteOpacity,
       ),
       width: 240.0,
       height: 45,
@@ -37,7 +36,7 @@ class ShopSpinner extends ConsumerWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle2,
             ),
-            value: _selectedShop,
+            value: ref.read(pickedShop.state).state,
             onChanged: (value) {
               ref.read(pickedShop.state).state = value;
             },

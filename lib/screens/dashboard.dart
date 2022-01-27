@@ -5,7 +5,7 @@ import 'dash/month_widget.dart';
 
 class ShopDetailsMain extends StatefulWidget {
   const ShopDetailsMain({Key? key, this.shopsData}) : super(key: key);
-  final ShopsData? shopsData;
+  final ShopData? shopsData;
   @override
   _ShopDetailsState createState() => _ShopDetailsState();
 }

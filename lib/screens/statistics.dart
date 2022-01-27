@@ -7,7 +7,7 @@ import 'lists/items.dart';
 
 class StatisticsWidget extends StatefulWidget {
   const StatisticsWidget({Key? key, this.shopsData}) : super(key: key);
-  final ShopsData? shopsData;
+  final ShopData? shopsData;
   @override
   _StatisticsWidgetState createState() => _StatisticsWidgetState();
 }

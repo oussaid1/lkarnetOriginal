@@ -66,14 +66,16 @@ class Tagged {
   PaymentsFiltered paymentsFiltered;
   List<ShopModel> shops;
   DateFilterType dateFilterType;
-  List<ShopsData> get shopData {
-    List<ShopsData> _list = [];
-    shops.forEach((shop) => _list.add(new ShopsData(
+  List<ShopData> get shopData {
+    List<ShopData> _list = [];
+    shops.forEach((shop) => _list.add(new ShopData(
         shop,
         new ItemsFiltered(
             tag: tag,
             dateFilterType: dateFilterType,
-            items: itemsFiltered.allItems.where((item) => item.shopName == shop.shopName).toList()),
+            items: itemsFiltered.allItems
+                .where((item) => item.shopName == shop.shopName)
+                .toList()),
         new PaymentsFiltered(
             tag: tag,
             dateFilterType: dateFilterType,
@@ -81,12 +83,15 @@ class Tagged {
                 .where((payment) => payment.paidShopName == shop.shopName)
                 .toList()))));
     // _list.retainWhere((element) => element.countItems != 0);
-    _list.sort((a, b) => b.itemsSumAfterPayment.compareTo(a.itemsSumAfterPayment));
+    _list.sort(
+        (a, b) => b.itemsSumAfterPayment.compareTo(a.itemsSumAfterPayment));
     return _list;
   }
 
-  List<ShopsData> get shopDataList {
-    return shopData.where((element) => element.itemsSumAfterPayment != 0).toList();
+  List<ShopData> get shopDataList {
+    return shopData
+        .where((element) => element.itemsSumAfterPayment != 0)
+        .toList();
   }
 
   Tagged({

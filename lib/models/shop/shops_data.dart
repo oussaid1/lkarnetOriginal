@@ -9,12 +9,12 @@ import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
 import '../item/items_data.dart';
 import 'shop_model.dart';
 
-final shopsDataListProvider = StateProvider<List<ShopsData>>((ref) {
-  List<ShopsData> list = [];
+final shopsDataListProvider = StateProvider<List<ShopData>>((ref) {
+  List<ShopData> list = [];
   final items = ref.watch(itemsProvider.state);
   final payments = ref.watch(paymentsProvider.state).state;
   final shops = ref.watch(shopsProvider.state);
-  shops.state.forEach((shop) => list.add(new ShopsData(
+  shops.state.forEach((shop) => list.add(new ShopData(
       shop,
       new ItemsFiltered(
           items: items.state
@@ -28,11 +28,11 @@ final shopsDataListProvider = StateProvider<List<ShopsData>>((ref) {
   return list;
 });
 
-class ShopsData {
+class ShopData {
   ShopModel shop;
   ItemsFiltered itemsFiltered;
   PaymentsFiltered paymentsFiltered;
-  ShopsData(this.shop, this.itemsFiltered, this.paymentsFiltered);
+  ShopData(this.shop, this.itemsFiltered, this.paymentsFiltered);
 
   // filtered list by Shop object passed to the constructor
   List<Item> get allItems {
@@ -94,9 +94,9 @@ class DataSink {
   List<Payment> payments;
   DataSink(this.shops, this.items, this.payments);
   // get all shopsData
-  List<ShopsData> get allShopsData {
-    List<ShopsData> list = [];
-    shops.forEach((shop) => list.add(new ShopsData(
+  List<ShopData> get allShopsData {
+    List<ShopData> list = [];
+    shops.forEach((shop) => list.add(new ShopData(
         shop,
         new ItemsFiltered(
             items: items

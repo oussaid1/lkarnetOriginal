@@ -63,7 +63,7 @@ class Operations {
         .then((value) => true);
   }
 
-  Future<bool> deleteShopData(ShopsData shopsData) async {
+  Future<bool> deleteShopData(ShopData shopsData) async {
     deleteShop(shopsData.shop);
     for (var item in shopsData.allItems) {
       deleteItem(item);

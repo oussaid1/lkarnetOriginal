@@ -59,7 +59,7 @@ class DailyDash extends ConsumerWidget {
             child: ListView.builder(
                 itemCount: _tagged.shopDataList.length,
                 itemBuilder: (context, index) {
-                  ShopsData shopsData = _tagged.shopDataList[index];
+                  ShopData shopsData = _tagged.shopDataList[index];
                   return BluredContainer(
                     child: ExpansionTile(
                       collapsedTextColor: Colors.white,

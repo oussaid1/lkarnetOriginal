@@ -3,10 +3,12 @@ import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
+import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/settings/theme.dart';
 
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:lkarnet/widgets/price_curency_widget.dart';
 
 class ItemsList extends ConsumerWidget {
   final List<Item>? lista;
@@ -24,7 +26,7 @@ class ItemsList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: _shopsDataList.length,
         itemBuilder: (BuildContext context, int index) {
-          ShopsData shopsData = _shopsDataList[index];
+          ShopData shopsData = _shopsDataList[index];
           return new ExpansionTile(
             title: Text('${shopsData.shop.shopName}'),
             trailing: Text('${shopsData.countItems}'),
@@ -90,13 +92,18 @@ class ItemTileWidget extends ConsumerWidget {
       //  actionExtentRatio: 0.25,
 
       startActionPane: ActionPane(
-        dismissible: DismissiblePane(onDismissed: () {}),
+        // dismissible: DismissiblePane(onDismissed: () {}),
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
             key: const Key('action-1'),
             backgroundColor: Colors.transparent,
             onPressed: (context) {
+              ref.read(pickedDateTime.state).state = item.dateBought;
+              ref.read(pickedShop.state).state = item.shopName;
+              ref.watch(selectedQuantifierProvider.state).state =
+                  item.quantifier;
+
               Dialogs.botomPopUpDialog(
                 context,
                 AddItem(
@@ -115,7 +122,7 @@ class ItemTileWidget extends ConsumerWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-              key: const Key('action-2'),
+              key: const Key('action-12'),
               backgroundColor: Colors.transparent,
               label: 'Delete',
               onPressed: (context) {
@@ -220,16 +227,12 @@ class ItemTileWidget extends ConsumerWidget {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      '${item.itemPrix.toPrecision()}',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                  ),
-                  Text(
-                    'DH',
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
+                      padding: EdgeInsets.all(4.0),
+                      child: PriceNumberZone(
+                        price: item.itemPrix,
+                        style: Theme.of(context).textTheme.headline4,
+                        withDollarSign: true,
+                      )),
                   const SizedBox(width: 8),
                 ],
               ),

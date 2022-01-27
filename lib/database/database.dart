@@ -227,7 +227,7 @@ class Database {
     }
   }
 
-  Future<void> deleteShopData(ShopsData shopsData) async {
+  Future<void> deleteShopData(ShopData shopsData) async {
     for (var item in shopsData.allItems)
       try {
         _users.collection('Goods').doc(item.id).delete();

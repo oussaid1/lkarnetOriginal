@@ -1,18 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/settings/theme.dart';
 
 class QuantifierSpinner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _list = <String>['واحدة', 'كيلو', 'علبة', 'لتر'];
-    final _slectedQuantifier =
-        ref.watch(selectedQuantifierProvider.state).state;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: MThemeData.blurWhite,
+        color: AppConstants.whiteOpacity,
       ),
       width: 120.0,
       height: 45,
@@ -27,7 +24,7 @@ class QuantifierSpinner extends ConsumerWidget {
               iconSize: 30,
               icon: Icon(Icons.arrow_drop_down),
               isExpanded: true,
-              value: _slectedQuantifier,
+              value: ref.read(selectedQuantifierProvider.state).state,
               onChanged: (value) {
                 ref.read(selectedQuantifierProvider.state).state = value;
               },

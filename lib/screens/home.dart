@@ -11,16 +11,13 @@ import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
 import '../providers/streamproviders/shops_stream_provider.dart';
+import '../widgets/price_curency_widget.dart';
 import 'add/add_shop.dart';
 import 'dashboard.dart';
 import 'lists/payments.dart';
 import 'lists/shops.dart';
 import 'shop_details.dart';
 import 'stats/stats_all.dart';
-
-final currencyProvider = StateProvider<String>((ref) {
-  return 'ريال';
-});
 
 class HomePage extends ConsumerStatefulWidget {
   HomePage({
@@ -37,13 +34,13 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _currency = ref.watch(currencyProvider.state).state;
+    //final _currency = ref.watch(currencyProvider.state).state;
     int _selectedPageIndex = ref.watch(selectedPageIndex.state).state;
     var items = ref.watch(itemsProvider.state).state;
     var payments = ref.watch(paymentsProvider.state).state;
     var shops = ref.watch(shopsProvider.state).state;
     var dataSink = DataSink(shops, items, payments);
-    List<ShopsData> _shopsDataList = dataSink.allShopsData;
+    List<ShopData> _shopsDataList = dataSink.allShopsData;
     // ref.watch(shopsDataListProvider.state).state;
     var _recentOperations = ref.watch(recentOperationsProvider.state).state;
     // var chartData = ref.watch(shopsChartsDataProvider.state).state;
@@ -85,18 +82,19 @@ class _HomePageState extends ConsumerState<HomePage> {
             backgroundColor: Colors.transparent,
             appBar: buildAppBar(context, title: 'Home', items: items),
             body: buildPageView(_pageController, ref, context,
-                currency: _currency,
                 dataSink: dataSink,
                 shopsDataList: _shopsDataList,
                 recentOperations: _recentOperations)));
   }
 
   buildPageView(
-      PageController _pageController, WidgetRef ref, BuildContext context,
-      {required DataSink dataSink,
-      required List<ShopsData> shopsDataList,
-      required RecentOperation recentOperations,
-      required String currency}) {
+    PageController _pageController,
+    WidgetRef ref,
+    BuildContext context, {
+    required DataSink dataSink,
+    required List<ShopData> shopsDataList,
+    required RecentOperation recentOperations,
+  }) {
     return Column(
       children: [
         Expanded(
@@ -108,7 +106,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             },
             children: [
               buildBody(context,
-                  currency: currency,
                   dataSink: dataSink,
                   shopsDataList: shopsDataList,
                   recentOperations: recentOperations),
@@ -147,12 +144,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.dashboard),
           label: 'Dashboard',
-          backgroundColor: Color.fromARGB(255, 224, 160, 101),
+          backgroundColor: Color.fromARGB(255, 224, 126, 101),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list),
           label: 'Lists',
-          backgroundColor: Color.fromARGB(255, 224, 201, 101),
+          backgroundColor: Color.fromARGB(255, 224, 101, 121),
         ),
         const BottomNavigationBarItem(
           icon: const Icon(Icons.add_chart),
@@ -168,11 +165,12 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  buildBody(BuildContext context,
-      {required DataSink dataSink,
-      required List<ShopsData> shopsDataList,
-      required RecentOperation recentOperations,
-      required String currency}) {
+  buildBody(
+    BuildContext context, {
+    required DataSink dataSink,
+    required List<ShopData> shopsDataList,
+    required RecentOperation recentOperations,
+  }) {
     return BluredContainer(
       start: 0,
       end: 0,
@@ -181,13 +179,11 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            buildTopWidget(dataSink, currency),
-            // const SizedBox(height: 20),
-            buildShopsWidget(context, shopsDataList, currency),
+            buildTopWidget(dataSink),
+            buildShopsWidget(context, shopsDataList),
             buildRecentOpeerationsWidget(
               context,
               recentOperations,
-              currency,
             )
           ],
         ),
@@ -195,69 +191,61 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  buildShopsWidget(
-      BuildContext context, List<ShopsData> _shopsDataList, String currency) {
+  buildShopsWidget(BuildContext context, List<ShopData> _shopsDataList) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
-                const SizedBox(width: 8),
-                Text('Shops',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline2),
-              ],
+      child: SizedBox(
+        height: 170,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
+                  const SizedBox(width: 8),
+                  Text('Shops',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline2),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            width: 390,
-            height: 120,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final ShopsData shopsData = _shopsDataList[index];
-
-                      return ShopCircleTile(
-                        currency: currency,
-                        shopData: shopsData,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShopDetails(
-                                shopsData: shopsData,
-                              ),
-                            ),
-                          );
-                        },
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final ShopData shopsData = _shopsDataList[index];
+                  return ShopSquareTile(
+                    shopData: shopsData,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShopDetails(
+                            shopData: shopsData,
+                          ),
+                        ),
                       );
                     },
-                    itemCount: _shopsDataList.length,
-                  ),
-                ),
-              ],
+                  );
+                },
+                itemCount: _shopsDataList.length,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
 // build operations widget
   buildRecentOpeerationsWidget(
-      BuildContext context, RecentOperation recentOperations, String currency) {
+      BuildContext context, RecentOperation recentOperations) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -287,7 +275,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     recentOperations.recentOperationsList[index];
                 return recentOperation.isItem
                     ? ItemTileWidget(
-                        //currency: currency,
                         item: recentOperation.item!,
                       )
                     : PaymentTile(
@@ -305,7 +292,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  buildTopWidget(DataSink dataSink, String currency) {
+  buildTopWidget(DataSink dataSink) {
     return SizedBox(
       width: 390,
       height: 120,
@@ -328,26 +315,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                 SizedBox(
                   height: 8,
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: '${dataSink.itemsSumAfterPayment}',
-                    style: GoogleFonts.roboto(
-                      color: Color(0xFF1A1619),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '$currency',
-                        style: GoogleFonts.poppins(
-                          color: Color(0xFF0A0A0A),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                PriceNumberZone(
+                  right: const SizedBox.shrink(),
+                  withDollarSign: true,
+                  price: dataSink.itemsSumAfterPayment,
+                  style: Theme.of(context).textTheme.headline2!,
+                ),
               ],
             ),
             buildCircularProgress(dataSink),
@@ -465,7 +438,7 @@ class ShopTile extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final ShopsData shopData;
+  final ShopData shopData;
   final String currency;
 
   @override
@@ -535,17 +508,15 @@ class ShopTile extends StatelessWidget {
   }
 }
 
-class ShopCircleTile extends StatelessWidget {
-  const ShopCircleTile({
+class ShopSquareTile extends StatelessWidget {
+  const ShopSquareTile({
     Key? key,
     required this.onTap,
     required this.shopData,
-    required this.currency,
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final ShopsData shopData;
-  final String currency;
+  final ShopData shopData;
 
   @override
   Widget build(BuildContext context) {
@@ -559,29 +530,28 @@ class ShopCircleTile extends StatelessWidget {
           child: BluredContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.person_outline_sharp,
-                  color: Colors.white.withOpacity(0.5),
-                  size: 40,
+                Column(
+                  children: [
+                    Icon(
+                      Icons.person_outline_sharp,
+                      color: Colors.white.withOpacity(0.5),
+                      size: 40,
+                    ),
+                    Text(
+                      '${shopData.shop.shopName}',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  ],
                 ),
-                Text(
-                  '${shopData.shop.shopName}',
-                  style: Theme.of(context).textTheme.headline5,
+                PriceNumberZone(
+                  right: const SizedBox.shrink(),
+                  withDollarSign: true,
+                  price: shopData.itemsSumAfterPayment,
+                  style: Theme.of(context).textTheme.headline3!,
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: '${shopData.itemsSumAfterPayment}',
-                    style: Theme.of(context).textTheme.headline4,
-                    children: [
-                      TextSpan(
-                        text: ' $currency',
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

@@ -39,3 +39,9 @@ final pickedDateTime = StateProvider<DateTime>((ref) {
 final shopSelectedMonthSProvider = StateProvider<String>((ref) {
   return '-- --';
 });
+
+//currency variable
+
+final currencyProvider = StateProvider<String>((ref) {
+  return 'ريال';
+});

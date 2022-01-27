@@ -35,9 +35,9 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             SizedBox(
-              height: 70,
+              height: 50,
               width: 400,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -49,9 +49,10 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
 
                   return SizedBox(
                     width: 100,
-                    height: 60,
+                    height: 50,
                     child: Card(
-                      color: Color.fromARGB(226, 214, 148, 148),
+                      color:
+                          Color.fromARGB(226, 214, 148, 148).withOpacity(0.5),
                       child: GestureDetector(
                         onTap: () =>
                             ref.read(tagIndexProvider.state).state = index,
@@ -62,8 +63,7 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
                                   .textTheme
                                   .headline4!
                                   .copyWith(
-                                      color:
-                                          Color.fromARGB(214, 247, 247, 247))),
+                                      color: Color.fromARGB(213, 24, 22, 22))),
                         ),
                       ),
                     ),
@@ -73,48 +73,70 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
             ),
             Column(
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 _buildMonthlyCard(context, _tagged),
                 const SizedBox(height: 10),
                 Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.symmetric(horizontal: 4),
                   width: 400,
                   height: 400,
-                  child: GridView.count(
-                      childAspectRatio: 1.6,
-                      crossAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: _tagged.shopDataList.map((shopsData) {
-                        return SizedBox(
-                          width: 100,
-                          height: 120,
-                          child: ShopCircleTile(
-                            currency: '\$',
-                            shopData: shopsData,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ShopDetails(
-                                    shopsData: shopsData,
-                                  ),
-                                ),
-                              );
-                            },
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.5,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10),
+                    itemCount: _tagged.shopDataList.length,
+                    itemBuilder: (context, index) {
+                      return ShopSquareTile(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShopDetails(
+                              shopData: _tagged.shopDataList[index],
+                            ),
                           ),
-                        );
-                      }).toList()),
+                        ),
+                        shopData: _tagged.shopDataList[index],
+                      );
+                      // return SizedBox(
+                      //   width: 100,
+                      //   height: 100,
+                      //   child: GestureDetector(
+                      //     onTap: () => Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => ShopDetails(
+                      //                   shopsData: _tagged.shopDataList[index],
+                      //                 ))),
+                      //     child: Card(
+                      //       color: Color.fromARGB(226, 214, 148, 148),
+                      //       child: Center(
+                      //         child: Text(
+                      //             '${_tagged.shopDataList[index].shop.shopName}',
+                      //             textAlign: TextAlign.center,
+                      //             style: Theme.of(context)
+                      //                 .textTheme
+                      //                 .headline4!
+                      //                 .copyWith(
+                      //                     color: Color.fromARGB(
+                      //                         214, 247, 247, 247))),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                  ),
                 ),
               ],
-            ),
-            const SizedBox(
-              height: 50,
             ),
           ],
         ),
       ),
     );
   }
+
+  // children: [  ],
 
   _buildMonthlyCard(BuildContext context, Tagged tagged) {
     return Padding(

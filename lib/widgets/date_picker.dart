@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' as df;
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/settings/theme.dart';
+
+import '../const/constents.dart';
 
 class SelectDate extends ConsumerWidget {
   void _selectDate(BuildContext context, ref) async {
@@ -25,37 +26,29 @@ class SelectDate extends ConsumerWidget {
     final _pickedDate = ref.watch(pickedDateTime.state).state;
     return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: Colors.grey, width: 1),
-        ),
+            borderRadius: BorderRadius.circular(2),
+            // border: Border.all(color: Colors.grey, width: 1),
+            color: AppConstants.whiteOpacity),
         height: 45,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0),
-            boxShadow: [],
-            color: MThemeData.blurWhite,
-          ),
-          child: Row(
-            children: [
-              Container(
-                height: 45,
-                width: 45,
-                child: IconButton(
-                  onPressed: () {
-                    _selectDate(context, ref);
-                  },
-                  icon: Icon(
-                    CupertinoIcons.calendar,
-                    color: Colors.grey,
-                  ),
+        child: Row(
+          children: [
+            Container(
+              height: 45,
+              width: 45,
+              child: IconButton(
+                onPressed: () {
+                  _selectDate(context, ref);
+                },
+                icon: Icon(
+                  CupertinoIcons.calendar,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: Text(_formatter.format(_pickedDate)),
-              ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
+              child: Text(_formatter.format(_pickedDate)),
+            ),
+          ],
         ));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/providers/dataprovider/data_providers.dart';
-import 'package:lkarnet/widgets/day_barchart.dart';
+import 'package:lkarnet/widgets/charts.dart';
 
 class StatsDay extends ConsumerWidget {
   @override
@@ -33,7 +33,9 @@ class StatsDay extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(height: 50,),
+          SizedBox(
+            height: 50,
+          ),
         ],
       ),
     );

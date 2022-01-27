@@ -47,13 +47,15 @@ class _ExpandableFabState extends State<ExpandableFab>
     super.dispose();
   }
 
-  void _toggle() {
+  void _toggle() async {
     setState(() {
       _open = !_open;
       if (_open) {
         _controller.forward();
-      } else {
-        _controller.reverse();
+        Future.delayed(const Duration(seconds: 2), () {
+          _controller.reverse();
+        });
+        _open = !_open;
       }
     });
   }

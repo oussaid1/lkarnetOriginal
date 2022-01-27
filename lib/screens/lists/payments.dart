@@ -6,7 +6,9 @@ import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 
 import '../../components.dart';
+import '../../providers/varproviders/var_providers.dart';
 import '../../settings/theme.dart';
+import '../../widgets/price_curency_widget.dart';
 
 class PaymentsList extends ConsumerWidget {
   final List<Payment>? lista;
@@ -24,7 +26,7 @@ class PaymentsList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: _shopsDataList.length,
         itemBuilder: (BuildContext context, int index) {
-          ShopsData shopsData = _shopsDataList[index];
+          ShopData shopsData = _shopsDataList[index];
           return new ExpansionTile(
             title: Text('${shopsData.shop.shopName}'),
             trailing: Text('${shopsData.paymentsSum}'),
@@ -94,6 +96,8 @@ class PaymentTile extends ConsumerWidget {
                 icon: Icons.mode_edit,
                 label: 'Edit',
                 onPressed: (context) {
+                  ref.read(pickedDateTime.state).state = payment.datePaid;
+                  ref.read(pickedShop.state).state = payment.paidShopName;
                   Dialogs.botomPopUpDialog(
                       context,
                       AddPayment(
@@ -189,23 +193,27 @@ class PaymentTile extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${payment.datePaid.formatted()}',
-                        style: Theme.of(context).textTheme.headline6,
+                      Column(
+                        children: [
+                          Text(
+                            '${payment.paidShopName}',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          Text(
+                            '${payment.datePaid.formatted()}',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ],
                       ),
                       Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              '${payment.paidAmount.toPrecision()}',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                          ),
-                          Text(
-                            'DH',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
+                              padding: EdgeInsets.all(4.0),
+                              child: PriceNumberZone(
+                                price: payment.paidAmount,
+                                style: Theme.of(context).textTheme.headline4,
+                                withDollarSign: true,
+                              )),
                           const SizedBox(width: 8),
                         ],
                       ),

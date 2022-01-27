@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lkarnet/models/search/search_delegate.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/lists/payments.dart';
 import 'package:lkarnet/screens/lists/shops.dart';
@@ -21,12 +19,7 @@ class ListTab extends ConsumerWidget {
             leading: Container(),
             leadingWidth: 10,
             actions: [
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => showSearch(
-                      context: context,
-                      delegate: ItemsListSearch(
-                          listOfItems: ref.watch(itemsProvider.state).state))),
+              IconButton(icon: Icon(Icons.search), onPressed: () {}),
             ],
             bottom: TabBar(
               overlayColor: MaterialStateColor.resolveWith(

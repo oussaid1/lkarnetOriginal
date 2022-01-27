@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/root.dart';
 import 'navigator/rout_navigator.dart';
 import 'settings/theme.dart';
-import 'settings/theme/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,14 +23,14 @@ Future<void> main() async {
 class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var appThemeState = ref.watch(appThemeStateNotifier);
+    //var appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: Locale('ar'),
       title: 'حانوتي - لكارني',
       theme: MThemeData.lightThemeData,
       darkTheme: MThemeData.darkThemeData,
-      themeMode: appThemeState.darkMode ? ThemeMode.dark : ThemeMode.light,
+      themeMode: ThemeMode.light,
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
       home: Root(),

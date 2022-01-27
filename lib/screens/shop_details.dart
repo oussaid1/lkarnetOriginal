@@ -6,8 +6,8 @@ import 'lists/items.dart';
 import 'lists/payments.dart';
 
 class ShopDetails extends StatefulWidget {
-  const ShopDetails({Key? key, this.shopsData}) : super(key: key);
-  final ShopsData? shopsData;
+  const ShopDetails({Key? key, this.shopData}) : super(key: key);
+  final ShopData? shopData;
   @override
   _ShopDetailsState createState() => _ShopDetailsState();
 }
@@ -51,7 +51,7 @@ class _ShopDetailsState extends State<ShopDetails> {
         // Color.fromARGB(255, 48, 199, 237),
         // Color.fromARGB(255, 48, 199, 237),
       ],
-      centerWidget: ShopsDetailsBody(shopsData: widget.shopsData!),
+      centerWidget: ShopsDetailsBody(shopsData: widget.shopData!),
     );
   }
 
@@ -65,7 +65,7 @@ class ShopsDetailsBody extends StatelessWidget {
     required this.shopsData,
   }) : super(key: key);
 
-  final ShopsData shopsData;
+  final ShopData shopsData;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,7 @@ class ShopItemsDetailsWidget extends StatelessWidget {
     required this.shopsData,
   }) : super(key: key);
 
-  final ShopsData shopsData;
+  final ShopData shopsData;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +167,9 @@ class ShopItemsDetailsWidget extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return ItemTileWidget(item: shopsData.allItems[index]);
+                  return ItemTileWidget(
+                    item: shopsData.allItems[index],
+                  );
                 },
                 itemCount: shopsData.allItems.length,
               ),
@@ -185,7 +187,7 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
     required this.shopsData,
   }) : super(key: key);
 
-  final ShopsData shopsData;
+  final ShopData shopsData;
 
   @override
   Widget build(BuildContext context) {
