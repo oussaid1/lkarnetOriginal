@@ -36,7 +36,7 @@ class ShopSpinner extends ConsumerWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle2,
             ),
-            value: ref.read(pickedShop.state).state,
+            value: ref.watch(pickedShop.state).state,
             onChanged: (value) {
               ref.read(pickedShop.state).state = value;
             },

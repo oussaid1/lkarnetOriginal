@@ -24,7 +24,7 @@ class QuantifierSpinner extends ConsumerWidget {
               iconSize: 30,
               icon: Icon(Icons.arrow_drop_down),
               isExpanded: true,
-              value: ref.read(selectedQuantifierProvider.state).state,
+              value: ref.watch(selectedQuantifierProvider.state).state,
               onChanged: (value) {
                 ref.read(selectedQuantifierProvider.state).state = value;
               },
