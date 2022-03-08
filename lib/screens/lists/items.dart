@@ -6,6 +6,7 @@ import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/settings/theme.dart';
+import 'package:flutter/material.dart';
 
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:lkarnet/widgets/price_curency_widget.dart';

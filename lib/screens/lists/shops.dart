@@ -22,9 +22,18 @@ class ShopsList extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 20),
+          SizedBox(
+              height: 40,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text("Shops", style: Theme.of(context).textTheme.headline3),
+                ],
+              )),
           BluredContainer(
-            margin: EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 8),
+            margin: EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: ListView.builder(
               itemCount: _shopsDataList.length,
               itemBuilder: (BuildContext context, int index) {

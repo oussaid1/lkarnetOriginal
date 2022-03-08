@@ -2,6 +2,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:flutter/material.dart';
 
 import '../components.dart';
 import '../providers/varproviders/var_providers.dart';

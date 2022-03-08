@@ -7,6 +7,7 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
 import 'package:lkarnet/widgets/shop_spinner.dart';
+import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
@@ -101,6 +102,15 @@ class _AddItemState extends ConsumerState<AddItem> {
                           focusNode: fieldFocusNode,
                           style: Theme.of(context).textTheme.headline6,
                           decoration: InputDecoration(
+                            suffix: IconButton(
+                              icon: Icon(
+                                Icons.clear_outlined,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                fieldTextEditingController.clear();
+                              },
+                            ),
                             hintText: 'name',
                             hintStyle: GoogleFonts.robotoSlab(),
                             contentPadding: EdgeInsets.only(top: 4),
@@ -116,6 +126,8 @@ class _AddItemState extends ConsumerState<AddItem> {
                       },
                       onSelected: (Item selection) {
                         _itemNameController.text = selection.itemName;
+                        _itemPriceController.text =
+                            selection.itemPrice.toString();
                       },
                     ),
                   ),

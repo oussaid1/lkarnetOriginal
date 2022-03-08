@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 
-import '../components.dart';
 import 'dash/month_widget.dart';
 
 class ShopDetailsMain extends StatefulWidget {

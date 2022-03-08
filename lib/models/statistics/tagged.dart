@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/item_distincts.dart';
 import 'package:lkarnet/models/payment/payments_filtered.dart';
@@ -66,6 +66,24 @@ class Tagged {
   PaymentsFiltered paymentsFiltered;
   List<ShopModel> shops;
   DateFilterType dateFilterType;
+  DateTime? get date {
+    List<String> date = tag.split('-');
+    if (date.length == 3) {
+      return DateTime.parse(tag);
+    } else if (date.length == 2) {
+      return DateTime.parse(date[0] + '-' + date[1] + '-01');
+    } else if (date.length == 1) {
+      return DateTime.parse(date[0] + '-01-01');
+    }
+    return null;
+  }
+
+  DateTime get tagDate {
+    var date = DateTime.parse(tag);
+    date.formatted();
+    return date;
+  }
+
   List<ShopData> get shopData {
     List<ShopData> _list = [];
     shops.forEach((shop) => _list.add(new ShopData(

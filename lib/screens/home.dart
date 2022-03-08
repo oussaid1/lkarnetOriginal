@@ -14,10 +14,18 @@ import '../providers/streamproviders/shops_stream_provider.dart';
 import '../widgets/price_curency_widget.dart';
 import 'add/add_shop.dart';
 import 'dashboard.dart';
+import 'kitchen_stock.dart';
 import 'lists/payments.dart';
 import 'lists/shops.dart';
 import 'shop_details.dart';
 import 'stats/stats_all.dart';
+import 'package:flutter/material.dart';
+
+import 'tabs/list_tab.dart';
+
+final appTittleProvider = StateProvider<String>((ref) {
+  return "Home";
+});
 
 class HomePage extends ConsumerStatefulWidget {
   HomePage({
@@ -112,7 +120,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               //DashBoardTab(),
               ShopDetailsMain(),
               // ListTab(),
-              ShopsList(),
+              //ShopsList(),
+              KitchenStockHome(),
               StatsAll(),
               SettingsPage(),
             ],
@@ -148,7 +157,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list),
-          label: 'Lists',
+          label: 'Shops',
           backgroundColor: Color.fromARGB(255, 224, 101, 121),
         ),
         const BottomNavigationBarItem(

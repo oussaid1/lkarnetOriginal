@@ -1,5 +1,6 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
+import 'package:flutter/material.dart';
 
 class QuantifierSpinner extends ConsumerWidget {
   @override

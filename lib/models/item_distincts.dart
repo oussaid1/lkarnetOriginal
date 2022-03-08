@@ -7,16 +7,17 @@ final itemDistinctsProvider = StateProvider<ItemDistincts>((ref) {
   return ItemDistincts(items: ref.watch(itemsProvider.state).state);
 });
 
+// get distincts from items
 class ItemDistincts {
   List<Item> items = [];
   ItemDistincts({
     required this.items,
   });
-
+// comment this is to get distinct itemNames from items
   List<String> get distinctItemNames {
     List<String> _distincts = [];
     items.forEach((element) {
-      _distincts.add(element.itemName);
+      _distincts.add(element.itemName.trim());
     });
     return _distincts.toSet().toList();
   }

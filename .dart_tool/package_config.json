@@ -237,9 +237,9 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/js-0.6.3",
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/js-0.6.4",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.16"
     },
     {
       "name": "logger",
@@ -267,7 +267,7 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/path-1.8.0",
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/path-1.8.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -489,7 +489,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.8",
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.9",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -530,7 +530,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-01-27T22:33:02.919448Z",
+  "generated": "2022-03-02T15:05:33.235823Z",
   "generator": "pub",
-  "generatorVersion": "2.16.0-134.1.beta"
+  "generatorVersion": "2.17.0-69.2.beta"
 }

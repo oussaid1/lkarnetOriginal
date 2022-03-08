@@ -4,6 +4,7 @@ import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/settings/theme.dart';
+import 'package:flutter/material.dart';
 
 class AddShop extends ConsumerStatefulWidget {
   final ShopModel? shop;

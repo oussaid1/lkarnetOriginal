@@ -78,7 +78,6 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
                 const SizedBox(height: 10),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 4),
-                  width: 400,
                   height: 400,
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -128,6 +127,7 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
                     },
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ],

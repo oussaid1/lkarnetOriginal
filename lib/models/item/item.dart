@@ -62,7 +62,7 @@ class Item {
   Item.fromDocumentSnapshot(QueryDocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
-    itemName = documentSnapshot['itemName'];
+    itemName = documentSnapshot['itemName'].trim();
     quantifier = documentSnapshot['quantifier'];
     quantity = documentSnapshot['quantity'].toDouble();
     itemPrice = (documentSnapshot['itemPrice']).toDouble() ?? 0;

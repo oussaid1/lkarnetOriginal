@@ -2,6 +2,7 @@ import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 
 import 'package:lkarnet/components.dart';
+import 'package:flutter/material.dart';
 
 class ShopSpinner extends ConsumerWidget {
   @override

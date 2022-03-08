@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 
@@ -44,10 +44,22 @@ class ChartData {
   final double value;
   final int count;
   final Color? color;
-  // get DateTime from tag
-  DateTime get dateTime {
-    var _date = DateTime.parse(tag);
-    return _date;
+  DateTime? get date {
+    List<String> date = tag.split('-');
+    if (date.length == 3) {
+      return DateTime.parse(tag);
+    } else if (date.length == 2) {
+      return DateTime.parse(date[0] + '-' + date[1] + '-01');
+    } else if (date.length == 1) {
+      return DateTime.parse(date[0] + '-01-01');
+    }
+    return null;
+  }
+
+  DateTime get tagDate {
+    var date = DateTime.parse(tag);
+    date.formatted();
+    return date;
   }
 }
 

@@ -15,6 +15,7 @@ class ListTab extends ConsumerWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             elevation: 0,
             leading: Container(),
             leadingWidth: 10,
@@ -32,7 +33,6 @@ class ListTab extends ConsumerWidget {
               tabs: [
                 Tab(text: 'Items'),
                 Tab(text: 'shops'),
-                //Tab(text: 'categories'),
                 Tab(text: 'payments'),
               ],
             ),

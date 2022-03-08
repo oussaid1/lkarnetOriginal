@@ -3,6 +3,7 @@ import 'package:lkarnet/providers/authproviders/login_page_providers.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
+import 'package:flutter/material.dart';
 
 import 'login.dart';
 
