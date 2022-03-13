@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
-import 'package:lkarnet/screens/add/add_item.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
-import '../widgets/dialogs.dart';
+import 'tabs/kitchen_item_detailed.dart';
 
 class KitchenStockHome extends ConsumerStatefulWidget {
   const KitchenStockHome({Key? key}) : super(key: key);
@@ -39,10 +38,18 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Dialogs.botomPopUpDialog(
+            Navigator.push(
               context,
-              AddItem(),
+              MaterialPageRoute(
+                builder: (context) => KitchenItemDetailsScreen(
+                    // availability: (double) {},
+                    ),
+              ),
             );
+            // Dialogs.botomPopUpDialog(
+            //   context,
+            //   AddItem(),
+            // );
           },
           child: Icon(Icons.add),
         ),

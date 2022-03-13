@@ -137,7 +137,7 @@ class KitchenElement {
     };
   }
 
-  factory KitchenElement.fromMap(Map<String, dynamic> map) {
+  factory KitchenElement.fromDocumentSnapShot(DocumentSnapshot map) {
     return KitchenElement(
       id: map['id'],
       title: map['title'],
@@ -147,6 +147,16 @@ class KitchenElement {
     );
   }
 
+// from map to object
+  factory KitchenElement.fromMap(Map<String, dynamic> map) {
+    return KitchenElement(
+      id: map['id'],
+      title: map['title'],
+      quantity: map['quantity'],
+      category: map['category'],
+      availability: map['availability'],
+    );
+  }
   String toJson() => json.encode(toMap());
 
   factory KitchenElement.fromJson(String source) =>
@@ -238,7 +248,7 @@ class KitchenItem {
     };
   }
 
-  KitchenItem.fromDocumentSnapshot(QueryDocumentSnapshot documentSnapshot) {
+  KitchenItem.fromDocumentSnapShot(QueryDocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
     itemName = documentSnapshot['itemName'].trim();
@@ -273,10 +283,23 @@ class KitchenItem {
     print('-------------------------------');
   }
 
+// from map
+  factory KitchenItem.fromMap(Map<String, dynamic> map) {
+    return KitchenItem(
+      id: map['id'],
+      besoinTitle: map['besoinTitle'],
+      shopName: map['shopName'],
+      itemName: map['itemName'],
+      quantifier: map['quantifier'],
+      quantity: map['quantity'],
+      itemPrice: map['itemPrice'],
+      count: map['count'],
+    );
+  }
   String toJson() => json.encode(toMap());
 
   factory KitchenItem.fromJson(String source) =>
-      KitchenItem.fromDocumentSnapshot(json.decode(source));
+      KitchenItem.fromMap(json.decode(source));
 
   @override
   String toString() {

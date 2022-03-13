@@ -8,9 +8,13 @@ import 'package:lkarnet/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../components.dart';
+import '../models/kitchen/kitchen_item.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //final String _collection = 'users';
+  final String _collectionKitchenElements = "KitchenElements";
+  final String _collectionKitchenItems = "KitchenItems";
   DocumentReference get _users => _firestore.collection("users").doc(uid);
   final String? uid;
   Database({required this.uid});
@@ -76,6 +80,31 @@ class Database {
             .toList());
   }
 
+// get kitchenElements
+  Stream<List<KitchenElement>> kitchenStream() {
+    return _users
+        .collection(_collectionKitchenElements)
+        .orderBy("dateBought", descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) => query.docs
+            .map((element) => KitchenElement.fromDocumentSnapShot(element))
+            .toList());
+  }
+
+  // get kitchenItems
+  Stream<List<KitchenItem>> kitchenItemsStream(
+      String collectionKitchenElementId) {
+    return _users
+        .collection(_collectionKitchenElements)
+        .doc(collectionKitchenElementId)
+        .collection(_collectionKitchenItems)
+        .orderBy("dateBought", descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) => query.docs
+            .map((element) => KitchenItem.fromDocumentSnapShot(element))
+            .toList());
+  }
+
   Stream<List<Item>> archiveItemStream() {
     return _users.collection("ArchiveGoods").snapshots().map(
         (QuerySnapshot query) => query.docs
@@ -138,7 +167,70 @@ class Database {
     }
   }
 
+// add KitchenElement to the kitchen
+  Future<void> addKitchenElement(
+    KitchenElement kitchenElement,
+  ) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .add(kitchenElement.toMap());
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+// add KitchenItem to the kitchen
+  Future<void> addKitchenItem(
+      KitchenItem kitchenItem, String _collectionKitchenId) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .doc(_collectionKitchenId)
+          .collection(_collectionKitchenItems)
+          .add(kitchenItem.toMap());
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
 // update ****/
+// update KitchenElement
+  Future<void> updateKitchenElement(
+    KitchenElement kitchenElement,
+    String _collectionKitchenId,
+  ) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .doc(_collectionKitchenId)
+          .update(kitchenElement.toMap());
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+// update KitchenItem
+  Future<void> updateKitchenItem(
+    KitchenItem kitchenItem,
+    String _collectionKitchenId,
+    String _collectionKitchenItemsId,
+  ) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .doc(_collectionKitchenId)
+          .collection(_collectionKitchenItems)
+          .doc(_collectionKitchenItemsId)
+          .update(kitchenItem.toMap());
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 
   Future<void> updateShop(
     ShopModel shopToUpdate,
@@ -198,7 +290,40 @@ class Database {
       rethrow;
     }
   }
+
 //delete
+// delete KitchenElement
+  Future<void> deleteKitchenElement(
+    String _collectionKitchenId,
+  ) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .doc(_collectionKitchenId)
+          .delete();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  // delete KitchenItem
+  Future<void> deleteKitchenItem(
+    String _collectionKitchenId,
+    String _collectionKitchenItemsId,
+  ) async {
+    try {
+      await _users
+          .collection(_collectionKitchenElements)
+          .doc(_collectionKitchenId)
+          .collection(_collectionKitchenItems)
+          .doc(_collectionKitchenItemsId)
+          .delete();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 
   Future<void> deleteShop(ShopModel shopToDelete) async {
     try {
