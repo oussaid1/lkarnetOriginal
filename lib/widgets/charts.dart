@@ -51,18 +51,28 @@ class PeiWidget extends ConsumerWidget {
   Widget build(BuildContext context, wacth) {
     return SfCircularChart(
       margin: EdgeInsets.zero,
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.left,
+        // alignment: ChartAlignment.center,
+        // width: '120',
+      ),
+      title: ChartTitle(
+          text: '10 Most Frequent Products', alignment: ChartAlignment.center),
       //  centerY: '220',
+
       series: <CircularSeries>[
         PieSeries<ChartData, String>(
           dataSource: chartData,
           xValueMapper: (ChartData data, _) => data.tag,
           yValueMapper: (ChartData data, _) => data.value,
-          dataLabelMapper: (ChartData data, _) => data.tag,
-          explode: false,
+          dataLabelMapper: (ChartData data, _) => data.count.toString(),
+          explode: true,
           // All the segments will be exploded
+
           explodeAll: true,
           enableTooltip: true,
-          name: 'Home',
+          // name: 'Home',
           dataLabelSettings: DataLabelSettings(
               isVisible: true,
               labelPosition: ChartDataLabelPosition.inside,
@@ -84,25 +94,30 @@ class LineChartWidgetDate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, wacth) {
     return SfCartesianChart(
+      title: ChartTitle(text: 'Monthly Consumption'),
       margin: EdgeInsets.zero,
       legend: Legend(isVisible: false),
       primaryXAxis: DateTimeAxis(
         majorGridLines: MajorGridLines(width: 0),
-        interval: 1,
-        dateFormat: DateFormat.MMM(),
+        interval: 2,
+        dateFormat: DateFormat('MMM-yy'),
         intervalType: DateTimeIntervalType.months,
-        minimum: DateTime(2020, 1, 1),
-        maximum: DateTime(2020, 12, 31),
+        labelRotation: 90,
+        maximum: DateTime.now(),
       ),
       series: <ChartSeries>[
         SplineSeries<Tagged, DateTime>(
+          xAxisName: 'Date',
+          yAxisName: 'Consumption',
           dataSource: chartData,
-          xValueMapper: (Tagged data, _) => data.date,
+          xValueMapper: (Tagged data, _) => DateTime.fromMicrosecondsSinceEpoch(
+              data.date!.microsecondsSinceEpoch),
           yValueMapper: (Tagged data, _) => data.itemsSum,
-          dataLabelMapper: (Tagged data, _) => data.tag,
+          dataLabelMapper: (Tagged data, _) =>
+              DateFormat('MM-yy').format(data.date!).toString(),
 
           enableTooltip: true,
-          name: 'Home',
+          // name: 'Home',
           dataLabelSettings: DataLabelSettings(
               isVisible: true,
               labelPosition: ChartDataLabelPosition.inside,
@@ -124,6 +139,7 @@ class LineChartWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, wacth) {
     return SfCartesianChart(
+      title: ChartTitle(text: 'Shops Consumption'),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[
@@ -146,6 +162,7 @@ class BarChartWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, wacth) {
     return SfCartesianChart(
+      title: ChartTitle(text: 'Shops Consumption'),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[
@@ -168,6 +185,7 @@ class ColumnChartWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, wacth) {
     return SfCartesianChart(
+      title: ChartTitle(text: 'Shops Consumption'),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[

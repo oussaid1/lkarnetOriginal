@@ -78,6 +78,7 @@ class BluredContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(AppConstants.radius)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
         child: Container(

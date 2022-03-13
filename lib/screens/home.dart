@@ -6,7 +6,6 @@ import 'package:lkarnet/screens/add/add_payment.dart';
 import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-import '../models/item/item.dart';
 import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
@@ -16,12 +15,9 @@ import 'add/add_shop.dart';
 import 'dashboard.dart';
 import 'kitchen_stock.dart';
 import 'lists/payments.dart';
-import 'lists/shops.dart';
 import 'shop_details.dart';
 import 'stats/stats_all.dart';
 import 'package:flutter/material.dart';
-
-import 'tabs/list_tab.dart';
 
 final appTittleProvider = StateProvider<String>((ref) {
   return "Home";
@@ -86,9 +82,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         centerWidget: Scaffold(
             bottomNavigationBar: buildNavigationBar(
                 context, _selectedPageIndex, _pageController, ref),
-            floatingActionButton: MyExpandableFab(),
             backgroundColor: Colors.transparent,
-            appBar: buildAppBar(context, title: 'Home', items: items),
+            //appBar: buildAppBar(context, title: 'Home', items: items),
             body: buildPageView(_pageController, ref, context,
                 dataSink: dataSink,
                 shopsDataList: _shopsDataList,
@@ -156,8 +151,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           backgroundColor: Color.fromARGB(255, 224, 126, 101),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.list),
-          label: 'Shops',
+          icon: const Icon(Icons.kitchen),
+          label: 'Kitchen',
           backgroundColor: Color.fromARGB(255, 224, 101, 121),
         ),
         const BottomNavigationBarItem(
@@ -180,21 +175,30 @@ class _HomePageState extends ConsumerState<HomePage> {
     required List<ShopData> shopsDataList,
     required RecentOperation recentOperations,
   }) {
-    return BluredContainer(
-      start: 0,
-      end: 0,
-      borderColorOpacity: 0,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            buildTopWidget(dataSink),
-            buildShopsWidget(context, shopsDataList),
-            buildRecentOpeerationsWidget(
-              context,
-              recentOperations,
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      floatingActionButton: MyExpandableFab(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      appBar: buildAppBar(
+        context,
+        title: 'Home',
+      ),
+      body: BluredContainer(
+        start: 0,
+        end: 0,
+        borderColorOpacity: 0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              buildTopWidget(dataSink),
+              buildShopsWidget(context, shopsDataList),
+              buildRecentOpeerationsWidget(
+                context,
+                recentOperations,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -678,7 +682,8 @@ class MyExpandableFab extends StatelessWidget {
 //     return File(filePath).writeAsString(data);
 //   }
 // }
-AppBar buildAppBar(BuildContext context, {String? title, List<Item>? items}) {
+AppBar buildAppBar(BuildContext context,
+    {String? title, IconData icon = Icons.home}) {
   return AppBar(
     actions: [
       // IconButton(
@@ -691,7 +696,7 @@ AppBar buildAppBar(BuildContext context, {String? title, List<Item>? items}) {
       //   },
       // ),
     ],
-    leading: Icon(Icons.home, color: Colors.black),
+    leading: Icon(icon, color: Colors.black),
     title: Text(
       title ?? '',
       style: Theme.of(context).textTheme.headline2,

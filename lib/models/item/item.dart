@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lkarnet/components.dart';
 
 class Item {
+  // a zero argument constructor
+  // Item();
   String? id;
   String? besoinTitle;
   late String shopName;

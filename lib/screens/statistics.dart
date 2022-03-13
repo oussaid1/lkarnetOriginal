@@ -46,6 +46,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
       ],
       centerWidget: Scaffold(
         floatingActionButton: MyExpandableFab(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         backgroundColor: Colors.transparent,
         appBar: buildAppBar(context, title: 'Shop Details'),
         body: SingleChildScrollView(

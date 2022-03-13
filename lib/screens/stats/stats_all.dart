@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/providers/dataprovider/data_providers.dart';
 import 'package:lkarnet/widgets/charts.dart';
+import '../../const/constents.dart';
 import '../../widgets/glasswidget.dart';
+import '../home.dart';
 
 class StatsAll extends ConsumerWidget {
   @override
@@ -17,28 +19,32 @@ class StatsAll extends ConsumerWidget {
     // //  var dataSink = DataSink(shops, items, payments);
     //   // List<ShopsData> _shopsDataList = dataSink.allShopsData;
     var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
-    return BluredContainer(
-      margin: EdgeInsets.all(8),
-      width: MediaQuery.of(context).size.width,
-      height: double.infinity,
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: buildAppBar(context, title: "Statistics"),
+      backgroundColor: Colors.transparent,
+      floatingActionButton: MyExpandableFab(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      body: SingleChildScrollView(
         child: Column(
           children: [
             BluredContainer(
               margin: EdgeInsets.all(8),
               width: 410,
               height: 220,
-              child: SizedBox(
-                width: 420,
-                height: 300,
-                child: PeiWidget(chartData),
+              child: Row(
+                children: [
+                  PeiWidget(chartData),
+                ],
               ),
             ),
             BluredContainer(
               margin: EdgeInsets.all(8),
               width: MediaQuery.of(context).size.width,
               height: 240,
-              child: LineChartWidgetDate(_listOfTagged),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LineChartWidgetDate(_listOfTagged),
+              ),
             ),
             const SizedBox(
               width: 8,
@@ -53,26 +59,36 @@ class StatsAll extends ConsumerWidget {
       ),
     );
   }
+
+  AppBar buildAppBar(BuildContext context, {String? title}) {
+    return AppBar(
+      actions: [
+        // IconButton(
+        //   icon: Icon(Icons.add_box_outlined),
+        //   onPressed: () async {
+        //     var logger = Logger();
+        //     for (var item in items!) {
+        //       logger.d(item.toMap());
+        //     }
+        //   },
+        // ),
+      ],
+      leading: Icon(Icons.bar_chart, color: Colors.black),
+      title: Text(
+        title ?? '',
+        style: Theme.of(context).textTheme.headline2,
+      ),
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      excludeHeaderSemantics: true,
+      toolbarHeight: 40,
+      backgroundColor: AppConstants.whiteOpacity,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.radius),
+          bottom: Radius.circular(AppConstants.radius),
+        ),
+      ),
+    );
+  }
 }
-//  Container(
-//               child: Column(
-//                 children: [
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Text("10 most frequent items"),
-//                   ),
-//                   SemiPeiWidget(chartData, Text('')),
-//                 ],
-//               ),
-//             ),
-//             Container(
-//               child: Column(
-//                 children: [
-//                   Text("highest shop consumption"),
-//                   PeiWidget(chartData2),
-//                 ],
-//               ),
-//             ),
-//             SizedBox(
-//               height: 50,
-//             ),

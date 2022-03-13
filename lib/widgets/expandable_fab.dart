@@ -67,7 +67,7 @@ class _ExpandableFabState extends State<ExpandableFab>
         alignment: Alignment.bottomCenter,
         clipBehavior: Clip.none,
         children: [
-          _buildTapToCloseFab(),
+          // buildTapToCloseFab(),
           ..._buildExpandingActionButtons(),
           _buildTapToOpenFab(),
         ],
@@ -75,10 +75,10 @@ class _ExpandableFabState extends State<ExpandableFab>
     );
   }
 
-  Widget _buildTapToCloseFab() {
+  Widget buildTapToCloseFab() {
     return SizedBox(
-      width: 56.0,
-      height: 56.0,
+      height: 56,
+      width: 56,
       child: Center(
         child: Material(
           color: Theme.of(context).primaryColor,
@@ -122,7 +122,8 @@ class _ExpandableFabState extends State<ExpandableFab>
     return IgnorePointer(
       ignoring: _open,
       child: AnimatedContainer(
-        transformAlignment: Alignment.center,
+        // alignment: Alignment.bottomCenter,
+        //transformAlignment: Alignment.bottomCenter,
         transform: Matrix4.diagonal3Values(
           _open ? 0.4 : 1.0,
           _open ? 0.4 : 1.0,

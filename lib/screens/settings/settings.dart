@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../settings/theme.dart';
+import '../home.dart';
 
 class SettingsPage extends ConsumerWidget {
   @override
@@ -17,6 +18,7 @@ class SettingsPage extends ConsumerWidget {
     return BluredContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        appBar: buildAppBar(context, title: "Settings", icon: Icons.settings),
         body: SingleChildScrollView(
           child: Column(
             children: [

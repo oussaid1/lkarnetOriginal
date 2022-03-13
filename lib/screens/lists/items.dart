@@ -217,9 +217,17 @@ class ItemTileWidget extends ConsumerWidget {
                         '${item.itemName}',
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      Text(
-                        '${item.dateBought.formatted()}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                      Row(
+                        children: [
+                          Text(
+                            '${item.shopName}',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                          Text(
+                            '  ${item.dateBought.formatted()}',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ],
                       ),
                     ],
                   ),

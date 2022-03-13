@@ -60,7 +60,7 @@ class _AddItemState extends ConsumerState<AddItem> {
       color: Colors.transparent,
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 420,
+          height: 440,
           width: 400,
           child: BluredContainer(
             child: Column(
@@ -115,7 +115,7 @@ class _AddItemState extends ConsumerState<AddItem> {
                             hintStyle: GoogleFonts.robotoSlab(),
                             contentPadding: EdgeInsets.only(top: 4),
                             prefixIcon: Icon(
-                              Icons.monetization_on_outlined,
+                              Icons.insert_emoticon_outlined,
                               color: Colors.grey,
                             ),
                             fillColor: AppConstants.whiteOpacity,
@@ -160,6 +160,15 @@ class _AddItemState extends ConsumerState<AddItem> {
                         hintText: ' 00.00',
                         hintStyle: GoogleFonts.robotoSlab(),
                         contentPadding: EdgeInsets.only(top: 4),
+                        suffix: IconButton(
+                          icon: Icon(
+                            Icons.clear_outlined,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            _itemPriceController.clear();
+                          },
+                        ),
                         prefixIcon: Icon(
                           Icons.monetization_on_outlined,
                         ),

@@ -71,9 +71,9 @@ class Tagged {
     if (date.length == 3) {
       return DateTime.parse(tag);
     } else if (date.length == 2) {
-      return DateTime.parse(date[0] + '-' + date[1] + '-01');
+      return DateTime.parse('${date[0]}-${date[1]}-01');
     } else if (date.length == 1) {
-      return DateTime.parse(date[0] + '-01-01');
+      return DateTime.parse('${date[0]}-01-01');
     }
     return null;
   }
