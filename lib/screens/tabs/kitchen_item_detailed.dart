@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+import 'package:lkarnet/widgets/date_picker.dart';
 
 import '../../components.dart';
 import '../../settings/theme.dart';
-import '../add/add_kitechen_element.dart';
 
 class KitchenItemDetailsScreen extends StatefulWidget {
   const KitchenItemDetailsScreen({Key? key}) : super(key: key);
@@ -153,10 +153,8 @@ final availibilityProvider = StateProvider<double>((ref) {
 });
 
 class Availibility extends ConsumerWidget {
-  const Availibility({
-    Key? key,
-  }) : super(key: key);
-  //final double   availability();
+  Availibility({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, ref) {
     double x = ref.watch(availibilityProvider.state).state;

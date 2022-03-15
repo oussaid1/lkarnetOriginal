@@ -11,15 +11,13 @@ enum KitchenItemStatus { full, half, empty }
 class KitchenElement {
   String? id;
   String? title;
-  //double? quantity;
-  String? category;
+  String? category = '';
   double? availability = 0;
   int? priority = 1;
 // constr
   KitchenElement({
     this.id,
     this.title,
-//this.quantity,
     this.category,
     this.availability,
     this.priority,
@@ -103,7 +101,6 @@ class KitchenElement {
     return KitchenElement(
       id: id ?? this.id,
       title: title ?? this.title,
-      //   quantity: quantity ?? this.quantity,
       category: category ?? this.category,
       availability: availability ?? this.availability,
     );
@@ -111,21 +108,20 @@ class KitchenElement {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'title': title,
-      // 'quantity': quantity,
       'category': category,
       'availability': availability,
+      'priority': priority,
     };
   }
 
   factory KitchenElement.fromDocumentSnapShot(DocumentSnapshot map) {
     return KitchenElement(
-      id: map['id'],
+      id: map.id,
       title: map['title'],
-      //  quantity: map['quantity'],
       category: map['category'],
       availability: map['availability'],
+      priority: map['priority'],
     );
   }
 
@@ -134,7 +130,6 @@ class KitchenElement {
     return KitchenElement(
       id: map['id'],
       title: map['title'],
-      //   quantity: map['quantity'],
       category: map['category'],
       availability: map['availability'],
     );
@@ -171,6 +166,7 @@ class KitchenElement {
 
 class KitchenItem {
   String? id;
+  String? kitchenElementId;
   String? besoinTitle;
   String? shopName;
   String? itemName;
@@ -186,7 +182,10 @@ class KitchenItem {
     this.quantifier,
     required this.quantity,
     required this.itemPrice,
-    required this.count,
+    this.count = 1,
+    required this.kitchenElementId,
+    required this.dateBought,
+    required this.dateExpired,
   });
   DateTime dateBought = DateTime.now();
   DateTime dateExpired =
@@ -201,17 +200,22 @@ class KitchenItem {
     double? quantity,
     double? itemPrice,
     int? count,
+    DateTime? dateBought,
+    DateTime? dateExpired,
+    required String kitchenElementId,
   }) {
     return KitchenItem(
-      id: id ?? this.id,
-      besoinTitle: besoinTitle ?? this.besoinTitle,
-      shopName: shopName ?? this.shopName,
-      itemName: itemName ?? this.itemName,
-      quantifier: quantifier ?? this.quantifier,
-      quantity: quantity ?? this.quantity,
-      itemPrice: itemPrice ?? this.itemPrice,
-      count: count ?? this.count,
-    );
+        id: id ?? this.id,
+        besoinTitle: besoinTitle ?? this.besoinTitle,
+        shopName: shopName ?? this.shopName,
+        itemName: itemName ?? this.itemName,
+        quantifier: quantifier ?? this.quantifier,
+        quantity: quantity ?? this.quantity,
+        itemPrice: itemPrice ?? this.itemPrice,
+        count: count ?? this.count,
+        dateBought: dateBought ?? this.dateBought,
+        dateExpired: dateExpired ?? this.dateExpired,
+        kitchenElementId: kitchenElementId);
   }
 
   Map<String, dynamic> toMap() {
@@ -225,6 +229,7 @@ class KitchenItem {
       'count': count,
       'dateBought': dateBought,
       'dateExpired': dateExpired,
+      'kitchenElementId': kitchenElementId,
     };
   }
 
@@ -238,6 +243,9 @@ class KitchenItem {
     shopName = documentSnapshot['shopName'] ?? '';
     Timestamp f = documentSnapshot['dateBought'];
     dateBought = f.toDate();
+    f = documentSnapshot['dateExpired'];
+    dateExpired = f.toDate();
+    kitchenElementId = documentSnapshot['kitchenElementId'] ?? '';
   }
   String get toYY {
     return dateBought.yyyy();
@@ -260,6 +268,8 @@ class KitchenItem {
     print('besoinTitle : $besoinTitle');
     print('shopName : $shopName');
     print('dateBought : $toMMYY');
+    print('dateExpired : $toMMYY');
+    print('kitchenElementId : $kitchenElementId');
     print('-------------------------------');
   }
 
@@ -274,6 +284,9 @@ class KitchenItem {
       quantity: map['quantity'],
       itemPrice: map['itemPrice'],
       count: map['count'],
+      dateBought: map['dateBought'],
+      dateExpired: map['dateExpired'],
+      kitchenElementId: map['kitchenElementId'],
     );
   }
   String toJson() => json.encode(toMap());
@@ -283,7 +296,7 @@ class KitchenItem {
 
   @override
   String toString() {
-    return 'KitchenItem(id: $id, besoinTitle: $besoinTitle, shopName: $shopName, itemName: $itemName, quantifier: $quantifier, quantity: $quantity, itemPrice: $itemPrice, count: $count)';
+    return 'KitchenItem(id: $id, besoinTitle: $besoinTitle,  shopName: $shopName, itemName: $itemName, quantifier: $quantifier, quantity: $quantity, itemPrice: $itemPrice, count: $count, dateBought: $dateBought, dateExpired: $dateExpired, kitchenElementId: $kitchenElementId)';
   }
 
   @override
@@ -298,7 +311,10 @@ class KitchenItem {
         other.quantifier == quantifier &&
         other.quantity == quantity &&
         other.itemPrice == itemPrice &&
-        other.count == count;
+        other.count == count &&
+        other.dateBought == dateBought &&
+        other.dateExpired == dateExpired &&
+        other.kitchenElementId == kitchenElementId;
   }
 
   @override
@@ -310,6 +326,9 @@ class KitchenItem {
         quantifier.hashCode ^
         quantity.hashCode ^
         itemPrice.hashCode ^
-        count.hashCode;
+        count.hashCode ^
+        dateBought.hashCode ^
+        dateExpired.hashCode ^
+        kitchenElementId.hashCode;
   }
 }

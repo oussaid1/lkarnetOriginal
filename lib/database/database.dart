@@ -81,22 +81,16 @@ class Database {
   }
 
 // get kitchenElements
-  Stream<List<KitchenElement>> kitchenStream() {
-    return _users
-        .collection(_collectionKitchenElements)
-        .orderBy("dateBought", descending: true)
-        .snapshots()
-        .map((QuerySnapshot query) => query.docs
+  Stream<List<KitchenElement>> kitchenElementsStream() {
+    return _users.collection(_collectionKitchenElements).snapshots().map(
+        (QuerySnapshot query) => query.docs
             .map((element) => KitchenElement.fromDocumentSnapShot(element))
             .toList());
   }
 
   // get kitchenItems
-  Stream<List<KitchenItem>> kitchenItemsStream(
-      String collectionKitchenElementId) {
+  Stream<List<KitchenItem>> kitchenItemsStream() {
     return _users
-        .collection(_collectionKitchenElements)
-        .doc(collectionKitchenElementId)
         .collection(_collectionKitchenItems)
         .orderBy("dateBought", descending: true)
         .snapshots()
@@ -182,14 +176,9 @@ class Database {
   }
 
 // add KitchenItem to the kitchen
-  Future<void> addKitchenItem(
-      KitchenItem kitchenItem, String _collectionKitchenId) async {
+  Future<void> addKitchenItem(KitchenItem kitchenItem) async {
     try {
-      await _users
-          .collection(_collectionKitchenElements)
-          .doc(_collectionKitchenId)
-          .collection(_collectionKitchenItems)
-          .add(kitchenItem.toMap());
+      await _users.collection(_collectionKitchenItems).add(kitchenItem.toMap());
     } catch (e) {
       print(e);
       rethrow;
@@ -216,15 +205,11 @@ class Database {
 // update KitchenItem
   Future<void> updateKitchenItem(
     KitchenItem kitchenItem,
-    String _collectionKitchenId,
-    String _collectionKitchenItemsId,
   ) async {
     try {
       await _users
-          .collection(_collectionKitchenElements)
-          .doc(_collectionKitchenId)
           .collection(_collectionKitchenItems)
-          .doc(_collectionKitchenItemsId)
+          .doc(kitchenItem.id)
           .update(kitchenItem.toMap());
     } catch (e) {
       print(e);
@@ -309,15 +294,12 @@ class Database {
 
   // delete KitchenItem
   Future<void> deleteKitchenItem(
-    String _collectionKitchenId,
-    String _collectionKitchenItemsId,
+    KitchenItem kitchenItem,
   ) async {
     try {
       await _users
-          .collection(_collectionKitchenElements)
-          .doc(_collectionKitchenId)
           .collection(_collectionKitchenItems)
-          .doc(_collectionKitchenItemsId)
+          .doc(kitchenItem.id)
           .delete();
     } catch (e) {
       print(e);

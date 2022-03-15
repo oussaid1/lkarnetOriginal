@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
+import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../providers/streamproviders/kitchen_stream.dart';
 import '../widgets/dialogs.dart';
 import 'tabs/kitchen_item_detailed.dart';
 
@@ -29,79 +31,88 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     //   // List<ShopsData> _shopsDataList = dataSink.allShopsData;
     //var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
     final fakeKitchenItems = KitchenElement.fakeKitchenItems;
-
+    List<KitchenElement> kitchenItems = [];
     return BluredContainer(
       start: 0,
       end: 0,
       borderColorOpacity: 0,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
+      child: StreamBuilder<List<KitchenElement>>(
+          stream: ref.read(databaseProvider).kitchenElementsStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              kitchenItems = snapshot.data!;
+            }
+            return Scaffold(
+              backgroundColor: Colors.transparent,
 
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Dialogs.botomPopUpDialog(
-              context,
-              AddKitchenItem(),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text('Kitchen Stock'),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(200),
-            child: SizedBox(
-              height: 230,
-              width: MediaQuery.of(context).size.width,
-              child: Stack(
-                children: [
-                  _buildMonthlyCard(
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Dialogs.botomPopUpDialog(
                     context,
-                  ),
-                  Positioned(
-                    top: 180,
-                    width: 380,
-                    left: MediaQuery.of(context).size.width / 2 - 190,
-                    child: _buildSelector(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        // Next, create a SliverList
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 4),
-          // height: 340,
-          //width: MediaQuery.of(context).size.width,
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1.5,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10),
-            itemCount: fakeKitchenItems.length,
-            itemBuilder: (context, index) {
-              return KitchenItemSquareTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => KitchenItemDetailsScreen(
-                          // availability: (double) {},
-                          ),
-                    ),
+                    AddKitchenItem(),
                   );
                 },
-                kitchenItem: fakeKitchenItems[index],
-              );
-            },
-          ),
-        ),
-      ),
+                child: Icon(Icons.add),
+              ),
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                title: Text('Kitchen Stock'),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(200),
+                  child: SizedBox(
+                    height: 230,
+                    width: MediaQuery.of(context).size.width,
+                    child: Stack(
+                      children: [
+                        _buildMonthlyCard(
+                          context,
+                          kitchenItems,
+                        ),
+                        Positioned(
+                          top: 180,
+                          width: 380,
+                          left: MediaQuery.of(context).size.width / 2 - 190,
+                          child: _buildSelector(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Next, create a SliverList
+              body: Container(
+                margin: EdgeInsets.symmetric(horizontal: 4),
+                // height: 340,
+                //width: MediaQuery.of(context).size.width,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.5,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10),
+                  itemCount: kitchenItems.length,
+                  itemBuilder: (context, index) {
+                    return KitchenItemSquareTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => KitchenItemDetailsScreen(
+                                // availability: (double) {},
+                                ),
+                          ),
+                        );
+                      },
+                      kitchenItem: kitchenItems[index],
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
     );
   }
 
@@ -119,6 +130,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
 
   _buildMonthlyCard(
     BuildContext context,
+    List<KitchenElement> _kitchenElements,
   ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -138,7 +150,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     style: Theme.of(context).textTheme.headline3,
                   ),
                   Text(
-                    ' {}',
+                    ' ${_kitchenElements.length}',
                     style: Theme.of(context).textTheme.headline3,
                   ),
                 ],

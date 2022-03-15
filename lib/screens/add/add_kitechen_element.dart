@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
-import 'package:lkarnet/widgets/date_picker.dart';
-import 'package:lkarnet/widgets/quantifier_spinner.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
@@ -16,24 +14,19 @@ class AddKitchenItem extends ConsumerStatefulWidget {
 }
 
 class _AddItemState extends ConsumerState<AddKitchenItem> {
-  double _quantity = 1;
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
-  final TextEditingController _itemPriceController = TextEditingController();
+
   void clear() {
     _itemNameController.clear();
-    _itemPriceController.clear();
   }
 
   void _update() {
-    // if (widget.kitchenElement != null) {
-    //   setState(() {
-    //     _itemNameController.text = widget.kitchenElement!.itemName.toString();
-    //     _itemPriceController.text =
-    //         (widget.kitchenElement!.itemPrice).toString();
-    //     _quantity = widget.kitchenElement!.quantity;
-    //   });
-    // }
+    if (widget.kitchenElement != null) {
+      setState(() {
+        _itemNameController.text = widget.kitchenElement!.title.toString();
+      });
+    }
   }
 
   @override
@@ -44,10 +37,10 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   @override
   void dispose() {
-    _quantity = 1;
     super.dispose();
   }
 
+  int priorityRating = 1;
   @override
   Widget build(BuildContext context) {
     Iterable<KitchenElement> _kOptions = [];
@@ -144,7 +137,9 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: PiorityRatingWidget(
-                    onRatingChanged: (p0) {},
+                    onRatingChanged: (int pri) {
+                      priorityRating = pri;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -173,8 +168,17 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                 onPressed: () {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                    content: Text('Updating...'),
+                                    content: Text('Saving...'),
                                   ));
+                                  final db = ref.read(databaseProvider);
+                                  final kitchenElement = KitchenElement(
+                                    title: _itemNameController.text.trim(),
+                                    priority: priorityRating,
+                                    availability: ref
+                                        .watch(availibilityProvider.state)
+                                        .state,
+                                  );
+                                  db.addKitchenElement(kitchenElement);
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),
