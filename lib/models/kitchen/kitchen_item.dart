@@ -11,16 +11,18 @@ enum KitchenItemStatus { full, half, empty }
 class KitchenElement {
   String? id;
   String? title;
-  double? quantity;
+  //double? quantity;
   String? category;
   double? availability = 0;
+  int? priority = 1;
 // constr
   KitchenElement({
     this.id,
     this.title,
-    this.quantity,
+//this.quantity,
     this.category,
     this.availability,
+    this.priority,
   });
   // List<Item> items = [];
   // double get totalPrice {
@@ -32,81 +34,61 @@ class KitchenElement {
     return [
       KitchenElement(
         title: 'Sugar',
-        quantity: 1,
+
+        ///: 1,
         category: 'Sweet',
         availability: 1,
+        priority: 1,
       ),
       KitchenElement(
-        title: 'Table Oil',
-        quantity: 1,
-        category: 'Oil',
+        title: 'Milk',
+        // quantity: 1,
+        category: 'Dairy',
         availability: 1,
+        priority: 2,
       ),
       KitchenElement(
-        title: 'Olive Oil',
-        quantity: 1,
-        category: 'Oil',
-        availability: 1,
-      ),
-      KitchenElement(
-        title: 'cummin',
-        quantity: 1,
-        category: 'Spices ',
-        availability: 1,
-      ),
-      KitchenElement(
-        title: 'Salt',
-        quantity: 1,
-        category: 'Spices',
-        availability: 1,
-      ),
-      KitchenElement(
-        title: 'Ginger',
-        quantity: 1,
-        category: 'Spices',
-        availability: 1,
-      ),
-      KitchenElement(
-        title: 'Green tea',
-        quantity: 1,
-        category: 'Tea',
-        availability: 3,
-      ),
-      KitchenElement(
-        title: 'Cake',
-        quantity: 1,
-        category: 'Dessert',
-        availability: 1,
-      ),
-      KitchenElement(
-        title: 'Cake',
-        quantity: 1,
-        category: 'Dessert',
-        availability: 3,
-      ),
-      KitchenElement(
-        title: 'Cake',
-        quantity: 4,
-        category: 'Dessert',
+        title: 'Bread',
+        //  quantity: 5,
+        category: 'Bakery',
         availability: 4,
+        priority: 3,
       ),
       KitchenElement(
-        title: 'Cake',
-        quantity: 2,
-        category: 'Dessert',
-        availability: 2,
+        title: 'Eggs',
+
+        ///   quantity: 1,
+        category: 'Dairy',
+        availability: 1,
+        priority: 2,
       ),
       KitchenElement(
-        title: 'Cake',
-        quantity: 5,
-        category: 'Dessert',
-        availability: 5,
+        title: 'Coffee',
+        //  quantity: 1,
+        category: 'Beverage',
+        availability: 1,
+        priority: 1,
       ),
       KitchenElement(
-        title: 'Cake',
-        quantity: 3,
-        category: 'Dessert',
-        availability: 3,
+        title: 'Tea',
+        //   quantity: 1,
+        category: 'Beverage',
+        availability: 1,
+        priority: 1,
+      ),
+      KitchenElement(
+        title: 'Oil',
+        //   quantity: 1,
+        category: 'Tableware',
+        availability: 1,
+        priority: 1,
+      ),
+      KitchenElement(
+        title: 'Sugar',
+        //   quantity: 1,
+        category: 'Sweet',
+        availability: 1,
+        priority: 1,
       ),
     ];
   }
@@ -121,7 +103,7 @@ class KitchenElement {
     return KitchenElement(
       id: id ?? this.id,
       title: title ?? this.title,
-      quantity: quantity ?? this.quantity,
+      //   quantity: quantity ?? this.quantity,
       category: category ?? this.category,
       availability: availability ?? this.availability,
     );
@@ -131,7 +113,7 @@ class KitchenElement {
     return {
       'id': id,
       'title': title,
-      'quantity': quantity,
+      // 'quantity': quantity,
       'category': category,
       'availability': availability,
     };
@@ -141,7 +123,7 @@ class KitchenElement {
     return KitchenElement(
       id: map['id'],
       title: map['title'],
-      quantity: map['quantity'],
+      //  quantity: map['quantity'],
       category: map['category'],
       availability: map['availability'],
     );
@@ -152,7 +134,7 @@ class KitchenElement {
     return KitchenElement(
       id: map['id'],
       title: map['title'],
-      quantity: map['quantity'],
+      //   quantity: map['quantity'],
       category: map['category'],
       availability: map['availability'],
     );
@@ -164,7 +146,7 @@ class KitchenElement {
 
   @override
   String toString() {
-    return 'KitchenElement(id: $id, title: $title, quantity: $quantity, category: $category, availability: $availability)';
+    return 'KitchenElement(id: $id, title: $title, category: $category, availability: $availability)';
   }
 
   @override
@@ -174,7 +156,6 @@ class KitchenElement {
     return other is KitchenElement &&
         other.id == id &&
         other.title == title &&
-        other.quantity == quantity &&
         other.category == category &&
         other.availability == availability;
   }
@@ -183,7 +164,6 @@ class KitchenElement {
   int get hashCode {
     return id.hashCode ^
         title.hashCode ^
-        quantity.hashCode ^
         category.hashCode ^
         availability.hashCode;
   }

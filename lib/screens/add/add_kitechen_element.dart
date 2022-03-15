@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
+import '../tabs/kitchen_item_detailed.dart';
 
-class AddItem extends ConsumerStatefulWidget {
+class AddKitchenItem extends ConsumerStatefulWidget {
   final KitchenElement? kitchenElement;
-  AddItem({this.kitchenElement});
+  AddKitchenItem({this.kitchenElement});
   @override
   _AddItemState createState() => _AddItemState();
 }
 
-class _AddItemState extends ConsumerState<AddItem> {
+class _AddItemState extends ConsumerState<AddKitchenItem> {
   double _quantity = 1;
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
@@ -55,17 +56,21 @@ class _AddItemState extends ConsumerState<AddItem> {
       color: Colors.transparent,
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 440,
-          width: 400,
+          height: 340,
+          //width: 200,
           child: BluredContainer(
             child: Column(
               children: [
-                // Padding(
-                //   padding: EdgeInsets.only(top: 20, bottom: 8),
-                //   child: ShopSpinner(),
-                // ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: EdgeInsets.only(top: 20, bottom: 8),
+                  child: Text(
+                    'Add Kitchen Element',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 4.0, top: 10, left: 8, right: 8),
                   child: Form(
                     key: _formKeyName,
                     child: Autocomplete<KitchenElement>(
@@ -110,15 +115,14 @@ class _AddItemState extends ConsumerState<AddItem> {
                               },
                             ),
                             hintText: 'name',
-                            hintStyle: GoogleFonts.robotoSlab(),
-                            contentPadding: EdgeInsets.only(top: 4),
-                            prefixIcon: Icon(
-                              Icons.insert_emoticon_outlined,
-                              color: Colors.grey,
-                            ),
+                            hintStyle:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      color: Colors.grey,
+                                    ),
+
                             fillColor: AppConstants.whiteOpacity,
                             filled: true,
-                            labelText: 'Name',
+                            // labelText: 'Name',
                           ),
                         );
                       },
@@ -126,62 +130,25 @@ class _AddItemState extends ConsumerState<AddItem> {
                     ),
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SelectDate(),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Availability',
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Availibility(),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Consumer(builder: (context, ref, child) {
-                      return Card(
-                        color: AppConstants.whiteOpacity,
-                        child: Container(
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                  icon: Icon(
-                                    CupertinoIcons.minus_circle,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (_quantity > 1) _quantity -= 0.5;
-                                      _quantity = _quantity;
-                                    });
-                                  }),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(_quantity.toString()),
-                                ),
-                              ),
-                              IconButton(
-                                  icon: Icon(
-                                    CupertinoIcons.plus_circle,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _quantity += 0.5;
-                                      _quantity = _quantity;
-                                    });
-                                  }),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-                    Container(
-                      child: QuantifierSpinner(),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PiorityRatingWidget(
+                    onRatingChanged: (p0) {},
+                  ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 widget.kitchenElement == null
                     ? Row(
@@ -204,19 +171,10 @@ class _AddItemState extends ConsumerState<AddItem> {
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
                                 onPressed: () {
-                                  // final _op = ref.read(operationsProvider);
-                                  // final _item = KitchenElement();
-                                  // logger.d(_item);
-                                  // if (_formKeyName.currentState!.validate() &&
-                                  //     _formKeyPrice.currentState!.validate()) {
-                                  //   _op.addItem(_item).then((value) {
-                                  //     logger.d(value);
-                                  //     if (value) {
-                                  //       _formKeyName.currentState!.reset();
-                                  //       _formKeyPrice.currentState!.reset();
-                                  //     }
-                                  //   });
-                                  // } //_op.addItem();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Updating...'),
+                                  ));
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),
@@ -246,46 +204,6 @@ class _AddItemState extends ConsumerState<AddItem> {
                                   //       .showSnackBar(SnackBar(
                                   //     content: Text('Updating...'),
                                   //   ));
-                                  //   final _op = ref.read(operationsProvider);
-                                  //   final _item = KitchenElement(
-                                  //     id: widget.kitchenElement!.id,
-                                  //     besoinTitle: '',
-                                  //     dateBought:
-                                  //         ref.read(pickedDateTime.state).state,
-                                  //     itemName: _itemNameController.text.trim(),
-                                  //     itemPrice: double.parse(
-                                  //         _itemPriceController.text.trim()),
-                                  //     quantifier:
-                                  //         ref.read(selectedQuantifierProvider),
-                                  //     quantity: _quantity,
-                                  //     shopName: ref.read(pickedShop.state).state!,
-                                  //   );
-                                  //   logger.d(_item);
-                                  //   ScaffoldMessenger.of(context)
-                                  //       .showSnackBar(SnackBar(
-                                  //     content: Text('Updating...'),
-                                  //   ));
-                                  //   if (_formKeyName.currentState!.validate() &&
-                                  //       _formKeyPrice.currentState!.validate()) {
-                                  //     _op.updateItem(_item).then((value) {
-                                  //       if (value) {
-                                  //         _formKeyName.currentState!.reset();
-                                  //         _formKeyPrice.currentState!.reset();
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(SnackBar(
-                                  //           content:
-                                  //               Text('KitchenElement Updated'),
-                                  //           duration: Duration(seconds: 1),
-                                  //         ));
-                                  //         Navigator.pop(context);
-                                  //       } else {
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(SnackBar(
-                                  //           content: Text('Error'),
-                                  //         ));
-                                  //       }
-                                  //     });
-                                  //   } //_op.addItem();
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),

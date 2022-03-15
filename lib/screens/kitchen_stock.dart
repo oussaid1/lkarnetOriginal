@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
+import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../widgets/dialogs.dart';
 import 'tabs/kitchen_item_detailed.dart';
 
 class KitchenStockHome extends ConsumerStatefulWidget {
@@ -38,18 +40,10 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
+            Dialogs.botomPopUpDialog(
               context,
-              MaterialPageRoute(
-                builder: (context) => KitchenItemDetailsScreen(
-                    // availability: (double) {},
-                    ),
-              ),
+              AddKitchenItem(),
             );
-            // Dialogs.botomPopUpDialog(
-            //   context,
-            //   AddItem(),
-            // );
           },
           child: Icon(Icons.add),
         ),
@@ -92,7 +86,16 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
             itemCount: fakeKitchenItems.length,
             itemBuilder: (context, index) {
               return KitchenItemSquareTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KitchenItemDetailsScreen(
+                          // availability: (double) {},
+                          ),
+                    ),
+                  );
+                },
                 kitchenItem: fakeKitchenItems[index],
               );
             },
@@ -202,9 +205,17 @@ class KitchenItemSquareTile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      kitchenItem.title.toString(),
-                      style: Theme.of(context).textTheme.headline4,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          kitchenItem.title.toString(),
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        PriorityWidget(
+                          priority: kitchenItem.priority!,
+                        ),
+                      ],
                     ),
                     Column(
                       children: [
@@ -225,14 +236,14 @@ class KitchenItemSquareTile extends StatelessWidget {
               buildKitchenItemDetail(context,
                   title: 'Status: ',
                   digitWidget: progress(
-                      status: '${kitchenItem.quantity}',
+                      status: '${kitchenItem.availability}',
                       value: kitchenItem.availability!)),
               buildKitchenItemDetail(context,
                   title: 'Last Bought: ',
                   digitWidget: Text(
                     DateTime.now().formatted(),
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        fontFamily: 'RobotoCondensed',
+                        fontFamily: 'Montserrat',
                         color:
                             Color.fromARGB(104, 36, 35, 35).withOpacity(0.6)),
                   )),

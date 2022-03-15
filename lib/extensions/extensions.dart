@@ -50,7 +50,7 @@ extension ContextExtension on BuildContext {
 extension DtExtension on DateTime {
   String formatted() {
     try {
-      return DateFormat("dd-MM-yy").format(this);
+      return DateFormat("ddMMM/yy").format(this).toUpperCase();
     } catch (e) {
       return '';
     }
