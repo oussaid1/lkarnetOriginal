@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
-import '../tabs/kitchen_item_detailed.dart';
+import '../tabs/kitchen_element_detailed.dart';
 
-class AddKitchenItem extends ConsumerStatefulWidget {
+class AddKitchenElement extends ConsumerStatefulWidget {
   final KitchenElement? kitchenElement;
-  AddKitchenItem({this.kitchenElement});
+  AddKitchenElement({this.kitchenElement});
   @override
   _AddItemState createState() => _AddItemState();
 }
 
-class _AddItemState extends ConsumerState<AddKitchenItem> {
+class _AddItemState extends ConsumerState<AddKitchenElement> {
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
 

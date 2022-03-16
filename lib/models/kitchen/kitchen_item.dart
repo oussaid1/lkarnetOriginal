@@ -21,29 +21,31 @@ class KitchenElement {
     this.category,
     this.availability,
     this.priority,
+    this.items,
   });
-  // List<Item> items = [];
-  // double get totalPrice {
-  //   return 0;
-  // }
+  List<KitchenItem>? items = [];
+  double get totalPrice {
+    return 0;
+  }
 
   // list of fake data
-  static List<KitchenElement> get fakeKitchenItems {
+  static List<KitchenElement> get fakeKitchenElements {
     return [
       KitchenElement(
-        title: 'Sugar',
+          title: 'Sugar',
 
-        ///: 1,
-        category: 'Sweet',
-        availability: 1,
-        priority: 1,
-      ),
+          ///: 1,
+          category: 'Sweet',
+          availability: 1,
+          priority: 1,
+          items: KitchenItem.fakeKitchenitems()),
       KitchenElement(
         title: 'Milk',
         // quantity: 1,
         category: 'Dairy',
         availability: 1,
         priority: 2,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Bread',
@@ -51,6 +53,7 @@ class KitchenElement {
         category: 'Bakery',
         availability: 4,
         priority: 3,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Eggs',
@@ -59,6 +62,7 @@ class KitchenElement {
         category: 'Dairy',
         availability: 1,
         priority: 2,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Coffee',
@@ -66,6 +70,7 @@ class KitchenElement {
         category: 'Beverage',
         availability: 1,
         priority: 1,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Tea',
@@ -73,6 +78,7 @@ class KitchenElement {
         category: 'Beverage',
         availability: 1,
         priority: 1,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Oil',
@@ -80,6 +86,7 @@ class KitchenElement {
         category: 'Tableware',
         availability: 1,
         priority: 1,
+        items: KitchenItem.fakeKitchenitems(),
       ),
       KitchenElement(
         title: 'Sugar',
@@ -87,6 +94,7 @@ class KitchenElement {
         category: 'Sweet',
         availability: 1,
         priority: 1,
+        items: KitchenItem.fakeKitchenitems(),
       ),
     ];
   }
@@ -330,5 +338,71 @@ class KitchenItem {
         dateBought.hashCode ^
         dateExpired.hashCode ^
         kitchenElementId.hashCode;
+  }
+
+  // list of fake data
+  static List<KitchenItem> fakeKitchenitems() {
+    return [
+      KitchenItem(
+        besoinTitle: 'test',
+        shopName: 'test',
+        itemName: 'test',
+        quantifier: 'test',
+        quantity: 1,
+        itemPrice: 1,
+        count: 1,
+        dateBought: DateTime.now(),
+        dateExpired: DateTime.now(),
+        kitchenElementId: 'test',
+      ),
+      KitchenItem(
+        besoinTitle: 'test',
+        shopName: 'test',
+        itemName: 'test',
+        quantifier: 'test',
+        quantity: 1,
+        itemPrice: 1,
+        count: 1,
+        dateBought: DateTime.now(),
+        dateExpired: DateTime.now(),
+        kitchenElementId: 'test',
+      ),
+      KitchenItem(
+        besoinTitle: 'test',
+        shopName: 'test',
+        itemName: 'test',
+        quantifier: 'test',
+        quantity: 1,
+        itemPrice: 1,
+        count: 1,
+        dateBought: DateTime.now(),
+        dateExpired: DateTime.now(),
+        kitchenElementId: 'test',
+      ),
+      KitchenItem(
+        besoinTitle: 'test',
+        shopName: 'test',
+        itemName: 'test',
+        quantifier: 'test',
+        quantity: 1,
+        itemPrice: 1,
+        count: 1,
+        dateBought: DateTime.now(),
+        dateExpired: DateTime.now(),
+        kitchenElementId: 'test',
+      ),
+      KitchenItem(
+        besoinTitle: 'test',
+        shopName: 'test',
+        itemName: 'test',
+        quantifier: 'test',
+        quantity: 1,
+        itemPrice: 1,
+        count: 1,
+        dateBought: DateTime.now(),
+        dateExpired: DateTime.now(),
+        kitchenElementId: 'test',
+      ),
+    ];
   }
 }

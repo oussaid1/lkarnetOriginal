@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
-import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
-import '../providers/streamproviders/kitchen_stream.dart';
 import '../widgets/dialogs.dart';
-import 'tabs/kitchen_item_detailed.dart';
+import 'tabs/kitchen_element_detailed.dart';
 
 class KitchenStockHome extends ConsumerStatefulWidget {
   const KitchenStockHome({Key? key}) : super(key: key);
@@ -30,8 +29,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     // //  var dataSink = DataSink(shops, items, payments);
     //   // List<ShopsData> _shopsDataList = dataSink.allShopsData;
     //var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
-    final fakeKitchenItems = KitchenElement.fakeKitchenItems;
-    List<KitchenElement> kitchenItems = [];
+    final fakekitchenElements = KitchenElement.fakeKitchenElements;
+    List<KitchenElement> kitchenElements = [];
     return BluredContainer(
       start: 0,
       end: 0,
@@ -39,9 +38,10 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       child: StreamBuilder<List<KitchenElement>>(
           stream: ref.read(databaseProvider).kitchenElementsStream(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              kitchenItems = snapshot.data!;
-            }
+            // if (snapshot.hasData) {
+            //   kitchenElements = snapshot.data!;
+            // }
+            kitchenElements = fakekitchenElements;
             return Scaffold(
               backgroundColor: Colors.transparent,
 
@@ -68,7 +68,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       children: [
                         _buildMonthlyCard(
                           context,
-                          kitchenItems,
+                          kitchenElements,
                         ),
                         Positioned(
                           top: 180,
@@ -93,20 +93,21 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       childAspectRatio: 1.5,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10),
-                  itemCount: kitchenItems.length,
+                  itemCount: kitchenElements.length,
                   itemBuilder: (context, index) {
+                    final kitchenElement = kitchenElements[index];
                     return KitchenItemSquareTile(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => KitchenItemDetailsScreen(
-                                // availability: (double) {},
-                                ),
+                              kitchenElement: kitchenElement,
+                            ),
                           ),
                         );
                       },
-                      kitchenItem: kitchenItems[index],
+                      kitchenElement: kitchenElement,
                     );
                   },
                 ),
@@ -195,11 +196,11 @@ class KitchenItemSquareTile extends StatelessWidget {
   const KitchenItemSquareTile({
     Key? key,
     required this.onTap,
-    required this.kitchenItem,
+    required this.kitchenElement,
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final KitchenElement kitchenItem;
+  final KitchenElement kitchenElement;
 
   @override
   Widget build(BuildContext context) {
@@ -221,11 +222,11 @@ class KitchenItemSquareTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          kitchenItem.title.toString(),
+                          kitchenElement.title.toString(),
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         PriorityWidget(
-                          priority: kitchenItem.priority!,
+                          priority: kitchenElement.priority!,
                         ),
                       ],
                     ),
@@ -237,7 +238,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                           size: 20,
                         ),
                         Text(
-                          '${kitchenItem.category}',
+                          '${kitchenElement.category}',
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
@@ -247,9 +248,9 @@ class KitchenItemSquareTile extends StatelessWidget {
               ),
               buildKitchenItemDetail(context,
                   title: 'Status: ',
-                  digitWidget: progress(
-                      status: '${kitchenItem.availability}',
-                      value: kitchenItem.availability!)),
+                  digitWidget: ProgressWidget(
+                    kitchenElement: kitchenElement,
+                  )),
               buildKitchenItemDetail(context,
                   title: 'Last Bought: ',
                   digitWidget: Text(
@@ -295,43 +296,51 @@ class KitchenItemSquareTile extends StatelessWidget {
   }
 }
 
-Widget progress({double value = 0, String? status = ''}) {
-  return SizedBox(
-    width: 30,
-    height: 30,
-    child: SfRadialGauge(
-      // backgroundColor: Colors.white,
-      axes: <RadialAxis>[
-        RadialAxis(
-          labelFormat: '$status',
-          labelOffset: 15,
-          labelsPosition: ElementsPosition.inside,
-          axisLabelStyle:
-              GaugeTextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-          minimum: 0,
-          maximum: 10,
-          showLabels: true,
-          showTicks: false,
-          startAngle: 270,
-          endAngle: 270,
-          axisLineStyle: AxisLineStyle(
-            thickness: 0.05,
-            color: Color.fromARGB(38, 255, 255, 255),
-            thicknessUnit: GaugeSizeUnit.factor,
-          ),
-          pointers: <GaugePointer>[
-            RangePointer(
-              color: Color.fromARGB(99, 255, 255, 255),
-              value: value,
-              width: 0.95,
-              pointerOffset: 0.05,
-              sizeUnit: GaugeSizeUnit.factor,
-            )
-          ],
-        )
-      ],
-    ),
-  );
+class ProgressWidget extends StatelessWidget {
+  const ProgressWidget({
+    Key? key,
+    required this.kitchenElement,
+  }) : super(key: key);
+  final KitchenElement kitchenElement;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 30,
+      height: 30,
+      child: SfRadialGauge(
+        // backgroundColor: Colors.white,
+        axes: <RadialAxis>[
+          RadialAxis(
+            labelFormat: '${kitchenElement.availability}',
+            labelOffset: 15,
+            labelsPosition: ElementsPosition.inside,
+            axisLabelStyle:
+                GaugeTextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+            minimum: 0,
+            maximum: 10,
+            showLabels: true,
+            showTicks: false,
+            startAngle: 270,
+            endAngle: 270,
+            axisLineStyle: AxisLineStyle(
+              thickness: 0.05,
+              color: Color.fromARGB(38, 255, 255, 255),
+              thicknessUnit: GaugeSizeUnit.factor,
+            ),
+            pointers: <GaugePointer>[
+              RangePointer(
+                color: Color.fromARGB(99, 255, 255, 255),
+                value: kitchenElement.availability!,
+                width: 0.95,
+                pointerOffset: 0.05,
+                sizeUnit: GaugeSizeUnit.factor,
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }
 //     return BluredContainer(
 //       margin: EdgeInsets.all(20),

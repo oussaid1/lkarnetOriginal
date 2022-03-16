@@ -34,6 +34,9 @@ final selectedQuantifierProvider = StateProvider<String?>((ref) {
 final pickedDateTime = StateProvider<DateTime>((ref) {
   return DateTime.now();
 });
+final pickedDateTime2 = StateProvider<DateTime?>((ref) {
+  return null;
+});
 
 // selected MonthYear for shop , in the Month Tab top card
 final shopSelectedMonthSProvider = StateProvider<String>((ref) {

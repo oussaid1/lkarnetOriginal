@@ -189,12 +189,11 @@ class Database {
 // update KitchenElement
   Future<void> updateKitchenElement(
     KitchenElement kitchenElement,
-    String _collectionKitchenId,
   ) async {
     try {
       await _users
           .collection(_collectionKitchenElements)
-          .doc(_collectionKitchenId)
+          .doc(kitchenElement.id)
           .update(kitchenElement.toMap());
     } catch (e) {
       print(e);
@@ -279,12 +278,12 @@ class Database {
 //delete
 // delete KitchenElement
   Future<void> deleteKitchenElement(
-    String _collectionKitchenId,
+    KitchenElement kitchenElement,
   ) async {
     try {
       await _users
           .collection(_collectionKitchenElements)
-          .doc(_collectionKitchenId)
+          .doc(kitchenElement.id)
           .delete();
     } catch (e) {
       print(e);

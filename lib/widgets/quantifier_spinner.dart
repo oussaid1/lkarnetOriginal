@@ -10,7 +10,7 @@ class QuantifierSpinner extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: AppConstants.whiteOpacity,
+        // color: AppConstants.whiteOpacity,
       ),
       width: 120.0,
       height: 45,
