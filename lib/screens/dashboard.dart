@@ -34,8 +34,35 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
         backgroundColor: Color.fromARGB(0, 255, 255, 255),
         floatingActionButton: MyExpandableFab(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        appBar:
-            buildAppBar(context, icon: Icons.dashboard, title: 'Shop Details'),
+        appBar: AppBar(
+          actions: [
+            // IconButton(
+            //   icon: Icon(Icons.add_box_outlined),
+            //   onPressed: () async {
+            //     var logger = Logger();
+            //     for (var item in items!) {
+            //       logger.d(item.toMap());
+            //     }
+            //   },
+            // ),
+          ],
+          leading: Icon(Icons.dashboard, color: Colors.black),
+          title: Text(
+            'Shop Details',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
+            ),
+          ),
+        ),
 
         // Next, create a SliverList
         body: Column(

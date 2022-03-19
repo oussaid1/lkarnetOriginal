@@ -105,6 +105,13 @@ class _KitchenItemDetailsScreenState
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(160),
               child: Container(
+                // decoration: BoxDecoration(
+                //     border: Border.fromBorderSide(
+                //   BorderSide(
+                //     color: Colors.black,
+                //     width: 1,
+                //   ),
+                // )),
                 height: 160,
                 child: SizedBox(
                   height: 200,

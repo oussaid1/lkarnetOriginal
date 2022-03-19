@@ -91,164 +91,190 @@ class ItemTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    return Slidable(
-      //actionPane: SlidableDrawerActionPane(),
-      //  actionExtentRatio: 0.25,
-
-      startActionPane: ActionPane(
-        // dismissible: DismissiblePane(onDismissed: () {}),
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            key: const Key('action-1'),
-            backgroundColor: Colors.transparent,
-            onPressed: (context) {
-              ref.read(pickedDateTime.state).state = item.dateBought;
-              ref.read(pickedShop.state).state = item.shopName;
-              ref.watch(selectedQuantifierProvider.state).state =
-                  item.quantifier;
-
-              Dialogs.botomPopUpDialog(
-                context,
-                AddItem(
-                  item: item,
-                ),
-              );
-            },
-            icon: Icons.edit,
-            label: 'Edit',
+    return GestureDetector(
+      onLongPress: () {
+        showMenu(
+          position: RelativeRect.fromLTRB(
+            MediaQuery.of(context).size.width / 2,
+            MediaQuery.of(context).size.height / 2,
+            MediaQuery.of(context).size.width / 2,
+            MediaQuery.of(context).size.height / 2,
           ),
-        ],
-      ),
+          context: context,
+          items: <PopupMenuEntry>[
+            PopupMenuItem(
+              value: 1,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.delete),
+                  Text("Delete"),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+      child: Slidable(
+        //actionPane: SlidableDrawerActionPane(),
+        //  actionExtentRatio: 0.25,
 
-      endActionPane: ActionPane(
-        //dismissible: DismissiblePane(onDismissed: () {}),
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-              key: const Key('action-12'),
+        startActionPane: ActionPane(
+          // dismissible: DismissiblePane(onDismissed: () {}),
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              key: const Key('action-1'),
               backgroundColor: Colors.transparent,
-              label: 'Delete',
               onPressed: (context) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: MThemeData.textButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: TextButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () => ref
-                                    .read(operationsProvider)
-                                    .deleteItem(item)
-                                    .then(
-                                        (value) => Navigator.of(context).pop()),
-                                style: MThemeData.textButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
-              },
-              icon: Icons.delete),
-        ],
-      ),
+                ref.read(pickedDateTime.state).state = item.dateBought;
+                ref.read(pickedShop.state).state = item.shopName;
+                ref.watch(selectedQuantifierProvider.state).state =
+                    item.quantifier;
 
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radius),
-        ),
-        color: AppConstants.whiteOpacity,
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(AppConstants.radius),
-                        bottomLeft: Radius.circular(AppConstants.radius),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${item.quantity}',
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          '${item.quantifier}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                Dialogs.botomPopUpDialog(
+                  context,
+                  AddItem(
+                    item: item,
                   ),
-                  const SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${item.itemName}',
-                        style: Theme.of(context).textTheme.headline6,
+                );
+              },
+              icon: Icons.edit,
+              label: 'Edit',
+            ),
+          ],
+        ),
+
+        endActionPane: ActionPane(
+          //dismissible: DismissiblePane(onDismissed: () {}),
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+                key: const Key('action-12'),
+                backgroundColor: Colors.transparent,
+                label: 'Delete',
+                onPressed: (context) {
+                  Dialogs.dialogSimple(context,
+                      title: 'Are you sure !!?',
+                      widgets: [
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 120,
+                                child: TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  style: MThemeData.textButtonStyleCancel,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: 120,
+                                child: TextButton(
+                                  child: Text(
+                                    'Ok',
+                                    style:
+                                        Theme.of(context).textTheme.headline3,
+                                  ),
+                                  onPressed: () => ref
+                                      .read(operationsProvider)
+                                      .deleteItem(item)
+                                      .then((value) =>
+                                          Navigator.of(context).pop()),
+                                  style: MThemeData.textButtonStyleSave,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]);
+                },
+                icon: Icons.delete),
+          ],
+        ),
+
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radius),
+          ),
+          color: AppConstants.whiteOpacity,
+          child: SizedBox(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color:
+                            Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(AppConstants.radius),
+                          bottomLeft: Radius.circular(AppConstants.radius),
+                        ),
                       ),
-                      Row(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${item.shopName}',
-                            style: Theme.of(context).textTheme.subtitle2,
+                            '${item.quantity}',
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
                           ),
                           Text(
-                            '  ${item.dateBought.formatted()}',
+                            '${item.quantifier}',
                             style: Theme.of(context).textTheme.subtitle2,
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: PriceNumberZone(
-                        price: item.itemPrix,
-                        style: Theme.of(context).textTheme.headline4,
-                        withDollarSign: true,
-                      )),
-                  const SizedBox(width: 8),
-                ],
-              ),
-            ],
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${item.itemName}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${item.shopName}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            Text(
+                              '  ${item.dateBought.formatted()}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: PriceNumberZone(
+                          price: item.itemPrix,
+                          style: Theme.of(context).textTheme.headline4,
+                          withDollarSign: true,
+                        )),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

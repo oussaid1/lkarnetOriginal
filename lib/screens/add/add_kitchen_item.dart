@@ -69,11 +69,17 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   @override
   Widget build(BuildContext context) {
     Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
+    if (widget.kitchenItem != null) {
+      ref.read(selectedQuantifierProvider.state).state =
+          widget.kitchenItem!.quantifier;
+      ref.read(pickedShop.state).state = widget.kitchenItem!.shopName;
+    }
+
     final logger = Logger();
     return Material(
       color: Colors.transparent,
       child: SizedBox(
-        height: 540,
+        height: 400,
         width: 400,
         child: BluredContainer(
           child: SingleChildScrollView(

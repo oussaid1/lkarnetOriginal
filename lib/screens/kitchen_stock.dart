@@ -59,6 +59,23 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
                 title: Text('Kitchen Stock'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(20),
+                  ),
+                ),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromARGB(40, 255, 255, 255),
+                        Color.fromARGB(52, 255, 255, 255),
+                      ],
+                    ),
+                  ),
+                ),
                 bottom: PreferredSize(
                   preferredSize: Size.fromHeight(200),
                   child: SizedBox(
