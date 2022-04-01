@@ -143,7 +143,7 @@ class _AddItemState extends ConsumerState<AddItem> {
                     child: SizedBox(
                       height: 50,
                       child: TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        //autovalidateMode: AutovalidateMode.disabled,
                         inputFormatters: [
                           //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
                           FilteringTextInputFormatter.allow(
