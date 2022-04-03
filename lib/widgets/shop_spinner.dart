@@ -6,8 +6,11 @@ import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
 import '../models/kitchen/kitchen_item.dart';
+import '../models/shop/shop_model.dart';
 
 class ShopSpinner extends ConsumerWidget {
+  const ShopSpinner({Key? key, required this.onShopSelected}) : super(key: key);
+  final void Function(String?) onShopSelected;
   @override
   Widget build(BuildContext context, ref) {
     var _list = ref.watch(shopsProvider.state).state;
@@ -42,6 +45,7 @@ class ShopSpinner extends ConsumerWidget {
             ),
             value: ref.watch(pickedShop.state).state,
             onChanged: (value) {
+              onShopSelected(value);
               ref.read(pickedShop.state).state = value;
             },
             items: [
@@ -72,6 +76,8 @@ final kitchenElementProvider = StateProvider<KitchenElement?>((ref) {
 });
 
 class KitchenElementSpinner extends ConsumerWidget {
+  KitchenElementSpinner({Key? key, required this.onSelected});
+  final void Function(KitchenElement?) onSelected;
   @override
   Widget build(BuildContext context, ref) {
     List<KitchenElement> _list = [];
@@ -112,6 +118,7 @@ class KitchenElementSpinner extends ConsumerWidget {
                   ),
                   value: ref.watch(kitchenElementProvider),
                   onChanged: (value) {
+                    onSelected(value!);
                     ref.read(kitchenElementProvider.state).state = value;
                   },
                   items: [

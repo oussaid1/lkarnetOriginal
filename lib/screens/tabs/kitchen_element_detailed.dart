@@ -13,9 +13,9 @@ import '../../settings/theme.dart';
 import '../../widgets/dialogs.dart';
 
 class KitchenItemDetailsScreen extends ConsumerStatefulWidget {
-  const KitchenItemDetailsScreen({Key? key, this.kitchenElement})
+  const KitchenItemDetailsScreen({Key? key, required this.kitchenElement})
       : super(key: key);
-  final KitchenElement? kitchenElement;
+  final KitchenElement kitchenElement;
   @override
   ConsumerState<KitchenItemDetailsScreen> createState() =>
       _KitchenItemDetailsScreenState();
@@ -65,12 +65,15 @@ class _KitchenItemDetailsScreenState
             onPressed: () {
               Dialogs.botomPopUpDialog(
                 context,
-                AddKitchenItem(),
+                AddKitchenItem(
+                  kitchenElement: widget.kitchenElement,
+                ),
               );
             },
             child: Icon(Icons.add),
           ),
           appBar: AppBar(
+            elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),
@@ -101,148 +104,156 @@ class _KitchenItemDetailsScreenState
               child: Container(),
             ),
             leadingWidth: 10,
-            leading: Container(),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(160),
-              child: Container(
-                // decoration: BoxDecoration(
-                //     border: Border.fromBorderSide(
-                //   BorderSide(
-                //     color: Colors.black,
-                //     width: 1,
-                //   ),
-                // )),
-                height: 160,
-                child: SizedBox(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.kitchenElement!.title.toString(),
-                                  style: Theme.of(context).textTheme.headline2,
-                                ),
-                                PriorityWidget(
-                                  priority: widget.kitchenElement!.priority!,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.fastfood,
-                                  color: Colors.white.withOpacity(0.7),
-                                  size: 30,
-                                ),
-                                Text(
-                                  '${widget.kitchenElement!.category}',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Status: ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
-                            ),
-                            ProgressWidget(
-                              kitchenElement: widget.kitchenElement!,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Last bought: ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
-                            ),
-                            Text(
-                              '${widget.kitchenElement!.items![0].dateBought.ddmmyyyy()}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Date expired : ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
-                            ),
-                            Text(
-                              '${widget.kitchenElement!.items![0].dateExpired.ddmmyyyy()}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
 
           // Next, create a SliverList
-          body: Container(
+          body: SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 20),
                 BluredContainer(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  height: 340,
+                  // decoration: BoxDecoration(
+                  //     border: Border.fromBorderSide(
+                  //   BorderSide(
+                  //     color: Colors.black,
+                  //     width: 1,
+                  //   ),
+                  // )),
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  height: 200,
+                  child: SizedBox(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.kitchenElement.title.toString(),
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                  PriorityWidget(
+                                    priority: widget.kitchenElement.priority!,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Icon(
+                                    Icons.fastfood,
+                                    color: Colors.white.withOpacity(0.7),
+                                    size: 30,
+                                  ),
+                                  Text(
+                                    '${widget.kitchenElement.category}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Status: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                              ProgressWidget(
+                                kitchenElement: widget.kitchenElement,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Last bought: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                              Text(
+                                '${widget.kitchenElement.lastTimeBought}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Date expired : ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                              Text(
+                                '${widget.kitchenElement.timeExpired}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                BluredContainer(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  // height: 340,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                    itemCount: widget.kitchenElement!.items!.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: widget.kitchenElement.items.length,
                     itemBuilder: (context, index) {
                       return KitchenItemTileWidget(
-                        kitchenItem: widget.kitchenElement!.items![index],
+                        kitchenItem: widget.kitchenElement.items[index],
                       );
                     },
                   ),
@@ -287,11 +298,17 @@ class PiorityRatingWidget extends StatelessWidget {
   }
 }
 
-class UpdateKitchenElement extends StatelessWidget {
+class UpdateKitchenElement extends StatefulWidget {
   const UpdateKitchenElement({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<UpdateKitchenElement> createState() => _UpdateKitchenElementState();
+}
+
+class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
+  DateTime _dateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -329,7 +346,13 @@ class UpdateKitchenElement extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
-                            SelectDate(),
+                            SelectDate(
+                              onDateSelected: (DateTime f) {
+                                setState(() {
+                                  _dateTime = f;
+                                });
+                              },
+                            ),
                           ],
                         ),
                       ),

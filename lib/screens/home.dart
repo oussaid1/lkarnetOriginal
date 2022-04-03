@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
@@ -311,7 +310,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   buildTopWidget(DataSink dataSink) {
     return SizedBox(
       width: 390,
-      height: 120,
+      height: 130,
       child: BluredContainer(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -339,7 +338,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ],
             ),
-            buildCircularProgress(dataSink),
+            Row(
+              children: [
+                buildCircularProgress(dataSink),
+              ],
+            ),
           ],
         ),
       ),
@@ -351,8 +354,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       animateFromLastPercent: true,
       animation: true,
       curve: Curves.linear,
-      radius: 90.0,
-      lineWidth: 8.0,
+      radius: 54.0,
+      lineWidth: 6.0,
       percent: dataSink.spendingsUnitinterval,
       center: new Text("${dataSink.spendingsPecentage} %",
           style: Theme.of(context).textTheme.headline6),
