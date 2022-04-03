@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
+import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
@@ -25,6 +26,10 @@ class _AddItemState extends ConsumerState<AddItem> {
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemPriceController = TextEditingController();
+
+  DateTime _dateBought = DateTime.now();
+
+  String? _quantifier = 'واحدة';
   void clear() {
     _itemNameController.clear();
     _itemPriceController.clear();
@@ -67,7 +72,11 @@ class _AddItemState extends ConsumerState<AddItem> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: ShopSpinner(),
+                  child: ShopSpinner(
+                    onShopSelected: (value) {
+                      ref.read(pickedShop.state).state = value;
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -75,62 +84,60 @@ class _AddItemState extends ConsumerState<AddItem> {
                     key: _formKeyName,
                     child: SizedBox(
                       height: 50,
-                      child: Autocomplete<Item>(
-                        initialValue: TextEditingValue(
-                          text:
-                              widget.item != null ? widget.item!.itemName : '',
+                      child: TypeAheadField<Item>(
+                        autoFlipDirection: true,
+                        minCharsForSuggestions: 2,
+                        direction: AxisDirection.up,
+                        hideSuggestionsOnKeyboardHide: true,
+                        textFieldConfiguration: TextFieldConfiguration(
+                          autofocus: true,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 4, right: 4, left: 4),
+                            fillColor: AppConstants.whiteOpacity,
+                            filled: true,
+                            hintText: 'milk',
+                            //alignLabelWithHint: true,
+
+                            prefixIcon: Icon(
+                              Icons.shopping_basket,
+                              color: Color.fromARGB(117, 212, 211, 211),
+                            ),
+                            suffix: IconButton(
+                              icon: Icon(
+                                Icons.clear_outlined,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _itemNameController.clear();
+                                });
+                              },
+                            ),
+                            // border: OutlineInputBorder(),
+                          ),
                         ),
-                        optionsBuilder:
-                            (TextEditingValue textEditingValue) async {
-                          if (textEditingValue.text.isEmpty) {
-                            return [];
-                          }
+                        suggestionsCallback: (pattern) async {
                           return _kOptions
                               .where((item) => item.itemName
                                   .toLowerCase()
-                                  .startsWith(
-                                      textEditingValue.text.toLowerCase()))
+                                  .startsWith(pattern.toLowerCase()))
                               .toList(growable: true);
                         },
-                        displayStringForOption: (Item item) => item.itemName,
-                        fieldViewBuilder: (BuildContext context,
-                            TextEditingController fieldTextEditingController,
-                            FocusNode fieldFocusNode,
-                            VoidCallback onFieldSubmitted) {
-                          return TextField(
-                            onChanged: (value) {
-                              _itemNameController.text = value;
-                            },
-                            controller: fieldTextEditingController,
-                            focusNode: fieldFocusNode,
-                            style: Theme.of(context).textTheme.headline6,
-                            decoration: InputDecoration(
-                              suffix: IconButton(
-                                icon: Icon(
-                                  Icons.clear_outlined,
-                                  size: 18,
-                                ),
-                                onPressed: () {
-                                  fieldTextEditingController.clear();
-                                },
-                              ),
-                              hintText: 'name',
-                              hintStyle: GoogleFonts.robotoSlab(),
-                              contentPadding: EdgeInsets.only(top: 4),
-                              prefixIcon: Icon(
-                                Icons.insert_emoticon_outlined,
-                                color: Colors.grey,
-                              ),
-                              fillColor: AppConstants.whiteOpacity,
-                              filled: true,
-                              labelText: 'Name',
-                            ),
+                        itemBuilder: (context, suggestion) {
+                          return ItemTileWidget(
+                            item: suggestion,
                           );
                         },
-                        onSelected: (Item selection) {
-                          _itemNameController.text = selection.itemName;
+                        onSuggestionSelected: (suggestion) {
+                          _itemNameController.text = suggestion.itemName;
                           _itemPriceController.text =
-                              selection.itemPrice.toString();
+                              suggestion.itemPrice.toString();
+                          _quantity = suggestion.quantity;
+                          ref.read(pickedDateTime.state).state =
+                              suggestion.dateBought;
                         },
                       ),
                     ),
@@ -188,7 +195,11 @@ class _AddItemState extends ConsumerState<AddItem> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SelectDate(),
+                  child: SelectDate(
+                    onDateSelected: (DateTime date) {
+                      _dateBought = date;
+                    },
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -207,7 +218,13 @@ class _AddItemState extends ConsumerState<AddItem> {
                       // value: _quantity,
                     ),
                     Container(
-                      child: QuantifierSpinner(),
+                      child: QuantifierSpinner(
+                        onValueChanged: (value) {
+                          setState(() {
+                            _quantifier = value;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),

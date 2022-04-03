@@ -6,6 +6,8 @@ import 'package:lkarnet/extensions/extensions.dart';
 import '../const/constents.dart';
 
 class SelectDate extends ConsumerWidget {
+  const SelectDate({Key? key, required this.onDateSelected}) : super(key: key);
+  final void Function(DateTime) onDateSelected;
   void _selectDate(BuildContext context, ref) async {
     //  final df.DateFormat _formatter = df.DateFormat('yyyy-MM-dd');
     final DateTime picked = (await showDatePicker(
@@ -15,6 +17,7 @@ class SelectDate extends ConsumerWidget {
       lastDate: DateTime(2025),
     ))!;
     if (picked != DateTime.now()) {
+      onDateSelected(picked);
       ref.read(pickedDateTime.state).state = picked;
     }
   }
@@ -57,6 +60,8 @@ class SelectDate extends ConsumerWidget {
 }
 
 class SelectDate2 extends ConsumerWidget {
+  const SelectDate2({Key? key, required this.onDateSelected}) : super(key: key);
+  final void Function(DateTime) onDateSelected;
   void _selectDate(BuildContext context, ref) async {
     //  final df.DateFormat _formatter = df.DateFormat('yyyy-MM-dd');
     final DateTime picked = (await showDatePicker(
@@ -66,6 +71,7 @@ class SelectDate2 extends ConsumerWidget {
       lastDate: DateTime(2031),
     ))!;
     if (picked != DateTime.now()) {
+      onDateSelected(picked);
       ref.read(pickedDateTime2.state).state = picked;
     }
   }

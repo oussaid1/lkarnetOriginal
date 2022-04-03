@@ -23,6 +23,8 @@ class AddPayment extends ConsumerStatefulWidget {
 class _AddPaymentState extends ConsumerState<AddPayment> {
   final GlobalKey<FormState> _formKeyPaidAmount = GlobalKey<FormState>();
   final TextEditingController _paidAmountController = TextEditingController();
+
+  late DateTime _datePaid;
   void _update() {
     if (widget.payment != null) {
       setState(() {
@@ -61,7 +63,11 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: ShopSpinner(),
+                  child: ShopSpinner(
+                    onShopSelected: (value) {
+                      ref.read(pickedShop.state).state = value;
+                    },
+                  ),
                 ),
                 Form(
                   key: _formKeyPaidAmount,
@@ -103,7 +109,12 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SelectDate(),
+                  child: SelectDate(
+                    onDateSelected: (value) {
+                      _datePaid = value;
+                      ref.read(pickedDateTime.state).state = value;
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 30,

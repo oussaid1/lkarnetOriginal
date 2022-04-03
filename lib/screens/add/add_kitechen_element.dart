@@ -150,7 +150,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     ),
                   ),
                 ),
-                const SizedBox(height:10 ),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: PiorityRatingWidget(
@@ -189,6 +189,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   ));
                                   final db = ref.read(databaseProvider);
                                   final kitchenElement = KitchenElement(
+                                    items: [],
                                     title: _itemNameController.text.trim(),
                                     priority: priorityRating,
                                     availability: ref

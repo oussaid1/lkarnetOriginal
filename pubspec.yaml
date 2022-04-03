@@ -24,6 +24,7 @@ dependencies:
   flutter_riverpod: ^1.0.3
   flutter_slidable: ^1.2.0
   flutter_svg: ^1.0.1
+  flutter_typeahead: ^3.2.4
   google_fonts: ^2.2.0
   google_sign_in: ^5.2.3
   logger: ^1.1.0

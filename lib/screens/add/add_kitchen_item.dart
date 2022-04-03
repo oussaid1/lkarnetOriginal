@@ -25,10 +25,16 @@ class AddKitchenItem extends ConsumerStatefulWidget {
 
 class _AddItemState extends ConsumerState<AddKitchenItem> {
   double _quantity = 1;
+  String _shop = "";
+  String _quantifier = "";
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemPriceController = TextEditingController();
+  KitchenElement? _kitchenElement;
+
+  DateTime _dateBought = DateTime.now();
+  DateTime _dateExpired = DateTime.now();
   void clear() {
     _itemNameController.clear();
     _itemPriceController.clear();
@@ -41,6 +47,10 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         _itemNameController.text = widget.kitchenItem!.itemName.toString();
         _itemPriceController.text = (widget.kitchenItem!.itemPrice).toString();
         _quantity = widget.kitchenItem!.quantity;
+        _shop = widget.kitchenItem!.shopName!;
+        _quantifier = widget.kitchenItem!.quantifier!;
+        _dateBought = widget.kitchenItem!.dateBought;
+        _dateExpired = widget.kitchenItem!.dateExpired;
       });
     }
 
@@ -50,6 +60,9 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         _itemNameController.text = widget.item!.itemName.toString();
         _itemPriceController.text = (widget.item!.itemPrice).toString();
         _quantity = widget.item!.quantity;
+        _shop = widget.item!.shopName;
+        _quantifier = widget.item!.quantifier!;
+        _dateBought = widget.item!.dateBought;
       });
     }
   }
@@ -87,27 +100,43 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: Text(
-                    'Add Kitchen Item',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Add Kitchen Item to :',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        Text('${widget.kitchenElement!.title}',
+                            style: Theme.of(context).textTheme.headline4),
+                      ],
                     ),
                   ),
                 ),
+                widget.item != null
+                    ? Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                            child: KitchenElementSpinner(
+                              onSelected: (KitchenElement? e) {
+                                _kitchenElement = e;
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
                 Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.all(4),
-                      child: KitchenElementSpinner(),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4),
-                      child: ShopSpinner(),
+                      child: ShopSpinner(
+                        onShopSelected: (String? s) {
+                          _shop = s!;
+                          ref.read(pickedShop.state).state = s;
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -186,7 +215,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                     child: SizedBox(
                       height: 50,
                       child: TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        // autovalidateMode: AutovalidateMode.onUserInteraction,
                         inputFormatters: [
                           //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
                           FilteringTextInputFormatter.allow(
@@ -237,7 +266,13 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                       color: AppConstants.whiteOpacity,
                     ),
                     child: Row(
-                      children: [SelectDate()],
+                      children: [
+                        SelectDate(
+                          onDateSelected: (DateTime date) {
+                            _dateBought = date;
+                          },
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -290,7 +325,13 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                             ),
                           );
                         }),
-                        QuantifierSpinner(),
+                        QuantifierSpinner(
+                          onValueChanged: (value) {
+                            setState(() {
+                              _quantifier = value;
+                            });
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -319,30 +360,42 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
                                 onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Saving...'),
+                                    ),
+                                  );
                                   final _op = ref.read(operationsProvider);
-                                  final _item = Item(
+                                  final _item = KitchenItem(
                                     besoinTitle: '',
                                     dateBought:
                                         ref.read(pickedDateTime.state).state,
                                     itemName: _itemNameController.text.trim(),
                                     itemPrice: double.parse(
                                         _itemPriceController.text.trim()),
-                                    quantifier:
-                                        ref.read(selectedQuantifierProvider),
+                                    quantifier: _quantifier,
                                     quantity: _quantity,
-                                    shopName: ref.read(pickedShop.state).state!,
+                                    shopName: ref.read(pickedShop.state).state,
+                                    dateExpired: _dateExpired,
+                                    kitchenElementId: widget.kitchenElement!.id,
                                   );
-                                  logger.d(_item);
+                                  _item.toPrint();
                                   if (_formKeyName.currentState!.validate() &&
                                       _formKeyPrice.currentState!.validate()) {
-                                    _op.addItem(_item).then((value) {
+                                    _op.addKitchenItem(_item).then((value) {
                                       logger.d(value);
                                       if (value) {
                                         _formKeyName.currentState!.reset();
                                         _formKeyPrice.currentState!.reset();
                                       }
                                     });
-                                  } //_op.addItem();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please fill all fields'),
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),

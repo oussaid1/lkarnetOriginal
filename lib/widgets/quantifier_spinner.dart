@@ -3,6 +3,9 @@ import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:flutter/material.dart';
 
 class QuantifierSpinner extends ConsumerWidget {
+  const QuantifierSpinner({Key? key, required this.onValueChanged})
+      : super(key: key);
+  final void Function(String) onValueChanged;
   @override
   Widget build(BuildContext context, ref) {
     final _list = <String>['واحدة', 'كيلو', 'علبة', 'لتر'];
@@ -27,6 +30,7 @@ class QuantifierSpinner extends ConsumerWidget {
               isExpanded: true,
               value: ref.watch(selectedQuantifierProvider.state).state,
               onChanged: (value) {
+                onValueChanged(value ?? _list[0]);
                 ref.read(selectedQuantifierProvider.state).state = value;
               },
               items: _list.toSet().map((itemName) {

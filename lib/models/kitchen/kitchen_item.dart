@@ -21,11 +21,40 @@ class KitchenElement {
     this.category,
     this.availability,
     this.priority,
-    this.items,
+    required this.items,
   });
-  List<KitchenItem>? items = [];
+  List<KitchenItem> items = [];
   double get totalPrice {
     return 0;
+  }
+
+// get the number of times the element is bought
+  int get timesBought {
+    if (items.isEmpty)
+      return 0;
+    else
+      return items.length;
+  }
+
+// get the date of the last item
+  String get lastTimeBought {
+    return items.isEmpty ? 'Not bought yet' : items.last.dateBought.ddmmyyyy();
+  }
+
+// get time expired of the last item
+  String get timeExpired {
+    return items.isEmpty ? 'Still in stock' : items.last.dateExpired.ddmmyyyy();
+  }
+
+// get last item was bought
+  KitchenItem? get lastItemBought {
+    // if items is empty return null
+    if (items.isEmpty) return null;
+    // get last item
+    final lastItem = items.last;
+    // if last item is not bought return null
+    // return last item
+    return lastItem;
   }
 
   // list of fake data
@@ -111,6 +140,7 @@ class KitchenElement {
       title: title ?? this.title,
       category: category ?? this.category,
       availability: availability ?? this.availability,
+      items: items,
     );
   }
 
@@ -130,6 +160,7 @@ class KitchenElement {
       category: map['category'],
       availability: map['availability'],
       priority: map['priority'],
+      items: [],
     );
   }
 
@@ -140,6 +171,8 @@ class KitchenElement {
       title: map['title'],
       category: map['category'],
       availability: map['availability'],
+      priority: map['priority'],
+      items: [],
     );
   }
   String toJson() => json.encode(toMap());
@@ -353,7 +386,7 @@ class KitchenItem {
         count: 1,
         dateBought: DateTime.now(),
         dateExpired: DateTime.now(),
-        kitchenElementId: 'test',
+        kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
       KitchenItem(
         besoinTitle: 'test',
@@ -365,7 +398,7 @@ class KitchenItem {
         count: 1,
         dateBought: DateTime.now(),
         dateExpired: DateTime.now(),
-        kitchenElementId: 'test',
+        kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
       KitchenItem(
         besoinTitle: 'test',
@@ -377,7 +410,7 @@ class KitchenItem {
         count: 1,
         dateBought: DateTime.now(),
         dateExpired: DateTime.now(),
-        kitchenElementId: 'test',
+        kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
       KitchenItem(
         besoinTitle: 'test',
@@ -389,7 +422,7 @@ class KitchenItem {
         count: 1,
         dateBought: DateTime.now(),
         dateExpired: DateTime.now(),
-        kitchenElementId: 'test',
+        kitchenElementId: 'I7ebCrvYuGKPL79sUhFl',
       ),
       KitchenItem(
         besoinTitle: 'test',
@@ -401,7 +434,7 @@ class KitchenItem {
         count: 1,
         dateBought: DateTime.now(),
         dateExpired: DateTime.now(),
-        kitchenElementId: 'test',
+        kitchenElementId: 'I7ebCrvYuGKPL79sUhFl',
       ),
     ];
   }
