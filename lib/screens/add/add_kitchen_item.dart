@@ -374,11 +374,17 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                         _itemPriceController.text.trim()),
                                     quantifier: _quantifier,
                                     quantity: _quantity,
+<<<<<<< HEAD
                                     shopName: _shop,
                                     dateExpired: _dateExpired,
                                     kitchenElementId: widget.item != null
                                         ? widget.kitchenElement!.id
                                         : _kitchenElement!.id,
+=======
+                                    shopName: ref.read(pickedShop.state).state,
+                                    dateExpired: _dateExpired,
+                                    kitchenElementId: widget.kitchenElement!.id,
+>>>>>>> 55dc683 (kitchen element items crud)
                                   );
                                   _item.toPrint();
                                   if (_formKeyName.currentState!.validate() &&

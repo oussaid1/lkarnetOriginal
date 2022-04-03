@@ -6,6 +6,7 @@ import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
 import '../models/kitchen/kitchen_item.dart';
+import '../models/shop/shop_model.dart';
 
 class ShopSpinner extends ConsumerWidget {
   const ShopSpinner({Key? key, required this.onShopSelected}) : super(key: key);

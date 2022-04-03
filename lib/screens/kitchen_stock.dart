@@ -19,6 +19,11 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 }
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
+<<<<<<< HEAD
+=======
+  String filter = '';
+
+>>>>>>> 55dc683 (kitchen element items crud)
   @override
   Widget build(BuildContext context) {
     List<KitchenElement> kitchenElements = [];
@@ -46,7 +51,10 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     floatingActionButtonLocation:
                         FloatingActionButtonLocation.centerDocked,
                     floatingActionButton: FloatingActionButton(
+<<<<<<< HEAD
                       heroTag: 'add_kitchen_element',
+=======
+>>>>>>> 55dc683 (kitchen element items crud)
                       onPressed: () {
                         Dialogs.botomPopUpDialog(
                           context,
@@ -57,6 +65,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     ),
                     appBar: AppBar(
                       actions: [
+<<<<<<< HEAD
                         NotificationWidget(
                           count: kitchenElementData!
                               .unavaliableKitchenElements.length,
@@ -70,12 +79,20 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                               ),
                             );
                           },
-                        ),
+=======
+                        // IconButton(
+                        //   icon: Icon(Icons.add_box_outlined),
+                        //   onPressed: () async {
+                        //     var logger = Logger();
+                        //     for (var item in items!) {
+                        //       logger.d(item.toMap());
+                        //     }
+                        //   },
+                        // ),
                       ],
-                      leading:
-                          Icon(Icons.kitchen_outlined, color: Colors.black),
+                      leading: Icon(Icons.dashboard, color: Colors.black),
                       title: Text(
-                        'Kitchen Stock',
+                        'Shop Details',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -87,8 +104,29 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(AppConstants.radius),
                           bottom: Radius.circular(AppConstants.radius),
+>>>>>>> 55dc683 (kitchen element items crud)
+                        ),
+                      ],
+                      leading:
+                          Icon(Icons.kitchen_outlined, color: Colors.black),
+                      title: Text(
+                        'Kitchen Stock',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+<<<<<<< HEAD
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      excludeHeaderSemantics: true,
+                      toolbarHeight: 40,
+                      backgroundColor: AppConstants.whiteOpacity,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(AppConstants.radius),
+                          bottom: Radius.circular(AppConstants.radius),
                         ),
                       ),
+=======
+>>>>>>> 55dc683 (kitchen element items crud)
                     ),
                     // Next, create a SliverList
                     body: SingleChildScrollView(
@@ -108,6 +146,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
+<<<<<<< HEAD
                             child: BluredContainer(
                                 margin: EdgeInsets.all(8),
                                 width: 400,
@@ -153,6 +192,45 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                                   ),
                                 )
                               : Container(),
+=======
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4),
+                            // height: 440,
+                            width: MediaQuery.of(context).size.width,
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 1.5,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10),
+                              itemCount:
+                                  kitchenElementData!.kitchenElements.length,
+                              itemBuilder: (context, index) {
+                                final KitchenElement kitchenElement =
+                                    kitchenElementData!.kitchenElements[index];
+                                return KitchenItemSquareTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            KitchenItemDetailsScreen(
+                                          kitchenElement: kitchenElement,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  kitchenElement: kitchenElement,
+                                );
+                              },
+                            ),
+                          ),
+>>>>>>> 55dc683 (kitchen element items crud)
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -269,3 +347,54 @@ class KitchenItemSquareTile extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+class ProgressWidget extends StatelessWidget {
+  const ProgressWidget({
+    Key? key,
+    required this.kitchenElement,
+  }) : super(key: key);
+  final KitchenElement kitchenElement;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 30,
+      height: 30,
+      child: SfRadialGauge(
+        // backgroundColor: Colors.white,
+        axes: <RadialAxis>[
+          RadialAxis(
+            labelFormat: '${kitchenElement.availability}',
+            labelOffset: 15,
+            labelsPosition: ElementsPosition.inside,
+            axisLabelStyle:
+                GaugeTextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+            minimum: 0,
+            maximum: 10,
+            showLabels: true,
+            showTicks: false,
+            startAngle: 270,
+            endAngle: 270,
+            axisLineStyle: AxisLineStyle(
+              thickness: 0.05,
+              color: Color.fromARGB(38, 255, 255, 255),
+              thicknessUnit: GaugeSizeUnit.factor,
+            ),
+            pointers: <GaugePointer>[
+              RangePointer(
+                color: Color.fromARGB(99, 255, 255, 255),
+                value: kitchenElement.availability!,
+                width: 0.95,
+                pointerOffset: 0.05,
+                sizeUnit: GaugeSizeUnit.factor,
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+>>>>>>> 55dc683 (kitchen element items crud)

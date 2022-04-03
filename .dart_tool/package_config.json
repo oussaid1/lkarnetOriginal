@@ -217,19 +217,31 @@
     },
     {
       "name": "flutter_keyboard_visibility",
+<<<<<<< HEAD
       "rootUri": "file:///home/oussaid/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility-5.2.0",
+=======
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility-5.2.0",
+>>>>>>> 55dc683 (kitchen element items crud)
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "flutter_keyboard_visibility_platform_interface",
+<<<<<<< HEAD
       "rootUri": "file:///home/oussaid/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_platform_interface-2.0.0",
+=======
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_platform_interface-2.0.0",
+>>>>>>> 55dc683 (kitchen element items crud)
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "flutter_keyboard_visibility_web",
+<<<<<<< HEAD
       "rootUri": "file:///home/oussaid/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_web-2.0.0",
+=======
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility_web-2.0.0",
+>>>>>>> 55dc683 (kitchen element items crud)
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -269,7 +281,11 @@
     },
     {
       "name": "flutter_typeahead",
+<<<<<<< HEAD
       "rootUri": "file:///home/oussaid/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_typeahead-3.2.4",
+=======
+      "rootUri": "file:///home/oussaid/.pub-cache/hosted/pub.dartlang.org/flutter_typeahead-3.2.4",
+>>>>>>> 55dc683 (kitchen element items crud)
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -733,6 +749,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   "generated": "2022-04-08T12:19:16.861319Z",
 =======
   "generated": "2022-04-02T23:22:46.819387Z",
@@ -743,6 +760,9 @@
 =======
   "generated": "2022-04-05T11:03:25.037555Z",
 >>>>>>> 28c3507 (kl)
+=======
+  "generated": "2022-04-05T11:04:58.681501Z",
+>>>>>>> 55dc683 (kitchen element items crud)
   "generator": "pub",
   "generatorVersion": "2.16.2"
 }

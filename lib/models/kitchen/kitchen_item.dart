@@ -24,10 +24,44 @@ class KitchenElement {
     required this.items,
   });
   List<KitchenItem> items = [];
+<<<<<<< HEAD
 
 // get isNotAvailable
   bool get isAvailable {
     return availability != 0;
+  }
+
+// get the number of times the element is bought
+  int get timesBought {
+    if (items.isEmpty)
+      return 0;
+    else
+      return items.length;
+  }
+
+// get the date of the last item
+  String get lastTimeBought {
+    return items.isEmpty ? 'Not bought yet' : items.last.dateBought.ddmmyyyy();
+  }
+
+// get time expired of the last item
+  String get timeExpired {
+    return items.isEmpty ? 'Still in stock' : items.last.dateExpired.ddmmyyyy();
+  }
+
+// get last item was bought
+  KitchenItem? get lastItemBought {
+    // if items is empty return null
+    if (items.isEmpty) return null;
+    // get last item
+    final lastItem = items.last;
+    // if last item is not bought return null
+    // return last item
+    return lastItem;
+=======
+  double get totalPrice {
+    return 0;
+>>>>>>> 55dc683 (kitchen element items crud)
   }
 
 // get the number of times the element is bought
@@ -160,8 +194,13 @@ class KitchenElement {
       id: map.id,
       title: map['title'],
       category: map['category'],
+<<<<<<< HEAD
       availability: map['availability'].toDouble(),
       priority: map['priority'].toDouble(),
+=======
+      availability: map['availability'],
+      priority: map['priority'],
+>>>>>>> 55dc683 (kitchen element items crud)
       items: [],
     );
   }

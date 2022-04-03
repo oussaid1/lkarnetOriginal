@@ -251,6 +251,30 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     ],
                   ),
                 ),
+<<<<<<< HEAD
+=======
+                const SizedBox(
+                  height: 20,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 18.0, bottom: 18),
+                    child: Divider(
+                      height: 3,
+                      indent: 12,
+                      color: Colors.amber,
+                      endIndent: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PiorityRatingWidget(
+                    onRatingChanged: (int pri) {
+                      priorityRating = pri;
+                    },
+                  ),
+                ),
+>>>>>>> 55dc683 (kitchen element items crud)
                 SizedBox(
                   height: 40,
                 ),
