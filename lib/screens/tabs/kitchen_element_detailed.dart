@@ -416,7 +416,7 @@ class Availibility extends ConsumerWidget {
               ),
               pointers: <GaugePointer>[
                 RangePointer(
-                  color: Color.fromARGB(98, 189, 77, 77),
+                  color: Color.fromARGB(98, 252, 183, 102),
                   value: x,
                   width: 0.95,
                   // pointerOffset: 0.05,

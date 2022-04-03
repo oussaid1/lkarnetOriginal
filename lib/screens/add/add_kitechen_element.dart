@@ -8,7 +8,9 @@ import '../tabs/kitchen_element_detailed.dart';
 
 class AddKitchenElement extends ConsumerStatefulWidget {
   final KitchenElement? kitchenElement;
+
   AddKitchenElement({this.kitchenElement});
+
   @override
   _AddItemState createState() => _AddItemState();
 }
@@ -41,6 +43,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
   }
 
   int priorityRating = 1;
+
   @override
   Widget build(BuildContext context) {
     Iterable<KitchenElement> _kOptions = [];
@@ -49,7 +52,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
       color: Colors.transparent,
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 340,
+          height: 380,
           //width: 200,
           child: BluredContainer(
             child: Column(
@@ -123,6 +126,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -134,6 +138,19 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 18.0, bottom: 18),
+                    child: Divider(
+                      height: 3,
+                      indent: 12,
+                      color: Colors.amber,
+                      endIndent: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height:10 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: PiorityRatingWidget(
@@ -143,7 +160,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 widget.kitchenElement == null
                     ? Row(
