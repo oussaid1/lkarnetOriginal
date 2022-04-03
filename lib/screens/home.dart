@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
@@ -102,6 +103,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       children: [
         Expanded(
           child: PageView(
+            //allowImplicitScrolling:true ,
+            //clipBehavior:Clip.hardEdge ,
             controller: _pageController,
             physics: NeverScrollableScrollPhysics(),
             onPageChanged: (index) {

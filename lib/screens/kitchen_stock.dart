@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
-import 'package:lkarnet/screens/add/add_kitchen_item.dart';
+import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../widgets/dialogs.dart';
@@ -16,6 +16,7 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
   String filter = '';
+
   // final TextEditingController _filterController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     final fakekitchenElements = KitchenElement.fakeKitchenElements;
     List<KitchenElement> kitchenElements = [];
     return BluredContainer(
-      start: 0,
+      start: 0.1,
       end: 0,
       borderColorOpacity: 0,
       child: StreamBuilder<List<KitchenElement>>(
@@ -51,82 +52,139 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                 onPressed: () {
                   Dialogs.botomPopUpDialog(
                     context,
-                    AddKitchenItem(),
+                    AddKitchenElement(),
                   );
                 },
                 child: Icon(Icons.add),
               ),
+              // appBar: AppBar(
+              //   backgroundColor: Colors.transparent,
+              //   title: Text('Kitchen Stock'),
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.vertical(
+              //       bottom: Radius.circular(20),
+              //     ),
+              //   ),
+              //   flexibleSpace: Container(
+              //     decoration: BoxDecoration(
+              //       gradient: LinearGradient(
+              //         begin: Alignment.topLeft,
+              //         end: Alignment.bottomRight,
+              //         colors: [
+              //           Color.fromARGB(40, 255, 255, 255),
+              //           Color.fromARGB(52, 255, 255, 255),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              //   bottom: PreferredSize(
+              //     preferredSize: Size.fromHeight(200),
+              //     child: SizedBox(
+              //       height: 230,
+              //       width: MediaQuery.of(context).size.width,
+              //       child: Stack(
+              //         children: [
+              //           _buildMonthlyCard(
+              //             context,
+              //             kitchenElements,
+              //           ),
+              //           Positioned(
+              //             top: 180,
+              //             width: 380,
+              //             left: MediaQuery.of(context).size.width / 2 - 190,
+              //             child: _buildSelector(),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                title: Text('Kitchen Stock'),
+                actions: [
+                  // IconButton(
+                  //   icon: Icon(Icons.add_box_outlined),
+                  //   onPressed: () async {
+                  //     var logger = Logger();
+                  //     for (var item in items!) {
+                  //       logger.d(item.toMap());
+                  //     }
+                  //   },
+                  // ),
+                ],
+                leading: Icon(Icons.dashboard, color: Colors.black),
+                title: Text(
+                  'Shop Details',
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                excludeHeaderSemantics: true,
+                toolbarHeight: 40,
+                backgroundColor: AppConstants.whiteOpacity,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(20),
-                  ),
-                ),
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromARGB(40, 255, 255, 255),
-                        Color.fromARGB(52, 255, 255, 255),
-                      ],
-                    ),
-                  ),
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(200),
-                  child: SizedBox(
-                    height: 230,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      children: [
-                        _buildMonthlyCard(
-                          context,
-                          kitchenElements,
-                        ),
-                        Positioned(
-                          top: 180,
-                          width: 380,
-                          left: MediaQuery.of(context).size.width / 2 - 190,
-                          child: _buildSelector(),
-                        ),
-                      ],
-                    ),
+                    top: Radius.circular(AppConstants.radius),
+                    bottom: Radius.circular(AppConstants.radius),
                   ),
                 ),
               ),
-
               // Next, create a SliverList
-              body: Container(
-                margin: EdgeInsets.symmetric(horizontal: 4),
-                // height: 340,
-                //width: MediaQuery.of(context).size.width,
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.5,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10),
-                  itemCount: kitchenElements.length,
-                  itemBuilder: (context, index) {
-                    final kitchenElement = kitchenElements[index];
-                    return KitchenItemSquareTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => KitchenItemDetailsScreen(
-                              kitchenElement: kitchenElement,
-                            ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height:10 ),
+
+                       Container(
+                        margin: EdgeInsets.all(8) ,
+                        height: 200,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.3),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight:Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
                           ),
-                        );
-                      },
-                      kitchenElement: kitchenElement,
-                    );
-                  },
+                        ),
+
+                    ),
+                    const SizedBox(height:20 ),
+
+                       Container(
+                        margin: EdgeInsets.symmetric(horizontal: 4),
+                       // height: 440,
+                        width: MediaQuery.of(context).size.width,
+                        child: GridView.builder(
+                          shrinkWrap: true ,
+                          physics: NeverScrollableScrollPhysics() ,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1.5,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10),
+                          itemCount: kitchenElements.length,
+                          itemBuilder: (context, index) {
+                            final kitchenElement = kitchenElements[index];
+                            return KitchenItemSquareTile(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        KitchenItemDetailsScreen(
+                                      kitchenElement: kitchenElement,
+                                    ),
+                                  ),
+                                );
+                              },
+                              kitchenElement: kitchenElement,
+                            );
+                          },
+                        ),
+                      ),
+                    const SizedBox(height:50 ),
+                  ],
                 ),
               ),
             );
@@ -319,6 +377,7 @@ class ProgressWidget extends StatelessWidget {
     required this.kitchenElement,
   }) : super(key: key);
   final KitchenElement kitchenElement;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
