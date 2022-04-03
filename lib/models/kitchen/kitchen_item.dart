@@ -29,9 +29,12 @@ class KitchenElement {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
+=======
+>>>>>>> 1a88e7a (kitchen element items crud)
   List<KitchenItem> get sortedItems {
     items.sort((a, b) {
       if (a.dateExpired != null && b.dateExpired != null) {
@@ -102,6 +105,39 @@ class KitchenElement {
     return items.isEmpty || items.first.dateExpired == null
         ? 'Still in stock'
         : items.first.dateExpired!.ddmmyyyy();
+  }
+
+// get last item was bought
+  KitchenItem? get lastItemBought {
+    // if items is empty return null
+    if (items.isEmpty) return null;
+    // get last item
+    final lastItem = items.last;
+    // if last item is not bought return null
+    // return last item
+    return lastItem;
+=======
+  double get totalPrice {
+    return 0;
+>>>>>>> b001677 (kitchen element items crud)
+  }
+
+// get the number of times the element is bought
+  int get timesBought {
+    if (items.isEmpty)
+      return 0;
+    else
+      return items.length;
+  }
+
+// get the date of the last item
+  String get lastTimeBought {
+    return items.isEmpty ? 'Not bought yet' : items.last.dateBought.ddmmyyyy();
+  }
+
+// get time expired of the last item
+  String get timeExpired {
+    return items.isEmpty ? 'Still in stock' : items.last.dateExpired.ddmmyyyy();
   }
 
 // get last item was bought
@@ -200,8 +236,12 @@ class KitchenElement {
       title: title ?? this.title,
       category: category ?? this.category,
       availability: availability ?? this.availability,
+<<<<<<< HEAD
       priority: priority ?? this.priority,
       items: items ?? this.items,
+=======
+      items: items,
+>>>>>>> b001677 (kitchen element items crud)
     );
   }
 
@@ -225,7 +265,11 @@ class KitchenElement {
 =======
       availability: map['availability'],
       priority: map['priority'],
+<<<<<<< HEAD
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+>>>>>>> b001677 (kitchen element items crud)
+>>>>>>> 1a88e7a (kitchen element items crud)
       items: [],
     );
   }

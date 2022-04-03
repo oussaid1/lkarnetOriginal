@@ -3,6 +3,7 @@ import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/kitchen/kitchen_item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
+import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/kitchen_elements_spinner.dart';
@@ -31,11 +32,16 @@ class _AddItemState extends ConsumerState<AddItem>
   final TextEditingController _itemPriceController = TextEditingController();
 
   DateTime _dateBought = DateTime.now();
+<<<<<<< HEAD
 //  KitchenElement? _kitchenElement;
   String? _quantifier = 'واحدة';
   String? _shop;
   bool _isLoading = false;
   Item? _localItem;
+=======
+
+  String? _quantifier = 'واحدة';
+>>>>>>> b001677 (kitchen element items crud)
   void clear() {
     _itemNameController.clear();
     _itemPriceController.clear();
@@ -70,6 +76,7 @@ class _AddItemState extends ConsumerState<AddItem>
   @override
   Widget build(BuildContext context) {
     Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
+<<<<<<< HEAD
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -181,6 +188,217 @@ class _AddItemState extends ConsumerState<AddItem>
       ),
     );
   }
+=======
+    final logger = Logger();
+    return Material(
+      color: Colors.transparent,
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: 440,
+          width: 400,
+          child: BluredContainer(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 8),
+                  child: ShopSpinner(
+                    onShopSelected: (value) {
+                      ref.read(pickedShop.state).state = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Form(
+                    key: _formKeyName,
+                    child: SizedBox(
+                      height: 50,
+                      child: TypeAheadField<Item>(
+                        autoFlipDirection: true,
+                        minCharsForSuggestions: 2,
+                        direction: AxisDirection.up,
+                        hideSuggestionsOnKeyboardHide: true,
+                        textFieldConfiguration: TextFieldConfiguration(
+                          autofocus: true,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 4, right: 4, left: 4),
+                            fillColor: AppConstants.whiteOpacity,
+                            filled: true,
+                            hintText: 'milk',
+                            //alignLabelWithHint: true,
+
+                            prefixIcon: Icon(
+                              Icons.shopping_basket,
+                              color: Color.fromARGB(117, 212, 211, 211),
+                            ),
+                            suffix: IconButton(
+                              icon: Icon(
+                                Icons.clear_outlined,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _itemNameController.clear();
+                                });
+                              },
+                            ),
+                            // border: OutlineInputBorder(),
+                          ),
+                        ),
+                        suggestionsCallback: (pattern) async {
+                          return _kOptions
+                              .where((item) => item.itemName
+                                  .toLowerCase()
+                                  .startsWith(pattern.toLowerCase()))
+                              .toList(growable: true);
+                        },
+                        itemBuilder: (context, suggestion) {
+                          return ItemTileWidget(
+                            item: suggestion,
+                          );
+                        },
+                        onSuggestionSelected: (suggestion) {
+                          _itemNameController.text = suggestion.itemName;
+                          _itemPriceController.text =
+                              suggestion.itemPrice.toString();
+                          _quantity = suggestion.quantity;
+                          ref.read(pickedDateTime.state).state =
+                              suggestion.dateBought;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Form(
+                    key: _formKeyPrice,
+                    child: SizedBox(
+                      height: 50,
+                      child: TextFormField(
+                        //autovalidateMode: AutovalidateMode.disabled,
+                        inputFormatters: [
+                          //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'(^\-?\d*\.?\d*)')),
+                        ],
+                        controller: _itemPriceController,
+                        validator: (text) {
+                          if (text!.isEmpty) {
+                            return '';
+                          } else if (text.contains(RegExp(r'[A-Z]'))) {
+                            return '';
+                          } else {
+                            return null;
+                          }
+                        },
+                        textAlign: TextAlign.center,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          hintText: ' 00.00',
+                          hintStyle: GoogleFonts.robotoSlab(),
+                          contentPadding: EdgeInsets.only(top: 4),
+                          suffix: IconButton(
+                            icon: Icon(
+                              Icons.clear_outlined,
+                              size: 18,
+                            ),
+                            onPressed: () {
+                              _itemPriceController.clear();
+                            },
+                          ),
+                          prefixIcon: Icon(
+                            Icons.monetization_on_outlined,
+                          ),
+                          fillColor: AppConstants.whiteOpacity,
+                          filled: true,
+                          labelText: 'Price',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: SelectDate(
+                    onDateSelected: (DateTime date) {
+                      _dateBought = date;
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NumberIncrementer(
+                      onDecrement: (value) {
+                        setState(() {
+                          _quantity = value;
+                        });
+                      },
+                      onIncrement: (value) {
+                        setState(() {
+                          _quantity = value;
+                        });
+                      },
+                      // value: _quantity,
+                    ),
+                    Container(
+                      child: QuantifierSpinner(
+                        onValueChanged: (value) {
+                          setState(() {
+                            _quantifier = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                widget.item == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Save',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  final _op = ref.read(operationsProvider);
+                                  final _item = Item(
+                                    besoinTitle: '',
+                                    dateBought:
+                                        ref.read(pickedDateTime.state).state,
+                                    itemName: _itemNameController.text.trim(),
+                                    itemPrice: double.parse(
+                                        _itemPriceController.text.trim()),
+                                    quantifier:
+                                        ref.read(selectedQuantifierProvider),
+                                    quantity: _quantity,
+                                    shopName: ref.read(pickedShop.state).state!,
+                                  );
+                                  // logger.d(_item);
+                                  if (_formKeyName.currentState!.validate() &&
+                                      _formKeyPrice.currentState!.validate()) {
+                                    _op.addItem(_item);
+>>>>>>> b001677 (kitchen element items crud)
 
   Row _buildUpdateButton(BuildContext context) {
     return Row(

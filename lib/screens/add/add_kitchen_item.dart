@@ -25,9 +25,14 @@ class AddKitchenItem extends ConsumerStatefulWidget {
 
 class _AddItemState extends ConsumerState<AddKitchenItem> {
   double _quantity = 1;
+<<<<<<< HEAD
   String? _shop;
   String? _quantifier = 'واحدة';
 
+=======
+  String _shop = "";
+  String _quantifier = "";
+>>>>>>> b001677 (kitchen element items crud)
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
@@ -35,13 +40,22 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   KitchenElement? _kitchenElement;
 
   DateTime _dateBought = DateTime.now();
+<<<<<<< HEAD
   DateTime? _dateExpired;
 
   bool _isLoading = false;
+=======
+  DateTime _dateExpired = DateTime.now();
+  void clear() {
+    _itemNameController.clear();
+    _itemPriceController.clear();
+  }
+>>>>>>> b001677 (kitchen element items crud)
 
   void _update() {
     // check if we have a kitchen item then update the fields
     if (widget.kitchenItem != null) {
+<<<<<<< HEAD
       _itemNameController.text = widget.kitchenItem!.itemName.toString();
       _itemPriceController.text = (widget.kitchenItem!.itemPrice).toString();
       _quantity = widget.kitchenItem!.quantity;
@@ -49,16 +63,38 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
       _quantifier = widget.kitchenItem!.quantifier!;
       _dateBought = widget.kitchenItem!.dateBought;
       _dateExpired = widget.kitchenItem!.dateExpired;
+=======
+      setState(() {
+        _itemNameController.text = widget.kitchenItem!.itemName.toString();
+        _itemPriceController.text = (widget.kitchenItem!.itemPrice).toString();
+        _quantity = widget.kitchenItem!.quantity;
+        _shop = widget.kitchenItem!.shopName!;
+        _quantifier = widget.kitchenItem!.quantifier!;
+        _dateBought = widget.kitchenItem!.dateBought;
+        _dateExpired = widget.kitchenItem!.dateExpired;
+      });
+>>>>>>> b001677 (kitchen element items crud)
     }
 
     // check if we have an item then set all the variables to the values of the item
     if (widget.item != null) {
+<<<<<<< HEAD
       _itemNameController.text = widget.item!.itemName.toString();
       _itemPriceController.text = (widget.item!.itemPrice).toString();
       _quantity = widget.item!.quantity;
       _shop = widget.item!.shopName;
       _quantifier = widget.item!.quantifier!;
       _dateBought = widget.item!.dateBought;
+=======
+      setState(() {
+        _itemNameController.text = widget.item!.itemName.toString();
+        _itemPriceController.text = (widget.item!.itemPrice).toString();
+        _quantity = widget.item!.quantity;
+        _shop = widget.item!.shopName;
+        _quantifier = widget.item!.quantifier!;
+        _dateBought = widget.item!.dateBought;
+      });
+>>>>>>> b001677 (kitchen element items crud)
     }
   }
 
@@ -151,6 +187,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+<<<<<<< HEAD
                 _buildTitle(context),
                 widget.item != null
                     ? _buildKitchenElementSpinner()
@@ -160,10 +197,251 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 _buildItemPrice(),
                 _buildSelectDateBought(),
                 _buildQuantityFier(),
+=======
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Add Kitchen Item to :',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        Text('${widget.kitchenElement!.title}',
+                            style: Theme.of(context).textTheme.headline4),
+                      ],
+                    ),
+                  ),
+                ),
+                widget.item != null
+                    ? Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                            child: KitchenElementSpinner(
+                              onSelected: (KitchenElement? e) {
+                                _kitchenElement = e;
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(4),
+                      child: ShopSpinner(
+                        onShopSelected: (String? s) {
+                          _shop = s!;
+                          ref.read(pickedShop.state).state = s;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Form(
+                    key: _formKeyName,
+                    child: SizedBox(
+                      height: 50,
+                      child: Autocomplete<Item>(
+                        initialValue: TextEditingValue(
+                          text: widget.kitchenItem != null
+                              ? widget.kitchenItem!.itemName!
+                              : '',
+                        ),
+                        optionsBuilder:
+                            (TextEditingValue textEditingValue) async {
+                          if (textEditingValue.text.isEmpty) {
+                            return [];
+                          }
+                          return _kOptions
+                              .where((item) => item.itemName
+                                  .toLowerCase()
+                                  .startsWith(
+                                      textEditingValue.text.toLowerCase()))
+                              .toList(growable: true);
+                        },
+                        displayStringForOption: (Item item) => item.itemName,
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController fieldTextEditingController,
+                            FocusNode fieldFocusNode,
+                            VoidCallback onFieldSubmitted) {
+                          return TextField(
+                            onChanged: (value) {
+                              _itemNameController.text = value;
+                            },
+                            controller: fieldTextEditingController,
+                            focusNode: fieldFocusNode,
+                            style: Theme.of(context).textTheme.headline6,
+                            decoration: InputDecoration(
+                              suffix: IconButton(
+                                icon: Icon(
+                                  Icons.clear_outlined,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  fieldTextEditingController.clear();
+                                },
+                              ),
+                              hintText: 'name',
+                              hintStyle: GoogleFonts.robotoSlab(),
+                              contentPadding: EdgeInsets.only(top: 4),
+                              prefixIcon: Icon(
+                                Icons.insert_emoticon_outlined,
+                                color: Colors.grey,
+                              ),
+                              fillColor: AppConstants.whiteOpacity,
+                              filled: true,
+                              labelText: 'Name',
+                            ),
+                          );
+                        },
+                        onSelected: (Item selection) {
+                          _itemNameController.text = selection.itemName;
+                          _itemPriceController.text =
+                              selection.itemPrice.toString();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Form(
+                    key: _formKeyPrice,
+                    child: SizedBox(
+                      height: 50,
+                      child: TextFormField(
+                        // autovalidateMode: AutovalidateMode.onUserInteraction,
+                        inputFormatters: [
+                          //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'(^\-?\d*\.?\d*)')),
+                        ],
+                        controller: _itemPriceController,
+                        validator: (text) {
+                          if (text!.isEmpty) {
+                            return '';
+                          } else if (text.contains(RegExp(r'[A-Z]'))) {
+                            return '';
+                          } else {
+                            return null;
+                          }
+                        },
+                        textAlign: TextAlign.center,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          hintText: ' 00.00',
+                          hintStyle: GoogleFonts.robotoSlab(),
+                          contentPadding: EdgeInsets.only(top: 4),
+                          suffix: IconButton(
+                            icon: Icon(
+                              Icons.clear_outlined,
+                              size: 18,
+                            ),
+                            onPressed: () {
+                              _itemPriceController.clear();
+                            },
+                          ),
+                          prefixIcon: Icon(
+                            Icons.monetization_on_outlined,
+                          ),
+                          fillColor: AppConstants.whiteOpacity,
+                          filled: true,
+                          labelText: 'Price',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppConstants.whiteOpacity,
+                    ),
+                    child: Row(
+                      children: [
+                        SelectDate(
+                          onDateSelected: (DateTime date) {
+                            _dateBought = date;
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppConstants.whiteOpacity,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Consumer(builder: (context, ref, child) {
+                          return Container(
+                            height: 45,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                    icon: Icon(
+                                      CupertinoIcons.minus_circle,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_quantity > 1) _quantity -= 0.5;
+                                        _quantity = _quantity;
+                                      });
+                                    }),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(_quantity.toString()),
+                                  ),
+                                ),
+                                IconButton(
+                                    icon: Icon(
+                                      CupertinoIcons.plus_circle,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _quantity += 0.5;
+                                        _quantity = _quantity;
+                                      });
+                                    }),
+                              ],
+                            ),
+                          );
+                        }),
+                        QuantifierSpinner(
+                          onValueChanged: (value) {
+                            setState(() {
+                              _quantifier = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+>>>>>>> b001677 (kitchen element items crud)
                 SizedBox(
                   height: 40,
                 ),
                 widget.kitchenItem == null
+<<<<<<< HEAD
 <<<<<<< HEAD
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -316,6 +594,141 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                     ? _buildSave(context, logger)
                     : _buildUpdate(context, logger),
 >>>>>>> 961f4d7 (struggling with item to kitchenItem)
+=======
+                    ? _buildSave(context, logger)
+                    : _buildUpdate(context, logger),
+=======
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Save',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Saving...'),
+                                    ),
+                                  );
+                                  final _op = ref.read(operationsProvider);
+                                  final _item = KitchenItem(
+                                    besoinTitle: '',
+                                    dateBought:
+                                        ref.read(pickedDateTime.state).state,
+                                    itemName: _itemNameController.text.trim(),
+                                    itemPrice: double.parse(
+                                        _itemPriceController.text.trim()),
+                                    quantifier: _quantifier,
+                                    quantity: _quantity,
+                                    shopName: ref.read(pickedShop.state).state,
+                                    dateExpired: _dateExpired,
+                                    kitchenElementId: widget.kitchenElement!.id,
+                                  );
+                                  _item.toPrint();
+                                  if (_formKeyName.currentState!.validate() &&
+                                      _formKeyPrice.currentState!.validate()) {
+                                    _op.addKitchenItem(_item).then((value) {
+                                      logger.d(value);
+                                      if (value) {
+                                        _formKeyName.currentState!.reset();
+                                        _formKeyPrice.currentState!.reset();
+                                      }
+                                    });
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please fill all fields'),
+                                      ),
+                                    );
+                                  }
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Update',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Updating...'),
+                                  ));
+                                  final _op = ref.read(operationsProvider);
+                                  final _item = Item(
+                                    id: widget.kitchenItem!.id,
+                                    besoinTitle: '',
+                                    dateBought:
+                                        ref.read(pickedDateTime.state).state,
+                                    itemName: _itemNameController.text.trim(),
+                                    itemPrice: double.parse(
+                                        _itemPriceController.text.trim()),
+                                    quantifier:
+                                        ref.read(selectedQuantifierProvider),
+                                    quantity: _quantity,
+                                    shopName: ref.read(pickedShop.state).state!,
+                                  );
+                                  logger.d(_item);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Updated...'),
+                                  ));
+                                  if (_formKeyName.currentState!.validate() &&
+                                      _formKeyPrice.currentState!.validate()) {
+                                    _op.updateItem(_item).then((value) {
+                                      if (value) {
+                                        _formKeyName.currentState!.reset();
+                                        _formKeyPrice.currentState!.reset();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Item Updated'),
+                                          duration: Duration(seconds: 1),
+                                        ));
+                                        Navigator.pop(context);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Error'),
+                                        ));
+                                      }
+                                    });
+                                  } //_op.addItem();
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      ),
+>>>>>>> b001677 (kitchen element items crud)
+>>>>>>> 1a88e7a (kitchen element items crud)
               ],
             ),
           ),

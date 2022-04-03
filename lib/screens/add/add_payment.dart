@@ -25,8 +25,11 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   final TextEditingController _paidAmountController = TextEditingController();
 
   late DateTime _datePaid;
+<<<<<<< HEAD
 
   String? _shop;
+=======
+>>>>>>> b001677 (kitchen element items crud)
   void _update() {
     if (widget.payment != null) {
       setState(() {
@@ -67,10 +70,14 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                   padding: EdgeInsets.only(top: 20, bottom: 8),
                   child: ShopSpinner(
                     onShopSelected: (value) {
+<<<<<<< HEAD
                       setState(() {
                         _shop = value;
                       });
                       // ref.read(pickedShop.state).state = value;
+=======
+                      ref.read(pickedShop.state).state = value;
+>>>>>>> b001677 (kitchen element items crud)
                     },
                   ),
                 ),

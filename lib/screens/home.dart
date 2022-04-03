@@ -149,7 +149,464 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.settings),
           label: 'Settings',
+<<<<<<< HEAD
           backgroundColor: Color.fromARGB(160, 148, 101, 224),
+=======
+          backgroundColor: Color.fromARGB(255, 148, 101, 224),
+        ),
+      ],
+    );
+  }
+
+  buildBody(
+    BuildContext context, {
+    required DataSink dataSink,
+    required List<ShopData> shopsDataList,
+    required RecentOperation recentOperations,
+  }) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      floatingActionButton: MyExpandableFab(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      appBar: buildAppBar(
+        context,
+        title: 'Home',
+      ),
+      body: BluredContainer(
+        start: 0,
+        end: 0,
+        borderColorOpacity: 0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              buildTopWidget(dataSink),
+              buildShopsWidget(context, shopsDataList),
+              buildRecentOpeerationsWidget(
+                context,
+                recentOperations,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  buildShopsWidget(BuildContext context, List<ShopData> _shopsDataList) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 170,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
+                  const SizedBox(width: 8),
+                  Text('Shops',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline2),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final ShopData shopsData = _shopsDataList[index];
+                  return ShopSquareTile(
+                    shopData: shopsData,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShopDetails(
+                            shopData: shopsData,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                itemCount: _shopsDataList.length,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+// build operations widget
+  buildRecentOpeerationsWidget(
+      BuildContext context, RecentOperation recentOperations) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.dashboard_customize,
+                    color: Color.fromRGBO(255, 255, 255, 1)),
+                const SizedBox(width: 8),
+                Text('Recent Operations',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline2),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 390,
+            height: 340,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final OperationsAdapter recentOperation =
+                    recentOperations.recentOperationsList[index];
+                return recentOperation.isItem
+                    ? ItemTileWidget(
+                        item: recentOperation.item!,
+                      )
+                    : PaymentTile(
+                        payment: recentOperation.payment!,
+                      );
+              },
+              itemCount: recentOperations.recentOperationsList.length,
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildTopWidget(DataSink dataSink) {
+    return SizedBox(
+      width: 390,
+      height: 130,
+      child: BluredContainer(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            //
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Spendings',
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                      ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                PriceNumberZone(
+                  right: const SizedBox.shrink(),
+                  withDollarSign: true,
+                  price: dataSink.itemsSumAfterPayment,
+                  style: Theme.of(context).textTheme.headline2!,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                buildCircularProgress(dataSink),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  CircularPercentIndicator buildCircularProgress(DataSink dataSink) {
+    return CircularPercentIndicator(
+      animateFromLastPercent: true,
+      animation: true,
+      curve: Curves.linear,
+      radius: 54.0,
+      lineWidth: 6.0,
+      percent: dataSink.spendingsUnitinterval,
+      center: new Text("${dataSink.spendingsPecentage} %",
+          style: Theme.of(context).textTheme.headline6),
+      circularStrokeCap: CircularStrokeCap.round,
+      progressColor: Colors.white,
+      backgroundColor: Colors.white.withOpacity(0.2),
+    );
+  }
+
+// build custom listTile
+  Widget buildRowTileRecentOpe(OperationsAdapter operation, String currency) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.radius),
+      ),
+      color: AppConstants.whiteOpacity,
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: operation.isItem
+                        ? Color(0xFFEBA613)
+                        : Color(0xA4E6218D),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppConstants.radius),
+                      bottomLeft: Radius.circular(AppConstants.radius),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${operation.quantity}',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        '${operation.quantifier}',
+                        style: Theme.of(context).textTheme.subtitle2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${operation.title}',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Text(
+                      '${operation.date!.formatted()}',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    '${operation.amount!.toPrecision()}',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+                Text(
+                  '$currency',
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShopTile extends StatelessWidget {
+  const ShopTile({
+    Key? key,
+    required this.onTap,
+    required this.shopData,
+    required this.currency,
+  }) : super(key: key);
+
+  final VoidCallback? onTap;
+  final ShopData shopData;
+  final String currency;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppConstants.radius),
+        ),
+        color: Color(0xADC69AE6).withOpacity(0.2),
+        child: SizedBox(
+          height: 42,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Color(0x7BFFFFFF),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Text(
+                      '${shopData.shop.shopName!.substring(0, 1)}',
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+              Expanded(
+                child: Text(
+                  '${shopData.shop.shopName}',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${shopData.itemsSumAfterPayment}',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  SizedBox(
+                    width: 42,
+                    height: 52,
+                    child: Text(
+                      '$currency',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShopSquareTile extends StatelessWidget {
+  const ShopSquareTile({
+    Key? key,
+    required this.onTap,
+    required this.shopData,
+  }) : super(key: key);
+
+  final VoidCallback? onTap;
+  final ShopData shopData;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: BluredContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Icon(
+                      Icons.person_outline_sharp,
+                      color: Colors.white.withOpacity(0.5),
+                      size: 40,
+                    ),
+                    Text(
+                      '${shopData.shop.shopName}',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  ],
+                ),
+                PriceNumberZone(
+                  right: const SizedBox.shrink(),
+                  withDollarSign: true,
+                  price: shopData.itemsSumAfterPayment,
+                  style: Theme.of(context).textTheme.headline3!,
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyExpandableFab extends StatelessWidget {
+  const MyExpandableFab({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpandableFab(
+      distance: 90.0,
+      children: [
+        ActionButton(
+          onPressed: () => Dialogs.botomPopUpDialog(
+            context,
+            AddPayment(),
+          ),
+          icon: const Icon(
+            Icons.monetization_on,
+            size: 32,
+          ),
+        ),
+        ActionButton(
+          onPressed: () => Dialogs.botomPopUpDialog(
+            context,
+            AddShop(),
+          ),
+          icon: const Icon(
+            Icons.person_add,
+            size: 30,
+          ),
+        ),
+        ActionButton(
+          onPressed: () => Dialogs.botomPopUpDialog(
+            context,
+            AddItem(),
+          ),
+          icon: const Icon(
+            Icons.add_shopping_cart_sharp,
+            size: 30,
+          ),
+>>>>>>> b001677 (kitchen element items crud)
         ),
       ],
     );

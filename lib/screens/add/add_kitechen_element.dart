@@ -175,6 +175,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
   }
 >>>>>>> 05f7265 (..)
 
+<<<<<<< HEAD
   Padding _buildTitle(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(top: 20, bottom: 8),
@@ -294,6 +295,48 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                         Navigator.of(context).pop();
                       }
                       ;
+=======
+                            fillColor: AppConstants.whiteOpacity,
+                            filled: true,
+                            // labelText: 'Name',
+                          ),
+                        );
+                      },
+                      onSelected: (KitchenElement selection) {},
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Availability',
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Availibility(),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 18.0, bottom: 18),
+                    child: Divider(
+                      height: 3,
+                      indent: 12,
+                      color: Colors.amber,
+                      endIndent: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PiorityRatingWidget(
+                    onRatingChanged: (int pri) {
+                      priorityRating = pri;
+>>>>>>> b001677 (kitchen element items crud)
                     },
               style: MThemeData.raisedButtonStyleSave),
         ),
@@ -587,11 +630,88 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
               hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: Colors.grey,
                   ),
+<<<<<<< HEAD
 
               fillColor: AppConstants.whiteOpacity,
               filled: true,
               contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
               // labelText: 'Name',
+=======
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                widget.kitchenElement == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Save',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Saving...'),
+                                  ));
+                                  final db = ref.read(databaseProvider);
+                                  final kitchenElement = KitchenElement(
+                                    items: [],
+                                    title: _itemNameController.text.trim(),
+                                    priority: priorityRating,
+                                    availability: ref
+                                        .watch(availibilityProvider.state)
+                                        .state,
+                                  );
+                                  db.addKitchenElement(kitchenElement);
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Update',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  //   ScaffoldMessenger.of(context)
+                                  //       .showSnackBar(SnackBar(
+                                  //     content: Text('Updating...'),
+                                  //   ));
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      ),
+              ],
+>>>>>>> b001677 (kitchen element items crud)
             ),
           ),
         ),

@@ -54,6 +54,12 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
 >>>>>>> 1b32af8 (hamdollillah)
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+=======
+    List<KitchenElement> kitchenElements = [];
+    List<KitchenItem> kitchenItems = KitchenItem.fakeKitchenitems();
+    KitchenElementData? kitchenElementData;
+>>>>>>> b001677 (kitchen element items crud)
     return BluredContainer(
       start: 0.1,
       end: 0,
@@ -65,6 +71,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                 stream: ref.read(databaseProvider).kitchenElementsStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snap.hasData) {
+<<<<<<< HEAD
                     clearListsts();
                     _kitchenElements = snapshot.data!;
                     _kitchenItems = snap.data!;
@@ -80,6 +87,12 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         ),
                       );
                     }
+=======
+                    kitchenElements = snapshot.data!;
+                    kitchenItems = snap.data!;
+                    kitchenElementData =
+                        KitchenElementData(kitchenElements, kitchenItems);
+>>>>>>> b001677 (kitchen element items crud)
                   }
                   //kitchenElements = KitchenElement.fakeKitchenElements;
                   return Scaffold(
@@ -89,6 +102,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     floatingActionButton: FloatingActionButton(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1a88e7a (kitchen element items crud)
                       heroTag: 'add_kitchen_element',
 =======
 >>>>>>> 55dc683 (kitchen element items crud)
@@ -101,12 +117,19 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                           MaterialPageRoute(
                             builder: (context) => AddKitchenElement(),
                           ),
+=======
+                      onPressed: () {
+                        Dialogs.botomPopUpDialog(
+                          context,
+                          AddKitchenElement(),
+>>>>>>> b001677 (kitchen element items crud)
                         );
                       },
                       child: Icon(Icons.add),
                     ),
                     appBar: AppBar(
                       actions: [
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -144,6 +167,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         _buildNotifications(kitchenElementData, context),
 >>>>>>> 05f7265 (..)
 =======
+=======
+>>>>>>> 1a88e7a (kitchen element items crud)
                         _buildNotifications(
                             KitchenElementData(_kitchenElements), context),
 >>>>>>> 1b32af8 (hamdollillah)
@@ -152,6 +177,21 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                           Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
                         'Kitchen Stock ',
+=======
+                        // IconButton(
+                        //   icon: Icon(Icons.add_box_outlined),
+                        //   onPressed: () async {
+                        //     var logger = Logger();
+                        //     for (var item in items!) {
+                        //       logger.d(item.toMap());
+                        //     }
+                        //   },
+                        // ),
+                      ],
+                      leading: Icon(Icons.dashboard, color: Colors.black),
+                      title: Text(
+                        'Shop Details',
+>>>>>>> b001677 (kitchen element items crud)
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -192,6 +232,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                           Container(
@@ -309,6 +350,63 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                           const SizedBox(height: 20),
                           _buildGridView(context, _kitchenElementDataList),
 >>>>>>> 1b32af8 (hamdollillah)
+=======
+                          _buildBarChartWidget(_kitchenElements),
+                          const SizedBox(height: 20),
+                          _buildGridView(context, _kitchenElementDataList),
+=======
+                          Container(
+                            margin: EdgeInsets.all(8),
+                            height: 200,
+                            width: 400,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4),
+                            // height: 440,
+                            width: MediaQuery.of(context).size.width,
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 1.5,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10),
+                              itemCount:
+                                  kitchenElementData!.kitchenElements.length,
+                              itemBuilder: (context, index) {
+                                final KitchenElement kitchenElement =
+                                    kitchenElementData!.kitchenElements[index];
+                                return KitchenItemSquareTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            KitchenItemDetailsScreen(
+                                          kitchenElement: kitchenElement,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  kitchenElement: kitchenElement,
+                                );
+                              },
+                            ),
+                          ),
+>>>>>>> b001677 (kitchen element items crud)
+>>>>>>> 1a88e7a (kitchen element items crud)
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -318,6 +416,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
           }),
     );
   }
+<<<<<<< HEAD
 
   Container _buildBarChartWidget(List<KitchenElement> kitchenElements) {
     return Container(
@@ -394,6 +493,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       },
     );
   }
+=======
+>>>>>>> b001677 (kitchen element items crud)
 }
 
 class KitchenItemSquareTile extends StatelessWidget {
@@ -559,6 +660,9 @@ class KitchenItemSquareTile extends StatelessWidget {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1a88e7a (kitchen element items crud)
 =======
 
 class ProgressWidget extends StatelessWidget {
@@ -608,6 +712,10 @@ class ProgressWidget extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD
 >>>>>>> 55dc683 (kitchen element items crud)
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
+=======
+>>>>>>> b001677 (kitchen element items crud)
+>>>>>>> 1a88e7a (kitchen element items crud)

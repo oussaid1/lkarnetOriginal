@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lkarnet/extensions/extensions.dart';
 
+<<<<<<< HEAD
 import 'glasswidget.dart';
 
 class SelectDate extends StatefulWidget {
@@ -17,6 +18,13 @@ class _SelectDateState extends State<SelectDate> {
   DateTime _selectedDate = DateTime.now();
 
   void _selectDate(BuildContext context) async {
+=======
+class SelectDate extends ConsumerWidget {
+  const SelectDate({Key? key, required this.onDateSelected}) : super(key: key);
+  final void Function(DateTime) onDateSelected;
+  void _selectDate(BuildContext context, ref) async {
+    //  final df.DateFormat _formatter = df.DateFormat('yyyy-MM-dd');
+>>>>>>> b001677 (kitchen element items crud)
     final DateTime picked = (await showDatePicker(
       context: context,
       initialDate: widget.initialDate ?? DateTime.now(),
@@ -24,7 +32,12 @@ class _SelectDateState extends State<SelectDate> {
       lastDate: DateTime(2025),
     ))!;
     if (picked != DateTime.now()) {
+<<<<<<< HEAD
       widget.onDateSelected(picked);
+=======
+      onDateSelected(picked);
+      ref.read(pickedDateTime.state).state = picked;
+>>>>>>> b001677 (kitchen element items crud)
     }
   }
 
@@ -69,6 +82,7 @@ class _SelectDateState extends State<SelectDate> {
   }
 }
 
+<<<<<<< HEAD
 class SelectDate2 extends StatefulWidget {
   const SelectDate2({Key? key, required this.onDateSelected, this.initialDate})
       : super(key: key);
@@ -100,6 +114,23 @@ class _SelectDate2State extends State<SelectDate2> {
   void initState() {
     // widget.onDateSelected(_selectedDate);
     super.initState();
+=======
+class SelectDate2 extends ConsumerWidget {
+  const SelectDate2({Key? key, required this.onDateSelected}) : super(key: key);
+  final void Function(DateTime) onDateSelected;
+  void _selectDate(BuildContext context, ref) async {
+    //  final df.DateFormat _formatter = df.DateFormat('yyyy-MM-dd');
+    final DateTime picked = (await showDatePicker(
+      context: context,
+      initialDate: ref.read(pickedDateTime2.state).state,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2031),
+    ))!;
+    if (picked != DateTime.now()) {
+      onDateSelected(picked);
+      ref.read(pickedDateTime2.state).state = picked;
+    }
+>>>>>>> b001677 (kitchen element items crud)
   }
 
   @override
