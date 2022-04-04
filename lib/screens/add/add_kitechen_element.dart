@@ -46,7 +46,6 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
 
   @override
   Widget build(BuildContext context) {
-    Iterable<KitchenElement> _kOptions = [];
     // final logger = Logger();
     return Material(
       color: Colors.transparent,
@@ -69,60 +68,32 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                       bottom: 4.0, top: 10, left: 8, right: 8),
                   child: Form(
                     key: _formKeyName,
-                    child: Autocomplete<KitchenElement>(
-                      initialValue: TextEditingValue(
-                        text: widget.kitchenElement != null
-                            ? widget.kitchenElement!.title!
-                            : '',
-                      ),
-                      optionsBuilder:
-                          (TextEditingValue textEditingValue) async {
-                        if (textEditingValue.text.isEmpty) {
-                          return [];
-                        }
-                        return _kOptions
-                            .where((kitchenElement) => kitchenElement.title!
-                                .toLowerCase()
-                                .startsWith(
-                                    textEditingValue.text.toLowerCase()))
-                            .toList(growable: true);
+                    child: TextField(
+                      onChanged: (value) {
+                        _itemNameController.text = value;
                       },
-                      displayStringForOption: (KitchenElement kitchenElement) =>
-                          kitchenElement.title!,
-                      fieldViewBuilder: (BuildContext context,
-                          TextEditingController fieldTextEditingController,
-                          FocusNode fieldFocusNode,
-                          VoidCallback onFieldSubmitted) {
-                        return TextField(
-                          onChanged: (value) {
-                            _itemNameController.text = value;
-                          },
-                          controller: fieldTextEditingController,
-                          focusNode: fieldFocusNode,
-                          style: Theme.of(context).textTheme.headline6,
-                          decoration: InputDecoration(
-                            suffix: IconButton(
-                              icon: Icon(
-                                Icons.clear_outlined,
-                                size: 18,
-                              ),
-                              onPressed: () {
-                                fieldTextEditingController.clear();
-                              },
-                            ),
-                            hintText: 'name',
-                            hintStyle:
-                                Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      color: Colors.grey,
-                                    ),
-
-                            fillColor: AppConstants.whiteOpacity,
-                            filled: true,
-                            // labelText: 'Name',
+                      controller: _itemNameController,
+                      style: Theme.of(context).textTheme.headline6,
+                      decoration: InputDecoration(
+                        suffix: IconButton(
+                          icon: Icon(
+                            Icons.clear_outlined,
+                            size: 18,
                           ),
-                        );
-                      },
-                      onSelected: (KitchenElement selection) {},
+                          onPressed: () {
+                            _itemNameController.clear();
+                          },
+                        ),
+                        hintText: 'element name',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  color: Colors.grey,
+                                ),
+
+                        fillColor: AppConstants.whiteOpacity,
+                        filled: true,
+                        // labelText: 'Name',
+                      ),
                     ),
                   ),
                 ),
@@ -197,10 +168,15 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   final kitchenElement = KitchenElement(
                                     items: [],
                                     title: _itemNameController.text.trim(),
-                                    priority: priorityRating,
+                                    priority: ref
+                                        .read(priorityRatingProvider.state)
+                                        .state
+                                        .toInt(),
                                     availability: ref
-                                        .watch(availibilityProvider.state)
+                                        .read(availibilityProvider.state)
                                         .state,
+                                    id: widget.kitchenElement?.id,
+                                    category: widget.kitchenElement?.category,
                                   );
                                   db.addKitchenElement(kitchenElement);
                                 },
