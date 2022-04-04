@@ -317,11 +317,8 @@ class _AddItemState extends ConsumerState<AddItem> {
                                     quantity: _quantity,
                                     shopName: ref.read(pickedShop.state).state!,
                                   );
-                                  logger.d(_item);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text('Updating...'),
-                                  ));
+                                  //  logger.d(_item);
+
                                   if (_formKeyName.currentState!.validate() &&
                                       _formKeyPrice.currentState!.validate()) {
                                     _op.updateItem(_item).then((value) {
@@ -330,6 +327,7 @@ class _AddItemState extends ConsumerState<AddItem> {
                                         _formKeyPrice.currentState!.reset();
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.green,
                                           content: Text('Item Updated'),
                                           duration: Duration(seconds: 1),
                                         ));

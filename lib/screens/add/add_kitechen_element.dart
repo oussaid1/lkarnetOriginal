@@ -330,6 +330,11 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                         _elementCategoryController.text.trim(),
                                   );
                                   db.updateKitchenElement(kitchenElement);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.green,
+                                    content: Text('Updated'),
+                                  ));
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),
