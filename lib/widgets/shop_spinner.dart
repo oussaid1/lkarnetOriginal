@@ -13,7 +13,6 @@ class ShopSpinner extends ConsumerStatefulWidget {
   }) : super(key: key);
 =======
 import '../models/kitchen/kitchen_item.dart';
-import '../models/shop/shop_model.dart';
 
 class ShopSpinner extends ConsumerWidget {
   const ShopSpinner({Key? key, required this.onShopSelected}) : super(key: key);

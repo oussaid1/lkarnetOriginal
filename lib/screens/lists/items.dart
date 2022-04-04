@@ -16,10 +16,15 @@ final filterTypeProvider = StateProvider<FilterType>((ref) {
   return FilterType.all;
 });
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
 =======
 >>>>>>> a71c130 (...)
+=======
+=======
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
 
 class ItemsList extends ConsumerStatefulWidget {
   final List<Item>? lista;
@@ -30,8 +35,11 @@ class ItemsList extends ConsumerStatefulWidget {
   @override
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> af91a79 (thanks Allah)
   ConsumerState<ItemsList> createState() => _ItemsListState();
 }
 
@@ -47,12 +55,19 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 
 =======
   Widget build(BuildContext context, ref) {
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
     var _list = ref.watch(itemsListNotifierProvider);
 
 >>>>>>> 336a080 (thanks Allah)
+=======
+    //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
+    final _list = ref.watch(itemsListNotifierProvider);
+
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -77,7 +92,15 @@ class _ItemsListState extends ConsumerState<ItemsList> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
+<<<<<<< HEAD
       gradientColors: AppConstants.myGradients,
+=======
+      gradientColors: [
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
+      ],
+>>>>>>> b369bdf (thanks Allah)
       centerWidget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -121,8 +144,11 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                 ),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> af91a79 (thanks Allah)
                 child: Column(
                   children: [
                     // a text field and a dropdownbutton
@@ -187,10 +213,15 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   ],
                 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
 =======
 >>>>>>> a71c130 (...)
+=======
+=======
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
@@ -198,6 +229,9 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   shrinkWrap: true,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> af91a79 (thanks Allah)
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list[index];
@@ -205,12 +239,16 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   itemCount: _list.itemsList.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list.itemsList[index];
+<<<<<<< HEAD
 >>>>>>> 336a080 (thanks Allah)
 =======
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list[index];
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
                     return ItemTileWidget(
                       item: item,
                     );

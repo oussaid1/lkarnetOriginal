@@ -11,6 +11,7 @@ export 'package:flutter_typeahead/flutter_typeahead.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export 'package:flutter_slidable/flutter_slidable.dart';
 export 'package:syncfusion_flutter_gauges/gauges.dart';
 <<<<<<< HEAD
@@ -22,8 +23,16 @@ export 'package:flutter_slidable/flutter_slidable.dart';
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
+=======
+>>>>>>> af91a79 (thanks Allah)
 export 'package:flutter_slidable/flutter_slidable.dart';
 export 'package:syncfusion_flutter_gauges/gauges.dart';
 =======
 >>>>>>> b001677 (kitchen element items crud)
+<<<<<<< HEAD
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+=======
+export 'package:flutter_slidable/flutter_slidable.dart';
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)

@@ -4,7 +4,11 @@ import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../components.dart';
 import '../widgets/item_listtile.dart';
+<<<<<<< HEAD
 import 'dash/dashboard.dart';
+=======
+import 'home.dart';
+>>>>>>> b369bdf (thanks Allah)
 import 'lists/payments.dart';
 
 class ShopDetails extends StatefulWidget {

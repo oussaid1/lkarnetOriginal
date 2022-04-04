@@ -194,8 +194,12 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                                     double.parse(_paidAmountController.text),
                                 datePaid:
                                     _datePaid, //ref.read(pickedDateTime.state).state,
+<<<<<<< HEAD
                                 paidShopName:
                                     _shop!, // ref.read(pickedShop.state).state,
+=======
+                                paidShopName: ref.read(pickedShop.state).state,
+>>>>>>> b369bdf (thanks Allah)
                               );
                               if (_formKeyPaidAmount.currentState!.validate()) {
                                 _op.updatePayment(_payment).then((value) {

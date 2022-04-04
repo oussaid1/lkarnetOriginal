@@ -17,6 +17,9 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> af91a79 (thanks Allah)
 final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
@@ -60,6 +63,7 @@ final itemsListNotifierProvider =
     ChangeNotifierProvider<ItemsListNotifier>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   return ItemsListNotifier(_kitchenElementsItems, '', FilterType.all);
+<<<<<<< HEAD
 >>>>>>> 336a080 (thanks Allah)
 =======
 final itemsListNotifierProvider = Provider<List<Item>>((ref) {
@@ -97,6 +101,9 @@ final itemsListNotifierProvider = Provider<List<Item>>((ref) {
       return _kitchenElementsItems;
   }
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
 });
 enum FilterType {
   all,
@@ -118,6 +125,9 @@ class ItemsListNotifier extends ChangeNotifier {
   List<Item> fakeitemsList = [];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> af91a79 (thanks Allah)
 =======
 // return itemsList according to filterPattern
   List<Item> get itemsListFiltered {
@@ -155,9 +165,13 @@ class ItemsListNotifier extends ChangeNotifier {
         return itemsList;
     }
   }
+<<<<<<< HEAD
 >>>>>>> 336a080 (thanks Allah)
 =======
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
 
   // add item to list
   void addItem(Item value) {

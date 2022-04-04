@@ -7,6 +7,9 @@ import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> af91a79 (thanks Allah)
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 <<<<<<< HEAD
 =======
@@ -14,13 +17,28 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 >>>>>>> e2feaab (v 0.9.8)
 import 'package:lkarnet/widgets/myappbar.dart';
+<<<<<<< HEAD
 >>>>>>> 0b1b10e (v 0.9.4)
+=======
+=======
+import 'package:lkarnet/screens/kitchen_stock.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+import 'package:lkarnet/widgets/date_picker.dart';
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
+<<<<<<< HEAD
 import '../../widgets/availability_widget.dart';
 import '../../widgets/expired_switch.dart';
+=======
+import '../../providers/authproviders/database_providers.dart';
+import '../../settings/theme.dart';
+import '../../widgets/dialogs.dart';
+>>>>>>> b369bdf (thanks Allah)
 import '../../widgets/kitchen_item_listtile.dart';
 <<<<<<< HEAD
 import '../add/edit_kitchen_element.dart';
@@ -255,7 +273,9 @@ class _KitchenItemDetailsScreenState
                     onPressed: () {
                       Dialogs.botomPopUpDialog(
                         context,
-                        UpdateKitchenElement(),
+                        UpdateKitchenElement(
+                          kitchenElement: widget.kitchenElement,
+                        ),
                       );
                     },
                   ),
@@ -1061,8 +1081,11 @@ class PiorityRatingWidget extends ConsumerWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> af91a79 (thanks Allah)
 // ignore: must_be_immutable
 class Availibility extends StatefulWidget {
   Availibility(
@@ -1104,16 +1127,20 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
   State<Availibility> createState() => _AvailibilityState();
 =======
 class UpdateKitchenElement extends StatefulWidget {
+=======
+class UpdateKitchenElement extends ConsumerStatefulWidget {
+>>>>>>> b369bdf (thanks Allah)
   const UpdateKitchenElement({
     Key? key,
+    required this.kitchenElement,
   }) : super(key: key);
-
+  final KitchenElement kitchenElement;
   @override
-  State<UpdateKitchenElement> createState() => _UpdateKitchenElementState();
+  ConsumerState<UpdateKitchenElement> createState() =>
+      _UpdateKitchenElementState();
 }
 
-class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
-  DateTime _dateTime = DateTime.now();
+class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -1132,7 +1159,13 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                     Container(
                       height: 100,
                       width: 100,
-                      child: Availibility(),
+                      child: Availibility(
+                        onChanged: (value) {
+                          // setState(() {
+                          //   // = value;
+                          // });
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -1153,9 +1186,7 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                             ),
                             SelectDate(
                               onDateSelected: (DateTime f) {
-                                setState(() {
-                                  _dateTime = f;
-                                });
+                                setState(() {});
                               },
                             ),
                           ],
@@ -1184,7 +1215,19 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                                 'Save',
                                 style: Theme.of(context).textTheme.headline3,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                final db = ref.read(databaseProvider);
+                                final kitchenElement = KitchenElement(
+                                  id: widget.kitchenElement.id,
+                                  items: [],
+                                  title: widget.kitchenElement.title,
+                                  priority: 2, //priorityRating,
+                                  availability: ref
+                                      .watch(availibilityProvider.state)
+                                      .state,
+                                );
+                                db.addKitchenElement(kitchenElement);
+                              },
                               style: MThemeData.textButtonStyleSave),
                         ),
                       ],
@@ -1201,8 +1244,21 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
 >>>>>>> b001677 (kitchen element items crud)
 }
 
+<<<<<<< HEAD
 class _AvailibilityState extends State<Availibility> {
+<<<<<<< HEAD
 >>>>>>> e2feaab (v 0.9.8)
+=======
+=======
+final availibilityProvider = StateProvider<double>((ref) {
+  return 0;
+});
+
+class Availibility extends ConsumerWidget {
+  Availibility({Key? key, required this.onChanged}) : super(key: key);
+  final void Function(double) onChanged;
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
   @override
   Widget build(BuildContext context) {
 <<<<<<< HEAD
@@ -1336,6 +1392,7 @@ class Availibility extends ConsumerWidget {
           }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           onChanged(value);
 =======
           onChanged(ref.read(availibilityProvider.state).state);
@@ -1343,6 +1400,12 @@ class Availibility extends ConsumerWidget {
 =======
           widget.onChanged(widget.initialValue);
 >>>>>>> e2feaab (v 0.9.8)
+=======
+          widget.onChanged(widget.initialValue);
+=======
+          onChanged(ref.read(availibilityProvider.state).state);
+>>>>>>> b369bdf (thanks Allah)
+>>>>>>> af91a79 (thanks Allah)
         },
         child: SfRadialGauge(
           // backgroundColor: Colors.white,
