@@ -33,13 +33,12 @@ import 'package:lkarnet/widgets/date_picker.dart';
 
 =======
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
-import 'package:lkarnet/screens/kitchen_stock.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 >>>>>>> 0c99d23 (...)
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 import '../../widgets/availability_widget.dart';
@@ -49,6 +48,9 @@ import '../../providers/authproviders/database_providers.dart';
 import '../../settings/theme.dart';
 =======
 >>>>>>> 0c99d23 (...)
+=======
+import '../../widgets/availability_widget.dart';
+>>>>>>> 9bb485b (v 0.9.2)
 import '../../widgets/dialogs.dart';
 >>>>>>> b369bdf (thanks Allah)
 import '../../widgets/kitchen_item_listtile.dart';
@@ -338,8 +340,11 @@ class _KitchenItemDetailsScreenState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
                 SizedBox(height: 20),
                 _buildTopContainer(context),
                 SizedBox(
@@ -352,21 +357,27 @@ class _KitchenItemDetailsScreenState
                     style: Theme.of(context).textTheme.headline6,
 =======
                 const SizedBox(height: 20),
+=======
+                SizedBox(height: 20),
+>>>>>>> 9bb485b (v 0.9.2)
                 BluredContainer(
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //   BorderSide(
-                  //     color: Colors.black,
-                  //     width: 1,
-                  //   ),
-                  // )),
                   margin: EdgeInsets.symmetric(horizontal: 8),
-                  height: 160,
+                  height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      BluredContainer(
+                        height: 45,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '${widget.kitchenElement.category}',
+                            style: Theme.of(context).textTheme.headline3,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -401,13 +412,6 @@ class _KitchenItemDetailsScreenState
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${widget.kitchenElement.category}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -421,8 +425,15 @@ class _KitchenItemDetailsScreenState
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
+<<<<<<< HEAD
                               PriorityWidget(
                                 priority: widget.kitchenElement.priority!,
+=======
+                              PiorityRatingWidget(
+                                ignoreGestures: true,
+                                onRatingChanged: (rating) {},
+                                initialRating: widget.kitchenElement.priority!,
+>>>>>>> 9bb485b (v 0.9.2)
                               ),
                             ],
                           ),
@@ -1083,14 +1094,20 @@ class PiorityRatingWidget extends ConsumerWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
 >>>>>>> 051a885 (...)
+=======
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)
           ignoreGestures: ignoreGestures,
           initialRating:
               initialRating, //ref.watch(priorityRatingProvider.state).state,
           itemSize: itemSize,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1101,10 +1118,17 @@ class PiorityRatingWidget extends ConsumerWidget {
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
 =======
+>>>>>>> 0fd069a (v 0.9.2)
+=======
           initialRating: ref.watch(priorityRatingProvider.state).state,
           itemSize: 20,
 >>>>>>> 0c99d23 (...)
+<<<<<<< HEAD
 >>>>>>> 051a885 (...)
+=======
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)
           minRating: 0,
           direction: Axis.horizontal,
           itemCount: 3,

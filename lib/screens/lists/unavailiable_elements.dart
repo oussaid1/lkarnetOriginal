@@ -4,7 +4,11 @@ import '../../components.dart';
 <<<<<<< HEAD
 =======
 import '../../models/kitchen/kitchen_element_data.dart';
+<<<<<<< HEAD
 >>>>>>> 7cea0f9 (v 0.9.2)
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)
 import '../../models/kitchen/kitchen_item.dart';
 import '../kitchen_stock.dart';
 import '../tabs/kitchen_element_detailed.dart';
@@ -46,7 +50,15 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
+<<<<<<< HEAD
       gradientColors: AppConstants.myGradients,
+=======
+      gradientColors: [
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
+      ],
+>>>>>>> 9bb485b (v 0.9.2)
       centerWidget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -73,15 +85,23 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
             children: [
               const SizedBox(height: 20),
               Container(
+<<<<<<< HEAD
                 //  margin: EdgeInsets.symmetric(vertical: 10),
+=======
+>>>>>>> 9bb485b (v 0.9.2)
                 width: 400,
                 height: 140,
                 decoration: BoxDecoration(
                   color: AppConstants.whiteOpacity,
+<<<<<<< HEAD
                   borderRadius: BorderRadius.circular(AppConstants.radius),
                 ),
               ),
               const SizedBox(height: 20),
+=======
+                ),
+              ),
+>>>>>>> 9bb485b (v 0.9.2)
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: Container(
@@ -93,7 +113,11 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
+<<<<<<< HEAD
                         childAspectRatio: 1.4,
+=======
+                        childAspectRatio: 1.5,
+>>>>>>> 9bb485b (v 0.9.2)
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10),
                     itemCount: widget.elementData!.length,

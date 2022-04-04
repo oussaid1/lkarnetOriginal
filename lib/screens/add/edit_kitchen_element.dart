@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 import 'package:lkarnet/widgets/date_picker.dart';
@@ -11,6 +12,8 @@ import 'package:lkarnet/widgets/date_picker.dart';
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
 >>>>>>> 051a885 (...)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
 import '../../components.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
@@ -28,6 +31,8 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 
 import 'package:lkarnet/widgets/date_picker.dart';
 
+=======
+>>>>>>> 9bb485b (v 0.9.2)
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/authproviders/database_providers.dart';
@@ -49,6 +54,11 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
 <<<<<<< HEAD
   double _availability = 1;
+<<<<<<< HEAD
+=======
+//  double _priorityRating = 1;
+//  DateTime _date = DateTime.now();
+>>>>>>> 9bb485b (v 0.9.2)
   @override
   void initState() {
     super.initState();
@@ -268,29 +278,31 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                     SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        color: AppConstants.whiteOpacity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Expired Date',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                            SelectDate(
-                              onDateSelected: (DateTime f) {
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     color: AppConstants.whiteOpacity,
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: Text(
+                    //             'Expired Date',
+                    //             style: Theme.of(context).textTheme.bodyText1,
+                    //           ),
+                    //         ),
+                    //         SelectDate(
+                    //           onDateSelected: (DateTime f) {
+                    //             setState(() {
+                    //               _date = f;
+                    //             });
+                    //           },
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 40,
                     ),
@@ -319,10 +331,17 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                   id: widget.kitchenElement.id,
                                   items: [],
                                   title: widget.kitchenElement.title,
+<<<<<<< HEAD
                                   priority: 2, //priorityRating,
                                   availability: ref
                                       .watch(availibilityProvider.state)
                                       .state,
+=======
+                                  priority: widget.kitchenElement
+                                      .priority, //priorityRating,
+                                  availability: _availability,
+                                  category: widget.kitchenElement.category,
+>>>>>>> 9bb485b (v 0.9.2)
                                 );
                                 db.updateKitchenElement(kitchenElement);
                               },

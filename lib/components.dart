@@ -27,6 +27,7 @@ export 'package:flutter_slidable/flutter_slidable.dart';
 >>>>>>> af91a79 (thanks Allah)
 export 'package:flutter_slidable/flutter_slidable.dart';
 export 'package:syncfusion_flutter_gauges/gauges.dart';
+<<<<<<< HEAD
 =======
 >>>>>>> b001677 (kitchen element items crud)
 <<<<<<< HEAD
@@ -35,4 +36,9 @@ export 'package:syncfusion_flutter_gauges/gauges.dart';
 =======
 export 'package:flutter_slidable/flutter_slidable.dart';
 >>>>>>> b369bdf (thanks Allah)
+<<<<<<< HEAD
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)

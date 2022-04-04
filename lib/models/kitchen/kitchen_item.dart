@@ -30,11 +30,14 @@ class KitchenElement {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
   List<KitchenItem> get sortedItems {
     items.sort((a, b) {
       if (a.dateExpired != null && b.dateExpired != null) {
@@ -44,11 +47,17 @@ class KitchenElement {
     });
     return items;
   }
+<<<<<<< HEAD
 >>>>>>> 8a4f5ac (before prayer)
+=======
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)
 
 // get isNotAvailable
   bool get isAvailable {
     return availability != 0;
+<<<<<<< HEAD
 <<<<<<< HEAD
   }
 
@@ -85,6 +94,8 @@ class KitchenElement {
 >>>>>>> 55dc683 (kitchen element items crud)
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
   }
 
 // get the number of times the element is bought
@@ -120,6 +131,8 @@ class KitchenElement {
   double get totalPrice {
     return 0;
 >>>>>>> b001677 (kitchen element items crud)
+=======
+>>>>>>> 9bb485b (v 0.9.2)
   }
 
 // get the number of times the element is bought

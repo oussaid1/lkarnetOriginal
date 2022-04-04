@@ -98,5 +98,20 @@ class SingleKitchenElementData {
     return kitchenElementList;
 >>>>>>> b001677 (kitchen element items crud)
   }
+<<<<<<< HEAD
 >>>>>>> 1b32af8 (hamdollillah)
+=======
+
+// get a list of all unavaliable elements
+  List<KitchenElement> get unavaliableKitchenElements {
+    //List<KitchenElement> _kitchenElements = [];
+//  List<KitchenItem> _kitchenItems = [];
+    return kitchenElementList.where((element) => !element.isAvailable).toList();
+  }
+
+//   // get kitchen items for a single kitchen element object
+// List<KitchenItem> getKitchenItems(KitchenElement kitchenElement){
+
+// }
+>>>>>>> 0fd069a (v 0.9.2)
 }

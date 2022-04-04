@@ -6,6 +6,10 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../widgets/availability_widget.dart';
 import '../widgets/charts.dart';
+<<<<<<< HEAD
+=======
+import '../widgets/dialogs.dart';
+>>>>>>> 9bb485b (v 0.9.2)
 import '../widgets/notifications_widget.dart';
 import 'lists/unavailiable_elements.dart';
 import 'tabs/kitchen_element_detailed.dart';
@@ -103,8 +107,11 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
                       heroTag: 'add_kitchen_element',
 =======
 >>>>>>> 55dc683 (kitchen element items crud)
@@ -118,6 +125,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                             builder: (context) => AddKitchenElement(),
                           ),
 =======
+=======
+                      heroTag: 'add_kitchen_element',
+>>>>>>> 9bb485b (v 0.9.2)
                       onPressed: () {
                         Dialogs.botomPopUpDialog(
                           context,
@@ -129,6 +139,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     ),
                     appBar: AppBar(
                       actions: [
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -169,6 +180,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
 =======
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
                         _buildNotifications(
                             KitchenElementData(_kitchenElements), context),
 >>>>>>> 1b32af8 (hamdollillah)
@@ -187,11 +200,32 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         //     }
                         //   },
                         // ),
+=======
+                        NotificationWidget(
+                          count: kitchenElementData!
+                              .unavaliableKitchenElements.length,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UnAvailiableElements(
+                                    elementData: kitchenElementData!
+                                        .unavaliableKitchenElements),
+                              ),
+                            );
+                          },
+                        ),
+>>>>>>> 9bb485b (v 0.9.2)
                       ],
-                      leading: Icon(Icons.dashboard, color: Colors.black),
+                      leading:
+                          Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
+<<<<<<< HEAD
                         'Shop Details',
 >>>>>>> b001677 (kitchen element items crud)
+=======
+                        'Kitchen Stock',
+>>>>>>> 9bb485b (v 0.9.2)
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -368,6 +402,11 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
+                            child: BluredContainer(
+                                margin: EdgeInsets.all(8),
+                                width: 400,
+                                height: 220,
+                                child: ColumnKitchenElWidget(kitchenElements)),
                           ),
                           const SizedBox(height: 20),
 <<<<<<< HEAD
@@ -572,6 +611,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+<<<<<<< HEAD
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -589,6 +629,16 @@ class KitchenItemSquareTile extends StatelessWidget {
                               initialRating: kitchenElement.priority!,
                             ),
                           ],
+=======
+                        Text(
+                          kitchenElement.title.toString(),
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        PiorityRatingWidget(
+                          ignoreGestures: true,
+                          onRatingChanged: (rating) {},
+                          initialRating: kitchenElement.priority!,
+>>>>>>> 9bb485b (v 0.9.2)
                         ),
                       ],
                     ),
@@ -705,8 +755,11 @@ class KitchenItemSquareTile extends StatelessWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+>>>>>>> 0fd069a (v 0.9.2)
 =======
 
 class ProgressWidget extends StatelessWidget {
@@ -762,4 +815,9 @@ class ProgressWidget extends StatelessWidget {
 >>>>>>> 7cea0f9 (v 0.9.2)
 =======
 >>>>>>> b001677 (kitchen element items crud)
+<<<<<<< HEAD
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+=======
+>>>>>>> 9bb485b (v 0.9.2)
+>>>>>>> 0fd069a (v 0.9.2)

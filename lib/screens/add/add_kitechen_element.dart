@@ -744,10 +744,34 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
                                 onPressed: () {
+<<<<<<< HEAD
                                   //   ScaffoldMessenger.of(context)
                                   //       .showSnackBar(SnackBar(
                                   //     content: Text('Updating...'),
                                   //   ));
+=======
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Updating...'),
+                                  ));
+
+                                  final db = ref.read(databaseProvider);
+                                  final kitchenElement = KitchenElement(
+                                    items: [],
+                                    title: _itemNameController.text.trim(),
+                                    priority: _priorityRating,
+                                    availability: _availability,
+                                    id: widget.kitchenElement!.id,
+                                    category:
+                                        _elementCategoryController.text.trim(),
+                                  );
+                                  db.updateKitchenElement(kitchenElement);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.green,
+                                    content: Text('Updated'),
+                                  ));
+>>>>>>> 9bb485b (v 0.9.2)
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),

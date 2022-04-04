@@ -400,6 +400,7 @@ class _AddItemState extends ConsumerState<AddItem>
                                     _op.addItem(_item);
 >>>>>>> b001677 (kitchen element items crud)
 
+<<<<<<< HEAD
   Row _buildUpdateButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -753,6 +754,86 @@ class _AddItemState extends ConsumerState<AddItem>
               fillColor: AppConstants.whiteOpacity,
               filled: true,
               labelText: 'Price',
+=======
+                                    // _formKeyName.currentState!.reset();
+                                    //_formKeyPrice.currentState!.reset();
+                                    _itemNameController.clear();
+                                    _itemPriceController.clear();
+                                    _quantity = 1;
+                                  } //_op.addItem();
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: MThemeData.textButtonStyleCancel),
+                          ),
+                          Container(
+                            width: 120,
+                            child: TextButton(
+                                child: Text(
+                                  'Update',
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Updating...'),
+                                  ));
+                                  final _op = ref.read(operationsProvider);
+                                  final _item = Item(
+                                    id: widget.item!.id,
+                                    besoinTitle: '',
+                                    dateBought:
+                                        ref.read(pickedDateTime.state).state,
+                                    itemName: _itemNameController.text.trim(),
+                                    itemPrice: double.parse(
+                                        _itemPriceController.text.trim()),
+                                    quantifier:
+                                        ref.read(selectedQuantifierProvider),
+                                    quantity: _quantity,
+                                    shopName: ref.read(pickedShop.state).state!,
+                                  );
+                                  //  logger.d(_item);
+
+                                  if (_formKeyName.currentState!.validate() &&
+                                      _formKeyPrice.currentState!.validate()) {
+                                    _op.updateItem(_item).then((value) {
+                                      if (value) {
+                                        _formKeyName.currentState!.reset();
+                                        _formKeyPrice.currentState!.reset();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content: Text('Item Updated'),
+                                          duration: Duration(seconds: 1),
+                                        ));
+                                        Navigator.pop(context);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Error'),
+                                        ));
+                                      }
+                                    });
+                                  } //_op.addItem();
+                                },
+                                style: MThemeData.textButtonStyleSave),
+                          ),
+                        ],
+                      ),
+              ],
+>>>>>>> 9bb485b (v 0.9.2)
             ),
           ),
         ),
