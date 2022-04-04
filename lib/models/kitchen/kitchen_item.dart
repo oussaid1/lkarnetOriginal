@@ -10,14 +10,14 @@ enum KitchenItemStatus { full, half, empty }
 
 class KitchenElement {
   String? id;
-  String? title;
+  String title;
   String? category = '';
   double? availability = 0;
-  int? priority = 1;
+  double? priority = 1;
 // constr
   KitchenElement({
     this.id,
-    this.title,
+    required this.title,
     this.category,
     this.availability,
     this.priority,
@@ -158,8 +158,8 @@ class KitchenElement {
       id: map.id,
       title: map['title'],
       category: map['category'],
-      availability: map['availability'],
-      priority: map['priority'],
+      availability: map['availability'].toDouble(),
+      priority: map['priority'].toDouble(),
       items: [],
     );
   }
