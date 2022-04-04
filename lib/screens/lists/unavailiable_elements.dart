@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
+<<<<<<< HEAD
+=======
+import '../../models/kitchen/kitchen_element_data.dart';
+>>>>>>> 7cea0f9 (v 0.9.2)
 import '../../models/kitchen/kitchen_item.dart';
 import '../kitchen_stock.dart';
 import '../tabs/kitchen_element_detailed.dart';

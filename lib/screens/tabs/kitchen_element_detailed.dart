@@ -4,6 +4,7 @@ import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+<<<<<<< HEAD
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
@@ -17,9 +18,12 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 >>>>>>> a71c130 (...)
 import 'package:lkarnet/screens/kitchen_stock.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
+import '../../widgets/availability_widget.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 <<<<<<< HEAD
@@ -164,6 +168,7 @@ class _KitchenItemDetailsScreenState
             child: Column(
               children: [
 <<<<<<< HEAD
+<<<<<<< HEAD
                 SizedBox(height: 20),
                 BluredContainer(
                   margin: EdgeInsets.symmetric(horizontal: 8),
@@ -295,21 +300,27 @@ class _KitchenItemDetailsScreenState
                 BluredContainer(
 =======
                 const SizedBox(height: 20),
+=======
+                SizedBox(height: 20),
+>>>>>>> 7cea0f9 (v 0.9.2)
                 BluredContainer(
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //   BorderSide(
-                  //     color: Colors.black,
-                  //     width: 1,
-                  //   ),
-                  // )),
                   margin: EdgeInsets.symmetric(horizontal: 8),
-                  height: 160,
+                  height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      BluredContainer(
+                        height: 45,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '${widget.kitchenElement.category}',
+                            style: Theme.of(context).textTheme.headline3,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -344,13 +355,6 @@ class _KitchenItemDetailsScreenState
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${widget.kitchenElement.category}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -364,8 +368,15 @@ class _KitchenItemDetailsScreenState
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
+<<<<<<< HEAD
                               PriorityWidget(
                                 priority: widget.kitchenElement.priority!,
+=======
+                              PiorityRatingWidget(
+                                ignoreGestures: true,
+                                onRatingChanged: (rating) {},
+                                initialRating: widget.kitchenElement.priority!,
+>>>>>>> 7cea0f9 (v 0.9.2)
                               ),
                             ],
                           ),
@@ -478,14 +489,20 @@ class PiorityRatingWidget extends ConsumerWidget {
       children: [
         RatingBar.builder(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
           ignoreGestures: ignoreGestures,
           initialRating:
               initialRating, //ref.watch(priorityRatingProvider.state).state,
           itemSize: itemSize,
+<<<<<<< HEAD
 =======
           initialRating: ref.watch(priorityRatingProvider.state).state,
           itemSize: 20,
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
           minRating: 0,
           direction: Axis.horizontal,
           itemCount: 3,

@@ -27,6 +27,9 @@ class KitchenElementData {
     return kitchenElementList;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
 
 // get a list of all unavaliable elements
   List<KitchenElement> get unavaliableKitchenElements {
@@ -39,6 +42,9 @@ class KitchenElementData {
 // List<KitchenItem> getKitchenItems(KitchenElement kitchenElement){
 
 // }
+<<<<<<< HEAD
 =======
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
 }

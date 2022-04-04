@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 import 'package:lkarnet/widgets/date_picker.dart';
 
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/authproviders/database_providers.dart';
@@ -77,6 +80,9 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                       height: 10,
                     ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
                     // Padding(
                     //   padding: const EdgeInsets.all(8.0),
                     //   child: Container(
@@ -102,6 +108,7 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                     //     ),
                     //   ),
                     // ),
+<<<<<<< HEAD
 =======
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -127,6 +134,8 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                       ),
                     ),
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
                     SizedBox(
                       height: 40,
                     ),

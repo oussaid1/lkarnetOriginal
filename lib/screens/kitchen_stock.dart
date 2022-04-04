@@ -52,9 +52,13 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         FloatingActionButtonLocation.centerDocked,
                     floatingActionButton: FloatingActionButton(
 <<<<<<< HEAD
+<<<<<<< HEAD
                       heroTag: 'add_kitchen_element',
 =======
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+                      heroTag: 'add_kitchen_element',
+>>>>>>> 7cea0f9 (v 0.9.2)
                       onPressed: () {
                         Dialogs.botomPopUpDialog(
                           context,
@@ -66,6 +70,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     appBar: AppBar(
                       actions: [
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
                         NotificationWidget(
                           count: kitchenElementData!
                               .unavaliableKitchenElements.length,
@@ -79,6 +86,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                               ),
                             );
                           },
+<<<<<<< HEAD
 =======
                         // IconButton(
                         //   icon: Icon(Icons.add_box_outlined),
@@ -89,10 +97,14 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                         //     }
                         //   },
                         // ),
+=======
+                        ),
+>>>>>>> 7cea0f9 (v 0.9.2)
                       ],
-                      leading: Icon(Icons.dashboard, color: Colors.black),
+                      leading:
+                          Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
-                        'Shop Details',
+                        'Kitchen Stock',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -147,6 +159,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                               ),
                             ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
                             child: BluredContainer(
                                 margin: EdgeInsets.all(8),
                                 width: 400,
@@ -389,6 +404,7 @@ class KitchenItemSquareTile extends StatelessWidget {
   }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 class ProgressWidget extends StatelessWidget {
@@ -439,3 +455,5 @@ class ProgressWidget extends StatelessWidget {
   }
 }
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)

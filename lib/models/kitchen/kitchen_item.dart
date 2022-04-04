@@ -25,10 +25,14 @@ class KitchenElement {
   });
   List<KitchenItem> items = [];
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
 
 // get isNotAvailable
   bool get isAvailable {
     return availability != 0;
+<<<<<<< HEAD
   }
 
 // get the number of times the element is bought
@@ -62,6 +66,8 @@ class KitchenElement {
   double get totalPrice {
     return 0;
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+>>>>>>> 7cea0f9 (v 0.9.2)
   }
 
 // get the number of times the element is bought
