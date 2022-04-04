@@ -8,3 +8,4 @@ export 'package:lkarnet/widgets/glasswidget.dart';
 export 'package:logger/logger.dart';
 export 'package:percent_indicator/percent_indicator.dart';
 export 'package:flutter_typeahead/flutter_typeahead.dart';
+export 'package:flutter_slidable/flutter_slidable.dart';

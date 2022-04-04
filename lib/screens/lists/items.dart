@@ -1,18 +1,10 @@
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/models/shop/shops_data.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/screens/add/add_item.dart';
-import 'package:lkarnet/settings/theme.dart';
+
 import 'package:flutter/material.dart';
+import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 
-import 'package:lkarnet/widgets/dialogs.dart';
-import 'package:lkarnet/widgets/price_curency_widget.dart';
-
-import '../../models/kitchen/kitchen_item.dart';
-import '../add/add_kitchen_item.dart';
+import '../../widgets/item_listtile.dart';
 
 class ItemsList extends ConsumerWidget {
   final List<Item>? lista;
@@ -23,37 +15,120 @@ class ItemsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
+    //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
+    final _list = ref.watch(itemsListNotifierProvider);
 
-    return Container(
-      margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-      child: ListView.builder(
-        itemCount: _shopsDataList.length,
-        itemBuilder: (BuildContext context, int index) {
-          ShopData shopsData = _shopsDataList[index];
-          return new ExpansionTile(
-            title: Text('${shopsData.shop.shopName}'),
-            trailing: Text('${shopsData.countItems}'),
-            leading: CircleAvatar(
-              child: const Icon(
-                Icons.account_circle,
-                size: 40,
-                color: Colors.grey,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.secondary,
+    return GlassMaterial(
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
+        ),
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
+        ),
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      gradientColors: [
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
+      ],
+      centerWidget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          actions: [
+            // IconButton(
+            //   icon: Icon(Icons.add_box_outlined),
+            //   onPressed: () async {
+            //     var logger = Logger();
+            //     for (var item in items!) {
+            //       logger.d(item.toMap());
+            //     }
+            //   },
+            // ),
+          ],
+          leading: Icon(Icons.menu, color: Colors.black),
+          title: Text(
+            'All Items',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
             ),
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
             children: [
+              const SizedBox(height: 20),
               Container(
-                height: 300,
                 width: 400,
-                child: GoodsList(
-                  lista: shopsData.allItems,
+                height: 140,
+                decoration: BoxDecoration(
+                  color: AppConstants.whiteOpacity,
+                ),
+              ),
+              BluredContainer(
+                margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _list.itemsList.length, // _shopsDataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Item item = _list.itemsList[index];
+                    return ItemTileWidget(
+                      item: item,
+                    );
+                    //ShopData shopsData = _shopsDataList[index];
+                    // return  ExpansionTile(
+                    //   title: Text('${shopsData.shop.shopName}'),
+                    //   trailing: Text('${shopsData.countItems}'),
+                    //   leading: CircleAvatar(
+                    //     child: const Icon(
+                    //       Icons.account_circle,
+                    //       size: 40,
+                    //       color: Colors.grey,
+                    //     ),
+                    //     backgroundColor:
+                    //         Theme.of(context).colorScheme.secondary,
+                    //   ),
+                    //   expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Container(
+                    //       height: 300,
+                    //       width: 400,
+                    //       child: GoodsList(
+                    //         lista: shopsData.allItems,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // );
+                  },
                 ),
               ),
             ],
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -61,10 +136,7 @@ class ItemsList extends ConsumerWidget {
 
 class GoodsList extends ConsumerWidget {
   final List<Item>? lista;
-  GoodsList({
-    Key? key,
-    this.lista,
-  }) : super(key: key);
+  GoodsList({Key? key, this.lista}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
@@ -76,382 +148,6 @@ class GoodsList extends ConsumerWidget {
           Item item = lista![index];
           return ItemTileWidget(item: item);
         },
-      ),
-    );
-  }
-}
-
-class ItemTileWidget extends ConsumerWidget {
-  const ItemTileWidget({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
-
-  final Item item;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return GestureDetector(
-      onLongPress: () {
-        showMenu(
-          position: RelativeRect.fromLTRB(
-            MediaQuery.of(context).size.width / 2,
-            MediaQuery.of(context).size.height / 2,
-            MediaQuery.of(context).size.width / 2,
-            MediaQuery.of(context).size.height / 2,
-          ),
-          context: context,
-          items: <PopupMenuEntry>[
-            PopupMenuItem(
-              value: 1,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.delete),
-                  Text("Delete"),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-      child: Slidable(
-        //actionPane: SlidableDrawerActionPane(),
-        //  actionExtentRatio: 0.25,
-
-        startActionPane: ActionPane(
-          // dismissible: DismissiblePane(onDismissed: () {}),
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              key: const Key('action-1'),
-              backgroundColor: Colors.transparent,
-              onPressed: (context) {
-                ref.read(pickedDateTime.state).state = item.dateBought;
-                ref.read(pickedShop.state).state = item.shopName;
-                ref.watch(selectedQuantifierProvider.state).state =
-                    item.quantifier;
-
-                Dialogs.botomPopUpDialog(
-                  context,
-                  AddItem(
-                    item: item,
-                  ),
-                );
-              },
-              icon: Icons.edit,
-              label: 'Edit',
-            ),
-          ],
-        ),
-
-        endActionPane: ActionPane(
-          //dismissible: DismissiblePane(onDismissed: () {}),
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-                key: const Key('action-12'),
-                backgroundColor: Colors.transparent,
-                label: 'Delete',
-                onPressed: (context) {
-                  Dialogs.dialogSimple(context,
-                      title: 'Are you sure !!?',
-                      widgets: [
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 120,
-                                child: TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  style: MThemeData.textButtonStyleCancel,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                width: 120,
-                                child: TextButton(
-                                  child: Text(
-                                    'Ok',
-                                    style:
-                                        Theme.of(context).textTheme.headline3,
-                                  ),
-                                  onPressed: () => ref
-                                      .read(operationsProvider)
-                                      .deleteItem(item)
-                                      .then((value) =>
-                                          Navigator.of(context).pop()),
-                                  style: MThemeData.textButtonStyleSave,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]);
-                },
-                icon: Icons.delete),
-          ],
-        ),
-
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radius),
-          ),
-          color: AppConstants.whiteOpacity,
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color:
-                            Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(AppConstants.radius),
-                          bottomLeft: Radius.circular(AppConstants.radius),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${item.quantity}',
-                            style: Theme.of(context).textTheme.headline6,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            '${item.quantifier}',
-                            style: Theme.of(context).textTheme.subtitle2,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${item.itemName}',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${item.shopName}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            Text(
-                              '  ${item.dateBought.formatted()}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: PriceNumberZone(
-                          price: item.itemPrix,
-                          style: Theme.of(context).textTheme.headline4,
-                          withDollarSign: true,
-                        )),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class KitchenItemTileWidget extends ConsumerWidget {
-  const KitchenItemTileWidget({
-    Key? key,
-    required this.kitchenItem,
-  }) : super(key: key);
-
-  final KitchenItem kitchenItem;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return Slidable(
-      //actionPane: SlidableDrawerActionPane(),
-      //  actionExtentRatio: 0.25,
-
-      startActionPane: ActionPane(
-        // dismissible: DismissiblePane(onDismissed: () {}),
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            key: const Key('action-1'),
-            backgroundColor: Colors.transparent,
-            onPressed: (context) {
-              ref.read(pickedDateTime.state).state = kitchenItem.dateBought;
-              ref.read(pickedShop.state).state = kitchenItem.shopName;
-              ref.watch(selectedQuantifierProvider.state).state =
-                  kitchenItem.quantifier;
-
-              Dialogs.botomPopUpDialog(
-                context,
-                AddKitchenItem(
-                  kitchenItem: kitchenItem,
-                ),
-              );
-            },
-            icon: Icons.edit,
-            label: 'Edit',
-          ),
-        ],
-      ),
-
-      endActionPane: ActionPane(
-        //dismissible: DismissiblePane(onDismissed: () {}),
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-              key: const Key('action-12'),
-              backgroundColor: Colors.transparent,
-              label: 'Delete',
-              onPressed: (context) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: MThemeData.textButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: TextButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () => ref
-                                    .read(operationsProvider)
-                                    .deleteKitchenItem(kitchenItem)
-                                    .then(
-                                        (value) => Navigator.of(context).pop()),
-                                style: MThemeData.textButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
-              },
-              icon: Icons.delete),
-        ],
-      ),
-
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radius),
-        ),
-        color: AppConstants.whiteOpacity,
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(AppConstants.radius),
-                        bottomLeft: Radius.circular(AppConstants.radius),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${kitchenItem.quantity}',
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          '${kitchenItem.quantifier}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${kitchenItem.itemName}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${kitchenItem.shopName}',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                          Text(
-                            '  ${kitchenItem.dateBought.formatted()}',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: PriceNumberZone(
-                        price: kitchenItem.itemPrice,
-                        style: Theme.of(context).textTheme.headline4,
-                        withDollarSign: true,
-                      )),
-                  const SizedBox(width: 8),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../models/payment/payment_model.dart';
 import '../models/shop/shops_data.dart';
+import '../widgets/item_listtile.dart';
 import 'home.dart';
-import 'lists/items.dart';
 
 class StatisticsWidget extends StatefulWidget {
   const StatisticsWidget({Key? key, this.shopsData}) : super(key: key);

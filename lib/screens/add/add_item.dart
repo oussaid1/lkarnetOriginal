@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/screens/lists/items.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
+import '../../widgets/item_listtile.dart';
 
 class AddItem extends ConsumerStatefulWidget {
   final Item? item;
@@ -255,13 +255,11 @@ class _AddItemState extends ConsumerState<AddItem> {
                                   final _op = ref.read(operationsProvider);
                                   final _item = Item(
                                     besoinTitle: '',
-                                    dateBought:
-                                        ref.read(pickedDateTime.state).state,
+                                    dateBought: _dateBought,
                                     itemName: _itemNameController.text.trim(),
                                     itemPrice: double.parse(
                                         _itemPriceController.text.trim()),
-                                    quantifier:
-                                        ref.read(selectedQuantifierProvider),
+                                    quantifier: _quantifier,
                                     quantity: _quantity,
                                     shopName: ref.read(pickedShop.state).state!,
                                   );

@@ -2,8 +2,8 @@ import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:flutter/material.dart';
 
 import '../components.dart';
+import '../widgets/item_listtile.dart';
 import 'home.dart';
-import 'lists/items.dart';
 import 'lists/payments.dart';
 
 class ShopDetails extends StatefulWidget {

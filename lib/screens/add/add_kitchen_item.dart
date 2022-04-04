@@ -368,16 +368,17 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                   final _op = ref.read(operationsProvider);
                                   final _item = KitchenItem(
                                     besoinTitle: '',
-                                    dateBought:
-                                        ref.read(pickedDateTime.state).state,
+                                    dateBought: _dateBought,
                                     itemName: _itemNameController.text.trim(),
                                     itemPrice: double.parse(
                                         _itemPriceController.text.trim()),
                                     quantifier: _quantifier,
                                     quantity: _quantity,
-                                    shopName: ref.read(pickedShop.state).state,
+                                    shopName: _shop,
                                     dateExpired: _dateExpired,
-                                    kitchenElementId: widget.kitchenElement!.id,
+                                    kitchenElementId: widget.item != null
+                                        ? widget.kitchenElement!.id
+                                        : _kitchenElement!.id,
                                   );
                                   _item.toPrint();
                                   if (_formKeyName.currentState!.validate() &&

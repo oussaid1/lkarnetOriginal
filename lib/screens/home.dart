@@ -10,9 +10,10 @@ import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
 import '../providers/streamproviders/shops_stream_provider.dart';
+import '../widgets/item_listtile.dart';
 import '../widgets/price_curency_widget.dart';
 import 'add/add_shop.dart';
-import 'dashboard.dart';
+import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';
 import 'lists/payments.dart';
 import 'shop_details.dart';
@@ -210,7 +211,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
-        height: 170,
+        // height: 170,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,17 +222,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(Icons.store, color: Color.fromRGBO(255, 255, 255, 1)),
-                  const SizedBox(width: 8),
-                  Text('Shops',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline2),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Shops',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Color.fromARGB(106, 255, 255, 255),
+                            )),
+                  ),
                 ],
               ),
             ),
             SizedBox(
-              height: 120,
+              height: 110,
               child: ListView.builder(
+                shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   final ShopData shopsData = _shopsDataList[index];
@@ -270,14 +275,33 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.dashboard_customize,
-                    color: Color.fromRGBO(255, 255, 255, 1)),
-                const SizedBox(width: 8),
-                Text('Recent Operations',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline2),
+                // Icon(Icons.dashboard_customize,
+                //     color: Color.fromRGBO(255, 255, 255, 1)),
+                // const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Recent Operations',
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: Color.fromARGB(106, 255, 255, 255),
+                          )),
+                ),
+                // more button
+
+                IconButton(
+                  icon:
+                      Icon(Icons.list, color: Color.fromRGBO(255, 255, 255, 1)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ItemsList(lista: recentOperations.items),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -285,6 +309,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             width: 390,
             height: 340,
             child: ListView.builder(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 final OperationsAdapter recentOperation =
                     recentOperations.recentOperationsList[index];
