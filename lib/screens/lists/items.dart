@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 
 import '../../widgets/item_listtile.dart';
+<<<<<<< HEAD
 
 // filterPattern String from the search bar
 final filterPatternProvider = StateProvider<String>((ref) {
@@ -14,6 +15,8 @@ final filterPatternProvider = StateProvider<String>((ref) {
 final filterTypeProvider = StateProvider<FilterType>((ref) {
   return FilterType.all;
 });
+=======
+>>>>>>> 336a080 (thanks Allah)
 
 class ItemsList extends ConsumerStatefulWidget {
   final List<Item>? lista;
@@ -22,6 +25,7 @@ class ItemsList extends ConsumerStatefulWidget {
     this.lista,
   }) : super(key: key);
   @override
+<<<<<<< HEAD
   ConsumerState<ItemsList> createState() => _ItemsListState();
 }
 
@@ -34,6 +38,12 @@ class _ItemsListState extends ConsumerState<ItemsList> {
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
     var _list = ref.watch(itemsListNotifierProvider);
 
+=======
+  Widget build(BuildContext context, ref) {
+    //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
+    final _list = ref.watch(itemsListNotifierProvider);
+
+>>>>>>> 336a080 (thanks Allah)
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -104,6 +114,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                 decoration: BoxDecoration(
                   color: AppConstants.whiteOpacity,
                 ),
+<<<<<<< HEAD
                 child: Column(
                   children: [
                     // a text field and a dropdownbutton
@@ -167,14 +178,22 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                     ),
                   ],
                 ),
+=======
+>>>>>>> 336a080 (thanks Allah)
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
+<<<<<<< HEAD
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list[index];
+=======
+                  itemCount: _list.itemsList.length, // _shopsDataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Item item = _list.itemsList[index];
+>>>>>>> 336a080 (thanks Allah)
                     return ItemTileWidget(
                       item: item,
                     );

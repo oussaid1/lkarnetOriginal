@@ -241,11 +241,18 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                       Text('Availability',
                           style: Theme.of(context).textTheme.bodyText1),
                       Availibility(
+<<<<<<< HEAD
                         value: _availability,
                         onChanged: (value) {
                           setState(() {
                             _availability = value;
                           });
+=======
+                        onChanged: (value) {
+                          // setState(() {
+                          //   // = value;
+                          // });
+>>>>>>> 336a080 (thanks Allah)
                         },
                       ),
                     ],

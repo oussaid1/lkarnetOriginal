@@ -375,6 +375,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                     quantifier: _quantifier,
                                     quantity: _quantity,
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     shopName: _shop,
                                     dateExpired: _dateExpired,
                                     kitchenElementId: widget.item != null
@@ -385,6 +386,13 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                     dateExpired: _dateExpired,
                                     kitchenElementId: widget.kitchenElement!.id,
 >>>>>>> 55dc683 (kitchen element items crud)
+=======
+                                    shopName: _shop,
+                                    dateExpired: _dateExpired,
+                                    kitchenElementId: widget.item != null
+                                        ? widget.kitchenElement!.id
+                                        : _kitchenElement!.id,
+>>>>>>> 336a080 (thanks Allah)
                                   );
                                   _item.toPrint();
                                   if (_formKeyName.currentState!.validate() &&

@@ -15,6 +15,7 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
   return stream.maybeWhen(data: (items) => items, orElse: () => []);
 });
 
+<<<<<<< HEAD
 final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
@@ -49,6 +50,12 @@ final itemsListNotifierProvider = Provider<List<Item>>((ref) {
     default:
       return _kitchenElementsItems;
   }
+=======
+final itemsListNotifierProvider =
+    ChangeNotifierProvider<ItemsListNotifier>((ref) {
+  final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
+  return ItemsListNotifier(_kitchenElementsItems, '', FilterType.all);
+>>>>>>> 336a080 (thanks Allah)
 });
 enum FilterType {
   all,
@@ -68,6 +75,45 @@ class ItemsListNotifier extends ChangeNotifier {
   String filterPattern;
   List<Item> itemsList = [];
   List<Item> fakeitemsList = [];
+<<<<<<< HEAD
+=======
+// return itemsList according to filterPattern
+  List<Item> get itemsListFiltered {
+    switch (filterType) {
+      case FilterType.all:
+        return itemsList;
+      case FilterType.byCategory:
+        return itemsList
+            .where((element) =>
+                element.besoinTitle!.toLowerCase() == filterPattern)
+            .toList();
+      case FilterType.byName:
+        return itemsList
+            .where((element) => element.itemName.toLowerCase() == filterPattern)
+            .toList();
+      case FilterType.byPrice:
+        return itemsList
+            .where((element) =>
+                element.itemPrix.toString().toLowerCase() == filterPattern)
+            .toList();
+      case FilterType.byQuantity:
+        return itemsList
+            .where((element) =>
+                element.quantity.toString().toLowerCase() == filterPattern)
+            .toList();
+      case FilterType.byDate:
+        return itemsList
+            .where((element) => element.dateBought.toString() == filterPattern)
+            .toList();
+      case FilterType.byShop:
+        return itemsList
+            .where((element) => element.shopName.toLowerCase() == filterPattern)
+            .toList();
+      default:
+        return itemsList;
+    }
+  }
+>>>>>>> 336a080 (thanks Allah)
 
   // add item to list
   void addItem(Item value) {
