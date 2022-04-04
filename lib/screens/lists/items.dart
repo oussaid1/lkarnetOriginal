@@ -6,17 +6,33 @@ import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 
 import '../../widgets/item_listtile.dart';
 
-class ItemsList extends ConsumerWidget {
+// filterPattern String from the search bar
+final filterPatternProvider = StateProvider<String>((ref) {
+  return '';
+});
+// filterType FilterType from the dropdown menu
+final filterTypeProvider = StateProvider<FilterType>((ref) {
+  return FilterType.all;
+});
+
+class ItemsList extends ConsumerStatefulWidget {
   final List<Item>? lista;
   ItemsList({
     Key? key,
     this.lista,
   }) : super(key: key);
-
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ItemsList> createState() => _ItemsListState();
+}
+
+class _ItemsListState extends ConsumerState<ItemsList> {
+  final TextEditingController _filterController = TextEditingController();
+  // String _filterPattern = '';
+  //FilterType _filterType = FilterType.all;
+  @override
+  Widget build(BuildContext context) {
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    final _list = ref.watch(itemsListNotifierProvider);
+    var _list = ref.watch(itemsListNotifierProvider);
 
     return GlassMaterial(
       circleWidgets: [
@@ -88,14 +104,77 @@ class ItemsList extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: AppConstants.whiteOpacity,
                 ),
+                child: Column(
+                  children: [
+                    // a text field and a dropdownbutton
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TextField(
+                          controller: _filterController,
+                          onChanged: (value) {
+                            ref.read(filterPatternProvider.state).state = value;
+                          },
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.clear_all_rounded),
+                              onPressed: () {
+                                _filterController.clear();
+                                ref.read(filterPatternProvider.state).state =
+                                    '';
+                              },
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppConstants.radius),
+                            ),
+                            labelText: 'Search',
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(AppConstants.radius),
+                        color: AppConstants.whiteOpacity,
+                      ),
+                      width: 140,
+                      height: 50,
+                      child: DropdownButton<FilterType>(
+                        value: FilterType.all,
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        onChanged: (FilterType? newValue) {
+                          ref.read(filterTypeProvider.state).state = newValue!;
+                        },
+                        items: FilterType.values.map((FilterType value) {
+                          return DropdownMenuItem<FilterType>(
+                            value: value,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _list.itemsList.length, // _shopsDataList.length,
+                  itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Item item = _list.itemsList[index];
+                    Item item = _list[index];
                     return ItemTileWidget(
                       item: item,
                     );

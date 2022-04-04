@@ -102,41 +102,44 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 4),
-                            // height: 440,
-                            width: MediaQuery.of(context).size.width,
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 1.5,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10),
-                              itemCount:
-                                  kitchenElementData!.kitchenElements.length,
-                              itemBuilder: (context, index) {
-                                final KitchenElement kitchenElement =
-                                    kitchenElementData!.kitchenElements[index];
-                                return KitchenItemSquareTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            KitchenItemDetailsScreen(
-                                          kitchenElement: kitchenElement,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  kitchenElement: kitchenElement,
-                                );
-                              },
-                            ),
-                          ),
+                          kitchenElementData != null
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 4),
+                                  // height: 440,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 1.5,
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10),
+                                    itemCount: kitchenElementData!
+                                        .kitchenElements.length,
+                                    itemBuilder: (context, index) {
+                                      final KitchenElement kitchenElement =
+                                          kitchenElementData!
+                                              .kitchenElements[index];
+                                      return KitchenItemSquareTile(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  KitchenElementDetailsScreen(
+                                                kitchenElement: kitchenElement,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        kitchenElement: kitchenElement,
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Container(),
                           const SizedBox(height: 50),
                         ],
                       ),

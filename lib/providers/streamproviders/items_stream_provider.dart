@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 
+import '../../screens/lists/items.dart';
+
 final itemsStream = StreamProvider<List<Item>>((ref) {
   final _db = ref.watch(databaseProvider);
   return _db.itemStream();
@@ -13,10 +15,40 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
   return stream.maybeWhen(data: (items) => items, orElse: () => []);
 });
 
-final itemsListNotifierProvider =
-    ChangeNotifierProvider<ItemsListNotifier>((ref) {
+final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
-  return ItemsListNotifier(_kitchenElementsItems, '', FilterType.all);
+  var _filterPattern = ref.watch(filterPatternProvider.state).state;
+  var _filterType = ref.watch(filterTypeProvider.state).state;
+  switch (_filterType) {
+    case FilterType.all:
+      return _kitchenElementsItems;
+    case FilterType.byName:
+      return _kitchenElementsItems
+          .where((element) => element.itemName
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byCategory:
+      return _kitchenElementsItems
+          .where((element) => element.besoinTitle!
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byPrice:
+      return _kitchenElementsItems
+          .where((element) => element.itemPrice
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byQuantity:
+      return _kitchenElementsItems
+          .where((element) => element.quantity
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    default:
+      return _kitchenElementsItems;
+  }
 });
 enum FilterType {
   all,
@@ -36,42 +68,6 @@ class ItemsListNotifier extends ChangeNotifier {
   String filterPattern;
   List<Item> itemsList = [];
   List<Item> fakeitemsList = [];
-// return itemsList according to filterPattern
-  List<Item> get itemsListFiltered {
-    switch (filterType) {
-      case FilterType.all:
-        return itemsList;
-      case FilterType.byCategory:
-        return itemsList
-            .where((element) =>
-                element.besoinTitle!.toLowerCase() == filterPattern)
-            .toList();
-      case FilterType.byName:
-        return itemsList
-            .where((element) => element.itemName.toLowerCase() == filterPattern)
-            .toList();
-      case FilterType.byPrice:
-        return itemsList
-            .where((element) =>
-                element.itemPrix.toString().toLowerCase() == filterPattern)
-            .toList();
-      case FilterType.byQuantity:
-        return itemsList
-            .where((element) =>
-                element.quantity.toString().toLowerCase() == filterPattern)
-            .toList();
-      case FilterType.byDate:
-        return itemsList
-            .where((element) => element.dateBought.toString() == filterPattern)
-            .toList();
-      case FilterType.byShop:
-        return itemsList
-            .where((element) => element.shopName.toLowerCase() == filterPattern)
-            .toList();
-      default:
-        return itemsList;
-    }
-  }
 
   // add item to list
   void addItem(Item value) {
