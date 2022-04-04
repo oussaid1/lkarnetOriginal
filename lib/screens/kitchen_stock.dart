@@ -16,8 +16,6 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 }
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
-  String filter = '';
-
   @override
   Widget build(BuildContext context) {
     List<KitchenElement> kitchenElements = [];
@@ -184,8 +182,9 @@ class KitchenItemSquareTile extends StatelessWidget {
                           kitchenElement.title.toString(),
                           style: Theme.of(context).textTheme.headline4,
                         ),
-                        PriorityWidget(
-                          priority: kitchenElement.priority!,
+                        PiorityRatingWidget(
+                          onRatingChanged: (rating) {},
+                          initialRating: kitchenElement.priority!,
                         ),
                       ],
                     ),

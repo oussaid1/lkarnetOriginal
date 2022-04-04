@@ -86,10 +86,6 @@ class _KitchenItemDetailsScreenState
                   IconButton(
                     icon: Icon(Icons.edit_outlined),
                     onPressed: () {
-                      ref.read(availibilityProvider.state).state =
-                          widget.kitchenElement.availability!;
-                      ref.read(priorityRatingProvider.state).state =
-                          widget.kitchenElement.priority!.toDouble();
                       Dialogs.botomPopUpDialog(
                         context,
                         AddKitchenElement(
@@ -191,8 +187,9 @@ class _KitchenItemDetailsScreenState
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
-                              PriorityWidget(
-                                priority: widget.kitchenElement.priority!,
+                              PiorityRatingWidget(
+                                onRatingChanged: (rating) {},
+                                initialRating: widget.kitchenElement.priority!,
                               ),
                             ],
                           ),
@@ -275,35 +272,36 @@ class _KitchenItemDetailsScreenState
   }
 }
 
-final priorityRatingProvider = StateProvider<double>((ref) {
-  return 0;
-});
+// final priorityRatingProvider = StateProvider<double>((ref) {
+//   return 0;
+// });
 
 class PiorityRatingWidget extends ConsumerWidget {
   const PiorityRatingWidget({
     Key? key,
     required this.onRatingChanged,
+    this.initialRating = 0,
+    this.itemSize = 20,
   }) : super(key: key);
-  final void Function(int) onRatingChanged;
+  final void Function(double) onRatingChanged;
+  final double itemSize;
+  final double initialRating;
   @override
   Widget build(BuildContext context, ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Priority', style: Theme.of(context).textTheme.bodyText1),
-        SizedBox(
-          width: 10,
-        ),
         RatingBar.builder(
-          initialRating: ref.watch(priorityRatingProvider.state).state,
+          initialRating:
+              initialRating, //ref.watch(priorityRatingProvider.state).state,
           itemSize: 20,
           minRating: 0,
           direction: Axis.horizontal,
           itemCount: 3,
           itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
           onRatingUpdate: (rating) {
-            ref.watch(priorityRatingProvider.state).state = rating;
-            onRatingChanged(rating.toInt());
+            //  ref.watch(priorityRatingProvider.state).state = rating;
+            onRatingChanged(rating);
           },
         ),
       ],
@@ -311,34 +309,32 @@ class PiorityRatingWidget extends ConsumerWidget {
   }
 }
 
-final availibilityProvider = StateProvider<double>((ref) {
-  return 0;
-});
-
-class Availibility extends ConsumerWidget {
-  Availibility({Key? key, required this.onChanged}) : super(key: key);
+// ignore: must_be_immutable
+class Availibility extends StatelessWidget {
+  Availibility({Key? key, required this.onChanged, this.value = 0})
+      : super(key: key);
   final void Function(double) onChanged;
+  double value = 0;
   @override
-  Widget build(BuildContext context, ref) {
-    double x = ref.watch(availibilityProvider.state).state;
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 35,
       height: 35,
       child: GestureDetector(
         onTap: () {
-          if (x < 10) {
-            ref.read(availibilityProvider.state).state++;
+          if (value < 10) {
+            value++;
           } else {
-            ref.read(availibilityProvider.state).state = 0;
+            value = 0;
           }
-          onChanged(ref.read(availibilityProvider.state).state);
+          onChanged(value);
         },
         child: SfRadialGauge(
           // backgroundColor: Colors.white,
 
           axes: <RadialAxis>[
             RadialAxis(
-              labelFormat: '$x',
+              labelFormat: '$value',
               maximumLabels: 1,
               labelOffset: 45,
               labelsPosition: ElementsPosition.inside,
@@ -358,7 +354,7 @@ class Availibility extends ConsumerWidget {
               pointers: <GaugePointer>[
                 RangePointer(
                   color: Color.fromARGB(98, 252, 183, 102),
-                  value: x,
+                  value: value,
                   width: 0.95,
                   // pointerOffset: 0.05,
                   sizeUnit: GaugeSizeUnit.factor,
@@ -372,102 +368,102 @@ class Availibility extends ConsumerWidget {
   }
 }
 
-class PriorityWidget extends StatelessWidget {
-  const PriorityWidget({Key? key, this.priority = 1, this.iconSize = 15})
-      : super(key: key);
-  final int priority;
-  final double iconSize;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 10,
-      child: getStars(priority),
-    );
-  }
+// class PriorityWidget extends StatelessWidget {
+//   const PriorityWidget({Key? key, this.priority = 1, this.iconSize = 15})
+//       : super(key: key);
+//   final int priority;
+//   final double iconSize;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 50,
+//       height: 10,
+//       child: getStars(priority),
+//     );
+//   }
 
-  Widget getStars(int priority) {
-    switch (priority) {
-      case 1:
-        return Row(
-          children: [
-            Icon(
-              Icons.star_rate_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_rate_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_rate_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-          ],
-        );
-      case 2:
-        return Row(
-          children: [
-            Icon(
-              Icons.star_rate_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_rate_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-          ],
-        );
-      case 3:
-        return Row(
-          children: [
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-          ],
-        );
-      default:
-        return Row(
-          children: [
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-            Icon(
-              Icons.star_border_rounded,
-              color: Colors.yellow,
-              size: iconSize,
-            ),
-          ],
-        );
-    }
-  }
-}
+//   Widget getStars(int priority) {
+//     switch (priority) {
+//       case 1:
+//         return Row(
+//           children: [
+//             Icon(
+//               Icons.star_rate_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_rate_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_rate_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//           ],
+//         );
+//       case 2:
+//         return Row(
+//           children: [
+//             Icon(
+//               Icons.star_rate_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_rate_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//           ],
+//         );
+//       case 3:
+//         return Row(
+//           children: [
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//           ],
+//         );
+//       default:
+//         return Row(
+//           children: [
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//             Icon(
+//               Icons.star_border_rounded,
+//               color: Colors.yellow,
+//               size: iconSize,
+//             ),
+//           ],
+//         );
+//     }
+//   }
+// }

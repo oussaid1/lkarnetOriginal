@@ -20,6 +20,18 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 }
 
 class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
+  double _availability = 1;
+//  double _priorityRating = 1;
+  @override
+  void initState() {
+    if (widget.kitchenElement.availability != null) {
+      setState(() {
+        _availability = widget.kitchenElement.availability!;
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -39,10 +51,11 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                       height: 100,
                       width: 100,
                       child: Availibility(
+                        value: _availability,
                         onChanged: (value) {
-                          // setState(() {
-                          //   // = value;
-                          // });
+                          setState(() {
+                            _availability = value;
+                          });
                         },
                       ),
                     ),
@@ -100,12 +113,16 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                   id: widget.kitchenElement.id,
                                   items: [],
                                   title: widget.kitchenElement.title,
-                                  priority: 2, //priorityRating,
-                                  availability: ref
-                                      .watch(availibilityProvider.state)
-                                      .state,
+                                  priority: widget.kitchenElement
+                                      .priority, //priorityRating,
+                                  availability: _availability,
                                 );
                                 db.updateKitchenElement(kitchenElement);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Saving...'),
+                                  ),
+                                );
                               },
                               style: MThemeData.textButtonStyleSave),
                         ),

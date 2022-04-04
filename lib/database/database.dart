@@ -124,7 +124,7 @@ class Database {
     try {
       await _users.collection("Besoins").add(besoin.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -135,7 +135,7 @@ class Database {
     try {
       await _users.collection("Shops").add(shop.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -146,7 +146,7 @@ class Database {
     try {
       _users.collection("Goods").add(item.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
     }
   }
 
@@ -156,7 +156,7 @@ class Database {
     try {
       await _users.collection("Payments").add(payment.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -170,7 +170,7 @@ class Database {
           .collection(_collectionKitchenElements)
           .add(kitchenElement.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -180,7 +180,7 @@ class Database {
     try {
       await _users.collection(_collectionKitchenItems).add(kitchenItem.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -196,7 +196,7 @@ class Database {
           .doc(kitchenElement.id)
           .update(kitchenElement.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -211,7 +211,7 @@ class Database {
           .doc(kitchenItem.id)
           .update(kitchenItem.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -225,7 +225,7 @@ class Database {
           .doc(shopToUpdate.id)
           .update(shopToUpdate.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -241,7 +241,7 @@ class Database {
           )
           .update(itemToUpdate.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -255,7 +255,7 @@ class Database {
           .doc(itemToUpdate.id)
           .update(itemToUpdate.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -270,7 +270,7 @@ class Database {
           .doc(itemToUpdate.id)
           .update(itemToUpdate.toMap());
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -286,7 +286,7 @@ class Database {
           .doc(kitchenElement.id)
           .delete();
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -301,7 +301,7 @@ class Database {
           .doc(kitchenItem.id)
           .delete();
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -310,7 +310,7 @@ class Database {
     try {
       _users.collection('Shops').doc(shopToDelete.id).delete();
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -319,7 +319,7 @@ class Database {
     try {
       _users.collection('Goods').doc(item.id).delete();
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -328,7 +328,7 @@ class Database {
     try {
       _users.collection('Payments').doc(payment.id).delete();
     } catch (e) {
-      print(e);
+      Exception(e);
       rethrow;
     }
   }
@@ -338,7 +338,7 @@ class Database {
       try {
         _users.collection('Goods').doc(item.id).delete();
       } catch (e) {
-        print(e);
+        Exception(e);
         rethrow;
       }
   }
