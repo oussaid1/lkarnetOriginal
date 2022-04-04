@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/kitchen_stock.dart';
-import 'package:lkarnet/screens/lists/items.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import 'package:lkarnet/widgets/date_picker.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
+import '../../providers/authproviders/database_providers.dart';
 import '../../settings/theme.dart';
 import '../../widgets/dialogs.dart';
+import '../../widgets/kitchen_item_listtile.dart';
 
 class KitchenItemDetailsScreen extends ConsumerStatefulWidget {
   const KitchenItemDetailsScreen({Key? key, required this.kitchenElement})
@@ -89,7 +90,9 @@ class _KitchenItemDetailsScreenState
                     onPressed: () {
                       Dialogs.botomPopUpDialog(
                         context,
-                        UpdateKitchenElement(),
+                        UpdateKitchenElement(
+                          kitchenElement: widget.kitchenElement,
+                        ),
                       );
                     },
                   ),
@@ -298,17 +301,18 @@ class PiorityRatingWidget extends StatelessWidget {
   }
 }
 
-class UpdateKitchenElement extends StatefulWidget {
+class UpdateKitchenElement extends ConsumerStatefulWidget {
   const UpdateKitchenElement({
     Key? key,
+    required this.kitchenElement,
   }) : super(key: key);
-
+  final KitchenElement kitchenElement;
   @override
-  State<UpdateKitchenElement> createState() => _UpdateKitchenElementState();
+  ConsumerState<UpdateKitchenElement> createState() =>
+      _UpdateKitchenElementState();
 }
 
-class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
-  DateTime _dateTime = DateTime.now();
+class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -327,7 +331,13 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                     Container(
                       height: 100,
                       width: 100,
-                      child: Availibility(),
+                      child: Availibility(
+                        onChanged: (value) {
+                          // setState(() {
+                          //   // = value;
+                          // });
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -348,9 +358,7 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                             ),
                             SelectDate(
                               onDateSelected: (DateTime f) {
-                                setState(() {
-                                  _dateTime = f;
-                                });
+                                setState(() {});
                               },
                             ),
                           ],
@@ -379,7 +387,19 @@ class _UpdateKitchenElementState extends State<UpdateKitchenElement> {
                                 'Save',
                                 style: Theme.of(context).textTheme.headline3,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                final db = ref.read(databaseProvider);
+                                final kitchenElement = KitchenElement(
+                                  id: widget.kitchenElement.id,
+                                  items: [],
+                                  title: widget.kitchenElement.title,
+                                  priority: 2, //priorityRating,
+                                  availability: ref
+                                      .watch(availibilityProvider.state)
+                                      .state,
+                                );
+                                db.addKitchenElement(kitchenElement);
+                              },
                               style: MThemeData.textButtonStyleSave),
                         ),
                       ],
@@ -400,8 +420,8 @@ final availibilityProvider = StateProvider<double>((ref) {
 });
 
 class Availibility extends ConsumerWidget {
-  Availibility({Key? key}) : super(key: key);
-
+  Availibility({Key? key, required this.onChanged}) : super(key: key);
+  final void Function(double) onChanged;
   @override
   Widget build(BuildContext context, ref) {
     double x = ref.watch(availibilityProvider.state).state;
@@ -415,9 +435,11 @@ class Availibility extends ConsumerWidget {
           } else {
             ref.read(availibilityProvider.state).state = 0;
           }
+          onChanged(ref.read(availibilityProvider.state).state);
         },
         child: SfRadialGauge(
           // backgroundColor: Colors.white,
+
           axes: <RadialAxis>[
             RadialAxis(
               labelFormat: '$x',

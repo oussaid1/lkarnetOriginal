@@ -179,7 +179,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                                 id: widget.payment!.id,
                                 paidAmount:
                                     double.parse(_paidAmountController.text),
-                                datePaid: ref.read(pickedDateTime.state).state,
+                                datePaid:
+                                    _datePaid, //ref.read(pickedDateTime.state).state,
                                 paidShopName: ref.read(pickedShop.state).state,
                               );
                               if (_formKeyPaidAmount.currentState!.validate()) {

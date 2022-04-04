@@ -134,7 +134,13 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     children: [
                       Text('Availability',
                           style: Theme.of(context).textTheme.bodyText1),
-                      Availibility(),
+                      Availibility(
+                        onChanged: (value) {
+                          // setState(() {
+                          //   // = value;
+                          // });
+                        },
+                      ),
                     ],
                   ),
                 ),

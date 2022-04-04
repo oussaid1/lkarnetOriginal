@@ -1,4 +1,3 @@
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
