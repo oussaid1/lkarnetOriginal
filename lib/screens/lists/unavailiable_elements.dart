@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../kitchen_stock.dart';
 import '../tabs/kitchen_element_detailed.dart';
