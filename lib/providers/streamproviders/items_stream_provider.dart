@@ -18,8 +18,11 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+>>>>>>> 051a885 (...)
 final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
@@ -103,7 +106,46 @@ final itemsListNotifierProvider = Provider<List<Item>>((ref) {
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> b369bdf (thanks Allah)
+<<<<<<< HEAD
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+final itemsListNotifierProvider = Provider<List<Item>>((ref) {
+  final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
+  var _filterPattern = ref.watch(filterPatternProvider.state).state;
+  var _filterType = ref.watch(filterTypeProvider.state).state;
+  switch (_filterType) {
+    case FilterType.all:
+      return _kitchenElementsItems;
+    case FilterType.byName:
+      return _kitchenElementsItems
+          .where((element) => element.itemName
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byCategory:
+      return _kitchenElementsItems
+          .where((element) => element.besoinTitle!
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byPrice:
+      return _kitchenElementsItems
+          .where((element) => element.itemPrice
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byQuantity:
+      return _kitchenElementsItems
+          .where((element) => element.quantity
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    default:
+      return _kitchenElementsItems;
+  }
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
 });
 enum FilterType {
   all,
@@ -126,8 +168,11 @@ class ItemsListNotifier extends ChangeNotifier {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+>>>>>>> 051a885 (...)
 =======
 // return itemsList according to filterPattern
   List<Item> get itemsListFiltered {
@@ -171,7 +216,12 @@ class ItemsListNotifier extends ChangeNotifier {
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> b369bdf (thanks Allah)
+<<<<<<< HEAD
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
 
   // add item to list
   void addItem(Item value) {

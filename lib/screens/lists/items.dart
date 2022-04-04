@@ -17,6 +17,7 @@ final filterTypeProvider = StateProvider<FilterType>((ref) {
 });
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
 =======
@@ -25,6 +26,12 @@ final filterTypeProvider = StateProvider<FilterType>((ref) {
 =======
 >>>>>>> b369bdf (thanks Allah)
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> b369bdf (thanks Allah)
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
 
 class ItemsList extends ConsumerStatefulWidget {
   final List<Item>? lista;
@@ -36,10 +43,15 @@ class ItemsList extends ConsumerStatefulWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
   ConsumerState<ItemsList> createState() => _ItemsListState();
 }
 
@@ -56,6 +68,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 =======
   Widget build(BuildContext context, ref) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
@@ -63,8 +76,12 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 
 >>>>>>> 336a080 (thanks Allah)
 =======
+=======
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    final _list = ref.watch(itemsListNotifierProvider);
+    var _list = ref.watch(itemsListNotifierProvider);
 
 >>>>>>> b369bdf (thanks Allah)
 >>>>>>> af91a79 (thanks Allah)
@@ -145,10 +162,15 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
                 child: Column(
                   children: [
                     // a text field and a dropdownbutton
@@ -190,7 +212,11 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                       width: 140,
                       height: 50,
                       child: DropdownButton<FilterType>(
+<<<<<<< HEAD
                         value: ref.watch(filterTypeProvider.state).state,
+=======
+                        value: FilterType.all,
+>>>>>>> 0c99d23 (...)
                         icon: Icon(Icons.arrow_drop_down),
                         iconSize: 24,
                         elevation: 16,
@@ -214,6 +240,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                 ),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
 =======
@@ -222,6 +249,12 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 =======
 >>>>>>> b369bdf (thanks Allah)
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+>>>>>>> b369bdf (thanks Allah)
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
@@ -230,8 +263,11 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+>>>>>>> 051a885 (...)
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list[index];
@@ -248,7 +284,15 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> b369bdf (thanks Allah)
+<<<<<<< HEAD
 >>>>>>> af91a79 (thanks Allah)
+=======
+=======
+                  itemCount: _list.length, // _shopsDataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Item item = _list[index];
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
                     return ItemTileWidget(
                       item: item,
                     );

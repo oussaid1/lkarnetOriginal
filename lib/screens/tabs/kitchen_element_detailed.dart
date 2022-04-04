@@ -8,8 +8,11 @@ import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+>>>>>>> 051a885 (...)
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 <<<<<<< HEAD
 =======
@@ -28,18 +31,28 @@ import 'package:lkarnet/widgets/date_picker.dart';
 >>>>>>> b369bdf (thanks Allah)
 >>>>>>> af91a79 (thanks Allah)
 
+=======
+import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+import 'package:lkarnet/screens/kitchen_stock.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+>>>>>>> 0c99d23 (...)
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import '../../widgets/availability_widget.dart';
 import '../../widgets/expired_switch.dart';
 =======
 import '../../providers/authproviders/database_providers.dart';
 import '../../settings/theme.dart';
+=======
+>>>>>>> 0c99d23 (...)
 import '../../widgets/dialogs.dart';
 >>>>>>> b369bdf (thanks Allah)
 import '../../widgets/kitchen_item_listtile.dart';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import '../add/edit_kitchen_element.dart';
 =======
@@ -58,7 +71,11 @@ import '../../widgets/dialogs.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 <<<<<<< HEAD
 >>>>>>> 336a080 (thanks Allah)
+=======
+import '../add/edit_kitchen_element.dart';
+>>>>>>> 051a885 (...)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
   const KitchenElementDetailsScreen({Key? key, required this.kitchenElement})
@@ -81,7 +98,14 @@ class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
 class KitchenItemDetailsScreen extends ConsumerStatefulWidget {
   const KitchenItemDetailsScreen({Key? key, required this.kitchenElement})
 >>>>>>> b001677 (kitchen element items crud)
+<<<<<<< HEAD
 >>>>>>> 1a88e7a (kitchen element items crud)
+=======
+=======
+class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
+  const KitchenElementDetailsScreen({Key? key, required this.kitchenElement})
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
       : super(key: key);
   final KitchenElement kitchenElement;
   @override
@@ -91,6 +115,7 @@ class KitchenItemDetailsScreen extends ConsumerStatefulWidget {
 
 class _KitchenItemDetailsScreenState
     extends ConsumerState<KitchenElementDetailsScreen> {
+<<<<<<< HEAD
   DateTime? _expiryDate = DateTime.now();
 
   //bool _isLoading = true;
@@ -106,6 +131,8 @@ class _KitchenItemDetailsScreenState
     super.initState();
   }
 
+=======
+>>>>>>> 0c99d23 (...)
   @override
   Widget build(BuildContext context) {
     //List<KitchenElement> kitchenItems = [];
@@ -271,9 +298,13 @@ class _KitchenItemDetailsScreenState
                   IconButton(
                     icon: Icon(Icons.edit_outlined),
                     onPressed: () {
+                      ref.read(availibilityProvider.state).state =
+                          widget.kitchenElement.availability!;
+                      ref.read(priorityRatingProvider.state).state =
+                          widget.kitchenElement.priority!.toDouble();
                       Dialogs.botomPopUpDialog(
                         context,
-                        UpdateKitchenElement(
+                        AddKitchenElement(
                           kitchenElement: widget.kitchenElement,
                         ),
                       );
@@ -291,7 +322,7 @@ class _KitchenItemDetailsScreenState
             ),
             leadingWidth: 10,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -330,120 +361,123 @@ class _KitchenItemDetailsScreenState
                   //   ),
                   // )),
                   margin: EdgeInsets.symmetric(horizontal: 8),
-                  height: 200,
-                  child: SizedBox(
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.kitchenElement.title.toString(),
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
+                  height: 160,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                Dialogs.botomPopUpDialog(
+                                  context,
+                                  UpdateKitchenElement(
+                                    kitchenElement: widget.kitchenElement,
                                   ),
-                                  PriorityWidget(
-                                    priority: widget.kitchenElement.priority!,
+                                );
+                              },
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ProgressWidget(
+                                    kitchenElement: widget.kitchenElement,
+                                  ),
+                                  Text(
+                                    'Status: ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            color:
+                                                Colors.white.withOpacity(0.3)),
                                   ),
                                 ],
                               ),
-                              Column(
-                                children: [
-                                  Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white.withOpacity(0.7),
-                                    size: 30,
-                                  ),
-                                  Text(
-                                    '${widget.kitchenElement.category}',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 30),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '${widget.kitchenElement.category}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                'Status: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, right: 12),
+                                child: Text(
+                                  widget.kitchenElement.title.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
                               ),
-                              ProgressWidget(
-                                kitchenElement: widget.kitchenElement,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Last bought: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
-                              ),
-                              Text(
-                                '${widget.kitchenElement.lastTimeBought}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
+                              PriorityWidget(
+                                priority: widget.kitchenElement.priority!,
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Last bought: ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Colors.white.withOpacity(0.3)),
+                            ),
+                            Text(
+                              '${widget.kitchenElement.lastTimeBought}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Colors.white.withOpacity(0.3)),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Date expired : ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
-                              ),
-                              Text(
-                                '${widget.kitchenElement.timeExpired}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
-                              ),
-                            ],
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Date expired : ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Colors.white.withOpacity(0.3)),
+                            ),
+                            Text(
+                              '${widget.kitchenElement.timeExpired}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Colors.white.withOpacity(0.3)),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -1022,7 +1056,11 @@ class _KitchenItemDetailsScreenState
 final priorityRatingProvider = StateProvider<double>((ref) {
   return 0;
 });
+<<<<<<< HEAD
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
 
 class PiorityRatingWidget extends ConsumerWidget {
   const PiorityRatingWidget({
@@ -1044,12 +1082,16 @@ class PiorityRatingWidget extends ConsumerWidget {
         RatingBar.builder(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
+=======
+>>>>>>> 051a885 (...)
           ignoreGestures: ignoreGestures,
           initialRating:
               initialRating, //ref.watch(priorityRatingProvider.state).state,
           itemSize: itemSize,
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
           initialRating: ref.watch(priorityRatingProvider.state).state,
@@ -1057,6 +1099,12 @@ class PiorityRatingWidget extends ConsumerWidget {
 >>>>>>> a71c130 (...)
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
+=======
+=======
+          initialRating: ref.watch(priorityRatingProvider.state).state,
+          itemSize: 20,
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
           minRating: 0,
           direction: Axis.horizontal,
           itemCount: 3,
@@ -1069,7 +1117,11 @@ class PiorityRatingWidget extends ConsumerWidget {
 =======
             ref.watch(priorityRatingProvider.state).state = rating;
             onRatingChanged(rating.toInt());
+<<<<<<< HEAD
 >>>>>>> a71c130 (...)
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)
           },
         ),
       ],
@@ -1082,10 +1134,13 @@ class PiorityRatingWidget extends ConsumerWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1a88e7a (kitchen element items crud)
 =======
 >>>>>>> af91a79 (thanks Allah)
+=======
+>>>>>>> 051a885 (...)
 // ignore: must_be_immutable
 class Availibility extends StatefulWidget {
   Availibility(
@@ -1250,6 +1305,8 @@ class _AvailibilityState extends State<Availibility> {
 >>>>>>> e2feaab (v 0.9.8)
 =======
 =======
+=======
+>>>>>>> 0c99d23 (...)
 final availibilityProvider = StateProvider<double>((ref) {
   return 0;
 });
@@ -1446,6 +1503,7 @@ class Availibility extends ConsumerWidget {
   }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1549,6 +1607,10 @@ class Availibility extends ConsumerWidget {
 //   }
 // }
 =======
+=======
+=======
+
+>>>>>>> 051a885 (...)
 class PriorityWidget extends StatelessWidget {
   const PriorityWidget({Key? key, this.priority = 1, this.iconSize = 15})
       : super(key: key);
@@ -1648,6 +1710,7 @@ class PriorityWidget extends StatelessWidget {
     }
   }
 }
+<<<<<<< HEAD
 >>>>>>> a71c130 (...)
 =======
 class ExpiredSwitch extends StatefulWidget {
@@ -1713,3 +1776,6 @@ class _ExpiredSwitchState extends State<ExpiredSwitch> {
 >>>>>>> 1b32af8 (hamdollillah)
 =======
 >>>>>>> 0b1b10e (v 0.9.4)
+=======
+>>>>>>> 0c99d23 (...)
+>>>>>>> 051a885 (...)

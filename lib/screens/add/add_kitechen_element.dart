@@ -136,6 +136,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                 ),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 StreamBuilder<List<KitchenElement>>(
                     stream: ref.read(databaseProvider).kitchenElementsStream(),
                     builder: (context, snapshot) {
@@ -168,6 +169,8 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   hintText: 'milk',
                                   //alignLabelWithHint: true,
 =======
+=======
+>>>>>>> 051a885 (...)
               ),
             ),
           ),
@@ -299,10 +302,39 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                             fillColor: AppConstants.whiteOpacity,
                             filled: true,
                             // labelText: 'Name',
-                          ),
-                        );
+=======
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 4.0, top: 10, left: 8, right: 8),
+                  child: Form(
+                    key: _formKeyName,
+                    child: TextField(
+                      onChanged: (value) {
+                        _itemNameController.text = value;
                       },
-                      onSelected: (KitchenElement selection) {},
+                      controller: _itemNameController,
+                      style: Theme.of(context).textTheme.headline6,
+                      decoration: InputDecoration(
+                        suffix: IconButton(
+                          icon: Icon(
+                            Icons.clear_outlined,
+                            size: 18,
+>>>>>>> 0c99d23 (...)
+                          ),
+                          onPressed: () {
+                            _itemNameController.clear();
+                          },
+                        ),
+                        hintText: 'element name',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  color: Colors.grey,
+                                ),
+
+                        fillColor: AppConstants.whiteOpacity,
+                        filled: true,
+                        // labelText: 'Name',
+                      ),
                     ),
                   ),
                 ),
@@ -676,10 +708,15 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   final kitchenElement = KitchenElement(
                                     items: [],
                                     title: _itemNameController.text.trim(),
-                                    priority: priorityRating,
+                                    priority: ref
+                                        .read(priorityRatingProvider.state)
+                                        .state
+                                        .toInt(),
                                     availability: ref
-                                        .watch(availibilityProvider.state)
+                                        .read(availibilityProvider.state)
                                         .state,
+                                    id: widget.kitchenElement?.id,
+                                    category: widget.kitchenElement?.category,
                                   );
                                   db.addKitchenElement(kitchenElement);
                                 },
