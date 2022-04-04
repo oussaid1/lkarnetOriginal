@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:lkarnet/widgets/date_picker.dart';
-
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/authproviders/database_providers.dart';
@@ -22,6 +19,7 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
   double _availability = 1;
 //  double _priorityRating = 1;
+//  DateTime _date = DateTime.now();
   @override
   void initState() {
     if (widget.kitchenElement.availability != null) {
@@ -62,29 +60,31 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                     SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        color: AppConstants.whiteOpacity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Expired Date',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                            SelectDate(
-                              onDateSelected: (DateTime f) {
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     color: AppConstants.whiteOpacity,
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: Text(
+                    //             'Expired Date',
+                    //             style: Theme.of(context).textTheme.bodyText1,
+                    //           ),
+                    //         ),
+                    //         SelectDate(
+                    //           onDateSelected: (DateTime f) {
+                    //             setState(() {
+                    //               _date = f;
+                    //             });
+                    //           },
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 40,
                     ),
@@ -116,6 +116,7 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                   priority: widget.kitchenElement
                                       .priority, //priorityRating,
                                   availability: _availability,
+                                  category: widget.kitchenElement.category,
                                 );
                                 db.updateKitchenElement(kitchenElement);
                                 ScaffoldMessenger.of(context).showSnackBar(

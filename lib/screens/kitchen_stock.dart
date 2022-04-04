@@ -3,9 +3,12 @@ import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/kitchen/kitchen_element_data.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../widgets/availability_widget.dart';
+import '../widgets/charts.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/notifications_widget.dart';
+import 'lists/unavailiable_elements.dart';
 import 'tabs/kitchen_element_detailed.dart';
 
 class KitchenStockHome extends ConsumerStatefulWidget {
@@ -43,6 +46,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     floatingActionButtonLocation:
                         FloatingActionButtonLocation.centerDocked,
                     floatingActionButton: FloatingActionButton(
+                      heroTag: 'add_kitchen_element',
                       onPressed: () {
                         Dialogs.botomPopUpDialog(
                           context,
@@ -53,19 +57,25 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     ),
                     appBar: AppBar(
                       actions: [
-                        // IconButton(
-                        //   icon: Icon(Icons.add_box_outlined),
-                        //   onPressed: () async {
-                        //     var logger = Logger();
-                        //     for (var item in items!) {
-                        //       logger.d(item.toMap());
-                        //     }
-                        //   },
-                        // ),
+                        NotificationWidget(
+                          count: kitchenElementData!
+                              .unavaliableKitchenElements.length,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UnAvailiableElements(
+                                    elementData: kitchenElementData!
+                                        .unavaliableKitchenElements),
+                              ),
+                            );
+                          },
+                        ),
                       ],
-                      leading: Icon(Icons.dashboard, color: Colors.black),
+                      leading:
+                          Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
-                        'Shop Details',
+                        'Kitchen Stock',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -98,6 +108,11 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
+                            child: BluredContainer(
+                                margin: EdgeInsets.all(8),
+                                width: 400,
+                                height: 220,
+                                child: ColumnKitchenElWidget(kitchenElements)),
                           ),
                           const SizedBox(height: 20),
                           kitchenElementData != null
@@ -183,6 +198,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         PiorityRatingWidget(
+                          ignoreGestures: true,
                           onRatingChanged: (rating) {},
                           initialRating: kitchenElement.priority!,
                         ),
@@ -248,54 +264,6 @@ class KitchenItemSquareTile extends StatelessWidget {
                 .copyWith(color: Colors.white.withOpacity(0.3)),
           ),
           digitWidget ?? SizedBox.shrink(),
-        ],
-      ),
-    );
-  }
-}
-
-class ProgressWidget extends StatelessWidget {
-  const ProgressWidget({
-    Key? key,
-    required this.kitchenElement,
-  }) : super(key: key);
-  final KitchenElement kitchenElement;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 30,
-      height: 30,
-      child: SfRadialGauge(
-        // backgroundColor: Colors.white,
-        axes: <RadialAxis>[
-          RadialAxis(
-            labelFormat: '${kitchenElement.availability}',
-            labelOffset: 15,
-            labelsPosition: ElementsPosition.inside,
-            axisLabelStyle:
-                GaugeTextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-            minimum: 0,
-            maximum: 10,
-            showLabels: true,
-            showTicks: false,
-            startAngle: 270,
-            endAngle: 270,
-            axisLineStyle: AxisLineStyle(
-              thickness: 0.05,
-              color: Color.fromARGB(38, 255, 255, 255),
-              thicknessUnit: GaugeSizeUnit.factor,
-            ),
-            pointers: <GaugePointer>[
-              RangePointer(
-                color: Color.fromARGB(99, 255, 255, 255),
-                value: kitchenElement.availability!,
-                width: 0.95,
-                pointerOffset: 0.05,
-                sizeUnit: GaugeSizeUnit.factor,
-              )
-            ],
-          )
         ],
       ),
     );

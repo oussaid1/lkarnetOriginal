@@ -26,4 +26,16 @@ class KitchenElementData {
 
     return kitchenElementList;
   }
+
+// get a list of all unavaliable elements
+  List<KitchenElement> get unavaliableKitchenElements {
+    //List<KitchenElement> _kitchenElements = [];
+//  List<KitchenItem> _kitchenItems = [];
+    return kitchenElementList.where((element) => !element.isAvailable).toList();
+  }
+
+//   // get kitchen items for a single kitchen element object
+// List<KitchenItem> getKitchenItems(KitchenElement kitchenElement){
+
+// }
 }

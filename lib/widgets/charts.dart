@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lkarnet/models/kitchen/kitchen_item.dart';
 import 'package:lkarnet/models/statistics/statistics_model.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -194,6 +194,45 @@ class ColumnChartWidget extends ConsumerWidget {
           dataSource: chartData,
           xValueMapper: (ChartData sales, _) => sales.tag,
           yValueMapper: (ChartData sales, _) => sales.value,
+        ),
+      ],
+    );
+  }
+}
+
+class ColumnKitchenElWidget extends ConsumerWidget {
+  final List<KitchenElement> kitchenData;
+
+  ColumnKitchenElWidget(this.kitchenData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCartesianChart(
+      title: ChartTitle(
+          text: 'Kitchen Elements Availability',
+          textStyle: Theme.of(context).textTheme.headline6),
+      primaryYAxis: NumericAxis(
+        minimum: 0,
+        maximum: 10,
+        interval: 2,
+        labelFormat: '{value}%',
+        axisLine: AxisLine(
+          width: 0,
+        ),
+        majorTickLines: MajorTickLines(size: 0),
+      ),
+      primaryXAxis: CategoryAxis(
+          //  labelRotation: 90,
+          ),
+      series: <ChartSeries>[
+        // Renders spline chart
+        ColumnSeries<KitchenElement, String>(
+          width: 0.5,
+          legendItemText: 'Kitchen Elements',
+          dataSource: kitchenData,
+          color: Colors.white.withOpacity(0.5),
+          xValueMapper: (KitchenElement sales, _) => sales.title,
+          yValueMapper: (KitchenElement sales, _) => sales.availability,
         ),
       ],
     );

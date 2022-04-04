@@ -440,9 +440,10 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                     quantity: _quantity,
                                     shopName: ref.read(pickedShop.state).state!,
                                   );
-                                  logger.d(_item);
+                                  // logger.d(_item);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.green,
                                     content: Text('Updated...'),
                                   ));
                                   if (_formKeyName.currentState!.validate() &&
@@ -464,7 +465,9 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                                         ));
                                       }
                                     });
-                                  } //_op.addItem();
+                                  }
+                                  // pop
+                                  //_op.addItem();
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),

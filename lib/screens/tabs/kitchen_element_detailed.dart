@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
-import 'package:lkarnet/screens/kitchen_stock.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
+import '../../widgets/availability_widget.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 import '../add/edit_kitchen_element.dart';
@@ -61,6 +60,7 @@ class _KitchenItemDetailsScreenState
 
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: FloatingActionButton(
+            heroTag: 'kitchen_element_details_screen',
             onPressed: () {
               Dialogs.botomPopUpDialog(
                 context,
@@ -117,22 +117,25 @@ class _KitchenItemDetailsScreenState
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 BluredContainer(
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //   BorderSide(
-                  //     color: Colors.black,
-                  //     width: 1,
-                  //   ),
-                  // )),
                   margin: EdgeInsets.symmetric(horizontal: 8),
-                  height: 160,
+                  height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      BluredContainer(
+                        height: 45,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '${widget.kitchenElement.category}',
+                            style: Theme.of(context).textTheme.headline3,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -167,13 +170,6 @@ class _KitchenItemDetailsScreenState
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${widget.kitchenElement.category}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,6 +184,7 @@ class _KitchenItemDetailsScreenState
                                 ),
                               ),
                               PiorityRatingWidget(
+                                ignoreGestures: true,
                                 onRatingChanged: (rating) {},
                                 initialRating: widget.kitchenElement.priority!,
                               ),
@@ -281,24 +278,28 @@ class PiorityRatingWidget extends ConsumerWidget {
     Key? key,
     required this.onRatingChanged,
     this.initialRating = 0,
-    this.itemSize = 20,
+    this.itemSize = 18,
+    this.ignoreGestures = false,
   }) : super(key: key);
   final void Function(double) onRatingChanged;
   final double itemSize;
   final double initialRating;
+  final bool ignoreGestures;
   @override
   Widget build(BuildContext context, ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         RatingBar.builder(
+          ignoreGestures: ignoreGestures,
           initialRating:
               initialRating, //ref.watch(priorityRatingProvider.state).state,
-          itemSize: 20,
+          itemSize: itemSize,
           minRating: 0,
           direction: Axis.horizontal,
           itemCount: 3,
-          itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+          itemBuilder: (context, _) =>
+              Icon(Icons.star_border_purple500, color: Colors.amber),
           onRatingUpdate: (rating) {
             //  ref.watch(priorityRatingProvider.state).state = rating;
             onRatingChanged(rating);

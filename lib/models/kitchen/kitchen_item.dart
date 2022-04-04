@@ -24,8 +24,10 @@ class KitchenElement {
     required this.items,
   });
   List<KitchenItem> items = [];
-  double get totalPrice {
-    return 0;
+
+// get isNotAvailable
+  bool get isAvailable {
+    return availability != 0;
   }
 
 // get the number of times the element is bought
