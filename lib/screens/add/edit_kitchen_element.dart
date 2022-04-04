@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+
+import 'package:lkarnet/widgets/date_picker.dart';
+
+>>>>>>> a71c130 (...)
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/authproviders/database_providers.dart';
@@ -17,6 +23,7 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 }
 
 class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
+<<<<<<< HEAD
   double _availability = 1;
 //  double _priorityRating = 1;
 //  DateTime _date = DateTime.now();
@@ -30,6 +37,8 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
     super.initState();
   }
 
+=======
+>>>>>>> a71c130 (...)
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -49,17 +58,25 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                       height: 100,
                       width: 100,
                       child: Availibility(
+<<<<<<< HEAD
                         value: _availability,
                         onChanged: (value) {
                           setState(() {
                             _availability = value;
                           });
+=======
+                        onChanged: (value) {
+                          // setState(() {
+                          //   // = value;
+                          // });
+>>>>>>> a71c130 (...)
                         },
                       ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
+<<<<<<< HEAD
                     // Padding(
                     //   padding: const EdgeInsets.all(8.0),
                     //   child: Container(
@@ -85,6 +102,31 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                     //     ),
                     //   ),
                     // ),
+=======
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        color: AppConstants.whiteOpacity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Expired Date',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                            SelectDate(
+                              onDateSelected: (DateTime f) {
+                                setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+>>>>>>> a71c130 (...)
                     SizedBox(
                       height: 40,
                     ),
@@ -113,6 +155,7 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                   id: widget.kitchenElement.id,
                                   items: [],
                                   title: widget.kitchenElement.title,
+<<<<<<< HEAD
                                   priority: widget.kitchenElement
                                       .priority, //priorityRating,
                                   availability: _availability,
@@ -124,6 +167,14 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                     content: Text('Saving...'),
                                   ),
                                 );
+=======
+                                  priority: 2, //priorityRating,
+                                  availability: ref
+                                      .watch(availibilityProvider.state)
+                                      .state,
+                                );
+                                db.updateKitchenElement(kitchenElement);
+>>>>>>> a71c130 (...)
                               },
                               style: MThemeData.textButtonStyleSave),
                         ),

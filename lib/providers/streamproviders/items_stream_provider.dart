@@ -16,6 +16,7 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
@@ -56,6 +57,42 @@ final itemsListNotifierProvider =
   final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
   return ItemsListNotifier(_kitchenElementsItems, '', FilterType.all);
 >>>>>>> 336a080 (thanks Allah)
+=======
+final itemsListNotifierProvider = Provider<List<Item>>((ref) {
+  final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
+  var _filterPattern = ref.watch(filterPatternProvider.state).state;
+  var _filterType = ref.watch(filterTypeProvider.state).state;
+  switch (_filterType) {
+    case FilterType.all:
+      return _kitchenElementsItems;
+    case FilterType.byName:
+      return _kitchenElementsItems
+          .where((element) => element.itemName
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byCategory:
+      return _kitchenElementsItems
+          .where((element) => element.besoinTitle!
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byPrice:
+      return _kitchenElementsItems
+          .where((element) => element.itemPrice
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    case FilterType.byQuantity:
+      return _kitchenElementsItems
+          .where((element) => element.quantity
+              .toString()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
+    default:
+      return _kitchenElementsItems;
+  }
+>>>>>>> a71c130 (...)
 });
 enum FilterType {
   all,
@@ -75,6 +112,7 @@ class ItemsListNotifier extends ChangeNotifier {
   String filterPattern;
   List<Item> itemsList = [];
   List<Item> fakeitemsList = [];
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 // return itemsList according to filterPattern
@@ -114,6 +152,8 @@ class ItemsListNotifier extends ChangeNotifier {
     }
   }
 >>>>>>> 336a080 (thanks Allah)
+=======
+>>>>>>> a71c130 (...)
 
   // add item to list
   void addItem(Item value) {

@@ -15,8 +15,11 @@ final filterPatternProvider = StateProvider<String>((ref) {
 final filterTypeProvider = StateProvider<FilterType>((ref) {
   return FilterType.all;
 });
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
+=======
+>>>>>>> a71c130 (...)
 
 class ItemsList extends ConsumerStatefulWidget {
   final List<Item>? lista;
@@ -26,6 +29,9 @@ class ItemsList extends ConsumerStatefulWidget {
   }) : super(key: key);
   @override
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a71c130 (...)
   ConsumerState<ItemsList> createState() => _ItemsListState();
 }
 
@@ -35,13 +41,16 @@ class _ItemsListState extends ConsumerState<ItemsList> {
   //FilterType _filterType = FilterType.all;
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
     var _list = ref.watch(itemsListNotifierProvider);
 
 =======
   Widget build(BuildContext context, ref) {
+=======
+>>>>>>> a71c130 (...)
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    final _list = ref.watch(itemsListNotifierProvider);
+    var _list = ref.watch(itemsListNotifierProvider);
 
 >>>>>>> 336a080 (thanks Allah)
     return GlassMaterial(
@@ -115,6 +124,9 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   color: AppConstants.whiteOpacity,
                 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a71c130 (...)
                 child: Column(
                   children: [
                     // a text field and a dropdownbutton
@@ -178,13 +190,17 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                     ),
                   ],
                 ),
+<<<<<<< HEAD
 =======
 >>>>>>> 336a080 (thanks Allah)
+=======
+>>>>>>> a71c130 (...)
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
+<<<<<<< HEAD
 <<<<<<< HEAD
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -194,6 +210,11 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   itemBuilder: (BuildContext context, int index) {
                     Item item = _list.itemsList[index];
 >>>>>>> 336a080 (thanks Allah)
+=======
+                  itemCount: _list.length, // _shopsDataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Item item = _list[index];
+>>>>>>> a71c130 (...)
                     return ItemTileWidget(
                       item: item,
                     );

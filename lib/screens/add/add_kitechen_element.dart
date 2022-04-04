@@ -72,6 +72,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
+<<<<<<< HEAD
                 StreamBuilder<List<KitchenElement>>(
                     stream: ref.read(databaseProvider).kitchenElementsStream(),
                     builder: (context, snapshot) {
@@ -196,6 +197,38 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                               EdgeInsets.only(top: 4, right: 4, left: 4),
                           // labelText: 'Name',
                         ),
+=======
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 4.0, top: 10, left: 8, right: 8),
+                  child: Form(
+                    key: _formKeyName,
+                    child: TextField(
+                      onChanged: (value) {
+                        _itemNameController.text = value;
+                      },
+                      controller: _itemNameController,
+                      style: Theme.of(context).textTheme.headline6,
+                      decoration: InputDecoration(
+                        suffix: IconButton(
+                          icon: Icon(
+                            Icons.clear_outlined,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            _itemNameController.clear();
+                          },
+                        ),
+                        hintText: 'element name',
+                        hintStyle:
+                            Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  color: Colors.grey,
+                                ),
+
+                        fillColor: AppConstants.whiteOpacity,
+                        filled: true,
+                        // labelText: 'Name',
+>>>>>>> a71c130 (...)
                       ),
                     ),
                   ),
@@ -314,10 +347,22 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   final kitchenElement = KitchenElement(
                                     items: [],
                                     title: _itemNameController.text.trim(),
+<<<<<<< HEAD
                                     priority: _priorityRating,
                                     availability: _availability,
                                     category:
                                         _elementCategoryController.text.trim(),
+=======
+                                    priority: ref
+                                        .read(priorityRatingProvider.state)
+                                        .state
+                                        .toInt(),
+                                    availability: ref
+                                        .read(availibilityProvider.state)
+                                        .state,
+                                    id: widget.kitchenElement?.id,
+                                    category: widget.kitchenElement?.category,
+>>>>>>> a71c130 (...)
                                   );
                                   db.addKitchenElement(kitchenElement);
                                 },
