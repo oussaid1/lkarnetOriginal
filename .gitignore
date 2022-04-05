@@ -125,3 +125,4 @@ app.*.symbols
 .dart_tool/package_config.json
 
 local.properties
+.dart_tool/flutter_build/generated_main.dart
