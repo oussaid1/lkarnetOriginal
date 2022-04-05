@@ -3,13 +3,8 @@ name: Flutter build release apk actions
 on:
   push:
     branches:
-<<<<<<< HEAD
       - release
       - dev_open
-=======
-      - master
-      - dev_open_u
->>>>>>> d2f86f7 (ll)
     tags:
       - 'v*'
 jobs:
