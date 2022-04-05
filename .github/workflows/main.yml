@@ -24,6 +24,11 @@ jobs:
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
+      - name: Clear artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.DEPLY_KEY }}
+          expire-in: 1hr
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
