@@ -7,6 +7,7 @@ import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/operationsprovider/operations_provider.dart';
 import '../../widgets/availability_widget.dart';
+import '../../widgets/date_picker.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 import '../add/edit_kitchen_element.dart';
@@ -22,6 +23,10 @@ class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
 
 class _KitchenItemDetailsScreenState
     extends ConsumerState<KitchenElementDetailsScreen> {
+  DateTime _expiryDate = DateTime.now();
+
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     //List<KitchenElement> kitchenItems = [];
@@ -283,15 +288,59 @@ class _KitchenItemDetailsScreenState
                   child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: widget.kitchenElement.items.length,
+                    itemCount: widget.kitchenElement.sortedItems.length,
                     itemBuilder: (context, index) {
                       final KitchenItem _kitchenItem =
-                          widget.kitchenElement.items[index];
+                          widget.kitchenElement.sortedItems[index];
                       return GestureDetector(
                         onDoubleTap: () => KitchenItmExpiredButton(
                             kitchenItem: _kitchenItem,
                             op: ref.read(operationsProvider)),
                         child: KitchenItemTileWidget(
+                          onLongPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Expired Date'),
+                                content: SelectDate2(
+                                  initialDate: DateTime.now(),
+                                  onDateSelected: (date) {
+                                    setState(() {
+                                      _expiryDate = date;
+                                    });
+                                  },
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    child: Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: Text('Ok'),
+                                    onPressed: _isLoading
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            ref
+                                                .read(operationsProvider)
+                                                .updateKitchenItem(
+                                                    _kitchenItem.copyWith(
+                                                        dateExpired:
+                                                            _expiryDate,
+                                                        kitchenElementId:
+                                                            _kitchenItem
+                                                                .kitchenElementId));
+                                            Navigator.of(context).pop();
+                                          },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                           kitchenItem: _kitchenItem,
                         ),
                       );

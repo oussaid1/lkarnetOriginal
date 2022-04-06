@@ -26,6 +26,15 @@ class KitchenElement {
     required this.items,
   });
   List<KitchenItem> items = [];
+  List<KitchenItem> get sortedItems {
+    items.sort((a, b) {
+      if (a.dateExpired != null && b.dateExpired != null) {
+        return a.dateExpired!.compareTo(b.dateExpired!);
+      }
+      return 0; //a.dateBought.compareTo(b.dateBought);
+    });
+    return items;
+  }
 
 // get isNotAvailable
   bool get isAvailable {
@@ -236,6 +245,10 @@ class KitchenItem {
   });
   DateTime dateBought = DateTime.now();
   DateTime? dateExpired; // double get itemPrix => itemPrice * quantity;
+// is expired
+  bool get isExpired {
+    return dateExpired != null && dateExpired!.isBefore(DateTime.now());
+  }
 
   KitchenItem copyWith({
     String? id,
@@ -302,7 +315,12 @@ class KitchenItem {
     Timestamp f1 = documentSnapshot['dateBought'];
     dateBought = f1.toDate();
     // f = documentSnapshot['dateExpired'];
-    dateExpired = documentSnapshot['dateExpired'];
+    if (documentSnapshot['dateExpired'] != null) {
+      Timestamp f2 = documentSnapshot['dateExpired'];
+      dateExpired = f2.toDate();
+    } else {
+      dateExpired = documentSnapshot['dateExpired'];
+    }
     kitchenElementId = documentSnapshot['kitchenElementId'] ?? '';
   }
   String get toYY {
