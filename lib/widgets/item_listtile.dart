@@ -7,6 +7,7 @@ import '../models/item/item.dart';
 import '../providers/operationsprovider/operations_provider.dart';
 import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_item.dart';
+import '../screens/add/add_screen.dart';
 import 'price_curency_widget.dart';
 
 class ItemTileWidget extends ConsumerWidget {
@@ -21,8 +22,21 @@ class ItemTileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AddScreen(
+              item: item,
+            ),
+          ),
+        );
+      },
       onLongPress: () {
         showMenu(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          // color: AppConstants.greenOpacity,
           position: RelativeRect.fromLTRB(
             MediaQuery.of(context).size.width / 2,
             MediaQuery.of(context).size.height / 2,
@@ -32,11 +46,20 @@ class ItemTileWidget extends ConsumerWidget {
           context: context,
           items: <PopupMenuEntry>[
             PopupMenuItem(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AddScreen(
+                      item: item,
+                    ),
+                  ),
+                );
+              },
               value: 1,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.delete),
-                  Text("Delete"),
+                  Icon(Icons.kitchen_rounded),
+                  Text("Add to Kitchen"),
                 ],
               ),
             )
@@ -81,7 +104,7 @@ class ItemTileWidget extends ConsumerWidget {
                 key: const Key('action-12'),
                 backgroundColor: Colors.transparent,
                 label: 'Delete',
-                onPressed: (context) {
+                onPressed: (context2) {
                   Dialogs.dialogSimple(context,
                       title: 'Are you sure !!?',
                       widgets: [
@@ -108,11 +131,19 @@ class ItemTileWidget extends ConsumerWidget {
                                     style:
                                         Theme.of(context).textTheme.headline3,
                                   ),
-                                  onPressed: () => ref
-                                      .read(operationsProvider)
-                                      .deleteItem(item)
-                                      .then((value) =>
-                                          Navigator.of(context).pop()),
+                                  onPressed: () {
+                                    ref
+                                        .read(operationsProvider)
+                                        .deleteItem(item);
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text('Item Deleted'),
+                                      duration: Duration(seconds: 1),
+                                      backgroundColor:
+                                          AppConstants.greenOpacity,
+                                    ));
+                                  },
                                   style: MThemeData.textButtonStyleSave,
                                 ),
                               ),
@@ -132,80 +163,77 @@ class ItemTileWidget extends ConsumerWidget {
           color: AppConstants.whiteOpacity,
           child: SizedBox(
             height: 50,
-            child: GestureDetector(
-              onTap: onTap,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(AppConstants.radius),
-                            bottomLeft: Radius.circular(AppConstants.radius),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${item.quantity}',
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              '${item.quantifier}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color:
+                            Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(AppConstants.radius),
+                          bottomLeft: Radius.circular(AppConstants.radius),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${item.itemName}',
+                            '${item.quantity}',
                             style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                '${item.shopName}',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                              Text(
-                                '  ${item.dateBought.formatted()}',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                            ],
+                          Text(
+                            '${item.quantifier}',
+                            style: Theme.of(context).textTheme.subtitle2,
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: PriceNumberZone(
-                            price: item.itemPrix,
-                            style: Theme.of(context).textTheme.headline4,
-                            withDollarSign: true,
-                          )),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${item.itemName}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${item.shopName}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            Text(
+                              '  ${item.dateBought.formatted()}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: PriceNumberZone(
+                          price: item.itemPrix,
+                          style: Theme.of(context).textTheme.headline4,
+                          withDollarSign: true,
+                        )),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

@@ -113,7 +113,7 @@ class PaymentTile extends ConsumerWidget {
               icon: Icons.delete_forever,
               label: 'Delete',
               backgroundColor: Colors.transparent,
-              onPressed: (context) {
+              onPressed: (context2) {
                 Dialogs.dialogSimple(context,
                     title: 'Are you sure !!?',
                     widgets: [

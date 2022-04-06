@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../const/constents.dart';
+
 class Dialogs {
   static Future<void> dialogSimple(BuildContext context,
       {List<Widget>? widgets, String? title}) {
@@ -48,7 +50,7 @@ class Dialogs {
 
   static snackBar(String text) => SnackBar(
         content: Text('$text'),
-        backgroundColor: Colors.green[400],
+        backgroundColor: AppConstants.greenOpacity,
       );
   static snackBarError(String text) =>
       SnackBar(content: Text('$text'), backgroundColor: Colors.red);

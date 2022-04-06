@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../widgets/item_listtile.dart';
+import '../../widgets/number_incrementer.dart';
 
 class AddItem extends ConsumerStatefulWidget {
   final Item? item;
@@ -30,6 +30,7 @@ class _AddItemState extends ConsumerState<AddItem> {
   DateTime _dateBought = DateTime.now();
 
   String? _quantifier = 'واحدة';
+  String? _shop;
   void clear() {
     _itemNameController.clear();
     _itemPriceController.clear();
@@ -37,11 +38,9 @@ class _AddItemState extends ConsumerState<AddItem> {
 
   void _update() {
     if (widget.item != null) {
-      setState(() {
-        _itemNameController.text = widget.item!.itemName.toString();
-        _itemPriceController.text = (widget.item!.itemPrice).toString();
-        _quantity = widget.item!.quantity;
-      });
+      _itemNameController.text = widget.item!.itemName;
+      _itemPriceController.text = (widget.item!.itemPrice).toString();
+      _quantity = widget.item!.quantity;
     }
   }
 
@@ -53,7 +52,6 @@ class _AddItemState extends ConsumerState<AddItem> {
 
   @override
   void dispose() {
-    _quantity = 1;
     super.dispose();
   }
 
@@ -69,281 +67,17 @@ class _AddItemState extends ConsumerState<AddItem> {
           child: BluredContainer(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: ShopSpinner(
-                    onShopSelected: (value) {
-                      ref.read(pickedShop.state).state = value;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Form(
-                    key: _formKeyName,
-                    child: SizedBox(
-                      height: 50,
-                      child: TypeAheadField<Item>(
-                        autoFlipDirection: true,
-                        minCharsForSuggestions: 2,
-                        direction: AxisDirection.up,
-                        hideSuggestionsOnKeyboardHide: true,
-                        textFieldConfiguration: TextFieldConfiguration(
-                          autofocus: true,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(top: 4, right: 4, left: 4),
-                            fillColor: AppConstants.whiteOpacity,
-                            filled: true,
-                            hintText: 'milk',
-                            //alignLabelWithHint: true,
-
-                            prefixIcon: Icon(
-                              Icons.shopping_basket,
-                              color: Color.fromARGB(117, 212, 211, 211),
-                            ),
-                            suffix: IconButton(
-                              icon: Icon(
-                                Icons.clear_outlined,
-                                size: 18,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _itemNameController.clear();
-                                });
-                              },
-                            ),
-                            // border: OutlineInputBorder(),
-                          ),
-                        ),
-                        suggestionsCallback: (pattern) async {
-                          return _kOptions
-                              .where((item) => item.itemName
-                                  .toLowerCase()
-                                  .startsWith(pattern.toLowerCase()))
-                              .toList(growable: true);
-                        },
-                        itemBuilder: (context, suggestion) {
-                          return ItemTileWidget(
-                            item: suggestion,
-                          );
-                        },
-                        onSuggestionSelected: (suggestion) {
-                          _itemNameController.text = suggestion.itemName;
-                          _itemPriceController.text =
-                              suggestion.itemPrice.toString();
-                          _quantity = suggestion.quantity;
-                          ref.read(pickedDateTime.state).state =
-                              suggestion.dateBought;
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Form(
-                    key: _formKeyPrice,
-                    child: SizedBox(
-                      height: 50,
-                      child: TextFormField(
-                        //autovalidateMode: AutovalidateMode.disabled,
-                        inputFormatters: [
-                          //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'(^\-?\d*\.?\d*)')),
-                        ],
-                        controller: _itemPriceController,
-                        validator: (text) {
-                          if (text!.isEmpty) {
-                            return '';
-                          } else if (text.contains(RegExp(r'[A-Z]'))) {
-                            return '';
-                          } else {
-                            return null;
-                          }
-                        },
-                        textAlign: TextAlign.center,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(
-                          hintText: ' 00.00',
-                          hintStyle: GoogleFonts.robotoSlab(),
-                          contentPadding: EdgeInsets.only(top: 4),
-                          suffix: IconButton(
-                            icon: Icon(
-                              Icons.clear_outlined,
-                              size: 18,
-                            ),
-                            onPressed: () {
-                              _itemPriceController.clear();
-                            },
-                          ),
-                          prefixIcon: Icon(
-                            Icons.monetization_on_outlined,
-                          ),
-                          fillColor: AppConstants.whiteOpacity,
-                          filled: true,
-                          labelText: 'Price',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SelectDate(
-                    onDateSelected: (DateTime date) {
-                      _dateBought = date;
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NumberIncrementer(
-                      onDecrement: (value) {
-                        setState(() {
-                          _quantity = value;
-                        });
-                      },
-                      onIncrement: (value) {
-                        setState(() {
-                          _quantity = value;
-                        });
-                      },
-                      // value: _quantity,
-                    ),
-                    Container(
-                      child: QuantifierSpinner(
-                        onValueChanged: (value) {
-                          setState(() {
-                            _quantifier = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                _buildShopSpinner(),
+                _buildItemName(context, _kOptions),
+                _buildItemPrice(),
+                _buildSelectDateBought(),
+                _buildQuantityFier(),
                 SizedBox(
                   height: 30,
                 ),
                 widget.item == null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: MThemeData.textButtonStyleCancel),
-                          ),
-                          Container(
-                            width: 120,
-                            child: TextButton(
-                                child: Text(
-                                  'Save',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {
-                                  final _op = ref.read(operationsProvider);
-                                  final _item = Item(
-                                    besoinTitle: '',
-                                    dateBought: _dateBought,
-                                    itemName: _itemNameController.text.trim(),
-                                    itemPrice: double.parse(
-                                        _itemPriceController.text.trim()),
-                                    quantifier: _quantifier,
-                                    quantity: _quantity,
-                                    shopName: ref.read(pickedShop.state).state!,
-                                  );
-                                  // logger.d(_item);
-                                  if (_formKeyName.currentState!.validate() &&
-                                      _formKeyPrice.currentState!.validate()) {
-                                    _op.addItem(_item);
-
-                                    // _formKeyName.currentState!.reset();
-                                    //_formKeyPrice.currentState!.reset();
-                                    _itemNameController.clear();
-                                    _itemPriceController.clear();
-                                    _quantity = 1;
-                                  } //_op.addItem();
-                                },
-                                style: MThemeData.textButtonStyleSave),
-                          ),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: MThemeData.textButtonStyleCancel),
-                          ),
-                          Container(
-                            width: 120,
-                            child: TextButton(
-                                child: Text(
-                                  'Update',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text('Updating...'),
-                                  ));
-                                  final _op = ref.read(operationsProvider);
-                                  final _item = Item(
-                                    id: widget.item!.id,
-                                    besoinTitle: '',
-                                    dateBought:
-                                        ref.read(pickedDateTime.state).state,
-                                    itemName: _itemNameController.text.trim(),
-                                    itemPrice: double.parse(
-                                        _itemPriceController.text.trim()),
-                                    quantifier:
-                                        ref.read(selectedQuantifierProvider),
-                                    quantity: _quantity,
-                                    shopName: ref.read(pickedShop.state).state!,
-                                  );
-                                  //  logger.d(_item);
-
-                                  if (_formKeyName.currentState!.validate() &&
-                                      _formKeyPrice.currentState!.validate()) {
-                                    _op.updateItem(_item).then((value) {
-                                      if (value) {
-                                        _formKeyName.currentState!.reset();
-                                        _formKeyPrice.currentState!.reset();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.green,
-                                          content: Text('Item Updated'),
-                                          duration: Duration(seconds: 1),
-                                        ));
-                                        Navigator.pop(context);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('Error'),
-                                        ));
-                                      }
-                                    });
-                                  } //_op.addItem();
-                                },
-                                style: MThemeData.textButtonStyleSave),
-                          ),
-                        ],
-                      ),
+                    ? _buildSaveButton(context)
+                    : _buildUpdateButton(context),
               ],
             ),
           ),
@@ -351,80 +85,301 @@ class _AddItemState extends ConsumerState<AddItem> {
       ),
     );
   }
-}
 
-// stateless numberIncrementer
-@immutable
-class NumberIncrementer extends StatefulWidget {
-  final Function(double) onDecrement;
-  final Function(double) onIncrement;
-  //final int value;
-  NumberIncrementer({
-    Key? key,
-    required this.onDecrement,
-    required this.onIncrement,
-    // this.value = 0,
-  }) : super(key: key);
+  Row _buildUpdateButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: MThemeData.textButtonStyleCancel),
+        ),
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text(
+                'Update',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Updating...'),
+                ));
+                final _op = ref.read(operationsProvider);
+                final _item = Item(
+                  id: widget.item!.id,
+                  besoinTitle: '',
+                  dateBought: ref.read(pickedDateTime.state).state,
+                  itemName: _itemNameController.text.trim(),
+                  itemPrice: double.parse(_itemPriceController.text.trim()),
+                  quantifier: ref.read(selectedQuantifierProvider),
+                  quantity: _quantity,
+                  shopName: ref.read(pickedShop.state).state!,
+                );
+                //  logger.d(_item);
 
-  @override
-  State<NumberIncrementer> createState() => _NumberIncrementerState();
-}
-
-class _NumberIncrementerState extends State<NumberIncrementer> {
-  double _quantity = 1;
-  @override
-  void dispose() {
-    _quantity = 1;
-    super.dispose();
+                if (_formKeyName.currentState!.validate() &&
+                    _formKeyPrice.currentState!.validate()) {
+                  _op.updateItem(_item).then((value) {
+                    if (value) {
+                      _formKeyName.currentState!.reset();
+                      _formKeyPrice.currentState!.reset();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: AppConstants.greenOpacity,
+                        content: Text('Item Updated'),
+                        duration: Duration(seconds: 1),
+                      ));
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Error'),
+                      ));
+                    }
+                  });
+                } //_op.addItem();
+              },
+              style: MThemeData.textButtonStyleSave),
+        ),
+      ],
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Row _buildSaveButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: MThemeData.textButtonStyleCancel),
+        ),
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text(
+                'Save',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              onPressed: () {
+                // saving
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 1),
+                    content: Text('Saving...'),
+                  ),
+                );
+                final _op = ref.read(operationsProvider);
+                final _item = Item(
+                  besoinTitle: '',
+                  dateBought: _dateBought,
+                  itemName: _itemNameController.text.trim(),
+                  itemPrice: double.parse(_itemPriceController.text.trim()),
+                  quantifier: _quantifier,
+                  quantity: _quantity,
+                  shopName: ref.read(pickedShop.state).state!,
+                );
+                // logger.d(_item);
+                if (_formKeyName.currentState!.validate() &&
+                    _formKeyPrice.currentState!.validate() &&
+                    _shop != null) {
+                  _op.addItem(_item);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Saved'),
+                          duration: Duration(seconds: 1),
+                          backgroundColor: AppConstants
+                              .greenOpacity) //AppConstants.greenOpacity
+                      );
+                  // _itemNameController.clear();
+                  //_itemPriceController.clear();
+                  //_quantity = 1;
+                }
+                // popup dialog do you want to save to kitchen
+              },
+              style: MThemeData.textButtonStyleSave),
+        ),
+      ],
+    );
+  }
+
+  Row _buildQuantityFier() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Card(
-          color: AppConstants.whiteOpacity,
-          child: Container(
-            height: 45,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                    icon: Icon(
-                      CupertinoIcons.minus_circle,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (_quantity > 0.5) {
-                          _quantity -= 0.5;
-                          widget.onDecrement(_quantity);
-                        }
-                      });
-                    }),
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(_quantity.toString()),
-                  ),
-                ),
-                IconButton(
-                    icon: Icon(
-                      CupertinoIcons.plus_circle,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _quantity += 0.5;
-                        widget.onIncrement(_quantity);
-                      });
-                    }),
-              ],
-            ),
+        NumberIncrementer(
+          onDecrement: (value) {
+            setState(() {
+              _quantity = value;
+            });
+          },
+          onIncrement: (value) {
+            setState(() {
+              _quantity = value;
+            });
+          },
+          // value: _quantity,
+        ),
+        Container(
+          child: QuantifierSpinner(
+            onValueChanged: (value) {
+              setState(() {
+                _quantifier = value;
+              });
+            },
           ),
         ),
       ],
+    );
+  }
+
+  Padding _buildSelectDateBought() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: SelectDate(
+        onDateSelected: (DateTime date) {
+          setState(() {
+            _dateBought = date;
+          });
+        },
+      ),
+    );
+  }
+
+  Padding _buildShopSpinner() {
+    return Padding(
+      padding: EdgeInsets.all(2),
+      child: ShopSpinner(
+        onShopSelected: (value) {
+          setState(() {
+            _shop = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Padding _buildItemName(BuildContext context, Iterable<Item> _kOptions) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Form(
+        key: _formKeyName,
+        child: SizedBox(
+          height: 50,
+          child: TypeAheadField<Item>(
+            autoFlipDirection: true,
+            minCharsForSuggestions: 2,
+            direction: AxisDirection.up,
+            hideSuggestionsOnKeyboardHide: true,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: _itemNameController,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
+                fillColor: AppConstants.whiteOpacity,
+                filled: true,
+                hintText: 'milk',
+                //alignLabelWithHint: true,
+
+                prefixIcon: Icon(
+                  Icons.shopping_basket,
+                  color: Color.fromARGB(117, 212, 211, 211),
+                ),
+                suffix: IconButton(
+                  icon: Icon(
+                    Icons.clear_outlined,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _itemNameController.clear();
+                    });
+                  },
+                ),
+                // border: OutlineInputBorder(),
+              ),
+            ),
+            suggestionsCallback: (pattern) async {
+              return _kOptions
+                  .where((item) => item.itemName
+                      .toLowerCase()
+                      .startsWith(pattern.toLowerCase()))
+                  .toList(growable: true);
+            },
+            itemBuilder: (context, suggestion) {
+              return ItemTileWidget(
+                item: suggestion,
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              _itemNameController.text = suggestion.itemName;
+              _itemPriceController.text = suggestion.itemPrice.toString();
+              _quantity = suggestion.quantity;
+              ref.read(pickedDateTime.state).state = suggestion.dateBought;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildItemPrice() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Form(
+        key: _formKeyPrice,
+        child: SizedBox(
+          height: 50,
+          child: TextFormField(
+            //autovalidateMode: AutovalidateMode.disabled,
+            inputFormatters: [
+              //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
+              FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)')),
+            ],
+            controller: _itemPriceController,
+            validator: (text) {
+              if (text!.isEmpty) {
+                return '';
+              } else if (text.contains(RegExp(r'[A-Z]'))) {
+                return '';
+              } else {
+                return null;
+              }
+            },
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(
+              hintText: ' 00.00',
+              hintStyle: GoogleFonts.robotoSlab(),
+              contentPadding: EdgeInsets.only(top: 4),
+              suffix: IconButton(
+                icon: Icon(
+                  Icons.clear_outlined,
+                  size: 18,
+                ),
+                onPressed: () {
+                  _itemPriceController.clear();
+                },
+              ),
+              prefixIcon: Icon(
+                Icons.monetization_on_outlined,
+              ),
+              fillColor: AppConstants.whiteOpacity,
+              filled: true,
+              labelText: 'Price',
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

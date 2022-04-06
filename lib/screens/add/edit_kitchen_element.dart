@@ -108,6 +108,12 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                 style: Theme.of(context).textTheme.headline3,
                               ),
                               onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Saving...'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
                                 final db = ref.read(databaseProvider);
                                 final kitchenElement = KitchenElement(
                                   id: widget.kitchenElement.id,
@@ -121,9 +127,12 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                 db.updateKitchenElement(kitchenElement);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Saving...'),
-                                  ),
+                                      content: Text('Saved'),
+                                      duration: Duration(seconds: 1),
+                                      backgroundColor:
+                                          AppConstants.greenOpacity),
                                 );
+                                Navigator.of(context).pop();
                               },
                               style: MThemeData.textButtonStyleSave),
                         ),

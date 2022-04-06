@@ -145,7 +145,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                       width: 140,
                       height: 50,
                       child: DropdownButton<FilterType>(
-                        value: FilterType.all,
+                        value: ref.watch(filterTypeProvider.state).state,
                         icon: Icon(Icons.arrow_drop_down),
                         iconSize: 24,
                         elevation: 16,

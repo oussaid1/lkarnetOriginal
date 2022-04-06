@@ -165,9 +165,6 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                       key: _formKeyTitle,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          _itemNameController.text = value;
-                        },
                         controller: _itemNameController,
                         style: Theme.of(context).textTheme.headline6,
                         decoration: InputDecoration(
@@ -277,6 +274,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                 onPressed: () {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
+                                    duration: Duration(seconds: 1),
                                     content: Text('Saving...'),
                                   ));
                                   final db = ref.read(databaseProvider);
@@ -289,6 +287,12 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                         _elementCategoryController.text.trim(),
                                   );
                                   db.addKitchenElement(kitchenElement);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: AppConstants.greenOpacity,
+                                    content: Text('Saved'),
+                                  ));
+                                  Navigator.of(context).pop();
                                 },
                                 style: MThemeData.textButtonStyleSave),
                           ),
@@ -332,7 +336,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                                   db.updateKitchenElement(kitchenElement);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                    backgroundColor: Colors.green,
+                                    backgroundColor: AppConstants.greenOpacity,
                                     content: Text('Updated'),
                                   ));
                                 },
