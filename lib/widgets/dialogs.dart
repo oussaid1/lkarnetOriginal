@@ -18,7 +18,7 @@ class Dialogs {
         });
   }
 
-  static Future<void> botomPopUpDialog(BuildContext context, Widget widget,
+  static Future<void> botomUpDialog(BuildContext context, Widget widget,
       {height}) async {
     showGeneralDialog(
       barrierLabel: "Barrier",

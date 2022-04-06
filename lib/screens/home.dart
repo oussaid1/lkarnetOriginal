@@ -629,7 +629,7 @@ class MyExpandableFab extends StatelessWidget {
       distance: 90.0,
       children: [
         ActionButton(
-          onPressed: () => Dialogs.botomPopUpDialog(
+          onPressed: () => Dialogs.botomUpDialog(
             context,
             AddPayment(),
           ),
@@ -639,7 +639,7 @@ class MyExpandableFab extends StatelessWidget {
           ),
         ),
         ActionButton(
-          onPressed: () => Dialogs.botomPopUpDialog(
+          onPressed: () => Dialogs.botomUpDialog(
             context,
             AddShop(),
           ),
@@ -649,9 +649,11 @@ class MyExpandableFab extends StatelessWidget {
           ),
         ),
         ActionButton(
-          onPressed: () => Dialogs.botomPopUpDialog(
+          onPressed: () => Navigator.push(
             context,
-            AddItem(),
+            MaterialPageRoute(
+              builder: (context) => AddItem(),
+            ),
           ),
           icon: const Icon(
             Icons.add_shopping_cart_sharp,

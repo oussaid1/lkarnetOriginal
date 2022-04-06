@@ -50,7 +50,7 @@ class ShopsList extends ConsumerWidget {
                             ),
                             color: Colors.transparent,
                             onPressed: () {
-                              Dialogs.botomPopUpDialog(
+                              Dialogs.botomUpDialog(
                                   context, AddShop(shop: shopsData.shop));
                             }),
                       ],
@@ -76,12 +76,12 @@ class ShopsList extends ConsumerWidget {
                                       children: [
                                         Container(
                                           width: 120,
-                                          child: TextButton(
+                                          child: ElevatedButton(
                                             child: Text('Cancel'),
                                             onPressed: () =>
                                                 Navigator.pop(context),
                                             style: MThemeData
-                                                .textButtonStyleCancel,
+                                                .raisedButtonStyleCancel,
                                           ),
                                         ),
                                         SizedBox(
@@ -89,7 +89,7 @@ class ShopsList extends ConsumerWidget {
                                         ),
                                         Container(
                                           width: 120,
-                                          child: TextButton(
+                                          child: ElevatedButton(
                                             child: Text(
                                               'Ok',
                                               style: Theme.of(context)
@@ -102,8 +102,8 @@ class ShopsList extends ConsumerWidget {
                                                 .then((value) =>
                                                     Navigator.of(context)
                                                         .pop()),
-                                            style:
-                                                MThemeData.textButtonStyleSave,
+                                            style: MThemeData
+                                                .raisedButtonStyleSave,
                                           ),
                                         ),
                                       ],

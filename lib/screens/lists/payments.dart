@@ -98,7 +98,7 @@ class PaymentTile extends ConsumerWidget {
                 onPressed: (context) {
                   ref.read(pickedDateTime.state).state = payment.datePaid;
                   ref.read(pickedShop.state).state = payment.paidShopName;
-                  Dialogs.botomPopUpDialog(
+                  Dialogs.botomUpDialog(
                       context,
                       AddPayment(
                         payment: payment,
@@ -123,10 +123,10 @@ class PaymentTile extends ConsumerWidget {
                           children: [
                             Container(
                               width: 120,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 child: Text('Cancel'),
                                 onPressed: () => Navigator.pop(context),
-                                style: MThemeData.textButtonStyleCancel,
+                                style: MThemeData.raisedButtonStyleCancel,
                               ),
                             ),
                             SizedBox(
@@ -134,7 +134,7 @@ class PaymentTile extends ConsumerWidget {
                             ),
                             Container(
                               width: 120,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 child: Text(
                                   'Ok',
                                   style: Theme.of(context).textTheme.headline3,
@@ -144,7 +144,7 @@ class PaymentTile extends ConsumerWidget {
                                     .deletePayment(payment)
                                     .then(
                                         (value) => Navigator.of(context).pop()),
-                                style: MThemeData.textButtonStyleSave,
+                                style: MThemeData.raisedButtonStyleSave,
                               ),
                             ),
                           ],

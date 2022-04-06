@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
@@ -26,8 +25,9 @@ class AddKitchenItem extends ConsumerStatefulWidget {
 
 class _AddItemState extends ConsumerState<AddKitchenItem> {
   double _quantity = 1;
-  String _shop = "";
-  String _quantifier = "";
+  String? _shop;
+  String? _quantifier = 'واحدة';
+
   final GlobalKey<FormState> _formKeyName = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
@@ -35,32 +35,28 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   KitchenElement? _kitchenElement;
 
   DateTime _dateBought = DateTime.now();
-  DateTime _dateExpired = DateTime.now();
+  DateTime? _dateExpired;
 
   void _update() {
     // check if we have a kitchen item then update the fields
     if (widget.kitchenItem != null) {
-      setState(() {
-        _itemNameController.text = widget.kitchenItem!.itemName.toString();
-        _itemPriceController.text = (widget.kitchenItem!.itemPrice).toString();
-        _quantity = widget.kitchenItem!.quantity;
-        _shop = widget.kitchenItem!.shopName!;
-        _quantifier = widget.kitchenItem!.quantifier!;
-        _dateBought = widget.kitchenItem!.dateBought;
-        _dateExpired = widget.kitchenItem!.dateExpired;
-      });
+      _itemNameController.text = widget.kitchenItem!.itemName.toString();
+      _itemPriceController.text = (widget.kitchenItem!.itemPrice).toString();
+      _quantity = widget.kitchenItem!.quantity;
+      _shop = widget.kitchenItem!.shopName!;
+      _quantifier = widget.kitchenItem!.quantifier!;
+      _dateBought = widget.kitchenItem!.dateBought;
+      _dateExpired = widget.kitchenItem!.dateExpired;
     }
 
     // check if we have an item then set all the variables to the values of the item
     if (widget.item != null) {
-      setState(() {
-        _itemNameController.text = widget.item!.itemName.toString();
-        _itemPriceController.text = (widget.item!.itemPrice).toString();
-        _quantity = widget.item!.quantity;
-        _shop = widget.item!.shopName;
-        _quantifier = widget.item!.quantifier!;
-        _dateBought = widget.item!.dateBought;
-      });
+      _itemNameController.text = widget.item!.itemName.toString();
+      _itemPriceController.text = (widget.item!.itemPrice).toString();
+      _quantity = widget.item!.quantity;
+      _shop = widget.item!.shopName;
+      _quantifier = widget.item!.quantifier!;
+      _dateBought = widget.item!.dateBought;
     }
   }
 
@@ -72,7 +68,6 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
       _shop = "";
       _quantifier = "";
       _dateBought = DateTime.now();
-      _dateExpired = DateTime.now();
     });
   }
 
@@ -93,12 +88,68 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
 
     final logger = Logger();
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox(
-        height: 400,
-        width: 400,
-        child: BluredContainer(
+    return GlassMaterial(
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
+        ),
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
+        ),
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      gradientColors: [
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
+      ],
+      centerWidget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          title: Text(
+            widget.kitchenElement != null ? "تعديل المادة" : "اضافة مادة",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        body: BluredContainer(
+          margin: EdgeInsets.all(12),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -281,16 +332,16 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
       children: [
         Container(
           width: 120,
-          child: TextButton(
+          child: ElevatedButton(
               child: Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              style: MThemeData.textButtonStyleCancel),
+              style: MThemeData.raisedButtonStyleCancel),
         ),
         Container(
           width: 120,
-          child: TextButton(
+          child: ElevatedButton(
               child: Text(
                 'Update',
                 style: Theme.of(context).textTheme.headline3,
@@ -300,7 +351,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   content: Text('Updating...'),
                 ));
                 final _op = ref.read(operationsProvider);
-                final _item = Item(
+                final _kitchenItem = KitchenItem(
                   id: widget.kitchenItem!.id,
                   besoinTitle: '',
                   dateBought: _dateBought,
@@ -309,12 +360,14 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   quantifier: _quantifier,
                   quantity: _quantity,
                   shopName: _shop,
+                  dateExpired: _dateExpired,
+                  kitchenElementId: widget.kitchenItem!.kitchenElementId,
                 );
-                logger.d(_item);
+                logger.d(_kitchenItem);
 
                 if (_formKeyName.currentState!.validate() &&
                     _formKeyPrice.currentState!.validate()) {
-                  _op.updateItem(_item);
+                  _op.updateKitchenItem(_kitchenItem);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: AppConstants.greenOpacity,
                     content: Text('Item Updated'),
@@ -325,7 +378,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 // pop
                 //_op.addItem();
               },
-              style: MThemeData.textButtonStyleSave),
+              style: MThemeData.raisedButtonStyleSave),
         ),
       ],
     );
@@ -337,16 +390,16 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
       children: [
         Container(
           width: 120,
-          child: TextButton(
+          child: ElevatedButton(
               child: Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              style: MThemeData.textButtonStyleCancel),
+              style: MThemeData.raisedButtonStyleCancel),
         ),
         Container(
           width: 120,
-          child: TextButton(
+          child: ElevatedButton(
               child: Text(
                 'Save',
                 style: Theme.of(context).textTheme.headline3,
@@ -359,7 +412,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   ),
                 );
                 final _op = ref.read(operationsProvider);
-                final _item = KitchenItem(
+                final _kitchenItem = KitchenItem(
                   besoinTitle: '',
                   dateBought: _dateBought,
                   itemName: _itemNameController.text.trim(),
@@ -369,13 +422,13 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   shopName: _shop,
                   dateExpired: _dateExpired,
                   kitchenElementId: widget.item == null
-                      ? widget.kitchenElement!.id
-                      : _kitchenElement!.id,
+                      ? widget.kitchenElement!.id!
+                      : _kitchenElement!.id!,
                 );
-                _item.toPrint();
+                _kitchenItem.toPrint();
                 if (_formKeyName.currentState!.validate() &&
                     _formKeyPrice.currentState!.validate()) {
-                  _op.addKitchenItem(_item).then((value) {
+                  _op.addKitchenItem(_kitchenItem).then((value) {
                     logger.d(value);
                     if (value) {
                       _formKeyName.currentState!.reset();
@@ -390,7 +443,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   );
                 }
               },
-              style: MThemeData.textButtonStyleSave),
+              style: MThemeData.raisedButtonStyleSave),
         ),
       ],
     );
@@ -556,7 +609,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
                 fillColor: AppConstants.whiteOpacity,
                 filled: true,
-                hintText: 'milk',
+                hintText: 'title',
                 //alignLabelWithHint: true,
 
                 prefixIcon: Icon(
@@ -621,7 +674,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 _shop = s!;
               });
 
-              ref.read(pickedShop.state).state = s;
+              // ref.read(pickedShop.state).state = s;
             },
           ),
         ),
@@ -664,3 +717,97 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     );
   }
 }
+
+class KitchenItmExpiredButton extends StatefulWidget {
+  const KitchenItmExpiredButton(
+      {Key? key, required this.kitchenItem, required this.op})
+      : super(key: key);
+  final KitchenItem kitchenItem;
+  final Operations op;
+  @override
+  State<KitchenItmExpiredButton> createState() =>
+      _KitchenItmExpiredButtonState();
+}
+
+class _KitchenItmExpiredButtonState extends State<KitchenItmExpiredButton> {
+  DateTime _expiryDate = DateTime.now();
+
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Expired Date'),
+            content: SelectDate2(
+              initialDate: DateTime.now(),
+              onDateSelected: (date) {
+                setState(() {
+                  _expiryDate = date;
+                });
+              },
+            ),
+            actions: [
+              ElevatedButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              ElevatedButton(
+                child: Text('Ok'),
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        widget.op.updateKitchenItem(widget.kitchenItem.copyWith(
+                            dateExpired: _expiryDate,
+                            kitchenElementId:
+                                widget.kitchenItem.kitchenElementId));
+                        Navigator.of(context).pop();
+                      },
+              ),
+            ],
+          ),
+        );
+      },
+      child: Text('Expired Date'),
+    );
+  }
+}
+// AppBar buildAppBar(BuildContext context,
+//     {String? title, IconData icon = Icons.home}) {
+//   return AppBar(
+//     actions: [
+//       // IconButton(
+//       //   icon: Icon(Icons.add_box_outlined),
+//       //   onPressed: () async {
+//       //     var logger = Logger();
+//       //     for (var item in items!) {
+//       //       logger.d(item.toMap());
+//       //     }
+//       //   },
+//       // ),
+//     ],
+//     leading: Icon(icon, color: Colors.black),
+//     title: Text(
+//       title ?? '',
+//       style: Theme.of(context).textTheme.headline2,
+//     ),
+//     elevation: 0,
+//     shadowColor: Colors.transparent,
+//     excludeHeaderSemantics: true,
+//     toolbarHeight: 40,
+//     backgroundColor: AppConstants.whiteOpacity,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(
+//         top: Radius.circular(AppConstants.radius),
+//         bottom: Radius.circular(AppConstants.radius),
+//       ),
+//     ),
+//   );
+// }

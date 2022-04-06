@@ -23,7 +23,13 @@ class QuantifierSpinner extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          child: DropdownButton<String>(
+          child: DropdownButtonFormField<String>(
+              validator: (value) {
+                if (value == null) {
+                  return 'الرجاء اختيار الكمية';
+                }
+                return null;
+              },
               elevation: 4,
               iconSize: 30,
               icon: Icon(Icons.arrow_drop_down),

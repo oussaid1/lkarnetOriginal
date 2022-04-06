@@ -25,6 +25,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   final TextEditingController _paidAmountController = TextEditingController();
 
   late DateTime _datePaid;
+
+  String? _shop;
   void _update() {
     if (widget.payment != null) {
       setState(() {
@@ -65,7 +67,10 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                   padding: EdgeInsets.only(top: 20, bottom: 8),
                   child: ShopSpinner(
                     onShopSelected: (value) {
-                      ref.read(pickedShop.state).state = value;
+                      setState(() {
+                        _shop = value;
+                      });
+                      // ref.read(pickedShop.state).state = value;
                     },
                   ),
                 ),
@@ -123,14 +128,14 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(
+                          ElevatedButton(
                             child: Text('Cancel'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            style: MThemeData.textButtonStyleCancel,
+                            style: MThemeData.raisedButtonStyleCancel,
                           ),
-                          TextButton(
+                          ElevatedButton(
                             child: Text(
                               'Save',
                               style: Theme.of(context).textTheme.headline3,
@@ -141,7 +146,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                                 paidAmount:
                                     double.parse(_paidAmountController.text),
                                 datePaid: ref.read(pickedDateTime.state).state,
-                                paidShopName: ref.read(pickedShop.state).state,
+                                paidShopName:
+                                    _shop!, // ref.read(pickedShop.state).state,
                               );
                               if (_formKeyPaidAmount.currentState!.validate()) {
                                 _op.addPayment(_payment).then((value) {
@@ -154,21 +160,21 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                               }
                               //
                             },
-                            style: MThemeData.textButtonStyleSave,
+                            style: MThemeData.raisedButtonStyleSave,
                           ),
                         ],
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(
+                          ElevatedButton(
                             child: Text('Cancel'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            style: MThemeData.textButtonStyleCancel,
+                            style: MThemeData.raisedButtonStyleCancel,
                           ),
-                          TextButton(
+                          ElevatedButton(
                             child: Text(
                               'Update',
                               style: Theme.of(context).textTheme.headline3,
@@ -181,7 +187,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                                     double.parse(_paidAmountController.text),
                                 datePaid:
                                     _datePaid, //ref.read(pickedDateTime.state).state,
-                                paidShopName: ref.read(pickedShop.state).state,
+                                paidShopName:
+                                    _shop!, // ref.read(pickedShop.state).state,
                               );
                               if (_formKeyPaidAmount.currentState!.validate()) {
                                 _op.updatePayment(_payment).then((value) {
@@ -195,7 +202,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                               }
                               //
                             },
-                            style: MThemeData.textButtonStyleSave,
+                            style: MThemeData.raisedButtonStyleSave,
                           ),
                         ],
                       )

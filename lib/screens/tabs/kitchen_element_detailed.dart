@@ -8,6 +8,7 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
+import '../../providers/operationsprovider/operations_provider.dart';
 import '../../widgets/availability_widget.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/kitchen_item_listtile.dart';
@@ -92,10 +93,10 @@ class _KitchenItemDetailsScreenState
           floatingActionButton: FloatingActionButton(
             heroTag: 'kitchen_element_details_screen',
             onPressed: () {
-              Dialogs.botomPopUpDialog(
+              Navigator.push(
                 context,
-                AddKitchenItem(
-                  kitchenElement: widget.kitchenElement,
+                MaterialPageRoute(
+                  builder: (context) => AddKitchenItem(),
                 ),
               );
             },
@@ -116,6 +117,7 @@ class _KitchenItemDetailsScreenState
                   IconButton(
                     icon: Icon(Icons.edit_outlined),
                     onPressed: () {
+<<<<<<< HEAD
                       ref.read(availibilityProvider.state).state =
                           widget.kitchenElement.availability!;
                       ref.read(priorityRatingProvider.state).state =
@@ -132,6 +134,14 @@ class _KitchenItemDetailsScreenState
                         AddKitchenElement(
 >>>>>>> a71c130 (...)
                           kitchenElement: widget.kitchenElement,
+=======
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddKitchenElement(
+                            kitchenElement: widget.kitchenElement,
+                          ),
+>>>>>>> 05f7265 (..)
                         ),
                       );
                     },
@@ -139,10 +149,10 @@ class _KitchenItemDetailsScreenState
                 ],
               ),
             ],
-            title: Text(
-              'Details',
-              //style: Theme.of(context).textTheme.headline2,
-            ),
+            title: Text('Details'
+                //style: Theme.of(context).textTheme.headline2,
+                ),
+            titleSpacing: 40,
             flexibleSpace: BluredContainer(
               child: Container(),
             ),
@@ -178,73 +188,95 @@ class _KitchenItemDetailsScreenState
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       BluredContainer(
-                        height: 45,
+                        height: 54,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${widget.kitchenElement.category}',
-                            style: Theme.of(context).textTheme.headline3,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: GestureDetector(
-                              onTap: () {
-                                Dialogs.botomPopUpDialog(
-                                  context,
-                                  UpdateKitchenElement(
-                                    kitchenElement: widget.kitchenElement,
-                                  ),
-                                );
-                              },
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ProgressWidget(
-                                    kitchenElement: widget.kitchenElement,
-                                  ),
-                                  Text(
-                                    'Status: ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                            color:
-                                                Colors.white.withOpacity(0.3)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, right: 12),
+                                padding: const EdgeInsets.only(right: 8.0),
                                 child: Text(
-                                  widget.kitchenElement.title.toString(),
+                                  '${widget.kitchenElement.category}',
+                                  style: Theme.of(context).textTheme.headline3,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
-                              PiorityRatingWidget(
-                                ignoreGestures: true,
-                                onRatingChanged: (rating) {},
-                                initialRating: widget.kitchenElement.priority!,
+                              Hero(
+                                tag: 'foodCategory',
+                                child: Icon(
+                                  Icons.fastfood,
+                                  color: Colors.white.withOpacity(0.5),
+                                  size: 20,
+                                ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Dialogs.botomUpDialog(
+                                    context,
+                                    UpdateKitchenElement(
+                                      kitchenElement: widget.kitchenElement,
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ProgressWidget(
+                                      kitchenElement: widget.kitchenElement,
+                                    ),
+                                    Text(
+                                      'Status: ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                              color: Colors.white
+                                                  .withOpacity(0.3)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 12),
+                                  child: Text(
+                                    widget.kitchenElement.title.toString(),
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                ),
+                                PiorityRatingWidget(
+                                  ignoreGestures: true,
+                                  onRatingChanged: (rating) {},
+                                  initialRating:
+                                      widget.kitchenElement.priority!,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: Row(
@@ -254,7 +286,7 @@ class _KitchenItemDetailsScreenState
                               'Last bought: ',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle1!
+                                  .bodyMedium!
                                   .copyWith(
                                       color: Colors.white.withOpacity(0.3)),
                             ),
@@ -262,9 +294,12 @@ class _KitchenItemDetailsScreenState
                               '${widget.kitchenElement.lastTimeBought}',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle1!
+                                  .bodyMedium!
                                   .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromARGB(104, 36, 35, 35)
+                                        .withOpacity(0.6),
+                                  ),
                             ),
                           ],
                         ),
@@ -286,9 +321,12 @@ class _KitchenItemDetailsScreenState
                               '${widget.kitchenElement.timeExpired}',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle1!
+                                  .bodyMedium!
                                   .copyWith(
-                                      color: Colors.white.withOpacity(0.3)),
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromARGB(104, 36, 35, 35)
+                                        .withOpacity(0.6),
+                                  ),
                             ),
                           ],
                         ),
@@ -445,8 +483,15 @@ class _KitchenItemDetailsScreenState
                     shrinkWrap: true,
                     itemCount: widget.kitchenElement.items.length,
                     itemBuilder: (context, index) {
-                      return KitchenItemTileWidget(
-                        kitchenItem: widget.kitchenElement.items[index],
+                      final KitchenItem _kitchenItem =
+                          widget.kitchenElement.items[index];
+                      return GestureDetector(
+                        onDoubleTap: () => KitchenItmExpiredButton(
+                            kitchenItem: _kitchenItem,
+                            op: ref.read(operationsProvider)),
+                        child: KitchenItemTileWidget(
+                          kitchenItem: _kitchenItem,
+                        ),
                       );
                     },
                   ),

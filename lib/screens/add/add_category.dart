@@ -117,21 +117,21 @@ class AddCategory extends StatelessWidget {
                 children: [
                   Container(
                     width: 120,
-                    child: TextButton(
+                    child: ElevatedButton(
                       child: Text('Cancel'),
                       onPressed: () {},
-                      style: MThemeData.textButtonStyleCancel,
+                      style: MThemeData.raisedButtonStyleCancel,
                     ),
                   ),
                   Container(
                     width: 120,
-                    child: TextButton(
+                    child: ElevatedButton(
                       child: Text(
                         'Save',
                         style: Theme.of(context).textTheme.headline3,
                       ),
                       onPressed: () {},
-                      style: MThemeData.textButtonStyleSave,
+                      style: MThemeData.raisedButtonStyleSave,
                     ),
                   ),
                 ],

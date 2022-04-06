@@ -144,16 +144,16 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                       children: [
                         Container(
                           width: 120,
-                          child: TextButton(
+                          child: ElevatedButton(
                               child: Text('Cancel'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              style: MThemeData.textButtonStyleCancel),
+                              style: MThemeData.raisedButtonStyleCancel),
                         ),
                         Container(
                           width: 120,
-                          child: TextButton(
+                          child: ElevatedButton(
                               child: Text(
                                 'Save',
                                 style: Theme.of(context).textTheme.headline3,
@@ -197,7 +197,7 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
                                 Navigator.of(context).pop();
 >>>>>>> 961f4d7 (struggling with item to kitchenItem)
                               },
-                              style: MThemeData.textButtonStyleSave),
+                              style: MThemeData.raisedButtonStyleSave),
                         ),
                       ],
                     )

@@ -35,10 +35,12 @@ class KitchenItemTileWidget extends ConsumerWidget {
               ref.watch(selectedQuantifierProvider.state).state =
                   kitchenItem.quantifier;
 
-              Dialogs.botomPopUpDialog(
+              Navigator.push(
                 context,
-                AddKitchenItem(
-                  kitchenItem: kitchenItem,
+                MaterialPageRoute(
+                  builder: (context) => AddKitchenItem(
+                    kitchenItem: kitchenItem,
+                  ),
                 ),
               );
             },
@@ -66,10 +68,10 @@ class KitchenItemTileWidget extends ConsumerWidget {
                           children: [
                             Container(
                               width: 120,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 child: Text('Cancel'),
                                 onPressed: () => Navigator.of(context).pop(),
-                                style: MThemeData.textButtonStyleCancel,
+                                style: MThemeData.raisedButtonStyleCancel,
                               ),
                             ),
                             SizedBox(
@@ -77,7 +79,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
                             ),
                             Container(
                               width: 120,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 child: Text(
                                   'Ok',
                                   style: Theme.of(context).textTheme.headline3,
@@ -87,7 +89,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
                                     .deleteKitchenItem(kitchenItem)
                                     .then(
                                         (value) => Navigator.of(context).pop()),
-                                style: MThemeData.textButtonStyleSave,
+                                style: MThemeData.raisedButtonStyleSave,
                               ),
                             ),
                           ],
@@ -181,4 +183,41 @@ class KitchenItemTileWidget extends ConsumerWidget {
       ),
     );
   }
+
+  // // build bottomsheet for add item
+  // void mBottomSheet(
+  //   BuildContext context, {
+  //   AnimationController? controller
+  //   // required Widget child,
+  // }) {
+  //   showModalBottomSheet(
+  //       transitionAnimationController: controller,
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.vertical(
+  //           top: Radius.circular(25.0),
+  //         ),
+  //       ),
+  //       // backgroundColor: Colors.black,
+  //       context: context,
+  //       isScrollControlled: true,
+  //       isDismissible: true,
+  //       builder: (_) {
+  //         return Container(
+  //           decoration: BoxDecoration(
+  //             color: Color.fromARGB(255, 189, 110, 110),
+  //             borderRadius: BorderRadius.vertical(
+  //               top: Radius.circular(25.0),
+  //             ),
+  //           ),
+  //           height: 160,
+  //           child: Padding(
+  //             padding: MediaQuery.of(context).viewInsets,
+  //             child: (
+  //               item: _localItem!,
+  //               op: ref.read(operationsProvider),
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 }
