@@ -35,7 +35,14 @@ class ItemsListWidget extends ConsumerWidget {
                           item.quantifier;
                       ref.read(pickedShop.state).state = item.shopName;
 
-                      Dialogs.botomPopUpDialog(context, AddItem(item: item));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddItem(
+                            item: item,
+                          ),
+                        ),
+                      );
                     })
               ],
             ),
@@ -54,10 +61,10 @@ class ItemsListWidget extends ConsumerWidget {
                               children: [
                                 Container(
                                   width: 120,
-                                  child: TextButton(
+                                  child: ElevatedButton(
                                     child: Text('Cancel'),
                                     onPressed: () => Navigator.pop(context),
-                                    style: MThemeData.textButtonStyleCancel,
+                                    style: MThemeData.raisedButtonStyleCancel,
                                   ),
                                 ),
                                 SizedBox(
@@ -65,7 +72,7 @@ class ItemsListWidget extends ConsumerWidget {
                                 ),
                                 Container(
                                   width: 120,
-                                  child: TextButton(
+                                  child: ElevatedButton(
                                     child: Text(
                                       'Ok',
                                       style:
@@ -77,7 +84,7 @@ class ItemsListWidget extends ConsumerWidget {
                                     //     .deleteItem(item)
                                     //     .then((value) =>
                                     //         Navigator.of(context).pop()),
-                                    style: MThemeData.textButtonStyleSave,
+                                    style: MThemeData.raisedButtonStyleSave,
                                   ),
                                 ),
                               ],

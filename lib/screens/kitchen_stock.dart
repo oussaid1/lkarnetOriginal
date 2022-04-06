@@ -6,7 +6,6 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../widgets/availability_widget.dart';
 import '../widgets/charts.dart';
-import '../widgets/dialogs.dart';
 import '../widgets/notifications_widget.dart';
 import 'lists/unavailiable_elements.dart';
 import 'tabs/kitchen_element_detailed.dart';
@@ -22,7 +21,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
   @override
   Widget build(BuildContext context) {
     List<KitchenElement> kitchenElements = [];
-    List<KitchenItem> kitchenItems = KitchenItem.fakeKitchenitems();
+    List<KitchenItem> kitchenItems = [];
     KitchenElementData? kitchenElementData;
     return BluredContainer(
       start: 0.1,
@@ -48,29 +47,18 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     floatingActionButton: FloatingActionButton(
                       heroTag: 'add_kitchen_element',
                       onPressed: () {
-                        Dialogs.botomPopUpDialog(
+                        Navigator.push(
                           context,
-                          AddKitchenElement(),
+                          MaterialPageRoute(
+                            builder: (context) => AddKitchenElement(),
+                          ),
                         );
                       },
                       child: Icon(Icons.add),
                     ),
                     appBar: AppBar(
                       actions: [
-                        NotificationWidget(
-                          count: kitchenElementData!
-                              .unavaliableKitchenElements.length,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UnAvailiableElements(
-                                    elementData: kitchenElementData!
-                                        .unavaliableKitchenElements),
-                              ),
-                            );
-                          },
-                        ),
+                        _buildNotifications(kitchenElementData, context),
                       ],
                       leading:
                           Icon(Icons.kitchen_outlined, color: Colors.black),
@@ -95,63 +83,10 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-                          Container(
-                            margin: EdgeInsets.all(8),
-                            height: 200,
-                            width: 400,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-                            child: BluredContainer(
-                                margin: EdgeInsets.all(8),
-                                width: 400,
-                                height: 220,
-                                child: ColumnKitchenElWidget(kitchenElements)),
-                          ),
+                          _buildBarChartWidget(kitchenElements),
                           const SizedBox(height: 20),
                           kitchenElementData != null
-                              ? Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 4),
-                                  // height: 440,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 1.5,
-                                            mainAxisSpacing: 10,
-                                            crossAxisSpacing: 10),
-                                    itemCount: kitchenElementData!
-                                        .kitchenElements.length,
-                                    itemBuilder: (context, index) {
-                                      final KitchenElement kitchenElement =
-                                          kitchenElementData!
-                                              .kitchenElements[index];
-                                      return KitchenItemSquareTile(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  KitchenElementDetailsScreen(
-                                                kitchenElement: kitchenElement,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        kitchenElement: kitchenElement,
-                                      );
-                                    },
-                                  ),
-                                )
+                              ? _buildGridView(context, kitchenElementData)
                               : Container(),
                           const SizedBox(height: 50),
                         ],
@@ -160,6 +95,82 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                   );
                 });
           }),
+    );
+  }
+
+  Container _buildBarChartWidget(List<KitchenElement> kitchenElements) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      height: 200,
+      width: 400,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.3),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
+      ),
+      child: BluredContainer(
+          margin: EdgeInsets.all(8),
+          width: 400,
+          height: 220,
+          child: ColumnChartKitchenElWidget(kitchenElements)),
+    );
+  }
+
+  Container _buildGridView(
+      BuildContext context, KitchenElementData? kitchenElementData) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      // height: 440,
+      width: MediaQuery.of(context).size.width,
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12),
+        itemCount: kitchenElementData!.kitchenElements.length,
+        itemBuilder: (context, index) {
+          final KitchenElement kitchenElement =
+              kitchenElementData.kitchenElements[index];
+          return KitchenItemSquareTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => KitchenElementDetailsScreen(
+                    kitchenElement: kitchenElement,
+                  ),
+                ),
+              );
+            },
+            kitchenElement: kitchenElement,
+          );
+        },
+      ),
+    );
+  }
+
+  NotificationWidget _buildNotifications(
+      KitchenElementData? kitchenElementData, BuildContext context) {
+    return NotificationWidget(
+      count: kitchenElementData != null
+          ? kitchenElementData.unavaliableKitchenElements.length
+          : 0,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UnAvailiableElements(
+                elementData: kitchenElementData!.unavaliableKitchenElements),
+          ),
+        );
+      },
     );
   }
 }
@@ -178,74 +189,132 @@ class KitchenItemSquareTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: BluredContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+      child: BluredContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          //verticalDirection: VerticalDirection.up,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          kitchenElement.title.toString(),
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        PiorityRatingWidget(
-                          ignoreGestures: true,
-                          onRatingChanged: (rating) {},
-                          initialRating: kitchenElement.priority!,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 0, right: 8),
+                              child: Text(
+                                kitchenElement.title.toString(),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ),
+                            PiorityRatingWidget(
+                              ignoreGestures: true,
+                              onRatingChanged: (rating) {},
+                              initialRating: kitchenElement.priority!,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Column(
+                  ),
+                  // buildKitchenItemDetail(context,
+                  //     title: 'Status: ',
+                  //     digitWidget: ProgressWidget(
+                  //       kitchenElement: kitchenElement,
+                  //     )),
+
+                  const SizedBox(height: 10),
+                  _buildDetails(context),
+                ],
+              ),
+            ),
+            RotatedBox(
+              quarterTurns: 3,
+              child: SizedBox(
+                height: 45,
+                child: Card(
+                  margin: EdgeInsets.all(0),
+                  color: AppConstants.whiteOpacity,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(4.0),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.fastfood,
-                          color: Colors.white.withOpacity(0.5),
-                          size: 20,
+                        ProgressWidget(
+                          kitchenElement: kitchenElement,
                         ),
-                        Text(
-                          '${kitchenElement.category}',
-                          style: Theme.of(context).textTheme.subtitle2,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '${kitchenElement.category!.trim()}',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                            ),
+                            Hero(
+                              tag: 'foodCategory',
+                              child: Icon(
+                                Icons.fastfood,
+                                color: Colors.white.withOpacity(0.5),
+                                size: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-              buildKitchenItemDetail(context,
-                  title: 'Status: ',
-                  digitWidget: ProgressWidget(
-                    kitchenElement: kitchenElement,
-                  )),
-              buildKitchenItemDetail(context,
-                  title: 'Last Bought: ',
-                  digitWidget: Text(
-                    DateTime.now().formatted(),
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        fontFamily: 'Montserrat',
-                        color:
-                            Color.fromARGB(104, 36, 35, 35).withOpacity(0.6)),
-                  )),
-              buildKitchenItemDetail(context,
-                  title: 'Times Bought: ',
-                  digitWidget: Text(
-                    '12',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color:
-                            Color.fromARGB(104, 36, 35, 35).withOpacity(0.6)),
-                  )),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Row _buildDetails(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildKitchenItemDetail(context,
+                title: 'Last Bought: ',
+                digitWidget: Text(
+                  kitchenElement.lastTimeBought,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontFamily: 'Montserrat',
+                      color: Color.fromARGB(104, 36, 35, 35).withOpacity(0.6)),
+                )),
+            buildKitchenItemDetail(context,
+                title: 'Times Bought: ',
+                digitWidget: Text(
+                  kitchenElement.timesBought.toString(),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      color: Color.fromARGB(104, 36, 35, 35).withOpacity(0.6)),
+                )),
+          ],
+        ),
+      ],
     );
   }
 
@@ -253,14 +322,15 @@ class KitchenItemSquareTile extends StatelessWidget {
       {String? title, Widget? digitWidget}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title ?? '',
             style: Theme.of(context)
                 .textTheme
-                .subtitle1!
+                .bodyText2!
                 .copyWith(color: Colors.white.withOpacity(0.3)),
           ),
           digitWidget ?? SizedBox.shrink(),

@@ -30,10 +30,16 @@ class StatsAll extends ConsumerWidget {
             BluredContainer(
               margin: EdgeInsets.all(8),
               width: 410,
-              height: 220,
-              child: Row(
+              height: 300,
+              child: Column(
                 children: [
-                  PeiWidget(chartData),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Most Frequent Products',
+                        style: Theme.of(context).textTheme.headline4),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(width: 410, height: 240, child: PeiWidget(chartData))
                 ],
               ),
             ),
@@ -46,14 +52,16 @@ class StatsAll extends ConsumerWidget {
                 child: LineChartWidgetDate(_listOfTagged),
               ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 12),
             BluredContainer(
-                margin: EdgeInsets.all(8),
-                width: 400,
-                height: 220,
-                child: ColumnChartWidget(chartData2)),
+              margin: EdgeInsets.all(8),
+              width: 400,
+              height: 220,
+              child: ColumnChartWidget(chartData2),
+            ),
+            const SizedBox(
+              width: 100,
+            ),
           ],
         ),
       ),

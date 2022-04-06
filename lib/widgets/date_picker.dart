@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lkarnet/extensions/extensions.dart';
 
+import 'glasswidget.dart';
+
 class SelectDate extends StatefulWidget {
   const SelectDate({Key? key, required this.onDateSelected, this.initialDate})
       : super(key: key);
@@ -34,14 +36,11 @@ class _SelectDateState extends State<SelectDate> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          // border: Border.all(color: Colors.grey, width: 1),
-          //
-          //  color: AppConstants.whiteOpacity,
-        ),
-        height: 45,
+    return GestureDetector(
+      onTap: () => _selectDate(context),
+      child: BluredContainer(
+        height: 50,
+        width: 300,
         child: Row(
           children: [
             Container(
@@ -64,7 +63,9 @@ class _SelectDateState extends State<SelectDate> {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -100,14 +101,11 @@ class _SelectDate2State extends State<SelectDate2> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          // border: Border.all(color: Colors.grey, width: 1),
-          //
-          //  color: AppConstants.whiteOpacity,
-        ),
-        height: 45,
+    return GestureDetector(
+      onTap: () => _selectDate(context),
+      child: BluredContainer(
+        height: 50,
+        width: 300,
         child: Row(
           children: [
             Container(
@@ -130,6 +128,8 @@ class _SelectDate2State extends State<SelectDate2> {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

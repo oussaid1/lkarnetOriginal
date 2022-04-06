@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:lkarnet/components.dart';
 
+import '../item/item.dart';
+
 //import '../item/item.dart';
 
 enum KitchenItemStatus { full, half, empty }
@@ -40,12 +42,14 @@ class KitchenElement {
 
 // get the date of the last item
   String get lastTimeBought {
-    return items.isEmpty ? 'Not bought yet' : items.last.dateBought.ddmmyyyy();
+    return items.isEmpty ? 'Not bought yet' : items.first.dateBought.ddmmyyyy();
   }
 
 // get time expired of the last item
   String get timeExpired {
-    return items.isEmpty ? 'Still in stock' : items.last.dateExpired.ddmmyyyy();
+    return items.isEmpty || items.first.dateExpired == null
+        ? 'Still in stock'
+        : items.first.dateExpired!.ddmmyyyy();
   }
 
 // get last item was bought
@@ -209,7 +213,7 @@ class KitchenElement {
 
 class KitchenItem {
   String? id;
-  String? kitchenElementId;
+  late String kitchenElementId;
   String? besoinTitle;
   String? shopName;
   String? itemName;
@@ -231,8 +235,7 @@ class KitchenItem {
     required this.dateExpired,
   });
   DateTime dateBought = DateTime.now();
-  DateTime dateExpired =
-      DateTime.now(); // double get itemPrix => itemPrice * quantity;
+  DateTime? dateExpired; // double get itemPrix => itemPrice * quantity;
 
   KitchenItem copyWith({
     String? id,
@@ -276,6 +279,18 @@ class KitchenItem {
     };
   }
 
+  KitchenItem.fromItem(Item item, KitchenElement kitchenElement) {
+    this.besoinTitle = item.itemName;
+    this.shopName = item.shopName;
+    this.itemName = item.itemName;
+    this.quantifier = item.quantifier;
+    this.quantity = item.quantity;
+    this.itemPrice = item.itemPrice;
+    this.count = item.count;
+    this.dateBought = item.dateBought;
+    this.dateExpired = null;
+    this.kitchenElementId = kitchenElement.id!;
+  }
   KitchenItem.fromDocumentSnapShot(QueryDocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
@@ -284,10 +299,10 @@ class KitchenItem {
     quantity = documentSnapshot['quantity'].toDouble();
     itemPrice = (documentSnapshot['itemPrice']).toDouble() ?? 0;
     shopName = documentSnapshot['shopName'] ?? '';
-    Timestamp f = documentSnapshot['dateBought'];
-    dateBought = f.toDate();
-    f = documentSnapshot['dateExpired'];
-    dateExpired = f.toDate();
+    Timestamp f1 = documentSnapshot['dateBought'];
+    dateBought = f1.toDate();
+    // f = documentSnapshot['dateExpired'];
+    dateExpired = documentSnapshot['dateExpired'];
     kitchenElementId = documentSnapshot['kitchenElementId'] ?? '';
   }
   String get toYY {

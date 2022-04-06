@@ -1,14 +1,23 @@
 import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
-class ShopSpinner extends ConsumerWidget {
-  const ShopSpinner({Key? key, required this.onShopSelected}) : super(key: key);
+import '../providers/varproviders/var_providers.dart';
+
+class ShopSpinner extends ConsumerStatefulWidget {
+  const ShopSpinner({
+    Key? key,
+    required this.onShopSelected,
+  }) : super(key: key);
   final void Function(String?) onShopSelected;
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ShopSpinner> createState() => _ShopSpinnerState();
+}
+
+class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
+  @override
+  Widget build(BuildContext context) {
     var _list = ref.watch(shopsProvider.state).state;
     return Container(
       decoration: BoxDecoration(
@@ -46,7 +55,10 @@ class ShopSpinner extends ConsumerWidget {
             ),
             value: ref.watch(pickedShop.state).state,
             onChanged: (value) {
-              onShopSelected(value);
+              setState(() {
+                widget.onShopSelected(value);
+              });
+
               ref.read(pickedShop.state).state = value;
             },
             items: [

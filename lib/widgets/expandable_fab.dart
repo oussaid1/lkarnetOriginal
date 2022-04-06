@@ -138,7 +138,10 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: FloatingActionButton(
             elevation: 12,
             onPressed: _toggle,
-            child: const Icon(Icons.add_shopping_cart_rounded),
+            child: const Icon(
+              Icons.add_shopping_cart_rounded,
+              // color: Colors.amber,
+            ),
           ),
         ),
       ),

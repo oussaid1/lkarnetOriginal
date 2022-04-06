@@ -210,17 +210,17 @@ class _AddShopState extends ConsumerState<AddShop> {
                             children: [
                               Container(
                                 width: 120,
-                                child: TextButton(
+                                child: ElevatedButton(
                                   child: Text('Cancel'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  style: MThemeData.textButtonStyleCancel,
+                                  style: MThemeData.raisedButtonStyleCancel,
                                 ),
                               ),
                               Container(
                                 width: 120,
-                                child: TextButton(
+                                child: ElevatedButton(
                                     child: Text(
                                       'Save',
                                       style:
@@ -245,7 +245,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                                         });
                                       }
                                     },
-                                    style: MThemeData.textButtonStyleSave),
+                                    style: MThemeData.raisedButtonStyleSave),
                               ),
                             ],
                           )
@@ -254,17 +254,17 @@ class _AddShopState extends ConsumerState<AddShop> {
                             children: [
                               Container(
                                 width: 120,
-                                child: TextButton(
+                                child: ElevatedButton(
                                   child: Text('Cancel'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  style: MThemeData.textButtonStyleCancel,
+                                  style: MThemeData.raisedButtonStyleCancel,
                                 ),
                               ),
                               Container(
                                 width: 120,
-                                child: TextButton(
+                                child: ElevatedButton(
                                   child: Text(
                                     'Update',
                                     style:

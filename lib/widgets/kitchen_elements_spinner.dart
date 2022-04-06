@@ -59,6 +59,7 @@ class _KitchenElementsSpinnerState
                       return DropdownMenuItem<KitchenElement>(
                         value: element,
                         child: Container(
+                          alignment: Alignment.center,
                           width: 100,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0, right: 8),

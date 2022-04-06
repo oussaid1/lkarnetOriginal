@@ -57,9 +57,12 @@ class PeiWidget extends ConsumerWidget {
         // alignment: ChartAlignment.center,
         // width: '120',
       ),
-      title: ChartTitle(
-          text: '10 Most Frequent Products', alignment: ChartAlignment.center),
-      //  centerY: '220',
+
+      // title: ChartTitle(
+      //     textStyle: Theme.of(context).textTheme.subtitle1,
+      //     text: 'Most Frequent Products',
+      //     alignment: ChartAlignment.far),
+      // //  centerY: '220',
 
       series: <CircularSeries>[
         PieSeries<ChartData, String>(
@@ -131,51 +134,52 @@ class LineChartWidgetDate extends ConsumerWidget {
   }
 }
 
-class LineChartWidget extends ConsumerWidget {
-  final List<ChartData> chartData;
+// class LineChartWidget extends ConsumerWidget {
+//   final List<ChartData> chartData;
 
-  LineChartWidget(this.chartData);
+//   LineChartWidget(this.chartData);
 
-  @override
-  Widget build(BuildContext context, wacth) {
-    return SfCartesianChart(
-      title: ChartTitle(text: 'Shops Consumption'),
-      //primaryXAxis: DateTimeAxis(),
-      primaryXAxis: CategoryAxis(),
-      series: <ChartSeries>[
-        // Renders spline chart
-        SplineSeries<ChartData, String>(
-          dataSource: chartData,
-          xValueMapper: (ChartData sales, _) => sales.tag,
-          yValueMapper: (ChartData sales, _) => sales.value,
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context, wacth) {
+//     return SfCartesianChart(
+//       title: ChartTitle(text: 'Shops Consumption'),
+//       //primaryXAxis: DateTimeAxis(),
+//       primaryXAxis: CategoryAxis(),
+//       series: <ChartSeries>[
+//         // Renders spline chart
+//         SplineSeries<ChartData, String>(
+//           dataSource: chartData,
+//           xValueMapper: (ChartData sales, _) => sales.tag,
+//           yValueMapper: (ChartData sales, _) => sales.value,
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-class BarChartWidget extends ConsumerWidget {
-  final List<ChartData> chartData;
+// class BarChartWidget extends ConsumerWidget {
+//   final List<ChartData> chartData;
 
-  BarChartWidget(this.chartData);
+//   BarChartWidget(this.chartData);
 
-  @override
-  Widget build(BuildContext context, wacth) {
-    return SfCartesianChart(
-      title: ChartTitle(text: 'Shops Consumption'),
-      //primaryXAxis: DateTimeAxis(),
-      primaryXAxis: CategoryAxis(),
-      series: <ChartSeries>[
-        // Renders spline chart
-        BarSeries<ChartData, String>(
-          dataSource: chartData,
-          xValueMapper: (ChartData sales, _) => sales.tag,
-          yValueMapper: (ChartData sales, _) => sales.value,
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context, wacth) {
+//     return SfCartesianChart(
+//       title: ChartTitle(text: 'Shops Consumption'),
+//       //primaryXAxis: DateTimeAxis(),
+//       primaryXAxis: CategoryAxis(),
+//       series: <ChartSeries>[
+//         // Renders spline chart
+//         BarSeries<ChartData, String>(
+//           dataSource: chartData,
+//           xValueMapper: (ChartData sales, _) => sales.tag,
+//           yValueMapper: (ChartData sales, _) => sales.value,
+
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class ColumnChartWidget extends ConsumerWidget {
   final List<ChartData> chartData;
@@ -185,25 +189,29 @@ class ColumnChartWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, wacth) {
     return SfCartesianChart(
-      title: ChartTitle(text: 'Shops Consumption'),
+      title: ChartTitle(text: 'Shops  Consumption'),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[
         // Renders spline chart
         ColumnSeries<ChartData, String>(
+          width: 0.4,
           dataSource: chartData,
+          //color: AppConstants.whiteOpacity,
           xValueMapper: (ChartData sales, _) => sales.tag,
           yValueMapper: (ChartData sales, _) => sales.value,
+          pointColorMapper: (ChartData sales, _) => sales.color,
+          dataLabelMapper: (ChartData sales, _) => sales.count.toString(),
         ),
       ],
     );
   }
 }
 
-class ColumnKitchenElWidget extends ConsumerWidget {
+class ColumnChartKitchenElWidget extends ConsumerWidget {
   final List<KitchenElement> kitchenData;
 
-  ColumnKitchenElWidget(this.kitchenData);
+  ColumnChartKitchenElWidget(this.kitchenData);
 
   @override
   Widget build(BuildContext context, wacth) {

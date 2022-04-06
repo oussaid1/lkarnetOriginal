@@ -188,12 +188,12 @@ class SettingsPage extends ConsumerWidget {
                   children: [
                     Container(
                       width: 120,
-                      child: TextButton(
+                      child: ElevatedButton(
                         child: Text('Cancel'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        style: MThemeData.textButtonStyleCancel,
+                        style: MThemeData.raisedButtonStyleCancel,
                       ),
                     ),
                     SizedBox(
@@ -201,7 +201,7 @@ class SettingsPage extends ConsumerWidget {
                     ),
                     Container(
                       width: 120,
-                      child: TextButton(
+                      child: ElevatedButton(
                         child: Text(
                           'Out',
                           style: Theme.of(context).textTheme.headline3,
@@ -213,7 +213,7 @@ class SettingsPage extends ConsumerWidget {
                                       builder: (context) => Root()),
                                   (Route<dynamic> route) => false));
                         },
-                        style: MThemeData.textButtonStyleSave,
+                        style: MThemeData.raisedButtonStyleSave,
                       ),
                     ),
                   ],
