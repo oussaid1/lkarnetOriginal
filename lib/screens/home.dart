@@ -12,6 +12,7 @@ import '../providers/streamproviders/payments_stream_provider.dart';
 import '../providers/streamproviders/shops_stream_provider.dart';
 import '../widgets/item_listtile.dart';
 import '../widgets/price_curency_widget.dart';
+import 'add/add_kitchen_item.dart';
 import 'add/add_shop.dart';
 import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';
@@ -316,6 +317,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                     recentOperations.recentOperationsList[index];
                 return recentOperation.isItem
                     ? ItemTileWidget(
+                        onTap: () {
+                          Dialogs.dialogSimple(context,
+                              title: 'do you want to save to kitchen',
+                              widgets: [
+                                Container(
+                                  child: AddKitchenItem(
+                                    item: recentOperation.item!,
+                                  ),
+                                ),
+                              ]);
+                        },
                         item: recentOperation.item!,
                       )
                     : PaymentTile(

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
+import '../../widgets/kitchen_elements_spinner.dart';
 
 class AddKitchenItem extends ConsumerStatefulWidget {
   final Item? item;
@@ -35,10 +36,6 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   DateTime _dateBought = DateTime.now();
   DateTime _dateExpired = DateTime.now();
-  void clear() {
-    _itemNameController.clear();
-    _itemPriceController.clear();
-  }
 
   void _update() {
     // check if we have a kitchen item then update the fields
@@ -67,6 +64,18 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     }
   }
 
+  void clearFields() {
+    setState(() {
+      _itemNameController.clear();
+      _itemPriceController.clear();
+      _quantity = 1;
+      _shop = "";
+      _quantifier = "";
+      _dateBought = DateTime.now();
+      _dateExpired = DateTime.now();
+    });
+  }
+
   @override
   void initState() {
     _update();
@@ -75,18 +84,13 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   @override
   void dispose() {
-    _quantity = 1;
+    clearFields();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
-    if (widget.kitchenItem != null) {
-      ref.read(selectedQuantifierProvider.state).state =
-          widget.kitchenItem!.quantifier;
-      ref.read(pickedShop.state).state = widget.kitchenItem!.shopName;
-    }
 
     final logger = Logger();
     return Material(
@@ -98,248 +102,20 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Add Kitchen Item to :',
-                            style: Theme.of(context).textTheme.bodyText1),
-                        Text('${widget.kitchenElement!.title}',
-                            style: Theme.of(context).textTheme.headline4),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildTitle(context),
                 widget.item != null
-                    ? Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(4),
-                            child: KitchenElementSpinner(
-                              onSelected: (KitchenElement? e) {
-                                _kitchenElement = e;
-                              },
-                            ),
-                          ),
-                        ],
-                      )
+                    ? _buildKitchenElementSpinner()
                     : SizedBox.shrink(),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(4),
-                      child: ShopSpinner(
-                        onShopSelected: (String? s) {
-                          _shop = s!;
-                          ref.read(pickedShop.state).state = s;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Form(
-                    key: _formKeyName,
-                    child: SizedBox(
-                      height: 50,
-                      child: Autocomplete<Item>(
-                        initialValue: TextEditingValue(
-                          text: widget.kitchenItem != null
-                              ? widget.kitchenItem!.itemName!
-                              : '',
-                        ),
-                        optionsBuilder:
-                            (TextEditingValue textEditingValue) async {
-                          if (textEditingValue.text.isEmpty) {
-                            return [];
-                          }
-                          return _kOptions
-                              .where((item) => item.itemName
-                                  .toLowerCase()
-                                  .startsWith(
-                                      textEditingValue.text.toLowerCase()))
-                              .toList(growable: true);
-                        },
-                        displayStringForOption: (Item item) => item.itemName,
-                        fieldViewBuilder: (BuildContext context,
-                            TextEditingController fieldTextEditingController,
-                            FocusNode fieldFocusNode,
-                            VoidCallback onFieldSubmitted) {
-                          return TextField(
-                            onChanged: (value) {
-                              _itemNameController.text = value;
-                            },
-                            controller: fieldTextEditingController,
-                            focusNode: fieldFocusNode,
-                            style: Theme.of(context).textTheme.headline6,
-                            decoration: InputDecoration(
-                              suffix: IconButton(
-                                icon: Icon(
-                                  Icons.clear_outlined,
-                                  size: 18,
-                                ),
-                                onPressed: () {
-                                  fieldTextEditingController.clear();
-                                },
-                              ),
-                              hintText: 'name',
-                              hintStyle: GoogleFonts.robotoSlab(),
-                              contentPadding: EdgeInsets.only(top: 4),
-                              prefixIcon: Icon(
-                                Icons.insert_emoticon_outlined,
-                                color: Colors.grey,
-                              ),
-                              fillColor: AppConstants.whiteOpacity,
-                              filled: true,
-                              labelText: 'Name',
-                            ),
-                          );
-                        },
-                        onSelected: (Item selection) {
-                          _itemNameController.text = selection.itemName;
-                          _itemPriceController.text =
-                              selection.itemPrice.toString();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Form(
-                    key: _formKeyPrice,
-                    child: SizedBox(
-                      height: 50,
-                      child: TextFormField(
-                        // autovalidateMode: AutovalidateMode.onUserInteraction,
-                        inputFormatters: [
-                          //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'(^\-?\d*\.?\d*)')),
-                        ],
-                        controller: _itemPriceController,
-                        validator: (text) {
-                          if (text!.isEmpty) {
-                            return '';
-                          } else if (text.contains(RegExp(r'[A-Z]'))) {
-                            return '';
-                          } else {
-                            return null;
-                          }
-                        },
-                        textAlign: TextAlign.center,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(
-                          hintText: ' 00.00',
-                          hintStyle: GoogleFonts.robotoSlab(),
-                          contentPadding: EdgeInsets.only(top: 4),
-                          suffix: IconButton(
-                            icon: Icon(
-                              Icons.clear_outlined,
-                              size: 18,
-                            ),
-                            onPressed: () {
-                              _itemPriceController.clear();
-                            },
-                          ),
-                          prefixIcon: Icon(
-                            Icons.monetization_on_outlined,
-                          ),
-                          fillColor: AppConstants.whiteOpacity,
-                          filled: true,
-                          labelText: 'Price',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: AppConstants.whiteOpacity,
-                    ),
-                    child: Row(
-                      children: [
-                        SelectDate(
-                          onDateSelected: (DateTime date) {
-                            _dateBought = date;
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: AppConstants.whiteOpacity,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Consumer(builder: (context, ref, child) {
-                          return Container(
-                            height: 45,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                    icon: Icon(
-                                      CupertinoIcons.minus_circle,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_quantity > 1) _quantity -= 0.5;
-                                        _quantity = _quantity;
-                                      });
-                                    }),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(_quantity.toString()),
-                                  ),
-                                ),
-                                IconButton(
-                                    icon: Icon(
-                                      CupertinoIcons.plus_circle,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _quantity += 0.5;
-                                        _quantity = _quantity;
-                                      });
-                                    }),
-                              ],
-                            ),
-                          );
-                        }),
-                        QuantifierSpinner(
-                          onValueChanged: (value) {
-                            setState(() {
-                              _quantifier = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildShopSpinner(),
+                _buildItemNameAutoComplete(context, _kOptions),
+                _buildItemPrice(),
+                _buildSelectDateBought(),
+                _buildQuantityFier(),
                 SizedBox(
                   height: 40,
                 ),
                 widget.kitchenItem == null
+<<<<<<< HEAD
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -487,9 +263,402 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                           ),
                         ],
                       ),
+=======
+                    ? _buildSave(context, logger)
+                    : _buildUpdate(context, logger),
+>>>>>>> 961f4d7 (struggling with item to kitchenItem)
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Row _buildUpdate(BuildContext context, Logger logger) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: MThemeData.textButtonStyleCancel),
+        ),
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text(
+                'Update',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Updating...'),
+                ));
+                final _op = ref.read(operationsProvider);
+                final _item = Item(
+                  id: widget.kitchenItem!.id,
+                  besoinTitle: '',
+                  dateBought: _dateBought,
+                  itemName: _itemNameController.text.trim(),
+                  itemPrice: double.tryParse(_itemPriceController.text.trim())!,
+                  quantifier: _quantifier,
+                  quantity: _quantity,
+                  shopName: _shop,
+                );
+                logger.d(_item);
+
+                if (_formKeyName.currentState!.validate() &&
+                    _formKeyPrice.currentState!.validate()) {
+                  _op.updateItem(_item);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: AppConstants.greenOpacity,
+                    content: Text('Item Updated'),
+                    duration: Duration(seconds: 1),
+                  ));
+                  Navigator.pop(context);
+                }
+                // pop
+                //_op.addItem();
+              },
+              style: MThemeData.textButtonStyleSave),
+        ),
+      ],
+    );
+  }
+
+  Row _buildSave(BuildContext context, Logger logger) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: MThemeData.textButtonStyleCancel),
+        ),
+        Container(
+          width: 120,
+          child: TextButton(
+              child: Text(
+                'Save',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Saving...'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+                final _op = ref.read(operationsProvider);
+                final _item = KitchenItem(
+                  besoinTitle: '',
+                  dateBought: _dateBought,
+                  itemName: _itemNameController.text.trim(),
+                  itemPrice: double.parse(_itemPriceController.text.trim()),
+                  quantifier: _quantifier,
+                  quantity: _quantity,
+                  shopName: _shop,
+                  dateExpired: _dateExpired,
+                  kitchenElementId: widget.item == null
+                      ? widget.kitchenElement!.id
+                      : _kitchenElement!.id,
+                );
+                _item.toPrint();
+                if (_formKeyName.currentState!.validate() &&
+                    _formKeyPrice.currentState!.validate()) {
+                  _op.addKitchenItem(_item).then((value) {
+                    logger.d(value);
+                    if (value) {
+                      _formKeyName.currentState!.reset();
+                      _formKeyPrice.currentState!.reset();
+                    }
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please fill all fields'),
+                    ),
+                  );
+                }
+              },
+              style: MThemeData.textButtonStyleSave),
+        ),
+      ],
+    );
+  }
+
+  Padding _buildQuantityFier() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          color: AppConstants.whiteOpacity,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Consumer(builder: (context, ref, child) {
+              return Container(
+                height: 45,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                          CupertinoIcons.minus_circle,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (_quantity > 1) _quantity -= 0.5;
+                            _quantity = _quantity;
+                          });
+                        }),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(_quantity.toString()),
+                      ),
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          CupertinoIcons.plus_circle,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _quantity += 0.5;
+                            _quantity = _quantity;
+                          });
+                        }),
+                  ],
+                ),
+              );
+            }),
+            QuantifierSpinner(
+              onValueChanged: (value) {
+                setState(() {
+                  _quantifier = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _buildSelectDateBought() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          color: AppConstants.whiteOpacity,
+        ),
+        child: Row(
+          children: [
+            SelectDate(
+              onDateSelected: (DateTime date) {
+                setState(() {
+                  _dateBought = date;
+                });
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _buildItemPrice() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Form(
+        key: _formKeyPrice,
+        child: SizedBox(
+          height: 50,
+          child: TextFormField(
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
+            inputFormatters: [
+              //  FilteringTextInputFormatter.allow(RegExp("0-9]"))
+              FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)')),
+            ],
+            controller: _itemPriceController,
+            validator: (text) {
+              if (text!.isEmpty) {
+                return '';
+              } else if (text.contains(RegExp(r'[A-Z]'))) {
+                return '';
+              } else {
+                return null;
+              }
+            },
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(
+              hintText: ' 00.00',
+              hintStyle: GoogleFonts.robotoSlab(),
+              contentPadding: EdgeInsets.only(top: 4),
+              suffix: IconButton(
+                icon: Icon(
+                  Icons.clear_outlined,
+                  size: 18,
+                ),
+                onPressed: () {
+                  _itemPriceController.clear();
+                },
+              ),
+              prefixIcon: Icon(
+                Icons.monetization_on_outlined,
+              ),
+              fillColor: AppConstants.whiteOpacity,
+              filled: true,
+              labelText: 'Price',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildItemNameAutoComplete(
+      BuildContext context, Iterable<Item> _kOptions) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Form(
+        key: _formKeyName,
+        child: SizedBox(
+          height: 50,
+          child: TypeAheadField<Item>(
+            noItemsFoundBuilder: (context) => Text('No Items Found'),
+            autoFlipDirection: true,
+            minCharsForSuggestions: 2,
+            direction: AxisDirection.up,
+            hideSuggestionsOnKeyboardHide: true,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: _itemNameController,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
+                fillColor: AppConstants.whiteOpacity,
+                filled: true,
+                hintText: 'milk',
+                //alignLabelWithHint: true,
+
+                prefixIcon: Icon(
+                  Icons.category,
+                  color: Color.fromARGB(117, 212, 211, 211),
+                ),
+                suffix: IconButton(
+                  icon: Icon(
+                    Icons.clear_outlined,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _itemNameController.clear();
+                    });
+                  },
+                ),
+                // border: OutlineInputBorder(),
+              ),
+            ),
+            suggestionsCallback: (pattern) async {
+              return _kOptions
+                  .where((item) => item.itemName
+                      .toLowerCase()
+                      .startsWith(pattern.toLowerCase()))
+                  .toList(growable: true);
+            },
+            itemBuilder: (context, suggestion) {
+              return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppConstants.whiteOpacity,
+                  ),
+                  height: 40,
+                  width: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      suggestion.itemName,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ));
+            },
+            onSuggestionSelected: (suggestion) {
+              _itemNameController.text = suggestion.itemName;
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row _buildShopSpinner() {
+    return Row(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(4),
+          child: ShopSpinner(
+            onShopSelected: (String? s) {
+              setState(() {
+                _shop = s!;
+              });
+
+              ref.read(pickedShop.state).state = s;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _buildKitchenElementSpinner() {
+    return Row(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(4),
+          child: KitchenElementsSpinner(
+            onSelected: (KitchenElement? e) {
+              _kitchenElement = e;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Padding _buildTitle(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Add Kitchen Item to :',
+                style: Theme.of(context).textTheme.bodyText1),
+            widget.kitchenElement != null
+                ? Text('${widget.kitchenElement!.title}',
+                    style: Theme.of(context).textTheme.headline4)
+                : const SizedBox.shrink(),
+          ],
         ),
       ),
     );

@@ -23,7 +23,11 @@ final itemsListNotifierProvider = Provider<List<Item>>((ref) {
   var _filterType = ref.watch(filterTypeProvider.state).state;
   switch (_filterType) {
     case FilterType.all:
-      return _kitchenElementsItems;
+      return _kitchenElementsItems
+          .where((element) => element.itemName
+              .toLowerCase()
+              .contains(_filterPattern.toLowerCase()))
+          .toList();
     case FilterType.byName:
       return _kitchenElementsItems
           .where((element) => element.itemName
