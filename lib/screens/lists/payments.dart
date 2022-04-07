@@ -158,6 +158,10 @@ class PaymentTile extends ConsumerWidget {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.radius),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.secondary,
+              width: 1,
+            ),
           ),
           color: AppConstants.whiteOpacity,
           child: SizedBox(

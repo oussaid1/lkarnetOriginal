@@ -4,7 +4,7 @@ import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 
 import '../../const/constents.dart';
-import '../home.dart';
+import '../../widgets/shop_square_tile.dart';
 import '../shop_details.dart';
 
 final tagedProvider = StateProvider<Tagged?>((ref) {

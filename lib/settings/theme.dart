@@ -169,7 +169,7 @@ class MThemeData {
       // Matches manifest.json colors and background color.
       primaryColor: colorScheme.background,
       appBarTheme: AppBarTheme(
-        toolbarHeight: 80,
+        //toolbarHeight: 80,
         titleTextStyle: _textTheme.headline6!.copyWith(
             // color: colorScheme.onPrimary,
             ),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../models/payment/payment_model.dart';
 import '../models/shop/shops_data.dart';
 import '../widgets/item_listtile.dart';
-import 'home.dart';
+import '../widgets/myappbar.dart';
+import 'dash/dashboard.dart';
 
 class StatisticsWidget extends StatefulWidget {
   const StatisticsWidget({Key? key, this.shopsData}) : super(key: key);
@@ -48,7 +49,16 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
         floatingActionButton: MyExpandableFab(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         backgroundColor: Colors.transparent,
-        appBar: buildAppBar(context, title: 'Shop Details'),
+        appBar: MyAppBar(
+          title: Text(
+            'Statistics ',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.bar_chart),
+            onPressed: null, //() => Navigator.pop(context),
+          ),
+        ),
         body: SingleChildScrollView(
           child: BluredContainer(
             start: 0,

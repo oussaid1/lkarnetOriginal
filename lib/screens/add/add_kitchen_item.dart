@@ -37,6 +37,8 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   DateTime _dateBought = DateTime.now();
   DateTime? _dateExpired;
 
+  bool _isLoading = false;
+
   void _update() {
     // check if we have a kitchen item then update the fields
     if (widget.kitchenItem != null) {
@@ -196,38 +198,44 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 'Update',
                 style: Theme.of(context).textTheme.headline3,
               ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Updating...'),
-                ));
-                final _op = ref.read(operationsProvider);
-                final _kitchenItem = KitchenItem(
-                  id: widget.kitchenItem!.id,
-                  besoinTitle: '',
-                  dateBought: _dateBought,
-                  itemName: _itemNameController.text.trim(),
-                  itemPrice: double.tryParse(_itemPriceController.text.trim())!,
-                  quantifier: _quantifier,
-                  quantity: _quantity,
-                  shopName: _shop,
-                  dateExpired: _dateExpired,
-                  kitchenElementId: widget.kitchenItem!.kitchenElementId,
-                );
-                logger.d(_kitchenItem);
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Updating...'),
+                      ));
+                      final _op = ref.read(operationsProvider);
+                      final _kitchenItem = KitchenItem(
+                        id: widget.kitchenItem!.id,
+                        besoinTitle: '',
+                        dateBought: _dateBought,
+                        itemName: _itemNameController.text.trim(),
+                        itemPrice:
+                            double.tryParse(_itemPriceController.text.trim())!,
+                        quantifier: _quantifier,
+                        quantity: _quantity,
+                        shopName: _shop,
+                        dateExpired: _dateExpired,
+                        kitchenElementId: widget.kitchenItem!.kitchenElementId,
+                      );
+                      logger.d(_kitchenItem);
 
-                if (_formKeyName.currentState!.validate() &&
-                    _formKeyPrice.currentState!.validate()) {
-                  _op.updateKitchenItem(_kitchenItem);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: AppConstants.greenOpacity,
-                    content: Text('Item Updated'),
-                    duration: Duration(seconds: 1),
-                  ));
-                  Navigator.pop(context);
-                }
-                // pop
-                //_op.addItem();
-              },
+                      if (_formKeyName.currentState!.validate() &&
+                          _formKeyPrice.currentState!.validate()) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        _op.updateKitchenItem(_kitchenItem);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: AppConstants.greenOpacity,
+                          content: Text('Item Updated'),
+                          duration: Duration(seconds: 1),
+                        ));
+                        Navigator.pop(context);
+                      }
+                      // pop
+                      //_op.addItem();
+                    },
               style: MThemeData.raisedButtonStyleSave),
         ),
       ],
@@ -254,45 +262,45 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 'Save',
                 style: Theme.of(context).textTheme.headline3,
               ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Saving...'),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-                final _op = ref.read(operationsProvider);
-                final _kitchenItem = KitchenItem(
-                  besoinTitle: '',
-                  dateBought: _dateBought,
-                  itemName: _itemNameController.text.trim(),
-                  itemPrice: double.parse(_itemPriceController.text.trim()),
-                  quantifier: _quantifier,
-                  quantity: _quantity,
-                  shopName: _shop,
-                  dateExpired: _dateExpired,
-                  kitchenElementId: widget.item == null
-                      ? widget.kitchenElement!.id!
-                      : _kitchenElement!.id!,
-                );
-                _kitchenItem.toPrint();
-                if (_formKeyName.currentState!.validate() &&
-                    _formKeyPrice.currentState!.validate()) {
-                  _op.addKitchenItem(_kitchenItem).then((value) {
-                    logger.d(value);
-                    if (value) {
-                      _formKeyName.currentState!.reset();
-                      _formKeyPrice.currentState!.reset();
-                    }
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Please fill all fields'),
-                    ),
-                  );
-                }
-              },
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Saving...'),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                      final _op = ref.read(operationsProvider);
+                      final _kitchenItem = KitchenItem(
+                        besoinTitle: '',
+                        dateBought: _dateBought,
+                        itemName: _itemNameController.text.trim(),
+                        itemPrice:
+                            double.parse(_itemPriceController.text.trim()),
+                        quantifier: _quantifier,
+                        quantity: _quantity,
+                        shopName: _shop,
+                        dateExpired: _dateExpired,
+                        kitchenElementId: widget.item == null
+                            ? widget.kitchenElement!.id!
+                            : _kitchenElement!.id!,
+                      );
+                      _kitchenItem.toPrint();
+                      if (_formKeyName.currentState!.validate() &&
+                          _formKeyPrice.currentState!.validate()) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        _op.addKitchenItem(_kitchenItem);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please fill all fields'),
+                          ),
+                        );
+                      }
+                    },
               style: MThemeData.raisedButtonStyleSave),
         ),
       ],
@@ -451,11 +459,18 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
             direction: AxisDirection.up,
             hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
+              onChanged: (text) {
+                setState(() {
+                  _isLoading = false;
+                });
+              },
               controller: _itemNameController,
               autofocus: true,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
               decoration: InputDecoration(
+                // no border ,
+                border: InputBorder.none,
                 contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
                 fillColor: AppConstants.whiteOpacity,
                 filled: true,

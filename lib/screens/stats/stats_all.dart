@@ -5,7 +5,7 @@ import 'package:lkarnet/providers/dataprovider/data_providers.dart';
 import 'package:lkarnet/widgets/charts.dart';
 import '../../const/constents.dart';
 import '../../widgets/glasswidget.dart';
-import '../home.dart';
+import '../dash/dashboard.dart';
 
 class StatsAll extends ConsumerWidget {
   @override

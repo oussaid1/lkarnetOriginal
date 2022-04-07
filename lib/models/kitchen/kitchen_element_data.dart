@@ -2,29 +2,10 @@ import 'kitchen_item.dart';
 
 class KitchenElementData {
   List<KitchenElement> kitchenElementList = [];
-  List<KitchenItem> kitchenItemList = [];
-  List<KitchenItem> fakekitchenElementItemsList =
-      KitchenItem.fakeKitchenitems();
-  //List<KitchenItem> kitchenElementItemsList = [];
-  KitchenElementData(this.kitchenElementList, this.kitchenItemList) {
+
+  KitchenElementData(this.kitchenElementList) {
     // kitchenElementList = [];
     // kitchenItemList = [];
-  }
-
-  // list of kitchen elements with items
-  List<KitchenElement> get kitchenElements {
-    List<KitchenElement> _kitchenElements = [];
-    List<KitchenItem> _kitchenItems = [];
-    for (var i = 0; i < kitchenElementList.length; i++) {
-      _kitchenItems = kitchenItemList
-          .where(
-              (element) => element.kitchenElementId == kitchenElementList[i].id)
-          .toList();
-      kitchenElementList[i].items = _kitchenItems;
-      _kitchenElements.add(kitchenElementList[i]);
-    }
-
-    return kitchenElementList;
   }
 
 // get a list of all unavaliable elements
@@ -33,9 +14,26 @@ class KitchenElementData {
 //  List<KitchenItem> _kitchenItems = [];
     return kitchenElementList.where((element) => !element.isAvailable).toList();
   }
+}
 
-//   // get kitchen items for a single kitchen element object
-// List<KitchenItem> getKitchenItems(KitchenElement kitchenElement){
+class SingleKitchenElementData {
+  late KitchenElement _kitchenElement;
+  late List<KitchenItem> _kitchenItems;
+  SingleKitchenElementData(
+      KitchenElement kitchenElement, List<KitchenItem> kitchenItems) {
+    _kitchenElement = kitchenElement;
+    _kitchenItems = kitchenItems;
+  }
+  List<KitchenItem> get _kitchenElementItems {
+    return _kitchenItems
+        .where((element) => element.kitchenElementId == _kitchenElement.id)
+        .toList();
+  }
 
-// }
+  // return a perfect KitchenElement with all items
+  KitchenElement get perfectKitchenElement {
+    return _kitchenElement.copyWith(
+      items: _kitchenElementItems,
+    );
+  }
 }

@@ -18,11 +18,34 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 }
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
+  late List<KitchenElement> _kitchenElements;
+  late List<KitchenItem> _kitchenItems;
+  //SingleKitchenElementData? singleKitchenElementData;
+  late List<SingleKitchenElementData> _kitchenElementDataList;
+  @override
+  void initState() {
+    _kitchenElements = [];
+    _kitchenItems = [];
+    _kitchenElementDataList = [];
+    super.initState();
+  }
+
+  void clearListsts() {
+    _kitchenElements = [];
+    _kitchenItems = [];
+    _kitchenElementDataList = [];
+  }
+
+  @override
+  void dispose() {
+    _kitchenElements = [];
+    _kitchenItems = [];
+    _kitchenElementDataList = [];
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<KitchenElement> kitchenElements = [];
-    List<KitchenItem> kitchenItems = [];
-    KitchenElementData? kitchenElementData;
     return BluredContainer(
       start: 0.1,
       end: 0,
@@ -34,10 +57,21 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                 stream: ref.read(databaseProvider).kitchenElementsStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snap.hasData) {
-                    kitchenElements = snapshot.data!;
-                    kitchenItems = snap.data!;
-                    kitchenElementData =
-                        KitchenElementData(kitchenElements, kitchenItems);
+                    clearListsts();
+                    _kitchenElements = snapshot.data!;
+                    _kitchenItems = snap.data!;
+                    for (var i = 0; i < _kitchenElements.length; i++) {
+                      _kitchenElementDataList.add(
+                        SingleKitchenElementData(
+                          _kitchenElements[i],
+                          _kitchenItems
+                              .where((element) =>
+                                  element.kitchenElementId ==
+                                  _kitchenElements[i].id)
+                              .toList(),
+                        ),
+                      );
+                    }
                   }
                   //kitchenElements = KitchenElement.fakeKitchenElements;
                   return Scaffold(
@@ -58,12 +92,13 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     ),
                     appBar: AppBar(
                       actions: [
-                        _buildNotifications(kitchenElementData, context),
+                        _buildNotifications(
+                            KitchenElementData(_kitchenElements), context),
                       ],
                       leading:
                           Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
-                        'Kitchen Stock',
+                        'Kitchen Stock ',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,
@@ -83,11 +118,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-                          _buildBarChartWidget(kitchenElements),
+                          _buildBarChartWidget(_kitchenElements),
                           const SizedBox(height: 20),
-                          kitchenElementData != null
-                              ? _buildGridView(context, kitchenElementData)
-                              : Container(),
+                          _buildGridView(context, _kitchenElementDataList),
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -120,8 +153,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     );
   }
 
-  Container _buildGridView(
-      BuildContext context, KitchenElementData? kitchenElementData) {
+  Container _buildGridView(BuildContext context,
+      List<SingleKitchenElementData> singleKitchenElementDataList) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),
       // height: 440,
@@ -134,22 +167,22 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
             childAspectRatio: 1.4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12),
-        itemCount: kitchenElementData!.kitchenElements.length,
+        itemCount: singleKitchenElementDataList.length,
         itemBuilder: (context, index) {
-          final KitchenElement kitchenElement =
-              kitchenElementData.kitchenElements[index];
+          final SingleKitchenElementData kitchenElement =
+              singleKitchenElementDataList[index];
           return KitchenItemSquareTile(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => KitchenElementDetailsScreen(
-                    kitchenElement: kitchenElement,
+                    kitchenElement: kitchenElement.perfectKitchenElement,
                   ),
                 ),
               );
             },
-            kitchenElement: kitchenElement,
+            kitchenElement: kitchenElement.perfectKitchenElement,
           );
         },
       ),

@@ -89,7 +89,9 @@ class _SelectDate2State extends State<SelectDate2> {
       lastDate: DateTime(2025),
     ))!;
     if (picked != DateTime.now()) {
-      widget.onDateSelected(picked);
+      setState(() {
+        widget.onDateSelected(picked);
+      });
     }
   }
 
