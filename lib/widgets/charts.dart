@@ -118,7 +118,8 @@ class LineChartWidgetDate extends ConsumerWidget {
           yValueMapper: (Tagged data, _) => data.itemsSum,
           dataLabelMapper: (Tagged data, _) =>
               DateFormat('MM-yy').format(data.date!).toString(),
-
+          color: Colors.white.withOpacity(0.5),
+          width: 1,
           enableTooltip: true,
           // name: 'Home',
           dataLabelSettings: DataLabelSettings(
@@ -198,6 +199,7 @@ class ColumnChartWidget extends ConsumerWidget {
           width: 0.4,
           dataSource: chartData,
           //color: AppConstants.whiteOpacity,
+          color: Colors.white.withOpacity(0.5),
           xValueMapper: (ChartData sales, _) => sales.tag,
           yValueMapper: (ChartData sales, _) => sales.value,
           pointColorMapper: (ChartData sales, _) => sales.color,

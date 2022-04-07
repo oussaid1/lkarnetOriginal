@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
-import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
-import '../../providers/operationsprovider/operations_provider.dart';
 import '../../widgets/availability_widget.dart';
-import '../../widgets/date_picker.dart';
 import '../../widgets/dialogs.dart';
+import '../../widgets/expired_switch.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 import '../add/edit_kitchen_element.dart';
 
@@ -27,10 +26,15 @@ class _KitchenItemDetailsScreenState
     extends ConsumerState<KitchenElementDetailsScreen> {
   DateTime? _expiryDate = DateTime.now();
 
-  bool _isLoading = true;
-  bool _isExpired = false;
+  //bool _isLoading = true;
+  //bool _isExpired = false;
   // an empty list of kitchen items
   List<KitchenItem> _kitchenItems = [];
+  @override
+  void initState() {
+    //_isLoading = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +88,9 @@ class _KitchenItemDetailsScreenState
             },
             child: Icon(Icons.add),
           ),
-          appBar: _buildAppBar(context),
+          appBar: MyAppBar(
+            title: Text('${widget.kitchenElement.title}'),
+          ),
 
           // Next, create a SliverList
           body: SingleChildScrollView(
@@ -135,61 +141,68 @@ class _KitchenItemDetailsScreenState
                 itemBuilder: (context, index) {
                   final KitchenItem _kitchenItem = _singleKitchenElementData
                       .perfectKitchenElement.items[index];
-                  return GestureDetector(
-                    onDoubleTap: () => KitchenItmExpiredButton(
-                        kitchenItem: _kitchenItem,
-                        op: ref.read(operationsProvider)),
-                    child: KitchenItemTileWidget(
-                      onLongPress: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: ExpiredSwitch(
-                              onChanged: (value) {
-                                setState(() {
-                                  if (!value) {
+                  return KitchenItemTileWidget(
+                    onDoubleTap: () {
+                      setState(() {
+                        _expiryDate = null;
+                      });
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: ExpiredSwitch(
+                            onChanged: (value) {
+                              setState(() {
+                                if (value['isExpired']) {
+                                  setState(() {
+                                    //  _isLoading = false;
+                                    _expiryDate = value['expiryDate'];
+                                  });
+                                } else {
+                                  setState(() {
                                     _expiryDate = null;
-                                  } else {
-                                    setState(() {
-                                      _isExpired = true;
-                                    });
-                                  }
-                                });
-                              },
-                            ),
-                            //content:
-                            actions: [
-                              ElevatedButton(
-                                child: Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              ElevatedButton(
-                                child: Text('Ok'),
-                                onPressed: _isLoading
-                                    ? null
-                                    : () {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        ref
-                                            .read(operationsProvider)
-                                            .updateKitchenItem(
-                                                _kitchenItem.copyWith(
-                                                    dateExpired: _expiryDate,
-                                                    kitchenElementId:
-                                                        _kitchenItem
-                                                            .kitchenElementId));
-                                        Navigator.of(context).pop();
-                                      },
-                              ),
-                            ],
+                                    //_isLoading = false;
+                                  });
+                                }
+                              });
+                            },
                           ),
-                        );
-                      },
-                      kitchenItem: _kitchenItem,
-                    ),
+                          //content:
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+
+                                //const Spacer(),
+                                ElevatedButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    // setState(() {
+                                    //   _isLoading = true;
+                                    // });
+                                    _kitchenItem.toPrint();
+                                    ref
+                                        .read(databaseProvider)
+                                        .updateKitchenItem(
+                                            _kitchenItem.copyWith(
+                                                dateExpired: _expiryDate,
+                                                kitchenElementId: _kitchenItem
+                                                    .kitchenElementId));
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    kitchenItem: _kitchenItem,
                   );
                 },
               );
@@ -218,13 +231,10 @@ class _KitchenItemDetailsScreenState
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(width: 10),
-                Hero(
-                  tag: 'foodCategory',
-                  child: Icon(
-                    Icons.fastfood,
-                    color: Colors.white.withOpacity(0.5),
-                    size: 20,
-                  ),
+                Icon(
+                  Icons.fastfood,
+                  color: Colors.white.withOpacity(0.5),
+                  size: 20,
                 ),
               ],
             ),
@@ -333,52 +343,6 @@ class _KitchenItemDetailsScreenState
       ),
     );
   }
-
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30),
-        ),
-      ),
-      backgroundColor: Color.fromARGB(54, 221, 170, 170),
-      actions: [
-        Row(
-          children: [
-            Text('Edit'),
-            IconButton(
-              icon: Icon(Icons.edit_outlined),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddKitchenElement(
-                      kitchenElement: widget.kitchenElement,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ],
-      title: Text('Details'
-          //style: Theme.of(context).textTheme.headline2,
-          ),
-      titleSpacing: 40,
-      flexibleSpace: BluredContainer(
-        child: Container(),
-      ),
-      leadingWidth: 10,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
 }
 
 // final priorityRatingProvider = StateProvider<double>((ref) {
@@ -477,67 +441,6 @@ class Availibility extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ExpiredSwitch extends StatefulWidget {
-  const ExpiredSwitch({Key? key, required this.onChanged}) : super(key: key);
-  final void Function(Map<String, dynamic>) onChanged;
-  @override
-  State<ExpiredSwitch> createState() => _ExpiredSwitchState();
-}
-
-class _ExpiredSwitchState extends State<ExpiredSwitch> {
-  bool _isExpired = false;
-  DateTime? _expiryDate;
-  // bool _isLoading = false;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Expired ?'),
-            Switch(
-              onChanged: (value) {
-                setState(() {
-                  if (value) {
-                    _isExpired = true;
-                    widget.onChanged(
-                        {'isExpired': _isExpired, 'expiryDate': _expiryDate});
-                  } else {
-                    _isExpired = false;
-                    widget.onChanged(
-                        {'isExpired': _isExpired, 'expiryDate': _expiryDate});
-                  }
-                  //_isExpired = !value;
-                });
-              },
-              value: _isExpired,
-            ),
-          ],
-        ),
-        _isExpired
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Date'),
-                  SelectDate2(
-                    initialDate: DateTime.now(),
-                    onDateSelected: (date) {
-                      setState(() {
-                        _expiryDate = date;
-                        //  _isLoading = false;
-                      });
-                    },
-                  )
-                ],
-              )
-            : SizedBox.shrink(),
-      ],
     );
   }
 }

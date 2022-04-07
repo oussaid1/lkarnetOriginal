@@ -31,6 +31,7 @@ class AddTab extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          heroTag: 'addFabOuss',
           onPressed: () {
             _showDialog(context);
           },

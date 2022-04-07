@@ -73,12 +73,15 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
             children: [
               const SizedBox(height: 20),
               Container(
+                //  margin: EdgeInsets.symmetric(vertical: 10),
                 width: 400,
                 height: 140,
                 decoration: BoxDecoration(
                   color: AppConstants.whiteOpacity,
+                  borderRadius: BorderRadius.circular(AppConstants.radius),
                 ),
               ),
+              const SizedBox(height: 20),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: Container(
@@ -90,7 +93,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 1.5,
+                        childAspectRatio: 1.4,
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10),
                     itemCount: widget.elementData!.length,

@@ -302,13 +302,10 @@ class KitchenItemSquareTile extends StatelessWidget {
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                             ),
-                            Hero(
-                              tag: 'foodCategory',
-                              child: Icon(
-                                Icons.fastfood,
-                                color: Colors.white.withOpacity(0.5),
-                                size: 20,
-                              ),
+                            Icon(
+                              Icons.fastfood,
+                              color: Colors.white.withOpacity(0.5),
+                              size: 20,
                             ),
                           ],
                         ),

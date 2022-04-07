@@ -28,7 +28,18 @@ class DashBoardPage extends ConsumerStatefulWidget {
   ConsumerState<DashBoardPage> createState() => _DashBoardPageState();
 }
 
-class _DashBoardPageState extends ConsumerState<DashBoardPage> {
+class _DashBoardPageState extends ConsumerState<DashBoardPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var items = ref.watch(itemsProvider.state).state;
@@ -192,6 +203,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage> {
                     recentOperations.recentOperationsList[index];
                 return recentOperation.isItem
                     ? ItemTileWidget(
+                        animationController: _animationController,
                         onTap: () {
                           Dialogs.dialogSimple(context,
                               title: 'do you want to save to kitchen',

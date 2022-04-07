@@ -76,7 +76,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             bottomNavigationBar: buildNavigationBar(
                 context, _selectedPageIndex, _pageController, ref),
             backgroundColor: Colors.transparent,
-            //appBar: buildAppBar(context, title: 'Home', items: items),
             body: buildPageView(_pageController, ref, context,
                 dataSink: dataSink,
                 shopsDataList: _shopsDataList,
