@@ -298,7 +298,7 @@ class KitchenItem {
   DateTime? dateExpired; // double get itemPrix => itemPrice * quantity;
 // is expired
   bool get isExpired {
-    return dateExpired != null && dateExpired!.isBefore(DateTime.now());
+    return dateExpired != null; // && dateExpired!.isBefore(DateTime.now());
   }
 
   KitchenItem copyWith({
@@ -324,7 +324,7 @@ class KitchenItem {
         itemPrice: itemPrice ?? this.itemPrice,
         count: count ?? this.count,
         dateBought: dateBought ?? this.dateBought,
-        dateExpired: dateExpired ?? this.dateExpired,
+        dateExpired: dateExpired,
         kitchenElementId: kitchenElementId);
   }
 
@@ -388,6 +388,7 @@ class KitchenItem {
 
   void toPrint() {
     print('-------------------------------');
+    print('id: $id');
     print('name : $itemName');
     print('quantifier : $quantifier');
     print('quantity : $quantity');
@@ -395,7 +396,7 @@ class KitchenItem {
     print('besoinTitle : $besoinTitle');
     print('shopName : $shopName');
     print('dateBought : $toMMYY');
-    print('dateExpired : $toMMYY');
+    print('dateExpired : $dateExpired');
     print('kitchenElementId : $kitchenElementId');
     print('-------------------------------');
   }

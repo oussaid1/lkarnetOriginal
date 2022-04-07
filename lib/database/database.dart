@@ -208,7 +208,7 @@ class Database {
     try {
       await _users
           .collection(_collectionKitchenItems)
-          .doc(kitchenItem.id)
+          .doc(kitchenItem.id!.trim().toString())
           .update(kitchenItem.toMap());
     } catch (e) {
       Exception(e);

@@ -9,12 +9,12 @@ import '../screens/add/add_kitchen_item.dart';
 import 'price_curency_widget.dart';
 
 class KitchenItemTileWidget extends ConsumerWidget {
-  final VoidCallback? onLongPress;
+  final VoidCallback? onDoubleTap;
 
   const KitchenItemTileWidget({
     Key? key,
     required this.kitchenItem,
-    this.onLongPress,
+    this.onDoubleTap,
   }) : super(key: key);
 
   final KitchenItem kitchenItem;
@@ -104,7 +104,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
       ),
 
       child: GestureDetector(
-        onLongPress: onLongPress,
+        onDoubleTap: onDoubleTap,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.radius),

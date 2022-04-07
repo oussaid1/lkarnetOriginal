@@ -794,35 +794,3 @@ class _KitchenItmExpiredButtonState extends State<KitchenItmExpiredButton> {
     );
   }
 }
-// AppBar buildAppBar(BuildContext context,
-//     {String? title, IconData icon = Icons.home}) {
-//   return AppBar(
-//     actions: [
-//       // IconButton(
-//       //   icon: Icon(Icons.add_box_outlined),
-//       //   onPressed: () async {
-//       //     var logger = Logger();
-//       //     for (var item in items!) {
-//       //       logger.d(item.toMap());
-//       //     }
-//       //   },
-//       // ),
-//     ],
-//     leading: Icon(icon, color: Colors.black),
-//     title: Text(
-//       title ?? '',
-//       style: Theme.of(context).textTheme.headline2,
-//     ),
-//     elevation: 0,
-//     shadowColor: Colors.transparent,
-//     excludeHeaderSemantics: true,
-//     toolbarHeight: 40,
-//     backgroundColor: AppConstants.whiteOpacity,
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.vertical(
-//         top: Radius.circular(AppConstants.radius),
-//         bottom: Radius.circular(AppConstants.radius),
-//       ),
-//     ),
-//   );
-// }
