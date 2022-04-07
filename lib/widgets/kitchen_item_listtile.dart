@@ -90,8 +90,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
                                 onPressed: () => ref
                                     .read(operationsProvider)
                                     .deleteKitchenItem(kitchenItem)
-                                    .then(
-                                        (value) => Navigator.of(context).pop()),
+                                    .then((value) => Navigator.pop(context)),
                                 style: MThemeData.raisedButtonStyleSave,
                               ),
                             ),

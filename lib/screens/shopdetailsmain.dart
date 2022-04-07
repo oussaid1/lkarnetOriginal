@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/models/shop/shops_data.dart';
+import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../components.dart';
 import '../models/statistics/tagged.dart';
-import 'dash/month_widget.dart';
-import 'home.dart';
+import '../widgets/price_curency_widget.dart';
+import '../widgets/shop_square_tile.dart';
+import 'dash/dashboard.dart';
 import 'shop_details.dart';
 
 class ShopDetailsMain extends ConsumerStatefulWidget {
-  const ShopDetailsMain({Key? key, this.shopsData}) : super(key: key);
-  final ShopData? shopsData;
+  const ShopDetailsMain({
+    Key? key,
+  }) : super(key: key);
+  //final ShopData? shopsData;
   @override
   _ShopDetailsState createState() => _ShopDetailsState();
 }
 
 class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
+  Tagged? _tagged;
+
+  //var _isSelected = false;
   @override
   void initState() {
+    //  _tagged = Tagged.fakeTagged();
     super.initState();
   }
 
@@ -24,8 +31,9 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   Widget build(BuildContext context) {
     var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
     //var _currentIndex = ref.watch(listIndex.state).state;
-    var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
+    // var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
     //return MonthlyDash();
+    _tagged == null ? _tagged = _listOfTagged[0] : _tagged;
     return BluredContainer(
       start: 0,
       end: 0,
@@ -34,46 +42,37 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
         backgroundColor: Color.fromARGB(0, 255, 255, 255),
         floatingActionButton: MyExpandableFab(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        appBar: AppBar(
-          actions: [
-            // IconButton(
-            //   icon: Icon(Icons.add_box_outlined),
-            //   onPressed: () async {
-            //     var logger = Logger();
-            //     for (var item in items!) {
-            //       logger.d(item.toMap());
-            //     }
-            //   },
-            // ),
-          ],
-          leading: Icon(Icons.dashboard, color: Colors.black),
+        appBar: MyAppBar(
           title: Text(
-            'Shop Details',
-            style: Theme.of(context).textTheme.headline2,
+            '${_tagged!.date!.mMMyy()}',
           ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          excludeHeaderSemantics: true,
-          toolbarHeight: 40,
-          backgroundColor: AppConstants.whiteOpacity,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppConstants.radius),
-              bottom: Radius.circular(AppConstants.radius),
-            ),
-          ),
+          leading: Icon(Icons.calendar_month, color: Colors.black),
         ),
 
         // Next, create a SliverList
         body: Column(
           children: [
+            const SizedBox(
+              height: 40,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Monthly',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(186, 255, 255, 255),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
             Container(
               height: 235,
               width: double.infinity,
               // color: Color.fromARGB(94, 255, 193, 7),
               child: Stack(
+                //fit: StackFit.loose,
                 children: [
-                  _buildMonthlyCard(context, _tagged),
+                  _buildMonthlyCard(context, _tagged!),
                   Positioned(
                     top: 195,
                     width: 360,
@@ -84,32 +83,34 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              height: 300,
-              width: MediaQuery.of(context).size.width,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.5,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10),
-                itemCount: _tagged.shopDataList.length,
-                itemBuilder: (context, index) {
-                  return ShopSquareTile(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ShopDetails(
-                          shopData: _tagged.shopDataList[index],
-                        ),
-                      ),
+            _tagged == null
+                ? SizedBox.shrink()
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1.5,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10),
+                      itemCount: _tagged!.shopDataList.length,
+                      itemBuilder: (context, index) {
+                        return ShopSquareTile(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShopDetails(
+                                shopData: _tagged!.shopDataList[index],
+                              ),
+                            ),
+                          ),
+                          shopData: _tagged!.shopDataList[index],
+                        );
+                      },
                     ),
-                    shopData: _tagged.shopDataList[index],
-                  );
-                },
-              ),
-            ),
+                  ),
           ],
         ),
       ),
@@ -136,14 +137,28 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
             width: 100,
             height: 30,
             child: GestureDetector(
-              onTap: () => ref.read(tagIndexProvider.state).state = index,
-              child: Center(
-                child: Text('${tagged.tag}',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(color: Color.fromARGB(212, 41, 35, 35))),
+              onTap: () {
+                setState(() {
+                  tagged.seledcted = !tagged.seledcted;
+
+                  _tagged = tagged;
+                });
+              },
+              child: Card(
+                color: _tagged == tagged
+                    ? AppConstants.primaryColor
+                    : AppConstants.whiteOpacity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // tagged == _tagged ? Text('Selected') : Text(''),
+                    Text(
+                      tagged.tag,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -166,12 +181,13 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total-amount',
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                  Text(
-                    ' ${tagged.itemsSumAfterPayment}',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
+                  PriceNumberZone(
+                      right: const SizedBox.shrink(),
+                      withDollarSign: true,
+                      price: tagged.itemsSumAfterPayment,
+                      style: Theme.of(context).textTheme.headline2!),
                 ],
               ),
             ),
@@ -182,11 +198,18 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total sum of items',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: AppConstants.whiteOpacity),
                   ),
-                  Text(
-                    '${tagged.itemsSum}',
-                    style: Theme.of(context).textTheme.bodyText1,
+                  PriceNumberZone(
+                    right: const SizedBox.shrink(),
+                    withDollarSign: true,
+                    price: tagged.itemsSum,
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: AppConstants.hintColor,
+                        ),
                   ),
                 ],
               ),
@@ -198,11 +221,18 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total sum of payments',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: AppConstants.whiteOpacity),
                   ),
-                  Text(
-                    '${tagged.paymentsSum}',
-                    style: Theme.of(context).textTheme.bodyText1,
+                  PriceNumberZone(
+                    right: const SizedBox.shrink(),
+                    withDollarSign: true,
+                    price: tagged.paymentsSum,
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: AppConstants.hintColor,
+                        ),
                   ),
                 ],
               ),
@@ -214,11 +244,18 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total number of items',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: AppConstants.whiteOpacity),
                   ),
-                  Text(
-                    '${tagged.countItems}',
-                    style: Theme.of(context).textTheme.bodyText1,
+                  PriceNumberZone(
+                    right: const SizedBox.shrink(),
+                    withDollarSign: true,
+                    price: tagged.countItems.toDouble(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: AppConstants.hintColor,
+                        ),
                   ),
                 ],
               ),
@@ -230,11 +267,18 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total number of payments',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: AppConstants.whiteOpacity),
                   ),
-                  Text(
-                    '${tagged.countPayments}',
-                    style: Theme.of(context).textTheme.bodyText1,
+                  PriceNumberZone(
+                    right: const SizedBox.shrink(),
+                    withDollarSign: true,
+                    price: tagged.countPayments.toDouble(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: AppConstants.hintColor,
+                        ),
                   ),
                 ],
               ),

@@ -34,5 +34,7 @@ class AppConstants {
       AppConstants.greenOpacity.withOpacity(opacity);
   static final Color whiteOpacity = Colors.white.withOpacity(opacity);
   static final Color blackOpacity = Colors.black.withOpacity(opacity);
+  static final Color hintColor =
+      Color.fromARGB(255, 36, 36, 36).withOpacity(0.6);
   static final Color primaryColor = Color.fromARGB(255, 235, 166, 150);
 }

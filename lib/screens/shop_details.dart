@@ -1,9 +1,10 @@
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:flutter/material.dart';
+import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../components.dart';
 import '../widgets/item_listtile.dart';
-import 'home.dart';
+import 'dash/dashboard.dart';
 import 'lists/payments.dart';
 
 class ShopDetails extends StatefulWidget {
@@ -73,7 +74,16 @@ class ShopsDetailsBody extends StatelessWidget {
     return Scaffold(
       floatingActionButton: MyExpandableFab(),
       backgroundColor: Colors.transparent,
-      appBar: buildAppBar(context, title: '${shopsData.shop.shopName}'),
+      appBar: MyAppBar(
+        title: Text(
+          '${shopsData.shop}',
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: SingleChildScrollView(
         child: BluredContainer(
           width: MediaQuery.of(context).size.width,

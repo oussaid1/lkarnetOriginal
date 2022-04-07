@@ -19,6 +19,7 @@ class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
   @override
   Widget build(BuildContext context) {
     var _list = ref.watch(shopsProvider.state).state;
+    var picked = ref.watch(pickedShop.state).state;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -53,7 +54,7 @@ class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle2,
             ),
-            value: ref.watch(pickedShop.state).state,
+            value: _list.contains(picked) ? picked : null,
             onChanged: (value) {
               setState(() {
                 widget.onShopSelected(value);

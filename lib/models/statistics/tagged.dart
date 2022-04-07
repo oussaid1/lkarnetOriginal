@@ -61,6 +61,7 @@ final taggedListMMYYProvider = StateProvider<List<Tagged>>((ref) {
 });
 
 class Tagged {
+  bool seledcted = false;
   String tag = 'Unknown';
   ItemsFiltered itemsFiltered;
   PaymentsFiltered paymentsFiltered;
@@ -78,10 +79,30 @@ class Tagged {
     return null;
   }
 
+// parseDate from tag
   DateTime get tagDate {
     var date = DateTime.parse(tag);
     date.formatted();
     return date;
+  }
+
+// fake Tagged object
+  static Tagged fakeTagged() {
+    return Tagged(
+      tag: '2020-01-01',
+      dateFilterType: DateFilterType.ddmmyy,
+      shops: [],
+      itemsFiltered: ItemsFiltered(
+        items: [],
+        tag: '2020-01-01',
+        dateFilterType: DateFilterType.ddmmyy,
+      ),
+      paymentsFiltered: PaymentsFiltered(
+        payments: [],
+        tag: '2020-01-01',
+        dateFilterType: DateFilterType.ddmmyy,
+      ),
+    );
   }
 
   List<ShopData> get shopData {

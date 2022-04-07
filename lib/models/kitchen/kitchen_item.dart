@@ -192,13 +192,16 @@ class KitchenElement {
     double? quantity,
     String? category,
     double? availability,
+    double? priority,
+    List<KitchenItem>? items,
   }) {
     return KitchenElement(
       id: id ?? this.id,
       title: title ?? this.title,
       category: category ?? this.category,
       availability: availability ?? this.availability,
-      items: items,
+      priority: priority ?? this.priority,
+      items: items ?? this.items,
     );
   }
 
@@ -341,7 +344,7 @@ class KitchenItem {
   }
 
   KitchenItem.fromItem(Item item, KitchenElement kitchenElement) {
-    this.besoinTitle = item.itemName;
+    this.besoinTitle = item.besoinTitle;
     this.shopName = item.shopName;
     this.itemName = item.itemName;
     this.quantifier = item.quantifier;

@@ -415,6 +415,7 @@ class _AddItemState extends ConsumerState<AddItem>
     return Padding(
       padding: EdgeInsets.all(2),
       child: ShopSpinner(
+        //: ref.watch(shopsProvider.state).state,
         onShopSelected: (value) {
           setState(() {
             _shop = value;

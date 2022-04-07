@@ -19,148 +19,230 @@ class ShopsList extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     //  final lista = ref.watch(shopsProvider.state).state;
     var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-              height: 40,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text("Shops", style: Theme.of(context).textTheme.headline3),
-                ],
-              )),
-          BluredContainer(
-            margin: EdgeInsets.only(left: 8, right: 8, bottom: 8),
-            child: ListView.builder(
-              itemCount: _shopsDataList.length,
-              itemBuilder: (BuildContext context, int index) {
-                ShopData shopsData = _shopsDataList[index];
-                return Slidable(
-                    startActionPane: ActionPane(
-                      motion: ScrollMotion(),
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.mode_edit,
-                              size: 30,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            color: Colors.transparent,
-                            onPressed: () {
-                              Dialogs.botomUpDialog(
-                                  context, AddShop(shop: shopsData.shop));
-                            }),
-                      ],
-                    ),
-                    endActionPane: ActionPane(
-                      motion: ScrollMotion(),
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete_forever,
-                            size: 30,
-                            color: Theme.of(context).errorColor,
-                          ),
-                          color: Colors.transparent,
-                          onPressed: () {
-                            Dialogs.dialogSimple(context,
-                                title: 'Are you sure !!?',
-                                widgets: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 120,
-                                          child: ElevatedButton(
-                                            child: Text('Cancel'),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            style: MThemeData
-                                                .raisedButtonStyleCancel,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Container(
-                                          width: 120,
-                                          child: ElevatedButton(
-                                            child: Text(
-                                              'Ok',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3,
-                                            ),
-                                            onPressed: () => ref
-                                                .read(operationsProvider)
-                                                .deleteShopData(shopsData)
-                                                .then((value) =>
-                                                    Navigator.of(context)
-                                                        .pop()),
-                                            style: MThemeData
-                                                .raisedButtonStyleSave,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ]);
-                          },
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: BluredContainer(
-                        height: 60,
-                        width: MediaQuery.of(context).size.width,
-                        child: Card(
-                          color: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.only(left: 8, right: 8),
-                            leading: Container(
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppConstants.whiteOpacity,
-                              ),
-                              child: Icon(Icons.person),
-                            ),
-                            title: Text(
-                              ' ${shopsData.shop.shopName}',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${(shopsData.shop.limit)}',
-                                  style: Theme.of(context).textTheme.headline4,
-                                ),
-                                Text(
-                                  'limit',
-                                  style: Theme.of(context).textTheme.subtitle2,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ));
-              },
+    return GlassMaterial(
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
+        ),
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
+        ),
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      gradientColors: [
+        Color.fromARGB(255, 134, 32, 230),
+        Color.fromARGB(255, 224, 101, 101),
+        Color.fromARGB(255, 224, 101, 101),
+      ],
+      centerWidget: Scaffold(
+        backgroundColor: Colors.transparent,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Dialogs.botomUpDialog(context, AddShop());
+          },
+          child: Icon(Icons.add),
+        ),
+        appBar: AppBar(
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
             ),
           ),
-        ],
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          title: Text(
+            'Shops',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                  height: 60,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Shops",
+                                style: Theme.of(context).textTheme.headline3),
+                            Text(
+                                "see all the shops, add new ones, edit them, delete them, etc.",
+                                style: Theme.of(context).textTheme.subtitle2),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              BluredContainer(
+                margin: EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                child: ListView.builder(
+                  itemCount: _shopsDataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    ShopData shopsData = _shopsDataList[index];
+                    return Slidable(
+                        startActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            IconButton(
+                                icon: Icon(
+                                  Icons.mode_edit,
+                                  size: 30,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                color: Colors.transparent,
+                                onPressed: () {
+                                  Dialogs.botomUpDialog(
+                                      context, AddShop(shop: shopsData.shop));
+                                }),
+                          ],
+                        ),
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_forever,
+                                size: 30,
+                                color: Theme.of(context).errorColor,
+                              ),
+                              color: Colors.transparent,
+                              onPressed: () {
+                                Dialogs.dialogSimple(context,
+                                    title: 'Are you sure !!?',
+                                    widgets: [
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: 120,
+                                              child: ElevatedButton(
+                                                child: Text('Cancel'),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                style: MThemeData
+                                                    .raisedButtonStyleCancel,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Container(
+                                              width: 120,
+                                              child: ElevatedButton(
+                                                child: Text(
+                                                  'Ok',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3,
+                                                ),
+                                                onPressed: () => ref
+                                                    .read(operationsProvider)
+                                                    .deleteShopData(shopsData)
+                                                    .then((value) =>
+                                                        Navigator.of(context)
+                                                            .pop()),
+                                                style: MThemeData
+                                                    .raisedButtonStyleSave,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ]);
+                              },
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: BluredContainer(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              color: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: ListTile(
+                                dense: true,
+                                contentPadding:
+                                    EdgeInsets.only(left: 8, right: 8),
+                                leading: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppConstants.whiteOpacity,
+                                  ),
+                                  child: Icon(Icons.person),
+                                ),
+                                title: Text(
+                                  ' ${shopsData.shop.shopName}',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${(shopsData.shop.limit)}',
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                    ),
+                                    Text(
+                                      'limit',
+                                      style:
+                                          Theme.of(context).textTheme.subtitle2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ));
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

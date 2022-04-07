@@ -9,7 +9,7 @@ class QuantifierSpinner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _list = <String>['واحدة', 'كيلو', 'علبة', 'لتر'];
-
+    var picked = ref.watch(selectedQuantifierProvider.state).state;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -34,7 +34,7 @@ class QuantifierSpinner extends ConsumerWidget {
               iconSize: 30,
               icon: Icon(Icons.arrow_drop_down),
               isExpanded: true,
-              value: ref.watch(selectedQuantifierProvider.state).state,
+              value: _list.contains(picked) ? picked : null,
               onChanged: (value) {
                 onValueChanged(value ?? _list[0]);
                 ref.read(selectedQuantifierProvider.state).state = value;
