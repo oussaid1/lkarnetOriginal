@@ -41,10 +41,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
           child: AppAssets.pinkCircleWidget,
         ),
       ],
-      gradientColors: [
-        Color.fromARGB(255, 48, 237, 171),
-        Color.fromARGB(255, 48, 209, 237),
-      ],
+      gradientColors: AppConstants.myGradients,
       centerWidget: Scaffold(
         floatingActionButton: MyExpandableFab(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

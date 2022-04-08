@@ -67,10 +67,10 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           },
         ),
       ),
-      body: BluredContainer(
+      body: GlassContainer(
         start: 0,
         end: 0,
-        borderColorOpacity: 0,
+        //borderColorOpacity: 0,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -124,24 +124,28 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
               ],
             ),
             SizedBox(
-              height: 140,
+              height: 100,
+              width: double.infinity,
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   final ShopData shopsData = _shopsDataList[index];
-                  return ShopSquareTile(
-                    shopData: shopsData,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ShopDetails(
-                            shopData: shopsData,
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ShopSquareTile(
+                      shopData: shopsData,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShopDetails(
+                              shopData: shopsData,
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 },
                 itemCount: _shopsDataList.length,
@@ -168,12 +172,25 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
               // Icon(Icons.dashboard_customize,
               //     color: Color.fromRGBO(255, 255, 255, 1)),
               // const SizedBox(width: 8),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Recent Operations',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Color.fromARGB(106, 255, 255, 255),
-                        )),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text('Recent Operations',
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Color.fromARGB(106, 255, 255, 255),
+                            )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                    child: Text(
+                      'double tap to add the item to kitchen !',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ),
+                ],
               ),
               // more button
 

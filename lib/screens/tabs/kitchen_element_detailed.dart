@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
+import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
+import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../widgets/availability_widget.dart';
-import '../../widgets/dialogs.dart';
 import '../../widgets/expired_switch.dart';
 import '../../widgets/kitchen_item_listtile.dart';
-import '../add/edit_kitchen_element.dart';
 
 class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
   const KitchenElementDetailsScreen({Key? key, required this.kitchenElement})
@@ -30,8 +30,11 @@ class _KitchenItemDetailsScreenState
   //bool _isExpired = false;
   // an empty list of kitchen items
   List<KitchenItem> _kitchenItems = [];
+
+  double _availability = 0;
   @override
   void initState() {
+    _availability = widget.kitchenElement.availability!;
     //_isLoading = true;
     super.initState();
   }
@@ -65,11 +68,7 @@ class _KitchenItemDetailsScreenState
             child: AppAssets.blueCircleWidget,
           ),
         ],
-        gradientColors: [
-          Color.fromARGB(255, 134, 32, 230),
-          Color.fromARGB(255, 224, 101, 101),
-          Color.fromARGB(255, 224, 101, 101),
-        ],
+        gradientColors: AppConstants.myGradients,
         centerWidget: Scaffold(
           backgroundColor: Colors.transparent,
 
@@ -90,6 +89,21 @@ class _KitchenItemDetailsScreenState
           ),
           appBar: MyAppBar(
             title: Text('${widget.kitchenElement.title}'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddKitchenElement(
+                        kitchenElement: widget.kitchenElement,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
 
           // Next, create a SliverList
@@ -185,7 +199,7 @@ class _KitchenItemDetailsScreenState
                                     // setState(() {
                                     //   _isLoading = true;
                                     // });
-                                    _kitchenItem.toPrint();
+                                    // _kitchenItem.toPrint();
                                     ref
                                         .read(databaseProvider)
                                         .updateKitchenItem(
@@ -221,7 +235,158 @@ class _KitchenItemDetailsScreenState
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           BluredContainer(
-            height: 50,
+            height: 65,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: GestureDetector(
+                      onTap: () {
+                        // Dialogs.botomUpDialog(
+                        //   context,
+                        //   UpdateKitchenElement(
+                        //     kitchenElement: widget.kitchenElement,
+                        //   ),
+                        // );
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (mctx) => Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                child: Stack(
+                                  overflow: Overflow.visible,
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Container(
+                                      height: 130,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 70, 10, 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            MaterialButton(
+                                              onPressed: () {
+                                                final db = ref
+                                                    .read(operationsProvider);
+
+                                                db.updateKitchenElement(widget
+                                                    .kitchenElement
+                                                    .copyWith(
+                                                        availability:
+                                                            _availability));
+
+                                                Navigator.of(context).pop();
+                                              },
+                                              color: Colors.redAccent,
+                                              child: Text(
+                                                'Save',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            // const SizedBox(width: 10),
+                                            MaterialButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              color: Colors.redAccent,
+                                              child: Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                        top: -60,
+                                        child: CircleAvatar(
+                                          backgroundColor:
+                                              AppConstants.primaryColor,
+
+                                          ///Color.fromARGB(255, 55, 152, 216),
+                                          radius: 60,
+                                          child: Availibility(
+                                            radius: 120,
+                                            initialValue: widget
+                                                .kitchenElement.availability!,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _availability = value;
+                                              });
+                                            },
+                                          ),
+                                        )),
+                                  ],
+                                )));
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ProgressWidget(
+                                kitchenElement: widget.kitchenElement,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Status: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(0.3)),
+                              ),
+                              Text(
+                                'tap here to change status ... ! ',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 12),
+                        child: Text(
+                          widget.kitchenElement.title.toString(),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ),
+                      PiorityRatingWidget(
+                        ignoreGestures: true,
+                        onRatingChanged: (rating) {},
+                        initialRating: widget.kitchenElement.priority!,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -239,62 +404,8 @@ class _KitchenItemDetailsScreenState
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      Dialogs.botomUpDialog(
-                        context,
-                        UpdateKitchenElement(
-                          kitchenElement: widget.kitchenElement,
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ProgressWidget(
-                          kitchenElement: widget.kitchenElement,
-                        ),
-                        Text(
-                          'Status: ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.white.withOpacity(0.3)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 12),
-                      child: Text(
-                        widget.kitchenElement.title.toString(),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                    ),
-                    PiorityRatingWidget(
-                      ignoreGestures: true,
-                      onRatingChanged: (rating) {},
-                      initialRating: widget.kitchenElement.priority!,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
+
+          ///  SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
@@ -387,32 +498,48 @@ class PiorityRatingWidget extends ConsumerWidget {
 }
 
 // ignore: must_be_immutable
-class Availibility extends StatelessWidget {
-  Availibility({Key? key, required this.onChanged, this.value = 0})
+class Availibility extends StatefulWidget {
+  Availibility(
+      {Key? key,
+      required this.onChanged,
+      this.initialValue = 0,
+      this.radius = 35})
       : super(key: key);
   final void Function(double) onChanged;
-  double value = 0;
+  final double radius;
+
+  double initialValue = 0;
+
+  @override
+  State<Availibility> createState() => _AvailibilityState();
+}
+
+class _AvailibilityState extends State<Availibility> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 35,
-      height: 35,
+      width: widget.radius,
+      height: widget.radius,
       child: GestureDetector(
         onTap: () {
-          if (value < 10) {
-            value++;
+          if (widget.initialValue < 10) {
+            setState(() {
+              widget.initialValue++;
+            });
           } else {
-            value = 0;
+            setState(() {
+              widget.initialValue = 0;
+            });
           }
-          onChanged(value);
+          widget.onChanged(widget.initialValue);
         },
         child: SfRadialGauge(
           // backgroundColor: Colors.white,
 
           axes: <RadialAxis>[
             RadialAxis(
-              labelFormat: '$value',
-              maximumLabels: 1,
+              labelFormat: '${widget.initialValue}',
+              maximumLabels: 0,
               labelOffset: 45,
               labelsPosition: ElementsPosition.inside,
               axisLabelStyle:
@@ -430,8 +557,8 @@ class Availibility extends StatelessWidget {
               ),
               pointers: <GaugePointer>[
                 RangePointer(
-                  color: Color.fromARGB(98, 252, 183, 102),
-                  value: value,
+                  color: Color.fromARGB(160, 255, 151, 15),
+                  value: widget.initialValue,
                   width: 0.95,
                   // pointerOffset: 0.05,
                   sizeUnit: GaugeSizeUnit.factor,

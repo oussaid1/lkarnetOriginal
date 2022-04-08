@@ -17,7 +17,7 @@ class Operations {
   Operations(this._read);
 // item crud
   Future<bool> addItem(Item _item) async {
-    _item.toPrint();
+    // _item.toPrint();
     return await _read(databaseProvider).addItem(_item).then((value) => true);
   }
 

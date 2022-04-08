@@ -114,11 +114,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
-      gradientColors: [
-        Color.fromARGB(255, 134, 32, 230),
-        Color.fromARGB(255, 224, 101, 101),
-        Color.fromARGB(255, 224, 101, 101),
-      ],
+      gradientColors: AppConstants.myGradients,
       centerWidget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -286,7 +282,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                             ? widget.kitchenElement!.id!
                             : _kitchenElement!.id!,
                       );
-                      _kitchenItem.toPrint();
+                      // _kitchenItem.toPrint();
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
                         setState(() {

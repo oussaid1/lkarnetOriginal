@@ -42,11 +42,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
-      gradientColors: [
-        Color.fromARGB(255, 134, 32, 230),
-        Color.fromARGB(255, 224, 101, 101),
-        Color.fromARGB(255, 224, 101, 101),
-      ],
+      gradientColors: AppConstants.myGradients,
       centerWidget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
