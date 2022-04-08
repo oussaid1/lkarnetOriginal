@@ -9,17 +9,18 @@ import 'package:lkarnet/widgets/date_picker.dart';
 =======
 >>>>>>> 7cea0f9 (v 0.9.2)
 import '../../components.dart';
-import '../../models/kitchen/kitchen_item.dart';
-import '../../providers/authproviders/database_providers.dart';
-import '../../settings/theme.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
 class UpdateKitchenElement extends ConsumerStatefulWidget {
-  const UpdateKitchenElement({
-    Key? key,
-    required this.kitchenElement,
-  }) : super(key: key);
-  final KitchenElement kitchenElement;
+  const UpdateKitchenElement(
+      {Key? key,
+      required this.onUpdate,
+      this.radius = 35,
+      this.initialValue = 0})
+      : super(key: key);
+  final Function(double) onUpdate;
+  final double radius;
+  final double initialValue;
   @override
   ConsumerState<UpdateKitchenElement> createState() =>
       _UpdateKitchenElementState();
@@ -28,15 +29,8 @@ class UpdateKitchenElement extends ConsumerStatefulWidget {
 class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
 <<<<<<< HEAD
   double _availability = 1;
-//  double _priorityRating = 1;
-//  DateTime _date = DateTime.now();
   @override
   void initState() {
-    if (widget.kitchenElement.availability != null) {
-      setState(() {
-        _availability = widget.kitchenElement.availability!;
-      });
-    }
     super.initState();
   }
 
@@ -44,6 +38,7 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
 >>>>>>> a71c130 (...)
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Material(
       color: Colors.transparent,
       child: SingleChildScrollView(
@@ -208,6 +203,19 @@ class _UpdateKitchenElementState extends ConsumerState<UpdateKitchenElement> {
           ],
         ),
       ),
+=======
+    return Availibility(
+      initialValue: widget.initialValue,
+      radius: widget.radius,
+      // value: _availability,
+      onChanged: (value) {
+        setState(() {
+          _availability = value;
+        });
+
+        widget.onUpdate(_availability);
+      },
+>>>>>>> e2feaab (v 0.9.8)
     );
   }
 }

@@ -122,7 +122,8 @@ class ItemTileWidget extends ConsumerWidget {
               context: context,
               isScrollControlled: true,
               isDismissible: true,
-              backgroundColor: AppConstants.primaryColor,
+              barrierColor: Colors.white.withOpacity(0),
+              backgroundColor: AppConstants.whiteOpacity,
               builder: (context) => Padding(
                     padding: MediaQuery.of(context).viewInsets,
                     // height: MediaQuery.of(context).size.height * 0.5,

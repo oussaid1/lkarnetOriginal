@@ -67,11 +67,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: AppAssets.blueCircleWidget,
           ),
         ],
-        gradientColors: [
-          Color.fromARGB(255, 134, 32, 230),
-          Color.fromARGB(255, 224, 101, 101),
-          Color.fromARGB(255, 224, 101, 101),
-        ],
         centerWidget: Scaffold(
             bottomNavigationBar: buildNavigationBar(
                 context, _selectedPageIndex, _pageController, ref),
@@ -134,27 +129,27 @@ class _HomePageState extends ConsumerState<HomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.home),
           label: 'Home',
-          backgroundColor: Color.fromARGB(255, 224, 101, 101),
+          backgroundColor: Color.fromARGB(137, 101, 179, 224),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.dashboard),
           label: 'Dashboard',
-          backgroundColor: Color.fromARGB(255, 224, 126, 101),
+          backgroundColor: Color.fromARGB(144, 224, 126, 101),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.kitchen),
           label: 'Kitchen',
-          backgroundColor: Color.fromARGB(255, 224, 101, 121),
+          backgroundColor: Color.fromARGB(136, 224, 101, 121),
         ),
         const BottomNavigationBarItem(
           icon: const Icon(Icons.add_chart),
           label: 'Stats',
-          backgroundColor: Color.fromARGB(255, 224, 101, 183),
+          backgroundColor: Color.fromARGB(123, 224, 101, 183),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.settings),
           label: 'Settings',
-          backgroundColor: Color.fromARGB(255, 148, 101, 224),
+          backgroundColor: Color.fromARGB(160, 148, 101, 224),
         ),
       ],
     );

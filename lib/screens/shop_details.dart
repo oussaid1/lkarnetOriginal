@@ -46,13 +46,7 @@ class _ShopDetailsState extends State<ShopDetails> {
           child: AppAssets.pinkCircleWidget,
         ),
       ],
-      gradientColors: [
-        Color.fromARGB(255, 237, 155, 48),
-        Color.fromARGB(255, 220, 157, 75),
-        Color.fromARGB(255, 227, 237, 48),
-        // Color.fromARGB(255, 48, 199, 237),
-        // Color.fromARGB(255, 48, 199, 237),
-      ],
+      gradientColors: AppConstants.myGradients,
       centerWidget: ShopsDetailsBody(shopsData: widget.shopData!),
     );
   }
@@ -76,7 +70,7 @@ class ShopsDetailsBody extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: MyAppBar(
         title: Text(
-          '${shopsData.shop}',
+          '${shopsData.shop.shopName}',
           style: Theme.of(context).textTheme.headline2,
         ),
         leading: IconButton(

@@ -108,12 +108,6 @@ class BluredContainer extends StatelessWidget {
   }
 }
 
-class GlassScaffold extends Scaffold {
-  const GlassScaffold({
-    Key? key,
-  }) : super(key: key);
-}
-
 class GlassMaterial extends StatelessWidget {
   final Widget centerWidget;
 
