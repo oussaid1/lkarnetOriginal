@@ -1,17 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/models/kitchen/kitchen_item.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
-import 'package:lkarnet/widgets/kitchen_elements_spinner.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
 import 'package:lkarnet/widgets/shop_spinner.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
+import '../../widgets/add_to_kitchen_from_item.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/number_incrementer.dart';
 
@@ -64,6 +63,7 @@ class _AddItemState extends ConsumerState<AddItem>
 
   @override
   void dispose() {
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -189,7 +189,9 @@ class _AddItemState extends ConsumerState<AddItem>
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -200,7 +202,6 @@ class _AddItemState extends ConsumerState<AddItem>
           child: ElevatedButton(
               child: Text(
                 'Update',
-                style: Theme.of(context).textTheme.headline3,
               ),
               onPressed: _isLoading
                   ? null
@@ -260,7 +261,9 @@ class _AddItemState extends ConsumerState<AddItem>
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -271,7 +274,6 @@ class _AddItemState extends ConsumerState<AddItem>
           child: ElevatedButton(
               child: Text(
                 'Save',
-                style: Theme.of(context).textTheme.headline3,
               ),
               onPressed: _isLoading
                   ? null
@@ -340,14 +342,14 @@ class _AddItemState extends ConsumerState<AddItem>
             top: Radius.circular(25.0),
           ),
         ),
-        // backgroundColor: Colors.black,
+        backgroundColor: Colors.white.withOpacity(0.5),
         context: context,
         isScrollControlled: true,
         isDismissible: true,
         builder: (_) {
           return Container(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 189, 110, 110),
+              //color: Color.fromARGB(255, 189, 110, 110),
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(25.0),
               ),
@@ -434,6 +436,7 @@ class _AddItemState extends ConsumerState<AddItem>
             direction: AxisDirection.up,
             hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
+              onChanged: (value) => _isLoading = false,
               controller: _itemNameController,
               autofocus: true,
               textAlign: TextAlign.center,
@@ -441,7 +444,6 @@ class _AddItemState extends ConsumerState<AddItem>
               decoration: InputDecoration(
                 //no borders,
                 border: InputBorder.none,
-
                 contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
                 fillColor: AppConstants.whiteOpacity,
                 filled: true,
@@ -513,6 +515,11 @@ class _AddItemState extends ConsumerState<AddItem>
                 return null;
               }
             },
+            onChanged: (value) {
+              setState(() {
+                _isLoading = false;
+              });
+            },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
@@ -539,78 +546,6 @@ class _AddItemState extends ConsumerState<AddItem>
           ),
         ),
       ),
-    );
-  }
-}
-
-class AddToKitchenFromItem extends StatefulWidget {
-  const AddToKitchenFromItem({Key? key, required this.item, required this.op})
-      : super(key: key);
-  final Item item;
-  final Operations op;
-  @override
-  State<AddToKitchenFromItem> createState() => _StateAddToKitchenFromItem();
-}
-
-class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
-  KitchenElement? _kitchenElement;
-  // bool _isLoading = false;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('Select kitchen Element to add item to '),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            KitchenElementsSpinner(
-              onSelected: (element) {
-                setState(() {
-                  _kitchenElement = element;
-                });
-              },
-            ),
-            Container(
-              width: 120,
-              child: ElevatedButton(
-                  child: Text(
-                    'Save',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  onPressed: _kitchenElement == null
-                      ? null
-                      : () {
-                          // final _kitchenItem = KitchenItem(
-                          //   itemName: _itemNameController.text,
-                          //   itemPrice: double.parse(
-                          //       _itemPriceController.text),
-                          //   quantity: _quantity,
-                          //   quantifier: _quantifier,
-                          //   dateBought: _dateBought,
-                          //   kitchenElementId: _kitchenElement!.id,
-                          //   shopName: _shop,
-                          //   dateExpired: null,
-                          // );
-                          // ref
-                          //     .read(operationsProvider)
-                          //
-                          //
-                          widget.op.addKitchenItem(KitchenItem.fromItem(
-                              widget.item, _kitchenElement!));
-                          Navigator.of(context).pop();
-                        },
-                  style: MThemeData.raisedButtonStyleSave),
-            ),
-            // const SizedBox(width: 4),
-          ],
-        ),
-        const SizedBox(height: 40),
-      ],
     );
   }
 }

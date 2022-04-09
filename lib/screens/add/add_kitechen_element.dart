@@ -112,30 +112,37 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
             ),
           ),
           body: SingleChildScrollView(
-            child: SizedBox(
-              height: 500,
-              //width: 200,
-              child: BluredContainer(
-                margin: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    _buildTitle(context),
-                    _buildKitchenItemName(),
-                    _buildElementName(context),
-                    const SizedBox(height: 10),
-                    _buildPriority(context),
-                    const SizedBox(height: 10),
-                    _buildDivider(),
-                    const SizedBox(height: 15),
-                    _buildAvailability(context),
-                    SizedBox(height: 40),
-                    widget.kitchenElement == null
-                        ? _buildSave(context)
-                        : _buildUpdate(context),
-                  ],
-                ),
-              ),
-            ),
+            child: StreamBuilder<List<KitchenElement>>(
+                stream: ref.read(databaseProvider).kitchenElementsStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _kitchenElements = snapshot.data!;
+                  }
+                  return SizedBox(
+                    height: 500,
+                    //width: 200,
+                    child: BluredContainer(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          _buildTitle(context),
+                          _buildKitchenItemName(),
+                          _buildElementName(context),
+                          const SizedBox(height: 10),
+                          _buildPriority(context),
+                          const SizedBox(height: 10),
+                          _buildDivider(),
+                          const SizedBox(height: 15),
+                          _buildAvailability(context),
+                          SizedBox(height: 40),
+                          widget.kitchenElement == null
+                              ? _buildSave(context)
+                              : _buildUpdate(context),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
           ),
         ));
   }
@@ -166,7 +173,9 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -177,7 +186,6 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           child: ElevatedButton(
               child: Text(
                 'Update',
-                style: Theme.of(context).textTheme.headline3,
               ),
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -218,7 +226,9 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -229,7 +239,6 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           child: ElevatedButton(
               child: Text(
                 'Save',
-                style: Theme.of(context).textTheme.headline3,
               ),
               onPressed: _isLoading
                   ? null
@@ -321,6 +330,9 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
             textAlign: TextAlign.center,
             controller: _itemNameController,
             style: Theme.of(context).textTheme.headline6,
+            onChanged: (x) => setState(() {
+              _isLoading = false;
+            }),
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.shopping_basket_outlined,
@@ -351,87 +363,82 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     );
   }
 
-  StreamBuilder<List<KitchenElement>> _buildKitchenItemName() {
-    return StreamBuilder<List<KitchenElement>>(
-        stream: ref.read(databaseProvider).kitchenElementsStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _kitchenElements = snapshot.data!;
-          }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKeyCat,
-              child: SizedBox(
-                height: 50,
-                child: TypeAheadField<KitchenElement>(
-                  noItemsFoundBuilder: (context) => Text('No Items Found'),
-                  autoFlipDirection: true,
-                  minCharsForSuggestions: 2,
-                  direction: AxisDirection.up,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: _elementCategoryController,
-                    autofocus: true,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(top: 4, right: 4, left: 4),
-                      fillColor: AppConstants.whiteOpacity,
-                      filled: true,
-                      hintText: 'title',
-                      //alignLabelWithHint: true,
+  Widget _buildKitchenItemName() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Form(
+        key: _formKeyCat,
+        child: SizedBox(
+          height: 50,
+          child: TypeAheadField<KitchenElement>(
+            noItemsFoundBuilder: (context) => Text('No Items Found'),
+            autoFlipDirection: true,
+            minCharsForSuggestions: 2,
+            direction: AxisDirection.up,
+            hideSuggestionsOnKeyboardHide: true,
+            textFieldConfiguration: TextFieldConfiguration(
+              onChanged: (x) => setState(() {
+                _isLoading = false;
+              }),
+              controller: _elementCategoryController,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
+                fillColor: AppConstants.whiteOpacity,
+                filled: true,
+                hintText: 'title',
+                //alignLabelWithHint: true,
 
-                      prefixIcon: Icon(
-                        Icons.category,
-                        color: Color.fromARGB(117, 212, 211, 211),
-                      ),
-                      suffix: IconButton(
-                        icon: Icon(
-                          Icons.clear_outlined,
-                          size: 18,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _elementCategoryController.clear();
-                          });
-                        },
-                      ),
-                      // border: OutlineInputBorder(),
-                    ),
+                prefixIcon: Icon(
+                  Icons.category,
+                  color: Color.fromARGB(117, 212, 211, 211),
+                ),
+                suffix: IconButton(
+                  icon: Icon(
+                    Icons.clear_outlined,
+                    size: 18,
                   ),
-                  suggestionsCallback: (pattern) async {
-                    return _kitchenElements
-                        .where((item) => item.title
-                            .toLowerCase()
-                            .startsWith(pattern.toLowerCase()))
-                        .toList(growable: true);
-                  },
-                  itemBuilder: (context, suggestion) {
-                    return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppConstants.whiteOpacity,
-                        ),
-                        height: 40,
-                        width: 100,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            suggestion.title,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ));
-                  },
-                  onSuggestionSelected: (suggestion) {
-                    _elementCategoryController.text = suggestion.title;
+                  onPressed: () {
+                    setState(() {
+                      _elementCategoryController.clear();
+                    });
                   },
                 ),
+                // border: OutlineInputBorder(),
               ),
             ),
-          );
-        });
+            suggestionsCallback: (pattern) {
+              return _kitchenElements
+                  .where((item) => item.title
+                      .toLowerCase()
+                      .startsWith(pattern.toLowerCase()))
+                  .toList(growable: true);
+            },
+            itemBuilder: (context, suggestion) {
+              return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppConstants.whiteOpacity,
+                  ),
+                  height: 40,
+                  width: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      suggestion.title,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ));
+            },
+            onSuggestionSelected: (suggestion) {
+              _elementCategoryController.text = suggestion.title;
+            },
+          ),
+        ),
+      ),
+    );
   }
 }

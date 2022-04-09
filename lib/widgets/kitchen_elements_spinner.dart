@@ -39,6 +39,7 @@ class _KitchenElementsSpinnerState
             }
             return DropdownButtonHideUnderline(
               child: ButtonTheme(
+                height: 200,
                 alignedDropdown: true,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

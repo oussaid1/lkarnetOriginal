@@ -124,7 +124,9 @@ class PaymentTile extends ConsumerWidget {
                             Container(
                               width: 120,
                               child: ElevatedButton(
-                                child: Text('Cancel'),
+                                child: Text(
+                                  'Cancel',
+                                ),
                                 onPressed: () => Navigator.pop(context),
                                 style: MThemeData.raisedButtonStyleCancel,
                               ),

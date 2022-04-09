@@ -200,7 +200,9 @@ class SettingsPage extends ConsumerWidget {
                     Container(
                       width: 120,
                       child: ElevatedButton(
-                        child: Text('Cancel'),
+                        child: Text(
+                          'Cancel',
+                        ),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },

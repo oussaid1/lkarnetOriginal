@@ -6,7 +6,7 @@ class MThemeData {
   /////// light theme
   static const primaryColor = Color.fromARGB(255, 255, 136, 0);
   static const primaryVarient = Color(0xFFCA950F);
-  static const secondaryColor = Color.fromARGB(255, 235, 166, 150);
+  static const secondaryColor = Color.fromARGB(255, 0, 151, 211);
   static const secondaryVarient = Color(0xFF7E3BC1);
   static const hintColor = Color.fromARGB(255, 43, 43, 43);
   static const almostWhiteColor = Color(0xFFF6FBFF);
@@ -30,7 +30,7 @@ class MThemeData {
     primary: primaryColor,
     primaryContainer: primaryVarient,
     secondary: secondaryColor,
-    secondaryContainer: secondaryVarient,
+    secondaryContainer: secondaryColor,
     background: almostWhiteColor,
     surface: white,
     onBackground: black,
@@ -40,13 +40,14 @@ class MThemeData {
     onSecondary: almostBlackColorDark,
     onSurface: black,
     brightness: Brightness.light,
+    //onSecondaryContainer:secondaryColor
   );
 
   static const ColorScheme darkColorScheme = ColorScheme(
     primary: primaryColorDark,
     primaryContainer: primaryVarientDark,
     secondary: secondaryColorDark,
-    secondaryContainer: secondaryVarientDark,
+    secondaryContainer: secondaryColor,
     background: black,
     surface: almostBlackColorDark,
     onBackground: white,
@@ -56,10 +57,11 @@ class MThemeData {
     onSecondary: almostWhiteColor,
     onSurface: white,
     brightness: Brightness.dark,
+    // onSecondaryContainer:
   );
 
   static final ButtonStyle raisedButtonStyleCancel = ElevatedButton.styleFrom(
-    textStyle: _textTheme.button!.copyWith(color: primaryColor),
+    textStyle: _textTheme.button!,
     // backgroundColor: Colors.transparent,
     onSurface: primaryColor,
     // minimumSize: const Size(100, 50),
@@ -67,7 +69,7 @@ class MThemeData {
     shadowColor: primaryColor,
     enableFeedback: true,
     elevation: 0,
-
+    primary: Colors.transparent,
     fixedSize: const Size(100, 40),
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
@@ -150,34 +152,34 @@ class MThemeData {
       // ),
 
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: colorScheme.secondary,
+        foregroundColor: colorScheme.onBackground,
         elevation: 0,
         shape: const CircleBorder(),
       ),
-      buttonTheme: ButtonThemeData(
-        disabledColor: colorScheme.primary.withOpacity(0.1),
-        //  buttonColor: colorScheme.secondary,
-        minWidth: 88,
-        height: 36,
-        colorScheme: colorScheme,
-        textTheme: ButtonTextTheme.normal,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
+      // buttonTheme: ButtonThemeData(
+      //   disabledColor: colorScheme.primary.withOpacity(0.1),
+      //   //  buttonColor: colorScheme.secondary,
+      //   minWidth: 88,
+      //   height: 36,
+      //   colorScheme: colorScheme,
+      //   textTheme: ButtonTextTheme.normal,
+      //   shape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(10)),
+      //   ),
+      // ),
       textTheme: _textTheme,
       // Matches manifest.json colors and background color.
       primaryColor: colorScheme.background,
-      appBarTheme: AppBarTheme(
-        //toolbarHeight: 80,
-        titleTextStyle: _textTheme.headline6!.copyWith(
-            // color: colorScheme.onPrimary,
-            ),
-        color: colorScheme.secondary,
-        elevation: 0,
-        iconTheme: IconThemeData(color: colorScheme.onBackground),
-      ),
+      // appBarTheme: AppBarTheme(
+      //   //toolbarHeight: 80,
+      //   // titleTextStyle: _textTheme.headline6!.copyWith(
+      //   //     // color: colorScheme.onPrimary,
+      //   //     ),
+      //   color: colorScheme.secondary,
+      //   elevation: 0,
+      //   iconTheme: IconThemeData(color: colorScheme.onBackground),
+      // ),
       hintColor: hintColor,
 
       // switchTheme: SwitchThemeData(
@@ -185,7 +187,7 @@ class MThemeData {
       //   trackColor: MaterialStateProperty.all(primaryVarient),
       // ),
       // tabBarTheme: TabBarTheme(labelColor: ),
-      //iconTheme: IconThemeData(color: ),
+      iconTheme: IconThemeData(color: colorScheme.surface),
       canvasColor: colorScheme.background,
       scaffoldBackgroundColor: colorScheme.background,
       highlightColor: Colors.transparent,
@@ -195,7 +197,7 @@ class MThemeData {
         elevation: 0,
         color: colorScheme.surface,
       ),
-      iconTheme: IconThemeData(color: Color.fromARGB(255, 27, 27, 27)),
+      //iconTheme: IconThemeData(color: Color.fromARGB(255, 27, 27, 27)),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Color.alphaBlend(

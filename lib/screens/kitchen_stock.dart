@@ -77,7 +77,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                   return Scaffold(
                     backgroundColor: Colors.transparent,
                     floatingActionButtonLocation:
-                        FloatingActionButtonLocation.centerDocked,
+                        FloatingActionButtonLocation.centerFloat,
                     floatingActionButton: FloatingActionButton(
                       heroTag: 'add_kitchen_element',
                       onPressed: () {

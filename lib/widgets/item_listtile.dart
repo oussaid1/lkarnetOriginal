@@ -6,6 +6,7 @@ import '../models/item/item.dart';
 import '../providers/operationsprovider/operations_provider.dart';
 import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_item.dart';
+import 'add_to_kitchen_from_item.dart';
 import 'price_curency_widget.dart';
 
 class ItemTileWidget extends ConsumerWidget {
@@ -72,7 +73,9 @@ class ItemTileWidget extends ConsumerWidget {
                             Container(
                               width: 120,
                               child: ElevatedButton(
-                                child: Text('Cancel'),
+                                child: Text(
+                                  'Cancel',
+                                ),
                                 onPressed: () => Navigator.of(context).pop(),
                                 style: MThemeData.raisedButtonStyleCancel,
                               ),
@@ -124,11 +127,13 @@ class ItemTileWidget extends ConsumerWidget {
               isDismissible: true,
               barrierColor: Colors.white.withOpacity(0),
               backgroundColor: AppConstants.whiteOpacity,
-              builder: (context) => Padding(
+              builder: (contsext) => Padding(
                     padding: MediaQuery.of(context).viewInsets,
                     // height: MediaQuery.of(context).size.height * 0.5,
-                    child: AddToKitchenFromItem(
-                        item: item, op: ref.read(operationsProvider)),
+                    child: GlassContainer(
+                      child: AddToKitchenFromItem(
+                          item: item, op: ref.read(operationsProvider)),
+                    ),
                   ));
         },
         child: Card(

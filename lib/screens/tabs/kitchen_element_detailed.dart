@@ -4,6 +4,7 @@ import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../components.dart';
@@ -103,6 +104,45 @@ class _KitchenItemDetailsScreenState
                   );
                 },
               ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Are you sure?'),
+                      content: Text(
+                          'This will delete all the items in this kitchen element'),
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
+                      actions: <Widget>[
+                        ElevatedButton(
+                          style: MThemeData.raisedButtonStyleCancel,
+                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        ElevatedButton(
+                          child: Text('Delete'),
+                          style: MThemeData.raisedButtonStyleSave,
+                          onPressed: () {
+                            ref.read(operationsProvider).deleteKitchenElement(
+                                  widget.kitchenElement,
+                                );
+                            for (KitchenItem item in _kitchenItems) {
+                              ref.read(operationsProvider).deleteKitchenItem(
+                                    item,
+                                  );
+                            }
+
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -112,16 +152,29 @@ class _KitchenItemDetailsScreenState
               children: [
                 SizedBox(height: 20),
                 _buildTopContainer(context),
-                SizedBox(
-                  height: 20,
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Items',
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                          Text(
+                            'Long press to set the expiration date ! if Item expired !',
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Long press to set the expiration date ! if Item expired !',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ),
+                SizedBox(height: 10),
                 _buildBottomContainer(context),
               ],
             ),
@@ -186,7 +239,9 @@ class _KitchenItemDetailsScreenState
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  child: Text('Cancel'),
+                                  child: Text(
+                                    'Cancel',
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -258,7 +313,8 @@ class _KitchenItemDetailsScreenState
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4.0)),
                                 child: Stack(
-                                  overflow: Overflow.visible,
+                                  //overflow: Overflow.visible,
+                                  clipBehavior: Clip.none,
                                   fit: StackFit.passthrough,
                                   alignment: Alignment.topCenter,
                                   children: [
@@ -287,8 +343,6 @@ class _KitchenItemDetailsScreenState
                                               color: Colors.redAccent,
                                               child: Text(
                                                 'Save',
-                                                style: TextStyle(
-                                                    color: Colors.white),
                                               ),
                                             ),
                                             // const SizedBox(width: 10),
@@ -299,8 +353,6 @@ class _KitchenItemDetailsScreenState
                                               color: Colors.redAccent,
                                               child: Text(
                                                 'Cancel',
-                                                style: TextStyle(
-                                                    color: Colors.white),
                                               ),
                                             ),
                                           ],

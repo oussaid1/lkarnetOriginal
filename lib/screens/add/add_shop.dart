@@ -48,6 +48,12 @@ class _AddShopState extends ConsumerState<AddShop> {
   }
 
   @override
+  void dispose() {
+    clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
@@ -96,9 +102,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                       child: TextFormField(
                         controller: _shopEmailController,
                         validator: (text) {
-                          if (text!.isEmpty) {
-                            return '';
-                          }
+                          // if (text!.isEmpty) {
+                          //   return '';
+                          // }
                           return null;
                         },
                         decoration: InputDecoration(
@@ -122,9 +128,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                       child: TextFormField(
                         controller: _shopPhoneController,
                         validator: (text) {
-                          if (text!.isEmpty) {
-                            return '';
-                          }
+                          // if (text!.isEmpty) {
+                          //   return '';
+                          // }
                           return null;
                         },
                         decoration: InputDecoration(
@@ -211,7 +217,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                               Container(
                                 width: 120,
                                 child: ElevatedButton(
-                                  child: Text('Cancel'),
+                                  child: Text(
+                                    'Cancel',
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -223,8 +231,6 @@ class _AddShopState extends ConsumerState<AddShop> {
                                 child: ElevatedButton(
                                     child: Text(
                                       'Save',
-                                      style:
-                                          Theme.of(context).textTheme.headline3,
                                     ),
                                     onPressed: () {
                                       final _op = ref.read(operationsProvider);
@@ -255,7 +261,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                               Container(
                                 width: 120,
                                 child: ElevatedButton(
-                                  child: Text('Cancel'),
+                                  child: Text(
+                                    'Cancel',
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -267,8 +275,6 @@ class _AddShopState extends ConsumerState<AddShop> {
                                 child: ElevatedButton(
                                   child: Text(
                                     'Update',
-                                    style:
-                                        Theme.of(context).textTheme.headline3,
                                   ),
                                   onPressed: () {
                                     final _op = ref.read(operationsProvider);

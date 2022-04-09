@@ -54,7 +54,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
       child: SingleChildScrollView(
         child: BluredContainer(
           width: 400,
-          height: 320,
+          height: 400,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -129,7 +129,9 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            child: Text('Cancel'),
+                            child: Text(
+                              'Cancel',
+                            ),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
@@ -138,7 +140,6 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                           ElevatedButton(
                             child: Text(
                               'Save',
-                              style: Theme.of(context).textTheme.headline3,
                             ),
                             onPressed: () {
                               final _op = ref.read(operationsProvider);
@@ -168,7 +169,9 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            child: Text('Cancel'),
+                            child: Text(
+                              'Cancel',
+                            ),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
@@ -177,7 +180,6 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                           ElevatedButton(
                             child: Text(
                               'Update',
-                              style: Theme.of(context).textTheme.headline3,
                             ),
                             onPressed: () {
                               final _op = ref.read(operationsProvider);

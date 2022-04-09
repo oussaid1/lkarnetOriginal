@@ -81,7 +81,7 @@ class _ExpandableFabState extends State<ExpandableFab>
       width: 56,
       child: Center(
         child: Material(
-          color: Theme.of(context).primaryColor,
+          color: Colors.amber, //Theme.of(context).colorScheme.secondaryVariant,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
@@ -141,6 +141,7 @@ class _ExpandableFabState extends State<ExpandableFab>
             onPressed: _toggle,
             child: const Icon(
               Icons.add_shopping_cart_rounded,
+              color: Colors.white,
               // color: Colors.amber,
             ),
           ),
@@ -208,7 +209,7 @@ class ActionButton extends StatelessWidget {
     return Material(
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
-      color: theme.colorScheme.secondary,
+      color: theme.colorScheme.secondaryContainer,
       elevation: 4.0,
       child: IconTheme.merge(
         data: theme.iconTheme,
