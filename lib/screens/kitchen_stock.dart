@@ -93,7 +93,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     appBar: AppBar(
                       actions: [
                         _buildNotifications(
-                            KitchenElementData(_kitchenElements), context),
+                            KitchenElementsData(_kitchenElements), context),
                       ],
                       leading:
                           Icon(Icons.kitchen_outlined, color: Colors.black),
@@ -190,7 +190,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
   }
 
   NotificationWidget _buildNotifications(
-      KitchenElementData? kitchenElementData, BuildContext context) {
+      KitchenElementsData? kitchenElementData, BuildContext context) {
     return NotificationWidget(
       count: kitchenElementData != null
           ? kitchenElementData.unavaliableKitchenElements.length

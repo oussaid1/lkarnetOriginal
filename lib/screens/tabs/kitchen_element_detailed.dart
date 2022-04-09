@@ -327,7 +327,9 @@ class _KitchenItemDetailsScreenState
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            MaterialButton(
+                                            ElevatedButton(
+                                              style: MThemeData
+                                                  .raisedButtonStyleSave,
                                               onPressed: () {
                                                 final db = ref
                                                     .read(operationsProvider);
@@ -340,17 +342,17 @@ class _KitchenItemDetailsScreenState
 
                                                 Navigator.of(context).pop();
                                               },
-                                              color: Colors.redAccent,
                                               child: Text(
                                                 'Save',
                                               ),
                                             ),
                                             // const SizedBox(width: 10),
-                                            MaterialButton(
+                                            ElevatedButton(
+                                              style: MThemeData
+                                                  .raisedButtonStyleCancel,
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
-                                              color: Colors.redAccent,
                                               child: Text(
                                                 'Cancel',
                                               ),
@@ -362,8 +364,8 @@ class _KitchenItemDetailsScreenState
                                     Positioned(
                                         top: -60,
                                         child: CircleAvatar(
-                                          backgroundColor:
-                                              AppConstants.primaryColor,
+                                          backgroundColor: Colors.transparent,
+                                          // AppConstants.primaryColor,
 
                                           ///Color.fromARGB(255, 55, 152, 216),
                                           radius: 60,
@@ -590,26 +592,29 @@ class _AvailibilityState extends State<Availibility> {
 
           axes: <RadialAxis>[
             RadialAxis(
+              useRangeColorForAxis: true,
               labelFormat: '${widget.initialValue}',
               maximumLabels: 0,
               labelOffset: 45,
               labelsPosition: ElementsPosition.inside,
-              axisLabelStyle:
-                  GaugeTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              axisLabelStyle: GaugeTextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 255, 115, 0)),
               minimum: 0,
               maximum: 10,
               showLabels: true,
               showTicks: false,
-              startAngle: 270,
-              endAngle: 270,
+              startAngle: 250,
+              endAngle: 250,
               axisLineStyle: AxisLineStyle(
                 thickness: 0.05,
-                color: Color.fromARGB(120, 78, 62, 62),
+                color: Colors.white.withOpacity(0.5),
                 thicknessUnit: GaugeSizeUnit.factor,
               ),
               pointers: <GaugePointer>[
                 RangePointer(
-                  color: Color.fromARGB(160, 255, 151, 15),
+                  color: Color.fromARGB(183, 252, 252, 252),
                   value: widget.initialValue,
                   width: 0.95,
                   // pointerOffset: 0.05,

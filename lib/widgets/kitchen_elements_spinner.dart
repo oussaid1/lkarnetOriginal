@@ -33,7 +33,8 @@ class _KitchenElementsSpinnerState
             if (snapshot.hasData) {
               _kitchenElements = snapshot.data!;
 
-              if (!_kitchenElements.isEmpty) {
+              if (_selectedKitchenElement == null &&
+                  !_kitchenElements.isEmpty) {
                 _selectedKitchenElement = _kitchenElements.first;
               }
             }

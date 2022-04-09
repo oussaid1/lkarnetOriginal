@@ -1,11 +1,17 @@
 import 'kitchen_item.dart';
 
-class KitchenElementData {
+class KitchenElementsData {
   List<KitchenElement> kitchenElementList = [];
+  late String tag;
+  KitchenElementsData(this.kitchenElementList);
 
-  KitchenElementData(this.kitchenElementList) {
-    // kitchenElementList = [];
-    // kitchenItemList = [];
+  // get a list of distinct categories
+  List<String> get distinctCategories {
+    List<String> categories = [];
+    for (var i = 0; i < kitchenElementList.length; i++) {
+      categories.add(kitchenElementList[i].category!);
+    }
+    return categories.toSet().toList();
   }
 
 // get a list of all unavaliable elements
