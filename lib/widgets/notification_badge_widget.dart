@@ -116,3 +116,21 @@ class NotificationBadgeWidget extends StatelessWidget {
     );
   }
 }
+
+//  Badge(
+//       stackFit: StackFit.loose,
+//       position: BadgePosition.topEnd(top: 0, end: 0),
+//       animationType: BadgeAnimationType.scale,
+//       animationDuration: Duration(milliseconds: 300),
+//       badgeContent: Text(
+//         '$count',
+//         style: TextStyle(color: Colors.white),
+//       ),
+//       badgeColor: Colors.red,
+//       child: IconButton(
+//         icon: Icon(Icons.notifications_active,
+//             color: Color.fromARGB(193, 233, 233, 233)),
+//         onPressed: onTap!,
+//       ),
+//     );
+//   }

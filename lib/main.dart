@@ -23,10 +23,13 @@ Future<void> main() async {
       MNotificationModel
           .calldispatcher, // The top level function, aka callbackDispatcher
       isInDebugMode:
-          false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+          true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
-  await Workmanager().registerPeriodicTask("test_workertask", "test_workertask",
-      inputData: {"data1": "value1", "data2": "value2"},
+  await Workmanager().registerPeriodicTask("oussaidTestTask", "oussaidTestTask",
+      inputData: {
+        MNotificationModel.expiredItems: 23,
+        MNotificationModel.dateTime: DateTime.now(),
+      },
       frequency: Duration(minutes: 15),
       initialDelay: Duration(seconds: 10),
       existingWorkPolicy: ExistingWorkPolicy.replace);

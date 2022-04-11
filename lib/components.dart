@@ -13,3 +13,4 @@ export 'package:syncfusion_flutter_gauges/gauges.dart';
 //export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 export 'package:awesome_notifications/awesome_notifications.dart';
 export 'package:workmanager/workmanager.dart';
+//export 'package:badges/badges.dart';

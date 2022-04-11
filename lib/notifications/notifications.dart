@@ -6,7 +6,8 @@ import 'utilities.dart';
 class MNotificationModel {
   // singleton
   // _NotificationModel._();
-
+  static const String expiredItems = 'expiredItems';
+  static const String dateTime = 'DateTime';
   static const String iconUri = 'resource://drawable/ic_launcher.png';
   static final MNotificationModel _singleton = MNotificationModel._();
   factory MNotificationModel() {
