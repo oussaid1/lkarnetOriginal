@@ -219,6 +219,7 @@ void _notificationsPermition(BuildContext context) async {
 
   AwesomeNotifications().createdStream.listen((notification) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.teal,
       content: Text(
         'Notification Created on ${notification.channelKey}',
       ),

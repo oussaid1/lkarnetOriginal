@@ -23,8 +23,14 @@ Future<void> main() async {
       MNotificationModel
           .calldispatcher, // The top level function, aka callbackDispatcher
       isInDebugMode:
-          true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+          false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
+  await Workmanager().registerPeriodicTask("test_workertask", "test_workertask",
+      inputData: {"data1": "value1", "data2": "value2"},
+      frequency: Duration(minutes: 15),
+      initialDelay: Duration(seconds: 10),
+      existingWorkPolicy: ExistingWorkPolicy.replace);
+
   runApp(ProviderScope(child: MyApp()));
 }
 

@@ -64,18 +64,18 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           style: Theme.of(context).textTheme.headline2,
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.telegram),
-            onPressed: () async {
-              await Workmanager().registerPeriodicTask(
-                  "test_workertask", "test_workertask",
-                  inputData: {"data1": "value1", "data2": "value2"},
-                  frequency: Duration(minutes: 15),
-                  initialDelay: Duration(seconds: 10),
-                  existingWorkPolicy: ExistingWorkPolicy.replace);
-              // Navigator.pushNamed(context, '/notifications');
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.telegram),
+          //   onPressed: () async {
+          //     await Workmanager().registerPeriodicTask(
+          //         "test_workertask", "test_workertask",
+          //         inputData: {"data1": "value1", "data2": "value2"},
+          //         frequency: Duration(minutes: 15),
+          //         initialDelay: Duration(seconds: 10),
+          //         existingWorkPolicy: ExistingWorkPolicy.replace);
+          //     // Navigator.pushNamed(context, '/notifications');
+          //   },
+          // ),
           NotificationsIconButton(
             ref: ref,
           ),

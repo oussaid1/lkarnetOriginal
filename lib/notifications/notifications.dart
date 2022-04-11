@@ -46,7 +46,7 @@ class MNotificationModel {
         channelKey: 'basic_channel',
         title:
             '${Emojis.food_bagel + Emojis.plant_palm_tree} Go Buy Some Food!!!',
-        body: 'You have $expired items expired ...',
+        body: 'one time You have $expired items expired ...',
         // bigPicture: 'asset://assets/notification_map.png',
         notificationLayout: NotificationLayout.Default,
       ),
@@ -63,7 +63,7 @@ class MNotificationModel {
         channelKey: 'scheduled_channel',
         title:
             '${Emojis.food_bagel + Emojis.plant_palm_tree} Go Buy Some Food!!!',
-        body: 'You have $expired items expired ...',
+        body: 'scheduled You have $expired items expired ...',
         // bigPicture: 'asset://assets/notification_map.png',
         notificationLayout: NotificationLayout.Default,
       ),
@@ -75,8 +75,8 @@ class MNotificationModel {
       ],
       schedule: NotificationCalendar(
         //weekday: dateTime.weekday,
-        hour: 0, //dateTime.hour,
-        minute: 50, // dateTime.minute,
+        hour: 16, //dateTime.hour,
+        minute: 28, // dateTime.minute,
         second: 0,
         millisecond: 0,
         repeats: true,
@@ -98,30 +98,3 @@ class MNotificationModel {
     });
   }
 }
-
-// static void callbackDispatcher() {
-
-//   // initial notifications
-//   //var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-//   //var initializationSettingsIOS = IOSInitializationSettings();
-
-//   var initializationSettings = InitializationSettings(
-//     android: initializationSettingsAndroid,
-//     iOS: initializationSettingsIOS,
-//   );
-
-//   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   flutterLocalNotificationsPlugin.initialize(
-//     initializationSettings,
-//   );
-
-//   Workmanager().executeTask((task, inputData) {
-//     showNotification();
-//     return Future.value(true);
-//   });
-// }
-
-
