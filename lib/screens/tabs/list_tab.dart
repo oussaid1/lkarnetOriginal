@@ -40,7 +40,7 @@ class ListTab extends ConsumerWidget {
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
-              ItemsList(),
+              ItemsList(lista: []),
               ShopsList(),
               PaymentsList(),
             ],

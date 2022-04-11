@@ -5,6 +5,7 @@ import 'package:lkarnet/widgets/myappbar.dart';
 import '../components.dart';
 import '../widgets/item_listtile.dart';
 import 'dash/dashboard.dart';
+import 'lists/items.dart';
 import 'lists/payments.dart';
 
 class ShopDetails extends StatefulWidget {
@@ -89,29 +90,9 @@ class ShopsDetailsBody extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     children: [
-                //       Container(
-                //         width: 100,
-                //         height: 40,
-                //         decoration: BoxDecoration(
-                //           color: Colors.white.withOpacity(0.5),
-                //           borderRadius: BorderRadius.circular(50),
-                //         ),
-                //         child: Center(
-                //           child: Text('${shopsData.shop.shopName}',
-                //               style: Theme.of(context).textTheme.headline2),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                const SizedBox(height: 10),
                 ShopItemsDetailsWidget(shopsData: shopsData),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 ShopPaymentsDetailWidget(shopsData: shopsData),
               ],
             ),
@@ -134,37 +115,64 @@ class ShopItemsDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 390,
-      height: 300,
+      height: 360,
       child: Container(
         child: Column(
           children: [
             SizedBox(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Text('Items', style: Theme.of(context).textTheme.headline3!
-                        // .copyWith(color: Colors.white),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Items',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3!
+                              .copyWith(color: Colors.white),
                         ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: 'count :',
-                          style: Theme.of(context).textTheme.bodyText1!),
-                      TextSpan(
-                          text: ' ${shopsData.countItems}',
-                          style: Theme.of(context).textTheme.headline3!),
-                    ])),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: 'total :',
-                          style: Theme.of(context).textTheme.bodyText1!),
-                      TextSpan(
-                          text: ' ${shopsData.itemsSum}',
-                          style: Theme.of(context).textTheme.headline3!),
-                    ])),
+                        IconButton(
+                          icon: Icon(Icons.list,
+                              color: Color.fromARGB(106, 255, 255, 255)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ItemsList(lista: shopsData.allItems),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    // const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'count :',
+                              style: Theme.of(context).textTheme.subtitle2!),
+                          TextSpan(
+                              text: ' ${shopsData.countItems}',
+                              style: Theme.of(context).textTheme.headline5!),
+                        ])),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'total :',
+                              style: Theme.of(context).textTheme.subtitle2!),
+                          TextSpan(
+                              text: ' ${shopsData.itemsSum}',
+                              style: Theme.of(context).textTheme.headline4!),
+                        ])),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -198,38 +206,63 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 390,
-      height: 260,
+      height: 300,
       child: Container(
         child: Column(
           children: [
             SizedBox(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Text('Payments',
-                        style: Theme.of(context).textTheme.headline3!
-                        // .copyWith(color: Colors.white),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Payments',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3!
+                              .copyWith(color: Colors.white),
                         ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: 'count :',
-                          style: Theme.of(context).textTheme.bodyText1!),
-                      TextSpan(
-                          text: ' ${shopsData.countPayments}',
-                          style: Theme.of(context).textTheme.headline3!),
-                    ])),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: 'total :',
-                          style: Theme.of(context).textTheme.bodyText1!),
-                      TextSpan(
-                          text: ' ${shopsData.paymentsSum}',
-                          style: Theme.of(context).textTheme.headline3!),
-                    ])),
+                        IconButton(
+                          icon: Icon(Icons.list,
+                              color: Color.fromARGB(106, 255, 255, 255)),
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) =>
+                            //         ItemsList(lista: recentOperations.items),
+                            //   ),
+                            // );
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'count :',
+                              style: Theme.of(context).textTheme.bodyText1!),
+                          TextSpan(
+                              text: ' ${shopsData.countPayments}',
+                              style: Theme.of(context).textTheme.headline3!),
+                        ])),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'total :',
+                              style: Theme.of(context).textTheme.bodyText1!),
+                          TextSpan(
+                              text: ' ${shopsData.paymentsSum}',
+                              style: Theme.of(context).textTheme.headline3!),
+                        ])),
+                      ],
+                    ),
                   ],
                 ),
               ),

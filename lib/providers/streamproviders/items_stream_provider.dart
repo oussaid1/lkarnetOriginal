@@ -15,8 +15,9 @@ final itemsProvider = StateProvider<List<Item>>((ref) {
   return stream.maybeWhen(data: (items) => items, orElse: () => []);
 });
 
-final itemsListNotifierProvider = Provider<List<Item>>((ref) {
-  final _kitchenElementsItems = ref.watch(itemsProvider.state).state;
+final itemsListNotifierProvider =
+    StateProvider.family<List<Item>, List<Item>>((ref, list) {
+  final _kitchenElementsItems = list; //ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
   var _filterType = ref.watch(filterTypeProvider.state).state;
   switch (_filterType) {

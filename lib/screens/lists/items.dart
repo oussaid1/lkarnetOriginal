@@ -16,10 +16,10 @@ final filterTypeProvider = StateProvider<FilterType>((ref) {
 });
 
 class ItemsList extends ConsumerStatefulWidget {
-  final List<Item>? lista;
+  final List<Item> lista;
   ItemsList({
     Key? key,
-    this.lista,
+    required this.lista,
   }) : super(key: key);
   @override
   ConsumerState<ItemsList> createState() => _ItemsListState();
@@ -32,7 +32,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
   @override
   Widget build(BuildContext context) {
     //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    var _list = ref.watch(itemsListNotifierProvider);
+    var _list = ref.watch(itemsListNotifierProvider(widget.lista).state).state;
 
     return GlassMaterial(
       circleWidgets: [

@@ -6,8 +6,7 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../widgets/availability_widget.dart';
 import '../widgets/charts.dart';
-import '../widgets/notifications_widget.dart';
-import 'lists/unavailiable_elements.dart';
+import '../widgets/notification_badge_widget.dart';
 import 'tabs/kitchen_element_detailed.dart';
 
 class KitchenStockHome extends ConsumerStatefulWidget {
@@ -60,18 +59,10 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     clearListsts();
                     _kitchenElements = snapshot.data!;
                     _kitchenItems = snap.data!;
-                    for (var i = 0; i < _kitchenElements.length; i++) {
-                      _kitchenElementDataList.add(
-                        SingleKitchenElementData(
-                          _kitchenElements[i],
-                          _kitchenItems
-                              .where((element) =>
-                                  element.kitchenElementId ==
-                                  _kitchenElements[i].id)
-                              .toList(),
-                        ),
-                      );
-                    }
+                    _kitchenElementDataList = KitchenElementsData(
+                            kitchenElementList: _kitchenElements,
+                            kitchenItems: _kitchenItems)
+                        .taggedsingleKitchenElementData;
                   }
                   //kitchenElements = KitchenElement.fakeKitchenElements;
                   return Scaffold(
@@ -92,8 +83,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                     ),
                     appBar: AppBar(
                       actions: [
-                        _buildNotifications(
-                            KitchenElementsData(_kitchenElements), context),
+                        NotificationsIconButton(
+                          ref: ref,
+                        ),
                       ],
                       leading:
                           Icon(Icons.kitchen_outlined, color: Colors.black),
@@ -188,24 +180,6 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       ),
     );
   }
-
-  NotificationWidget _buildNotifications(
-      KitchenElementsData? kitchenElementData, BuildContext context) {
-    return NotificationWidget(
-      count: kitchenElementData != null
-          ? kitchenElementData.unavaliableKitchenElements.length
-          : 0,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UnAvailiableElements(
-                elementData: kitchenElementData!.unavaliableKitchenElements),
-          ),
-        );
-      },
-    );
-  }
 }
 
 class KitchenItemSquareTile extends StatelessWidget {
@@ -266,7 +240,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                   //       kitchenElement: kitchenElement,
                   //     )),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   _buildDetails(context),
                 ],
               ),
@@ -283,34 +257,33 @@ class KitchenItemSquareTile extends StatelessWidget {
                       bottom: Radius.circular(4.0),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ProgressWidget(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ProgressWidget(
                           kitchenElement: kitchenElement,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '${kitchenElement.category!.trim()}',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '${kitchenElement.category!.trim()}',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
-                            Icon(
-                              Icons.fastfood,
-                              color: Colors.white.withOpacity(0.5),
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          Icon(
+                            Icons.fastfood,
+                            color: Colors.white.withOpacity(0.5),
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

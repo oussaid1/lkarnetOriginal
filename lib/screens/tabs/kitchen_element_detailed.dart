@@ -197,8 +197,8 @@ class _KitchenItemDetailsScreenState
 
               final SingleKitchenElementData _singleKitchenElementData =
                   SingleKitchenElementData(
-                widget.kitchenElement,
-                _kitchenItems,
+                kitchenElement: widget.kitchenElement,
+                kitchenItems: _kitchenItems,
               );
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),

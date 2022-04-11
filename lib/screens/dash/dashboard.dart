@@ -10,6 +10,7 @@ import '../../providers/streamproviders/payments_stream_provider.dart';
 import '../../providers/streamproviders/shops_stream_provider.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
+import '../../widgets/notification_badge_widget.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../../widgets/shop_square_tile.dart';
 import '../add/add_item.dart';
@@ -31,6 +32,8 @@ class DashBoardPage extends ConsumerStatefulWidget {
 class _DashBoardPageState extends ConsumerState<DashBoardPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  //late List<KitchenElement> _kitchenElements;
+  // /late List<KitchenItem> _kitchenItems;
   @override
   void initState() {
     _animationController = AnimationController(
@@ -60,6 +63,23 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           'Dashboard',
           style: Theme.of(context).textTheme.headline2,
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.telegram),
+            onPressed: () async {
+              await Workmanager().registerPeriodicTask(
+                  "test_workertask", "test_workertask",
+                  inputData: {"data1": "value1", "data2": "value2"},
+                  frequency: Duration(minutes: 15),
+                  initialDelay: Duration(seconds: 10),
+                  existingWorkPolicy: ExistingWorkPolicy.replace);
+              // Navigator.pushNamed(context, '/notifications');
+            },
+          ),
+          NotificationsIconButton(
+            ref: ref,
+          ),
+        ],
         leading: IconButton(
           icon: Icon(Icons.dashboard),
           onPressed: () {
@@ -505,4 +525,3 @@ class MyExpandableFab extends StatelessWidget {
 //     return File(filePath).writeAsString(data);
 //   }
 // }
-

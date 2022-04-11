@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
@@ -28,6 +30,24 @@ class _HomePageState extends ConsumerState<HomePage> {
   final logger = Logger();
   //File _pickedFile = File('/storage/emulated/0/Download/test.txt');
   final PageController _pageController = PageController();
+  @override
+  void initState() {
+    _notificationsPermition(context);
+    // Workmanager().initialize(
+    //     callbackDispatcher, // The top level function, aka callbackDispatcher
+    //     isInDebugMode:
+    //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+    //     );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,37 +64,39 @@ class _HomePageState extends ConsumerState<HomePage> {
     //final _db = ref.watch(databaseProvider);
 
     return GlassMaterial(
-        circleWidgets: [
-          Positioned(
-            width: 100,
-            height: 100,
-            left: 10,
-            top: 120,
-            child: AppAssets.pinkCircleWidget,
-          ),
-          Positioned(
-            width: 180,
-            height: 180,
-            right: 80,
-            top: 200,
-            child: AppAssets.purpleCircleWidget,
-          ),
-          Positioned(
-            width: 140,
-            height: 140,
-            left: 30,
-            bottom: 80,
-            child: AppAssets.blueCircleWidget,
-          ),
-        ],
-        centerWidget: Scaffold(
-            bottomNavigationBar: buildNavigationBar(
-                context, _selectedPageIndex, _pageController, ref),
-            backgroundColor: Colors.transparent,
-            body: buildPageView(_pageController, ref, context,
-                dataSink: dataSink,
-                shopsDataList: _shopsDataList,
-                recentOperations: _recentOperations)));
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
+        ),
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
+        ),
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      centerWidget: Scaffold(
+        bottomNavigationBar: buildNavigationBar(
+            context, _selectedPageIndex, _pageController, ref),
+        backgroundColor: Colors.transparent,
+        body: buildPageView(_pageController, ref, context,
+            dataSink: dataSink,
+            shopsDataList: _shopsDataList,
+            recentOperations: _recentOperations),
+      ),
+    );
   }
 
   buildPageView(
@@ -154,4 +176,68 @@ class _HomePageState extends ConsumerState<HomePage> {
       ],
     );
   }
+}
+
+void _notificationsPermition(BuildContext context) async {
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Allow Notifications'),
+          content: Text('Our app would like to send you notifications'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Don\'t Allow',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            TextButton(
+                onPressed: () => AwesomeNotifications()
+                    .requestPermissionToSendNotifications()
+                    .then((_) => Navigator.pop(context)),
+                child: Text(
+                  'Allow',
+                  style: TextStyle(
+                    color: Colors.teal,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ))
+          ],
+        ),
+      );
+    }
+  });
+
+  AwesomeNotifications().createdStream.listen((notification) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'Notification Created on ${notification.channelKey}',
+      ),
+    ));
+  });
+
+  AwesomeNotifications().actionStream.listen((notification) {
+    if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+      AwesomeNotifications().getGlobalBadgeCounter().then(
+            (value) => AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+          );
+    }
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => KitchenStockHome(),
+      ),
+      (route) => route.isFirst,
+    );
+  });
 }
