@@ -5,6 +5,7 @@ import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 
 import '../../models/shop/shops_data.dart';
+import '../../notifications/notifications.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../providers/streamproviders/payments_stream_provider.dart';
 import '../../providers/streamproviders/shops_stream_provider.dart';
@@ -40,6 +41,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
       vsync: this,
       duration: Duration(milliseconds: 500),
     );
+
     super.initState();
   }
 
@@ -64,6 +66,20 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           style: Theme.of(context).textTheme.headline2,
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () async {
+              await Workmanager()
+                  .registerPeriodicTask("oussaidTestTask", "oussaidTestTask",
+                      inputData: {
+                        MNotificationModel.expiredItems: 23,
+                        MNotificationModel.dateTime: 22,
+                      },
+                      frequency: Duration(minutes: 15),
+                      initialDelay: Duration(seconds: 10),
+                      existingWorkPolicy: ExistingWorkPolicy.replace);
+            },
+          ),
           // IconButton(
           //   icon: Icon(Icons.telegram),
           //   onPressed: () async {

@@ -25,14 +25,6 @@ Future<void> main() async {
       isInDebugMode:
           true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
-  await Workmanager().registerPeriodicTask("oussaidTestTask", "oussaidTestTask",
-      inputData: {
-        MNotificationModel.expiredItems: 23,
-        MNotificationModel.dateTime: DateTime.now(),
-      },
-      frequency: Duration(minutes: 15),
-      initialDelay: Duration(seconds: 10),
-      existingWorkPolicy: ExistingWorkPolicy.replace);
 
   runApp(ProviderScope(child: MyApp()));
 }
