@@ -10,7 +10,7 @@ export 'package:percent_indicator/percent_indicator.dart';
 export 'package:flutter_typeahead/flutter_typeahead.dart';
 export 'package:flutter_slidable/flutter_slidable.dart';
 export 'package:syncfusion_flutter_gauges/gauges.dart';
-//export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 export 'package:awesome_notifications/awesome_notifications.dart';
+//export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 export 'package:workmanager/workmanager.dart';
 //export 'package:badges/badges.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../models/kitchen/kitchen_item.dart';
+import '../../models/kitchen/kitchen_element.dart';
+import '../../widgets/price_curency_widget.dart';
 import '../kitchen_stock.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
@@ -16,6 +17,19 @@ class UnAvailiableElements extends ConsumerStatefulWidget {
 }
 
 class _ItemsListState extends ConsumerState<UnAvailiableElements> {
+  double _total = 0;
+  double _count = 0;
+  @override
+  void initState() {
+    if (widget.elementData != null) {
+      widget.elementData!.forEach((element) {
+        _total += element.totalPrice;
+        _count += element.items.length;
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlassMaterial(
@@ -68,15 +82,17 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              Container(
-                //  margin: EdgeInsets.symmetric(vertical: 10),
-                width: 400,
-                height: 140,
-                decoration: BoxDecoration(
-                  color: AppConstants.whiteOpacity,
-                  borderRadius: BorderRadius.circular(AppConstants.radius),
-                ),
-              ),
+              // Container(
+              //   //  margin: EdgeInsets.symmetric(vertical: 10),
+              //   width: 400,
+              //   height: 140,
+              //   decoration: BoxDecoration(
+              //     color: AppConstants.whiteOpacity,
+              //     borderRadius: BorderRadius.circular(AppConstants.radius),
+              //   ),
+              //   child: ,
+              // ),
+              buildTopWidget(total: _total, count: _count),
               const SizedBox(height: 20),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
@@ -114,6 +130,71 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  buildTopWidget({double total = 0, double count = 0}) {
+    return BluredContainer(
+      width: 390,
+      height: 130,
+      child: SizedBox(
+        width: 390,
+        height: 130,
+        child: BluredContainer(
+          margin: const EdgeInsets.all(8),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    //
+
+                    Text(
+                      'To be bought',
+                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                            color: Color.fromRGBO(255, 255, 255, 1),
+                          ),
+                    ),
+                    Spacer(),
+                    PriceNumberZone(
+                      right: const SizedBox.shrink(),
+                      withDollarSign: true,
+                      price: total,
+                      style: Theme.of(context).textTheme.headline2!,
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'with a total of',
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          // color: Color.fromRGBO(255, 255, 255, 1),
+                          ),
+                    ),
+                    Spacer(),
+                    PriceNumberZone(
+                      right: const SizedBox.shrink(),
+                      withDollarSign: false,
+                      price: count,
+                      style: Theme.of(context).textTheme.bodyMedium!,
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 
+import '../../models/kitchen/kitchen_element.dart';
 import '../../models/kitchen/kitchen_item.dart';
 
 final operationsProvider = Provider<Operations>((ref) {

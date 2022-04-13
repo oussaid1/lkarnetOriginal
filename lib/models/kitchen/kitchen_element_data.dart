@@ -1,3 +1,4 @@
+import 'kitchen_element.dart';
 import 'kitchen_item.dart';
 
 class KitchenElementsData {
@@ -74,6 +75,42 @@ class SingleKitchenElementData {
   KitchenElement get perfectKitchenElement {
     return kitchenElement.copyWith(
       items: _kitchenElementItems,
+    );
+  }
+}
+
+class ScaresElements {
+  List<SingleKitchenElementData> _kitchenElements = [];
+  ScaresElements(this._kitchenElements);
+  // get a lis of expired elements
+  List<SingleKitchenElementData> get expiredElements {
+    return _kitchenElements
+        .where((element) => !element.kitchenElement.isAvailable)
+        .toList();
+  }
+
+  // get the total price of expired elements
+  double get expiredElementsPrice {
+    return expiredElements.fold(
+      0,
+      (previousValue, element) =>
+          previousValue + element.kitchenElement.totalPrice,
+    );
+  }
+}
+
+class PerfectKitchenelement {
+  late KitchenElement kitchenElement;
+  late List<KitchenItem> _kitchenItems;
+  PerfectKitchenelement(this.kitchenElement, List<KitchenItem> kitchenItems) {
+    _kitchenItems = kitchenItems
+        .where((element) => element.kitchenElementId == kitchenElement.id)
+        .toList();
+  }
+  // get a perfect kitchen element with all items
+  KitchenElement get perfectKitchenElement {
+    return kitchenElement.copyWith(
+      items: _kitchenItems,
     );
   }
 }

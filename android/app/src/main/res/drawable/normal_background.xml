@@ -2,9 +2,9 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/MThemeData.primaryColor" />
-    <item>
+    <!-- <item>
         <bitmap
             android:gravity="center"
             android:src="@mipmap/splash" />
-    </item>
+    </item> -->
 </layer-list>

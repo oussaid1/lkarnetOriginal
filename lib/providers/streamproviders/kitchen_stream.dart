@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/kitchen/kitchen_item.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 
+import '../../models/kitchen/kitchen_element.dart';
+
 // stream of KitchenElement list from Firebase
 final kitchenElementsStream = StreamProvider<List<KitchenElement>>((ref) {
   final _db = ref.watch(databaseProvider);

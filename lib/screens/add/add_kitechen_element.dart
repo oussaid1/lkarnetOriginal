@@ -3,7 +3,7 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../models/kitchen/kitchen_item.dart';
+import '../../models/kitchen/kitchen_element.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
 class AddKitchenElement extends ConsumerStatefulWidget {

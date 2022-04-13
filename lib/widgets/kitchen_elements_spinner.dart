@@ -1,7 +1,7 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:flutter/material.dart';
-import '../models/kitchen/kitchen_item.dart';
+import '../models/kitchen/kitchen_element.dart';
 
 class KitchenElementsSpinner extends ConsumerStatefulWidget {
   const KitchenElementsSpinner({Key? key, required this.onSelected})

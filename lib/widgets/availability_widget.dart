@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components.dart';
-import '../models/kitchen/kitchen_item.dart';
+import '../models/kitchen/kitchen_element.dart';
 
 class ProgressWidget extends StatelessWidget {
   const ProgressWidget({

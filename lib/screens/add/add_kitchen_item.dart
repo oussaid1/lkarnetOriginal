@@ -9,6 +9,7 @@ import 'package:lkarnet/widgets/shop_spinner.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
+import '../../models/kitchen/kitchen_element.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../widgets/kitchen_elements_spinner.dart';

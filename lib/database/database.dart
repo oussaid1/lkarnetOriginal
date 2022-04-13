@@ -8,6 +8,7 @@ import 'package:lkarnet/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../components.dart';
+import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 
 class Database {

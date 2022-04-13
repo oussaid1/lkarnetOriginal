@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/models/kitchen/kitchen_item.dart';
 import 'package:lkarnet/models/statistics/statistics_model.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../components.dart';
+import '../models/kitchen/kitchen_element.dart';
 
 class SemiPeiWidget extends ConsumerWidget {
   final List<ChartData> chartData;
