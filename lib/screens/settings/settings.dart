@@ -8,6 +8,7 @@ import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../components.dart';
 import '../../settings/theme.dart';
+import '../../widgets/notifications_switch.dart';
 
 class SettingsPage extends ConsumerWidget {
   @override
@@ -150,6 +151,25 @@ class SettingsPage extends ConsumerWidget {
                   Icons.arrow_forward_ios_rounded,
                   size: 20,
                 ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Container(
+                    width: 45, height: 45, child: Icon(Icons.share_outlined)),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Activate Notification',
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                    Text(
+                      'Turn on/off notification',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ],
+                ),
+                trailing: NotificationsSwitch(),
                 onTap: () {},
               ),
               ListTile(

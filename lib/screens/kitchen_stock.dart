@@ -20,12 +20,13 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
   late List<KitchenElementModel> _kitchenElements;
   late List<KitchenItem> _kitchenItems;
-  late KitchenElementDataModel singleKitchenElementData;
-  late KitchenElementsData _kitchenElementsData;
+  //KitchenElementDataModel? singleKitchenElementData;
+  KitchenElementsData? _kitchenElementsData;
   @override
   void initState() {
     _kitchenElements = [];
     _kitchenItems = [];
+
     super.initState();
   }
 
@@ -36,8 +37,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
 
   @override
   void dispose() {
-    _kitchenElements = [];
-    _kitchenItems = [];
+    clearListsts();
     super.dispose();
   }
 
@@ -110,7 +110,9 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                           const SizedBox(height: 10),
                           _buildBarChartWidget(_kitchenElements),
                           const SizedBox(height: 20),
-                          _buildGridView(context, _kitchenElementsData),
+                          _kitchenElementsData != null
+                              ? _buildGridView(context, _kitchenElementsData!)
+                              : const SizedBox(height: 20),
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -270,7 +272,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${kitchenElement.kitchenElement..category!.trim()}',
+                              '${kitchenElement.kitchenElement.category!.trim()}',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.subtitle2,
                             ),

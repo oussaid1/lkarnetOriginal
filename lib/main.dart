@@ -21,13 +21,6 @@ Future<void> main() async {
   AwesomeNotifications()
     ..initialize('resource://drawable/res_notification_app_icon',
         MNotificationModel.channels);
-  // Workmanager().initialize(
-  //     MNotificationModel
-  //         .calldispatcher, // The top level function, aka callbackDispatcher
-  //     isInDebugMode:
-  //         false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-  //     );
-
   runApp(ProviderScope(child: MyApp()));
 }
 

@@ -30,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   final PageController _pageController = PageController();
   @override
   void initState() {
-    _notificationsPermition(context);
+    //  _notificationsPermition(context);
     // Workmanager().initialize(
     //     callbackDispatcher, // The top level function, aka callbackDispatcher
     //     isInDebugMode:
@@ -174,25 +174,4 @@ class _HomePageState extends ConsumerState<HomePage> {
       ],
     );
   }
-}
-
-void _notificationsPermition(BuildContext context) async {
-  AwesomeNotifications().createdStream.listen((notification) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.teal,
-      content: Text(
-        'Notification Created on ${notification.channelKey}',
-      ),
-    ));
-  });
-
-  AwesomeNotifications().actionStream.listen((notification) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => KitchenStockHome(),
-      ),
-      (route) => route.isFirst,
-    );
-  });
 }

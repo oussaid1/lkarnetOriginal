@@ -41,14 +41,14 @@ class AppThemeState extends ChangeNotifier {
 
 // Theme
 final notificationStateNotifier =
-    ChangeNotifierProvider((ref) => AppThemeState());
+    ChangeNotifierProvider((ref) => NotificationState());
 
 class NotificationState extends ChangeNotifier {
   final String key = "notificationActive";
   SharedPreferences? _preferences;
   late bool _notificationActive = false;
 
-  bool get darkMode => _notificationActive;
+  bool get shouldNotify => _notificationActive;
 
   NotificationState() {
     _notificationActive = true;

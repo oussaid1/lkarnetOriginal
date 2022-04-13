@@ -37,7 +37,7 @@ class KitchenElementsData {
         _unavaliableElements.add(allKitchenElementData[i]);
       }
     }
-    return [];
+    return _unavaliableElements;
   }
 
 // get a list of all avaliable elements
@@ -48,7 +48,16 @@ class KitchenElementsData {
         _avaliableElements.add(allKitchenElementData[i]);
       }
     }
-    return [];
+    return _avaliableElements;
+  }
+
+  // get a list of scaresElements
+  List<ScarceElements> get scaresElements {
+    List<ScarceElements> _scaresElements = [];
+    for (var i = 0; i < allKitchenElementData.length; i++) {
+      _scaresElements.add(ScarceElements(allKitchenElementData[i]));
+    }
+    return _scaresElements;
   }
 
   // get a list of tagged elements
@@ -144,4 +153,21 @@ class KitchenElementDataModel {
         ? 0
         : kitchenItems.map((e) => e.itemPrice).reduce((a, b) => a + b);
   }
+}
+
+class ScarceElements {
+  List<KitchenElementDataModel> _scaresElements = [];
+  ScarceElements(KitchenElementDataModel kitchenElementDataModel) {
+    _scaresElements.add(kitchenElementDataModel);
+  }
+  List<KitchenElementDataModel> get scaresElements {
+    _scaresElements = [];
+    for (var i = 0; i < _scaresElements.length; i++) {
+      if (_scaresElements[i].isAvailable) {
+        _scaresElements.add(_scaresElements[i]);
+      }
+    }
+    return _scaresElements;
+  }
+  // get the total price of all scare elements
 }
