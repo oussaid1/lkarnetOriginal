@@ -6,12 +6,12 @@ import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import '../../models/kitchen/kitchen_element.dart';
 
 // stream of KitchenElement list from Firebase
-final kitchenElementsStream = StreamProvider<List<KitchenElement>>((ref) {
+final kitchenElementsStream = StreamProvider<List<KitchenElementModel>>((ref) {
   final _db = ref.watch(databaseProvider);
   return _db.kitchenElementsStream();
 });
 // connvert stream to list
-final kitchenElementsProvider = StateProvider<List<KitchenElement>>((ref) {
+final kitchenElementsProvider = StateProvider<List<KitchenElementModel>>((ref) {
   final stream = ref.watch(kitchenElementsStream);
   return stream.maybeWhen(data: (items) => items, orElse: () => []);
 });
@@ -29,9 +29,9 @@ class KitchenElementListNotifier extends ChangeNotifier {
         : kitchenElementList;
   }
 
-  List<KitchenElement> kitchenElementList = [];
-  List<KitchenElement> fakekitchenElementList =
-      KitchenElement.fakeKitchenElements;
+  List<KitchenElementModel> kitchenElementList = [];
+  List<KitchenElementModel> fakekitchenElementList =
+      KitchenElementModel.fakeKitchenElements;
 
   // List<SocialMediaProfile> get kitchenElementList => kitchenElementList;
 
@@ -41,7 +41,7 @@ class KitchenElementListNotifier extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addSocialProfil(KitchenElement value) {
+  void addSocialProfil(KitchenElementModel value) {
     kitchenElementList.add(value);
     // state.add(value);
     notifyListeners();

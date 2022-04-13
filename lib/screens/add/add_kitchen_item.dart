@@ -17,7 +17,7 @@ import '../../widgets/kitchen_elements_spinner.dart';
 class AddKitchenItem extends ConsumerStatefulWidget {
   final Item? item;
   final KitchenItem? kitchenItem;
-  final KitchenElement? kitchenElement;
+  final KitchenElementModel? kitchenElement;
   AddKitchenItem({Key? key, this.kitchenItem, this.kitchenElement, this.item})
       : super(key: key);
   @override
@@ -33,7 +33,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemPriceController = TextEditingController();
-  KitchenElement? _kitchenElement;
+  KitchenElementModel? _kitchenElement;
 
   DateTime _dateBought = DateTime.now();
   DateTime? _dateExpired;
@@ -552,7 +552,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         Padding(
           padding: EdgeInsets.all(4),
           child: KitchenElementsSpinner(
-            onSelected: (KitchenElement? e) {
+            onSelected: (KitchenElementModel? e) {
               _kitchenElement = e;
             },
           ),

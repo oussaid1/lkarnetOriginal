@@ -1,8 +1,10 @@
+import 'package:lkarnet/components.dart';
+
 import 'kitchen_element.dart';
 import 'kitchen_item.dart';
 
 class KitchenElementsData {
-  List<KitchenElement> kitchenElementList = [];
+  List<KitchenElementModel> kitchenElementList = [];
   late List<KitchenItem> kitchenItems;
   KitchenElementsData(
       {required this.kitchenElementList, required this.kitchenItems});
@@ -16,101 +18,130 @@ class KitchenElementsData {
     return categories.toSet().toList();
   }
 
+// get all KittchenElementDataModel
+  List<KitchenElementDataModel> get allKitchenElementData {
+    List<KitchenElementDataModel> allKitchenElements = [];
+    for (var i = 0; i < kitchenElementList.length; i++) {
+      allKitchenElements.add(KitchenElementDataModel(
+          kitchenElement: kitchenElementList[i],
+          kitchenItemList: kitchenItems));
+    }
+    return allKitchenElements;
+  }
+
 // get a list of all unavaliable elements
-  List<KitchenElement> get unavaliableElements {
-    //List<KitchenElement> _kitchenElements = [];
-//  List<KitchenItem> _kitchenItems = [];
-    return kitchenElementList.where((element) => !element.isAvailable).toList();
+  List<KitchenElementDataModel> get unavaliableElements {
+    List<KitchenElementDataModel> _unavaliableElements = [];
+    for (var i = 0; i < allKitchenElementData.length; i++) {
+      if (!allKitchenElementData[i].isAvailable) {
+        _unavaliableElements.add(allKitchenElementData[i]);
+      }
+    }
+    return [];
   }
 
 // get a list of all avaliable elements
-  List<SingleKitchenElementData> get singleKitchenElementData {
-    List<SingleKitchenElementData> _singleKitchenElements = [];
-    for (var i = 0; i < kitchenElementList.length; i++) {
-      _singleKitchenElements.add(
-        SingleKitchenElementData(
-          kitchenElement: kitchenElementList[i],
-          kitchenItems: kitchenItems,
-        ),
-      );
+  List<KitchenElementDataModel> get avaliableElements {
+    List<KitchenElementDataModel> _avaliableElements = [];
+    for (var i = 0; i < allKitchenElementData.length; i++) {
+      if (allKitchenElementData[i].isAvailable) {
+        _avaliableElements.add(allKitchenElementData[i]);
+      }
     }
-    return _singleKitchenElements;
+    return [];
   }
 
   // get a list of tagged elements
-  List<SingleKitchenElementData> get taggedsingleKitchenElementData {
-    List<SingleKitchenElementData> _kitchenElements = [];
+  List<TaggedKitchenElementDataModel> get taggedsingleKitchenElementData {
+    List<TaggedKitchenElementDataModel> _kitchenElements = [];
     for (var i = 0; i < distinctCategories.length; i++) {
-      _kitchenElements.add(
-        SingleKitchenElementData(
-            kitchenElement: kitchenElementList.firstWhere(
-              (element) => element.category == distinctCategories[i],
+      for (var i = 0; i < allKitchenElementData.length; i++) {
+        if (allKitchenElementData[i].kitchenElement.category ==
+            distinctCategories[i]) {
+          _kitchenElements.add(
+            TaggedKitchenElementDataModel(
+              tag: distinctCategories[i],
+              kittchenElementDataModel: allKitchenElementData[i],
             ),
-            kitchenItems: kitchenItems,
-            tagg: distinctCategories[i]),
-      );
+          );
+        }
+      }
     }
     return _kitchenElements;
   }
 }
 
-class SingleKitchenElementData {
-  late String tag;
-  late KitchenElement kitchenElement;
+class TaggedKitchenElementDataModel {
+  String tag;
+  KitchenElementDataModel kittchenElementDataModel;
+  TaggedKitchenElementDataModel(
+      {required this.tag, required this.kittchenElementDataModel});
+}
+
+class KitchenElementDataModel {
+  late KitchenElementModel kitchenElement;
   late List<KitchenItem> kitchenItems;
-  SingleKitchenElementData({
-    String? tagg,
-    required this.kitchenElement,
-    required this.kitchenItems,
-  }) {
-    tag = tagg ?? kitchenElement.category ?? 'No Category';
-  }
-  List<KitchenItem> get _kitchenElementItems {
-    return kitchenItems
+  KitchenElementDataModel(
+      {required this.kitchenElement,
+      required List<KitchenItem> kitchenItemList}) {
+    kitchenItems = kitchenItemList
         .where((element) => element.kitchenElementId == kitchenElement.id)
         .toList();
   }
 
-  // return a perfect KitchenElement with all items
-  KitchenElement get perfectKitchenElement {
-    return kitchenElement.copyWith(
-      items: _kitchenElementItems,
-    );
-  }
-}
-
-class ScaresElements {
-  List<SingleKitchenElementData> _kitchenElements = [];
-  ScaresElements(this._kitchenElements);
-  // get a lis of expired elements
-  List<SingleKitchenElementData> get expiredElements {
-    return _kitchenElements
-        .where((element) => !element.kitchenElement.isAvailable)
-        .toList();
+  List<KitchenItem> get sortedItems {
+    kitchenItems.sort((a, b) {
+      if (a.dateExpired != null && b.dateExpired != null) {
+        return a.dateExpired!.compareTo(b.dateExpired!);
+      }
+      return 0; //a.dateBought.compareTo(b.dateBought);
+    });
+    return kitchenItems;
   }
 
-  // get the total price of expired elements
-  double get expiredElementsPrice {
-    return expiredElements.fold(
-      0,
-      (previousValue, element) =>
-          previousValue + element.kitchenElement.totalPrice,
-    );
+// get isNotAvailable
+  bool get isAvailable {
+    return kitchenElement.availability != 0;
   }
-}
 
-class PerfectKitchenelement {
-  late KitchenElement kitchenElement;
-  late List<KitchenItem> _kitchenItems;
-  PerfectKitchenelement(this.kitchenElement, List<KitchenItem> kitchenItems) {
-    _kitchenItems = kitchenItems
-        .where((element) => element.kitchenElementId == kitchenElement.id)
-        .toList();
+// get isScares
+// get the number of times the element is bought
+  int get timesBought {
+    if (kitchenItems.isEmpty)
+      return 0;
+    else
+      return kitchenItems.length;
   }
-  // get a perfect kitchen element with all items
-  KitchenElement get perfectKitchenElement {
-    return kitchenElement.copyWith(
-      items: _kitchenItems,
-    );
+
+// get the date of the last item
+  String get lastTimeBought {
+    return kitchenItems.isEmpty
+        ? 'Not bought yet'
+        : kitchenItems.first.dateBought.ddmmyyyy();
+  }
+
+// get time expired of the last item
+  String get timeExpired {
+    return kitchenItems.isEmpty || kitchenItems.first.dateExpired == null
+        ? 'Still in stock'
+        : kitchenItems.first.dateExpired!.ddmmyyyy();
+  }
+
+// get last item was bought
+  KitchenItem? get lastItemBought {
+    // if items is empty return null
+    if (kitchenItems.isEmpty) return null;
+    // get last item
+    final lastItem = kitchenItems.last;
+    // if last item is not bought return null
+    // return last item
+    return lastItem;
+  }
+
+// get the total price of all items
+  double get totalPrice {
+    return kitchenItems.isEmpty
+        ? 0
+        : kitchenItems.map((e) => e.itemPrice).reduce((a, b) => a + b);
   }
 }

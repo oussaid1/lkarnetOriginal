@@ -6,7 +6,7 @@ import '../models/kitchen/kitchen_element.dart';
 class KitchenElementsSpinner extends ConsumerStatefulWidget {
   const KitchenElementsSpinner({Key? key, required this.onSelected})
       : super(key: key);
-  final void Function(KitchenElement) onSelected;
+  final void Function(KitchenElementModel) onSelected;
 
   @override
   ConsumerState<KitchenElementsSpinner> createState() =>
@@ -15,8 +15,8 @@ class KitchenElementsSpinner extends ConsumerStatefulWidget {
 
 class _KitchenElementsSpinnerState
     extends ConsumerState<KitchenElementsSpinner> {
-  KitchenElement? _selectedKitchenElement;
-  List<KitchenElement> _kitchenElements = [];
+  KitchenElementModel? _selectedKitchenElement;
+  List<KitchenElementModel> _kitchenElements = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _KitchenElementsSpinnerState
       // ),
       width: 160.0,
       height: 45,
-      child: StreamBuilder<List<KitchenElement>>(
+      child: StreamBuilder<List<KitchenElementModel>>(
           stream: ref.read(databaseProvider).kitchenElementsStream(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -45,7 +45,7 @@ class _KitchenElementsSpinnerState
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: DropdownButton<KitchenElement>(
+                child: DropdownButton<KitchenElementModel>(
                     elevation: 4,
                     iconSize: 30,
                     icon: Icon(Icons.arrow_drop_down),
@@ -58,7 +58,7 @@ class _KitchenElementsSpinnerState
                       widget.onSelected(value!);
                     },
                     items: _kitchenElements.toSet().map((element) {
-                      return DropdownMenuItem<KitchenElement>(
+                      return DropdownMenuItem<KitchenElementModel>(
                         value: element,
                         child: Container(
                           alignment: Alignment.center,

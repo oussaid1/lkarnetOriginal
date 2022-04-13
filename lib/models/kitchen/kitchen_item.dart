@@ -82,7 +82,7 @@ class KitchenItem {
     };
   }
 
-  KitchenItem.fromItem(Item item, KitchenElement kitchenElement) {
+  KitchenItem.fromItem(Item item, KitchenElementModel kitchenElement) {
     this.besoinTitle = item.besoinTitle;
     this.shopName = item.shopName;
     this.itemName = item.itemName;

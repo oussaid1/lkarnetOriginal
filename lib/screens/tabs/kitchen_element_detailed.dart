@@ -8,7 +8,6 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../components.dart';
-import '../../models/kitchen/kitchen_element.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../widgets/availability_widget.dart';
@@ -18,7 +17,7 @@ import '../../widgets/kitchen_item_listtile.dart';
 class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
   const KitchenElementDetailsScreen({Key? key, required this.kitchenElement})
       : super(key: key);
-  final KitchenElement kitchenElement;
+  final KitchenElementDataModel kitchenElement;
   @override
   ConsumerState<KitchenElementDetailsScreen> createState() =>
       _KitchenItemDetailsScreenState();
@@ -28,24 +27,19 @@ class _KitchenItemDetailsScreenState
     extends ConsumerState<KitchenElementDetailsScreen> {
   DateTime? _expiryDate = DateTime.now();
 
-  //bool _isLoading = true;
-  //bool _isExpired = false;
-  // an empty list of kitchen items
   List<KitchenItem> _kitchenItems = [];
 
   double _availability = 0;
   @override
   void initState() {
-    _availability = widget.kitchenElement.availability!;
-    //_isLoading = true;
+    _availability = widget.kitchenElement.kitchenElement.availability!;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //List<KitchenElement> kitchenItems = [];
     return Scaffold(
-      //appBar: AppBar(),
       body: GlassMaterial(
         circleWidgets: [
           Positioned(
@@ -82,7 +76,7 @@ class _KitchenItemDetailsScreenState
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddKitchenItem(
-                    kitchenElement: widget.kitchenElement,
+                    kitchenElement: widget.kitchenElement.kitchenElement,
                   ),
                 ),
               );
@@ -90,7 +84,7 @@ class _KitchenItemDetailsScreenState
             child: Icon(Icons.add),
           ),
           appBar: MyAppBar(
-            title: Text('${widget.kitchenElement.title}'),
+            title: Text('${widget.kitchenElement.kitchenElement.title}'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.edit),
@@ -99,7 +93,7 @@ class _KitchenItemDetailsScreenState
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddKitchenElement(
-                        kitchenElement: widget.kitchenElement,
+                        kitchenElement: widget.kitchenElement.kitchenElement,
                       ),
                     ),
                   );
@@ -128,7 +122,7 @@ class _KitchenItemDetailsScreenState
                           style: MThemeData.raisedButtonStyleSave,
                           onPressed: () {
                             ref.read(operationsProvider).deleteKitchenElement(
-                                  widget.kitchenElement,
+                                  widget.kitchenElement.kitchenElement,
                                 );
                             for (KitchenItem item in _kitchenItems) {
                               ref.read(operationsProvider).deleteKitchenItem(
@@ -196,19 +190,19 @@ class _KitchenItemDetailsScreenState
             if (snapshot.hasData) {
               _kitchenItems = snapshot.data!;
 
-              final SingleKitchenElementData _singleKitchenElementData =
-                  SingleKitchenElementData(
-                kitchenElement: widget.kitchenElement,
-                kitchenItems: _kitchenItems,
+              final KitchenElementDataModel _singleKitchenElementData =
+                  KitchenElementDataModel(
+                kitchenElement: widget.kitchenElement.kitchenElement,
+                kitchenItemList: _kitchenItems,
               );
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: _singleKitchenElementData.perfectKitchenElement.items
+                itemCount: _singleKitchenElementData.kitchenItems
                     .length, //widget.kitchenElement.sortedItems.length,
                 itemBuilder: (context, index) {
-                  final KitchenItem _kitchenItem = _singleKitchenElementData
-                      .perfectKitchenElement.items[index];
+                  final KitchenItem _kitchenItem =
+                      _singleKitchenElementData.kitchenItems[index];
                   return KitchenItemTileWidget(
                     onDoubleTap: () {
                       setState(() {
@@ -337,6 +331,7 @@ class _KitchenItemDetailsScreenState
 
                                                 db.updateKitchenElement(widget
                                                     .kitchenElement
+                                                    .kitchenElement
                                                     .copyWith(
                                                         availability:
                                                             _availability));
@@ -372,7 +367,7 @@ class _KitchenItemDetailsScreenState
                                           radius: 60,
                                           child: Availibility(
                                             radius: 120,
-                                            initialValue: widget
+                                            initialValue: widget.kitchenElement
                                                 .kitchenElement.availability!,
                                             onChanged: (value) {
                                               setState(() {
@@ -424,7 +419,7 @@ class _KitchenItemDetailsScreenState
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 12),
                         child: Text(
-                          widget.kitchenElement.title.toString(),
+                          widget.kitchenElement.kitchenElement.title.toString(),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headline2,
                         ),
@@ -432,7 +427,8 @@ class _KitchenItemDetailsScreenState
                       PiorityRatingWidget(
                         ignoreGestures: true,
                         onRatingChanged: (rating) {},
-                        initialRating: widget.kitchenElement.priority!,
+                        initialRating:
+                            widget.kitchenElement.kitchenElement.priority!,
                       ),
                     ],
                   ),
@@ -446,7 +442,7 @@ class _KitchenItemDetailsScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${widget.kitchenElement.category}',
+                  '${widget.kitchenElement.kitchenElement.category}',
                   style: Theme.of(context).textTheme.headline3,
                   textAlign: TextAlign.center,
                 ),

@@ -18,12 +18,14 @@ Future<void> main() async {
       .activate(
     webRecaptchaSiteKey: '6D035D8A-1A94-4DBD-927D-9A21F4C36730',
   );
-  // MNotificationModel.initialize();
+  AwesomeNotifications()
+    ..initialize('resource://drawable/res_notification_app_icon',
+        MNotificationModel.channels);
   // Workmanager().initialize(
   //     MNotificationModel
   //         .calldispatcher, // The top level function, aka callbackDispatcher
   //     isInDebugMode:
-  //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+  //         false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
   //     );
 
   runApp(ProviderScope(child: MyApp()));

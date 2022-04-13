@@ -17,7 +17,7 @@ class AddToKitchenFromItem extends StatefulWidget {
 }
 
 class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
-  KitchenElement? _kitchenElement;
+  KitchenElementModel? _kitchenElement;
   // bool _isLoading = false;
   @override
   Widget build(BuildContext context) {

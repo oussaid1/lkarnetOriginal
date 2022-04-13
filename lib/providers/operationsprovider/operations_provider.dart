@@ -100,19 +100,19 @@ class Operations {
 
 // kitchenElement crud
 
-  Future<bool> addKitchenElement(KitchenElement kitchenElement) async {
+  Future<bool> addKitchenElement(KitchenElementModel kitchenElement) async {
     return await _read(databaseProvider)
         .addKitchenElement(kitchenElement)
         .then((value) => true);
   }
 
-  Future<bool> updateKitchenElement(KitchenElement kitchenElement) async {
+  Future<bool> updateKitchenElement(KitchenElementModel kitchenElement) async {
     return await _read(databaseProvider)
         .updateKitchenElement(kitchenElement)
         .then((value) => true);
   }
 
-  Future<bool> deleteKitchenElement(KitchenElement kitchenElement) async {
+  Future<bool> deleteKitchenElement(KitchenElementModel kitchenElement) async {
     return await _read(databaseProvider)
         .deleteKitchenElement(kitchenElement)
         .then((value) => true);

@@ -7,7 +7,7 @@ import '../../models/kitchen/kitchen_element.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
 class AddKitchenElement extends ConsumerStatefulWidget {
-  final KitchenElement? kitchenElement;
+  final KitchenElementModel? kitchenElement;
 
   AddKitchenElement({this.kitchenElement});
 
@@ -48,7 +48,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     super.dispose();
   }
 
-  List<KitchenElement> _kitchenElements = [];
+  List<KitchenElementModel> _kitchenElements = [];
   double _priorityRating = 1;
   double _availability = 1;
 
@@ -112,7 +112,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
             ),
           ),
           body: SingleChildScrollView(
-            child: StreamBuilder<List<KitchenElement>>(
+            child: StreamBuilder<List<KitchenElementModel>>(
                 stream: ref.read(databaseProvider).kitchenElementsStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -193,8 +193,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                 ));
 
                 final db = ref.read(databaseProvider);
-                final kitchenElement = KitchenElement(
-                  items: [],
+                final kitchenElement = KitchenElementModel(
                   title: _itemNameController.text.trim(),
                   priority: _priorityRating,
                   availability: _availability,
@@ -248,8 +247,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                         content: Text('Saving...'),
                       ));
                       final db = ref.read(databaseProvider);
-                      final kitchenElement = KitchenElement(
-                        items: [],
+                      final kitchenElement = KitchenElementModel(
                         title: _itemNameController.text.trim(),
                         priority: _priorityRating,
                         availability: _availability,
@@ -370,7 +368,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
         key: _formKeyCat,
         child: SizedBox(
           height: 50,
-          child: TypeAheadField<KitchenElement>(
+          child: TypeAheadField<KitchenElementModel>(
             noItemsFoundBuilder: (context) => Text('No Items Found'),
             autoFlipDirection: true,
             minCharsForSuggestions: 2,

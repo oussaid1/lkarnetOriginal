@@ -69,19 +69,13 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () async {
-              await Workmanager()
-                  .registerPeriodicTask("oussaidTestTask", "oussaidTestTask",
-                      inputData: {
-                        MNotificationModel.expiredItems: 23,
-                        MNotificationModel.dateTime: 22,
-                      },
-                      frequency: Duration(minutes: 15),
-                      initialDelay: Duration(seconds: 10),
-                      existingWorkPolicy: ExistingWorkPolicy.replace);
+              //  MNotificationModel.createPlantFoodNotification(expired: '1');
+              MNotificationModel.createBuyReminderNotification(
+                  itemsExpired: true, expired: '2', dateTime: DateTime.now());
             },
           ),
           // IconButton(
-          //   icon: Icon(Icons.telegram),
+          //   icon: Icon(Icons.send),
           //   onPressed: () async {
           //     await Workmanager().registerPeriodicTask(
           //         "test_workertask", "test_workertask",

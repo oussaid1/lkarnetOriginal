@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../models/kitchen/kitchen_element.dart';
+import '../../models/kitchen/kitchen_element_data.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../kitchen_stock.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
 class UnAvailiableElements extends ConsumerStatefulWidget {
-  final List<KitchenElement>? elementData;
+  final List<KitchenElementDataModel>? elementData;
   UnAvailiableElements({
     Key? key,
     this.elementData,
@@ -24,7 +24,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
     if (widget.elementData != null) {
       widget.elementData!.forEach((element) {
         _total += element.totalPrice;
-        _count += element.items.length;
+        _count += element.kitchenItems.length;
       });
     }
     super.initState();
@@ -110,7 +110,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                         crossAxisSpacing: 10),
                     itemCount: widget.elementData!.length,
                     itemBuilder: (context, index) {
-                      final KitchenElement kitchenElement =
+                      final KitchenElementDataModel kitchenElement =
                           widget.elementData![index];
                       return KitchenItemSquareTile(
                         onTap: () {

@@ -18,8 +18,9 @@ class NotificationsIconButton extends StatefulWidget {
 
 class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
   //  late AnimationController _animationController;
-  late List<KitchenElement> _kitchenElements;
+  late List<KitchenElementModel> _kitchenElements;
   late List<KitchenItem> _kitchenItems;
+  late KitchenElementsData _kitchenElementsData;
   @override
   void initState() {
     _kitchenElements = [];
@@ -39,11 +40,24 @@ class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
           if (snapshotItems.hasData) {
             _kitchenItems = snapshotItems.data!;
           }
-          return StreamBuilder<List<KitchenElement>>(
+          return StreamBuilder<List<KitchenElementModel>>(
               stream: widget.ref.read(databaseProvider).kitchenElementsStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   _kitchenElements = snapshot.data!;
+                  _kitchenElementsData = KitchenElementsData(
+                    kitchenElementList: _kitchenElements,
+                    kitchenItems: _kitchenItems,
+                  );
+                  // _kitchenElementData = _kitchenElements
+                  //     .map((element) => KitchenElementDataModel(
+                  //           kitchenElement: element,
+                  //           kitchenItemList: _kitchenItems
+                  //               .where((item) =>
+                  //                   item.kitchenElementId == element.id)
+                  //               .toList(),
+                  //         ))
+                  //     .toList();
                 }
                 return NotificationBadgeWidget(
                     onTap: () {
@@ -51,10 +65,8 @@ class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => UnAvailiableElements(
-                              elementData: KitchenElementsData(
-                            kitchenElementList: _kitchenElements,
-                            kitchenItems: _kitchenItems,
-                          ).unavaliableElements),
+                              elementData:
+                                  _kitchenElementsData.unavaliableElements),
                         ),
                       );
                     },

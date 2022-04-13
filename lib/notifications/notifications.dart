@@ -7,49 +7,61 @@ class MNotificationModel {
   // singleton
   // _NotificationModel._();
   static const String expiredItems = 'expiredItems';
+  static const String _channelKey1 = 'remember_to_buy_items';
+  static const String _channelName1 = 'Remember to Buy Items';
+  static const String _channelKey2 = 'schedule_remember_to_register_items';
+  static const String _channelName2 = 'Schedule Remember to Register Items';
+
   static const String dateTime = 'DateTime';
-  static const String iconUri = 'resource://drawable/ic_launcher.png';
+  static const String iconUri = 'resource://drawable/res_notification_app_icon';
   static final MNotificationModel _singleton = MNotificationModel._();
   factory MNotificationModel() {
     return _singleton;
   }
   MNotificationModel._();
-  static AwesomeNotifications _notification = AwesomeNotifications();
-  static AwesomeNotifications get notification => _notification;
-  static void initialize() {
-    _notification.initialize(iconUri, channels);
-  }
+  //static AwesomeNotifications _notification = AwesomeNotifications();
+  //static AwesomeNotifications get notification => _notification;
+  // static Future<void> initialize() async {
+  //   _notification.initialize(iconUri, channels);
+  // }
 
-  static List<NotificationChannel> get channels => [
-        NotificationChannel(
-          channelKey: 'basic_channel',
-          channelName: 'Basic Notifications',
-          defaultColor: Colors.teal,
-          importance: NotificationImportance.High,
-          channelShowBadge: true,
-          channelDescription: '',
-        ),
-        NotificationChannel(
-          channelKey: 'scheduled_channel',
-          channelName: 'Scheduled Notifications',
-          defaultColor: Colors.teal,
-          locked: true,
-          importance: NotificationImportance.High,
-          soundSource: 'resource://raw/res_custom_notification',
-          channelDescription:
-              'this is to notify you that some items have expired',
-        ),
-      ];
+  static List<NotificationChannel> channels = [
+    NotificationChannel(
+      channelKey: _channelKey1,
+      channelName: _channelName1,
+      defaultColor: Colors.teal,
+      importance: NotificationImportance.High,
+      channelShowBadge: true,
+      channelDescription: 'This channel is used to show expired items',
+      enableLights: true,
+      enableVibration: true,
+      //vibrationPattern: [0, 500, 200, 500],
+      icon: iconUri,
+      ledColor: Colors.teal,
+    ),
+    NotificationChannel(
+      channelKey: _channelKey2,
+      channelName: _channelName2,
+      defaultColor: Colors.teal,
+      importance: NotificationImportance.High,
+      channelShowBadge: true,
+      channelDescription: 'This channel is used to show expired items',
+      enableLights: true,
+      enableVibration: true,
+      //vibrationPattern: [0, 500, 200, 500],
+      icon: iconUri,
+      ledColor: Colors.teal,
+    ),
+  ];
   static Future<void> createPlantFoodNotification({String? expired}) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
-        channelKey: 'basic_channel',
-        title:
-            '${Emojis.food_bagel + Emojis.plant_palm_tree} Go Buy Some Food!!!',
+        channelKey: 'Remember to Buy Items',
+        title: '${Emojis.food_bagel + Emojis.food_banana} Go Buy Some Food!!!',
         body: 'one time You have $expired items expired ...',
         // bigPicture: 'asset://assets/notification_map.png',
-        notificationLayout: NotificationLayout.Default,
+        notificationLayout: NotificationLayout.BigText,
       ),
     );
   }
@@ -61,9 +73,9 @@ class MNotificationModel {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
-        channelKey: 'scheduled_channel',
+        channelKey: _channelKey2,
         title:
-            '${Emojis.food_bagel + Emojis.plant_palm_tree} Go Buy Some Food!!!',
+            "${Emojis.person_role_woman_mechanic + Emojis.paper_books} Dont't forget to register items !!!",
         body: 'scheduled You have $expired items expired ...',
         // bigPicture: 'asset://assets/notification_map.png',
         notificationLayout: NotificationLayout.Default,
@@ -76,8 +88,8 @@ class MNotificationModel {
       ],
       schedule: NotificationCalendar(
         //weekday: dateTime.weekday,
-        hour: 16, //dateTime.hour,
-        minute: 28, // dateTime.minute,
+        //hour: 8, //dateTime.hour,
+        minute: 20, // dateTime.minute,
         second: 0,
         millisecond: 0,
         repeats: true,

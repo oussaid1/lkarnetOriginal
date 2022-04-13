@@ -18,29 +18,26 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 }
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
-  late List<KitchenElement> _kitchenElements;
+  late List<KitchenElementModel> _kitchenElements;
   late List<KitchenItem> _kitchenItems;
-  //SingleKitchenElementData? singleKitchenElementData;
-  late List<SingleKitchenElementData> _kitchenElementDataList;
+  late KitchenElementDataModel singleKitchenElementData;
+  late KitchenElementsData _kitchenElementsData;
   @override
   void initState() {
     _kitchenElements = [];
     _kitchenItems = [];
-    _kitchenElementDataList = [];
     super.initState();
   }
 
   void clearListsts() {
     _kitchenElements = [];
     _kitchenItems = [];
-    _kitchenElementDataList = [];
   }
 
   @override
   void dispose() {
     _kitchenElements = [];
     _kitchenItems = [];
-    _kitchenElementDataList = [];
     super.dispose();
   }
 
@@ -53,17 +50,17 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       child: StreamBuilder<List<KitchenItem>>(
           stream: ref.read(databaseProvider).kitchenItemsStream(),
           builder: (context, snap) {
-            return StreamBuilder<List<KitchenElement>>(
+            return StreamBuilder<List<KitchenElementModel>>(
                 stream: ref.read(databaseProvider).kitchenElementsStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snap.hasData) {
                     clearListsts();
                     _kitchenElements = snapshot.data!;
                     _kitchenItems = snap.data!;
-                    _kitchenElementDataList = KitchenElementsData(
-                            kitchenElementList: _kitchenElements,
-                            kitchenItems: _kitchenItems)
-                        .taggedsingleKitchenElementData;
+                    _kitchenElementsData = KitchenElementsData(
+                      kitchenElementList: _kitchenElements,
+                      kitchenItems: _kitchenItems,
+                    );
                   }
                   //kitchenElements = KitchenElement.fakeKitchenElements;
                   return Scaffold(
@@ -113,7 +110,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                           const SizedBox(height: 10),
                           _buildBarChartWidget(_kitchenElements),
                           const SizedBox(height: 20),
-                          _buildGridView(context, _kitchenElementDataList),
+                          _buildGridView(context, _kitchenElementsData),
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -124,7 +121,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     );
   }
 
-  Container _buildBarChartWidget(List<KitchenElement> kitchenElements) {
+  Container _buildBarChartWidget(List<KitchenElementModel> kitchenElements) {
     return Container(
       margin: EdgeInsets.all(8),
       height: 200,
@@ -146,8 +143,8 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
     );
   }
 
-  Container _buildGridView(BuildContext context,
-      List<SingleKitchenElementData> singleKitchenElementDataList) {
+  Container _buildGridView(
+      BuildContext context, KitchenElementsData _kitchenElementsData) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),
       // height: 440,
@@ -160,22 +157,22 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
             childAspectRatio: 1.4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12),
-        itemCount: singleKitchenElementDataList.length,
+        itemCount: _kitchenElementsData.allKitchenElementData.length,
         itemBuilder: (context, index) {
-          final SingleKitchenElementData kitchenElement =
-              singleKitchenElementDataList[index];
+          final KitchenElementDataModel kitchenElement =
+              _kitchenElementsData.allKitchenElementData[index];
           return KitchenItemSquareTile(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => KitchenElementDetailsScreen(
-                    kitchenElement: kitchenElement.perfectKitchenElement,
+                    kitchenElement: kitchenElement,
                   ),
                 ),
               );
             },
-            kitchenElement: kitchenElement.perfectKitchenElement,
+            kitchenElement: kitchenElement,
           );
         },
       ),
@@ -191,7 +188,7 @@ class KitchenItemSquareTile extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final KitchenElement kitchenElement;
+  final KitchenElementDataModel kitchenElement;
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +217,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 0, right: 8),
                               child: Text(
-                                kitchenElement.title.toString(),
+                                kitchenElement.kitchenElement.title.toString(),
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headline3,
                               ),
@@ -228,7 +225,8 @@ class KitchenItemSquareTile extends StatelessWidget {
                             PiorityRatingWidget(
                               ignoreGestures: true,
                               onRatingChanged: (rating) {},
-                              initialRating: kitchenElement.priority!,
+                              initialRating:
+                                  kitchenElement.kitchenElement.priority!,
                             ),
                           ],
                         ),
@@ -272,7 +270,7 @@ class KitchenItemSquareTile extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${kitchenElement.category!.trim()}',
+                              '${kitchenElement.kitchenElement..category!.trim()}',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.subtitle2,
                             ),

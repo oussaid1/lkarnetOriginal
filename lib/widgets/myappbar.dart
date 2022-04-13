@@ -21,7 +21,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       shadowColor: Colors.transparent,
       excludeHeaderSemantics: true,
-      toolbarHeight: 40,
+      //toolbarHeight: 40,
       backgroundColor: AppConstants.whiteOpacity,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

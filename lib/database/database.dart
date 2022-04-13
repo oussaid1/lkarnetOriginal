@@ -82,10 +82,10 @@ class Database {
   }
 
 // get kitchenElements
-  Stream<List<KitchenElement>> kitchenElementsStream() {
+  Stream<List<KitchenElementModel>> kitchenElementsStream() {
     return _users.collection(_collectionKitchenElements).snapshots().map(
         (QuerySnapshot query) => query.docs
-            .map((element) => KitchenElement.fromDocumentSnapShot(element))
+            .map((element) => KitchenElementModel.fromDocumentSnapShot(element))
             .toList());
   }
 
@@ -164,7 +164,7 @@ class Database {
 
 // add KitchenElement to the kitchen
   Future<void> addKitchenElement(
-    KitchenElement kitchenElement,
+    KitchenElementModel kitchenElement,
   ) async {
     try {
       await _users
@@ -189,7 +189,7 @@ class Database {
 // update ****/
 // update KitchenElement
   Future<void> updateKitchenElement(
-    KitchenElement kitchenElement,
+    KitchenElementModel kitchenElement,
   ) async {
     try {
       await _users
@@ -279,7 +279,7 @@ class Database {
 //delete
 // delete KitchenElement
   Future<void> deleteKitchenElement(
-    KitchenElement kitchenElement,
+    KitchenElementModel kitchenElement,
   ) async {
     try {
       await _users

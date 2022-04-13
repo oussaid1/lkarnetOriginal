@@ -211,7 +211,7 @@ class ColumnChartWidget extends ConsumerWidget {
 }
 
 class ColumnChartKitchenElWidget extends ConsumerWidget {
-  final List<KitchenElement> kitchenData;
+  final List<KitchenElementModel> kitchenData;
 
   ColumnChartKitchenElWidget(this.kitchenData);
 
@@ -236,13 +236,13 @@ class ColumnChartKitchenElWidget extends ConsumerWidget {
           ),
       series: <ChartSeries>[
         // Renders spline chart
-        ColumnSeries<KitchenElement, String>(
+        ColumnSeries<KitchenElementModel, String>(
           width: 0.5,
           legendItemText: 'Kitchen Elements',
           dataSource: kitchenData,
           color: Colors.white.withOpacity(0.5),
-          xValueMapper: (KitchenElement sales, _) => sales.title,
-          yValueMapper: (KitchenElement sales, _) => sales.availability,
+          xValueMapper: (KitchenElementModel sales, _) => sales.title,
+          yValueMapper: (KitchenElementModel sales, _) => sales.availability,
         ),
       ],
     );
