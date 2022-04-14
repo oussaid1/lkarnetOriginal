@@ -88,8 +88,8 @@ class MNotificationModel {
       ],
       schedule: NotificationCalendar(
         //weekday: dateTime.weekday,
-        //hour: 8, //dateTime.hour,
-        minute: 20, // dateTime.minute,
+        hour: 4, //dateTime.hour,
+        minute: 0, // dateTime.minute,
         second: 0,
         millisecond: 0,
         repeats: true,

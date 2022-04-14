@@ -89,13 +89,18 @@ class TaggedKitchenElementDataModel {
 
 class KitchenElementDataModel {
   late KitchenElementModel kitchenElement;
-  late List<KitchenItem> kitchenItems;
+  List<KitchenItem> kitchenItems = [];
   KitchenElementDataModel(
       {required this.kitchenElement,
       required List<KitchenItem> kitchenItemList}) {
-    kitchenItems = kitchenItemList
-        .where((element) => element.kitchenElementId == kitchenElement.id)
-        .toList();
+    for (var i = 0; i < kitchenItemList.length; i++) {
+      if (kitchenItemList[i].kitchenElementId == kitchenElement.id) {
+        kitchenItems.add(kitchenItemList[i]);
+      }
+    }
+    // kitchenItems = kitchenItemList
+    //     .where((element) => element.kitchenElementId == kitchenElement.id)
+    //     .toList();
   }
 
   List<KitchenItem> get sortedItems {

@@ -93,11 +93,14 @@ class Database {
   Stream<List<KitchenItem>> kitchenItemsStream() {
     return _users
         .collection(_collectionKitchenItems)
-        .orderBy("dateBought", descending: true)
         .snapshots()
-        .map((QuerySnapshot query) => query.docs
-            .map((element) => KitchenItem.fromDocumentSnapShot(element))
-            .toList());
+        .map((QuerySnapshot query) {
+      List<KitchenItem> retVal = [];
+      query.docs.forEach((element) {
+        retVal.add(KitchenItem.fromDocumentSnapShot(element));
+      });
+      return retVal;
+    });
   }
 
   Stream<List<Item>> archiveItemStream() {

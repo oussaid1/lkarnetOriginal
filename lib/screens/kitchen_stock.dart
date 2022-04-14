@@ -88,7 +88,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
                       leading:
                           Icon(Icons.kitchen_outlined, color: Colors.black),
                       title: Text(
-                        'Kitchen Stock ',
+                        'Kitchen Stock  ${_kitchenItems.length}',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       elevation: 0,

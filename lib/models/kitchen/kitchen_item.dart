@@ -11,7 +11,7 @@ import 'kitchen_element.dart';
 
 class KitchenItem {
   String? id;
-  late String kitchenElementId;
+  String kitchenElementId = "";
   String? besoinTitle;
   String? shopName;
   String? itemName;

@@ -155,7 +155,7 @@ class SettingsPage extends ConsumerWidget {
               ),
               ListTile(
                 leading: Container(
-                    width: 45, height: 45, child: Icon(Icons.share_outlined)),
+                    width: 45, height: 45, child: Icon(Icons.notifications)),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
