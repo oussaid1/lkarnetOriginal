@@ -4,11 +4,10 @@ import 'package:lkarnet/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
-  final gooleSignIn = GoogleSignIn();
+  // final gooleSignIn = GoogleSignIn();
   AuthenticationService(this._firebaseAuth);
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -17,29 +16,29 @@ class AuthenticationService {
 
 // many unhandled google error exist
 // will push them soon
-  Future<bool> googleSignIn() async {
-    GoogleSignInAccount? googleSignInAccount = await gooleSignIn.signIn();
+  // Future<bool> googleSignIn() async {
+  //   GoogleSignInAccount? googleSignInAccount = await gooleSignIn.signIn();
 
-    if (googleSignInAccount != null) {
-      GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+  //   if (googleSignInAccount != null) {
+  //     GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
 
-      OAuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken);
+  //     OAuthCredential credential = GoogleAuthProvider.credential(
+  //         idToken: googleSignInAuthentication.idToken,
+  //         accessToken: googleSignInAuthentication.accessToken);
 
-      //User? user = _firebaseAuth.currentUser;
-      Map<String, dynamic> idMap =
-          parseJwt(googleSignInAuthentication.idToken)!;
-      final String firstName = idMap["given_name"];
-      // final String lastName = idMap["family_name"];
+  //     //User? user = _firebaseAuth.currentUser;
+  //     Map<String, dynamic> idMap =
+  //         parseJwt(googleSignInAuthentication.idToken)!;
+  //     final String firstName = idMap["given_name"];
+  //     // final String lastName = idMap["family_name"];
 
-      await _firebaseAuth.signInWithCredential(credential).then((value) =>
-          createNewUser(UserModel.fromUserCredential(value, firstName)));
-      return Future.value(true);
-    } else
-      return Future.value(false);
-  }
+  //     await _firebaseAuth.signInWithCredential(credential).then((value) =>
+  //         createNewUser(UserModel.fromUserCredential(value, firstName)));
+  //     return Future.value(true);
+  //   } else
+  //     return Future.value(false);
+  // }
 
   static Map<String, dynamic>? parseJwt(String? token) {
     // validate token

@@ -186,10 +186,10 @@ class LoginPage extends ConsumerWidget {
                         ],
                       ),
                       onTap: () {
-                        _auth.googleSignIn().then((value) => Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Root()),
-                            ));
+                        // _auth.googleSignIn().then((value) => Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context) => Root()),
+                        //     ));
 
                         // _auth.signInWithGoogle().then((value) => _auth.createNewUser(UserModel.fromUserCredential(value, value.user!.displayName.toString()) ));
                       },

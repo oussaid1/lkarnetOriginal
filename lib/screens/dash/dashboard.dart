@@ -66,14 +66,15 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           style: Theme.of(context).textTheme.headline2,
         ),
         actions: [
-          // IconButton(
-          //   icon: Icon(Icons.notifications),
-          //   onPressed: () async {
-          //     //  MNotificationModel.createPlantFoodNotification(expired: '1');
-          //     MNotificationModel.createBuyReminderNotification(
-          //         itemsExpired: true, expired: '2', dateTime: DateTime.now());
-          //   },
-          // ),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () async {
+              //  MNotificationModel.createPlantFoodNotification(expired: '1');
+              MNotificationModel.createPlantFoodNotification(
+                expired: '2',
+              );
+            },
+          ),
           // IconButton(
           //   icon: Icon(Icons.send),
           //   onPressed: () async {

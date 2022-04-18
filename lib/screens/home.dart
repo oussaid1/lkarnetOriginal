@@ -30,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   final PageController _pageController = PageController();
   @override
   void initState() {
-    //  _notificationsPermition(context);
+    _notificationsPermition(context);
     // Workmanager().initialize(
     //     callbackDispatcher, // The top level function, aka callbackDispatcher
     //     isInDebugMode:
