@@ -53,11 +53,11 @@ class MNotificationModel {
       ledColor: Colors.teal,
     ),
   ];
-  static Future<void> createPlantFoodNotification({String? expired}) async {
+  static Future<void> createOneTimeNotification({String? expired}) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
-        channelKey: 'Remember to Buy Items',
+        channelKey: _channelKey1,
         title: '${Emojis.food_bagel + Emojis.food_banana} Go Buy Some Food!!!',
         body: 'one time You have $expired items expired ...',
         // bigPicture: 'asset://assets/notification_map.png',
@@ -104,7 +104,7 @@ class MNotificationModel {
 
   static Future<void> calldispatcher(String id) async {
     Workmanager().executeTask((task, inputData) async {
-      await MNotificationModel.createPlantFoodNotification();
+      await MNotificationModel.createOneTimeNotification();
       await MNotificationModel.createBuyReminderNotification(
           itemsExpired: true, expired: '2', dateTime: DateTime.now());
       return Future.value(true);

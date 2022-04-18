@@ -70,7 +70,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
             icon: Icon(Icons.notifications),
             onPressed: () async {
               //  MNotificationModel.createPlantFoodNotification(expired: '1');
-              MNotificationModel.createPlantFoodNotification(
+              MNotificationModel.createOneTimeNotification(
                 expired: '2',
               );
             },
