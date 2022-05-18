@@ -14,12 +14,16 @@ import '../models/kitchen/kitchen_item.dart';
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   //final String _collection = 'users';
+  // tockens collection
+  //final String _tokens = 'tokens';
   final String _collectionKitchenElements = "KitchenElements";
   final String _collectionKitchenItems = "KitchenItems";
+
   DocumentReference get _users => _firestore.collection("users").doc(uid);
   final String? uid;
   Database({required this.uid});
   final logger = Logger();
+  // create user in firebase
   Future<bool> createNewUser(UserModel user) async {
     bool _done = false;
     await _firestore
@@ -31,6 +35,21 @@ class Database {
       _done = false;
       print("Failed to add user: $error");
     });
+    return _done;
+  }
+
+  // insert token in firebase
+  Future<bool> insertToken(String token) async {
+    bool _done = false;
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .set({'token': token})
+        .then((value) => _done = true)
+        .catchError((error) {
+          _done = false;
+          print("Failed to add token: $error");
+        });
     return _done;
   }
 

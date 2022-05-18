@@ -1,5 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
+import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
@@ -36,8 +38,22 @@ class _HomePageState extends ConsumerState<HomePage> {
     //     isInDebugMode:
     //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
     //     );
-
+    _getToken();
     super.initState();
+  }
+
+// get device token and insert it in firebase
+  Future<String?> _getToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken != null) {
+      logger.d("FCM Token: $fcmToken");
+      ref.read(databaseProvider).insertToken(fcmToken);
+      logger.d("token inserted");
+      return fcmToken;
+    } else {
+      logger.d("FCM Token: null");
+      return null;
+    }
   }
 
   void _notificationsPermition(BuildContext context) async {

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-//import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lkarnet/notifications/notifications.dart';
@@ -8,6 +7,7 @@ import 'package:lkarnet/root.dart';
 import 'components.dart';
 import 'navigator/rout_navigator.dart';
 import 'settings/theme.dart';
+//import 'settings/theme/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,13 +21,14 @@ Future<void> main() async {
   AwesomeNotifications()
     ..initialize('resource://drawable/res_notification_app_icon',
         MNotificationModel.channels);
+
   runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //var appThemeState = ref.watch(appThemeStateNotifier);
+    // var appThemeState = ref.watch(appThemeStateNotifier);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: Locale('ar'),

@@ -5,6 +5,7 @@ import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart'
 
 import '../components.dart';
 
+
 final recentOperationsProvider = StateProvider<RecentOperation>((ref) {
   final items = ref.watch(itemsProvider);
   final payments = ref.watch(paymentsProvider);

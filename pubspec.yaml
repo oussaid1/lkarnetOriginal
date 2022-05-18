@@ -10,29 +10,30 @@ environment:
   sdk: ">=2.12.0-259.12.beta <3.0.0"
 
 dependencies:
-  awesome_notifications: ^0.6.21
-  bottom_navy_bar: ^6.0.0
-  cloud_firestore: ^3.1.6
-  cupertino_icons: ^1.0.2
-  firebase_app_check: ^0.0.6+4
-  firebase_auth: ^3.3.5
-  firebase_core: ^1.11.0
   flutter:
     sdk: flutter
-  flutter_rating_bar: ^4.0.0
-  flutter_riverpod: ^1.0.3
-  flutter_slidable: ^1.2.0
-  flutter_svg: ^1.0.1
-  flutter_typeahead: ^3.2.4
-  google_fonts: ^2.2.0
-  google_sign_in: ^5.2.3
+  awesome_notifications: ^0.6.21
+  bottom_navy_bar: ^6.0.0
+  cloud_firestore: ^3.1.15
+  cupertino_icons: ^1.0.2
+  firebase_app_check: ^0.0.6+12
+  firebase_auth: ^3.3.18
+  firebase_core: ^1.17.0
+  firebase_messaging: ^11.4.0
+  flutter_rating_bar: ^4.0.1
+  flutter_riverpod:  ^1.0.4
+  flutter_slidable: ^1.2.1
+  flutter_svg: ^1.0.3
+  flutter_typeahead: ^4.0.0
+  google_fonts: ^2.3.2
+  #google_sign_in: ^5.2.3
   logger: ^1.1.0
-  percent_indicator: ^4.0.0
+  percent_indicator: ^4.2.2
   permission_handler: ^9.2.0
-  shared_preferences: ^2.0.12
-  syncfusion_flutter_charts: ^19.4.42
-  syncfusion_flutter_gauges: ^19.4.55
-  workmanager: ^0.4.1
+  shared_preferences: ^2.0.15
+  syncfusion_flutter_charts: ^20.1.56
+  syncfusion_flutter_gauges: ^20.1.56
+  workmanager: ^0.5.0
 
 dev_dependencies:
   flutter_test:
