@@ -28,7 +28,7 @@ class _AddItemState extends ConsumerState<AddItem>
   final GlobalKey<FormState> _formKeyPrice = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _itemPriceController = TextEditingController();
-
+  FocusNode _itemNameFocusNode = FocusNode();
   DateTime _dateBought = DateTime.now();
 //  KitchenElement? _kitchenElement;
   String? _quantifier = 'واحدة';
@@ -148,31 +148,6 @@ class _AddItemState extends ConsumerState<AddItem>
                   widget.item == null
                       ? _buildSaveButton(context)
                       : _buildUpdateButton(context),
-                  // const SizedBox(height: 20),
-                  // Container(
-                  //   margin: EdgeInsets.all(8),
-                  //   //  width: 300,
-                  //   // height: 70,
-                  //   child: ExpansionTile(
-                  //     onExpansionChanged: (bool isExpanded) {
-                  //       if (isExpanded) {
-                  //         mBottomSheet(context, controller: _controller);
-                  //       } else {}
-                  //     },
-                  //     title: Text(
-                  //       'add to Kitchen',
-                  //       style: Theme.of(context).textTheme.headline3,
-                  //     ),
-                  //     children: [
-                  //       _localItem != null
-                  //           ? AddToKitchenFromItem(
-                  //               item: _localItem!,
-                  //               op: ref.read(operationsProvider),
-                  //             )
-                  //           : SizedBox(child: Text("Pleasw save the item first")),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -413,6 +388,8 @@ class _AddItemState extends ConsumerState<AddItem>
     return Padding(
       padding: EdgeInsets.all(2),
       child: ShopSpinner(
+        initialValue: widget.item?.shopName,
+        focusNode: _itemNameFocusNode,
         //: ref.watch(shopsProvider.state).state,
         onShopSelected: (value) {
           setState(() {
@@ -436,6 +413,7 @@ class _AddItemState extends ConsumerState<AddItem>
             direction: AxisDirection.up,
             hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
+              focusNode: _itemNameFocusNode,
               onChanged: (value) => _isLoading = false,
               controller: _itemNameController,
               autofocus: true,

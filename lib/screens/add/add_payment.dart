@@ -25,7 +25,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   final TextEditingController _paidAmountController = TextEditingController();
 
   late DateTime _datePaid;
-
+  final FocusNode _paidAmountFocusNode = FocusNode();
   String? _shop;
   void _update() {
     if (widget.payment != null) {
@@ -66,6 +66,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 8),
                   child: ShopSpinner(
+                    initialValue: widget.payment?.paidShopName,
+                    focusNode: _paidAmountFocusNode,
                     onShopSelected: (value) {
                       setState(() {
                         _shop = value;
@@ -79,10 +81,11 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      focusNode: _paidAmountFocusNode,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (text) {
                         if (text!.isEmpty) {
-                          return '';
+                          return 'please enter amount';
                         }
                         return null;
                       },

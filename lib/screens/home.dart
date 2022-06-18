@@ -48,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (fcmToken != null) {
       logger.d("FCM Token: $fcmToken");
       ref.read(databaseProvider).insertToken(fcmToken);
-      logger.d("token inserted");
+      logger.d("token inserted $fcmToken");
       return fcmToken;
     } else {
       logger.d("FCM Token: null");

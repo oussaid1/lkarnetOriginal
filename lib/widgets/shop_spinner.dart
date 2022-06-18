@@ -9,8 +9,12 @@ class ShopSpinner extends ConsumerStatefulWidget {
   const ShopSpinner({
     Key? key,
     required this.onShopSelected,
+    this.focusNode,
+    this.initialValue,
   }) : super(key: key);
   final void Function(String?) onShopSelected;
+  final FocusNode? focusNode;
+  final String? initialValue;
   @override
   ConsumerState<ShopSpinner> createState() => _ShopSpinnerState();
 }
@@ -25,16 +29,24 @@ class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
         borderRadius: BorderRadius.circular(6),
         color: AppConstants.whiteOpacity,
       ),
-      width: 160.0,
+      width: 200.0,
       margin: EdgeInsets.all(8),
-      height: 45,
-      child: DropdownButtonHideUnderline(
+      height: 50,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: ButtonTheme(
+          // focusColor: Colors.red,
+          //highlightColor: Colors.red,
           alignedDropdown: true,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radius),
           ),
           child: DropdownButtonFormField<String>(
+            borderRadius: BorderRadius.circular(AppConstants.radius),
+            dropdownColor: Color.fromARGB(108, 255, 255, 255).withOpacity(0.6),
+            alignment: Alignment.center,
+            autofocus: true,
+            autovalidateMode: AutovalidateMode.always,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(0),
@@ -43,23 +55,29 @@ class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
             iconSize: 30,
             validator: (value) {
               if (value == null) {
-                return 'select shop';
+                return 'please select shop first !';
               }
               return null;
             },
             icon: Icon(Icons.arrow_drop_down),
             isExpanded: false,
-            hint: Text(
-              "Select Shop",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle2,
-            ),
-            value: _list.contains(picked) ? picked : null,
+            // hint: Text(
+            //   "Select Shop",
+            //   textAlign: TextAlign.center,
+            //   style: Theme.of(context).textTheme.subtitle2,
+            // ),
+            value: widget.initialValue != null
+                ? widget.initialValue
+                : _list.contains(picked)
+                    ? picked
+                    : null,
+            focusColor: AppConstants.primaryColor,
             onChanged: (value) {
-              setState(() {
-                widget.onShopSelected(value);
-              });
+              widget.onShopSelected(value);
 
+              widget.focusNode != null
+                  ? widget.focusNode!.requestFocus()
+                  : null;
               ref.read(pickedShop.state).state = value;
             },
             items: [
