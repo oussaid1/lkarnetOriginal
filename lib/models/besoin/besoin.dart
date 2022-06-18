@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:lkarnet/models/shop/shop_model.dart';
 
-class Besoin {
+class BesoinModel {
   String? id;
   int count = 1;
   DateTime timeStamp = DateTime.now();
@@ -16,7 +16,7 @@ class Besoin {
 
   String get imageFullPath => 'assets/images/$image';
 
-  Besoin({
+  BesoinModel({
     this.id,
     this.categoryTitle,
     required this.timeStamp,
@@ -42,7 +42,7 @@ class Besoin {
     };
   }
 
-  Besoin.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+  BesoinModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     categoryTitle = documentSnapshot['categoryTitle'];
     image = documentSnapshot['image'] ?? '';
@@ -53,7 +53,7 @@ class Besoin {
     count = documentSnapshot['count'];
   }
 
-  static var sample = Besoin(
+  static var sample = BesoinModel(
     limit: 0,
     timeStamp: DateTime.now(),
     categoryTitle: "اساسي",

@@ -8,7 +8,7 @@ import '../providers/varproviders/var_providers.dart';
 import '../settings/theme.dart';
 
 class ItemsListWidget extends ConsumerWidget {
-  final List<Item> items;
+  final List<ItemModel> items;
   const ItemsListWidget({
     Key? key,
     required this.items,
@@ -21,7 +21,7 @@ class ItemsListWidget extends ConsumerWidget {
       child: ListView.builder(
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          Item item = items[index];
+          ItemModel item = items[index];
           return Slidable(
             startActionPane: ActionPane(
               motion: ScrollMotion(),

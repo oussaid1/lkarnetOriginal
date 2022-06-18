@@ -19,7 +19,7 @@ class NotificationsIconButton extends StatefulWidget {
 class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
   //  late AnimationController _animationController;
   late List<KitchenElementModel> _kitchenElements;
-  late List<KitchenItem> _kitchenItems;
+  late List<KitchenItemModel> _kitchenItems;
   late KitchenElementsData _kitchenElementsData;
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<KitchenItem>>(
+    return StreamBuilder<List<KitchenItemModel>>(
         stream: widget.ref.read(databaseProvider).kitchenItemsStream(),
         builder: (context, snapshotItems) {
           if (snapshotItems.hasData) {

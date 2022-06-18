@@ -11,7 +11,7 @@ import '../../settings/theme.dart';
 import '../../widgets/price_curency_widget.dart';
 
 class PaymentsList extends ConsumerWidget {
-  final List<Payment>? lista;
+  final List<PaymentModel>? lista;
   PaymentsList({
     Key? key,
     this.lista,
@@ -56,7 +56,7 @@ class PaymentsList extends ConsumerWidget {
 }
 
 class PayList extends ConsumerWidget {
-  final List<Payment>? lista;
+  final List<PaymentModel>? lista;
   PayList({
     Key? key,
     this.lista,
@@ -69,7 +69,7 @@ class PayList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: lista!.length,
         itemBuilder: (BuildContext context, int index) {
-          Payment payment = lista![index];
+          PaymentModel payment = lista![index];
           return PaymentTile(payment: payment);
         },
       ),
@@ -83,7 +83,7 @@ class PaymentTile extends ConsumerWidget {
     required this.payment,
   }) : super(key: key);
 
-  final Payment payment;
+  final PaymentModel payment;
 
   @override
   Widget build(BuildContext context, ref) {

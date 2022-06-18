@@ -103,14 +103,14 @@ class Database {
   ////////////////////////////////////////////////////////////////////////////////
   ///////// get / read  //////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  Stream<List<Besoin>> besoinStream(String uid) {
+  Stream<List<BesoinModel>> besoinStream(String uid) {
     return _users
         .collection(DBTables.besoins)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<Besoin> retVal = [];
+      List<BesoinModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(Besoin.fromDocumentSnapshot(element));
+        retVal.add(BesoinModel.fromDocumentSnapshot(element));
       });
       return retVal;
     });
@@ -137,13 +137,13 @@ class Database {
         .then((value) => value['dayLimit']);
   }
 
-  Stream<List<Item>> itemStream() {
+  Stream<List<ItemModel>> itemStream() {
     return _users
         .collection(DBTables.goods)
         .orderBy("dateBought", descending: true)
         .snapshots()
         .map((QuerySnapshot query) => query.docs
-            .map((element) => Item.fromDocumentSnapshot(element))
+            .map((element) => ItemModel.fromDocumentSnapshot(element))
             .toList());
   }
 
@@ -156,35 +156,35 @@ class Database {
   }
 
   // get kitchenItems
-  Stream<List<KitchenItem>> kitchenItemsStream() {
+  Stream<List<KitchenItemModel>> kitchenItemsStream() {
     return _users
         .collection(_collectionKitchenItems)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<KitchenItem> retVal = [];
+      List<KitchenItemModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(KitchenItem.fromDocumentSnapShot(element));
+        retVal.add(KitchenItemModel.fromDocumentSnapShot(element));
       });
       return retVal;
     });
   }
 
-  Stream<List<Item>> archiveItemStream() {
+  Stream<List<ItemModel>> archiveItemStream() {
     return _users.collection(DBTables.archiveGoods).snapshots().map(
         (QuerySnapshot query) => query.docs
-            .map((element) => Item.fromDocumentSnapshot(element))
+            .map((element) => ItemModel.fromDocumentSnapshot(element))
             .toList());
   }
 
-  Stream<List<Payment>> streamPayments() {
+  Stream<List<PaymentModel>> streamPayments() {
     return _users
         .collection(DBTables.payments)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<Payment> retVal = [];
+      List<PaymentModel> retVal = [];
       for (var element in query.docs) {
         // logger.d(element.data());
-        retVal.add(Payment.fromDocumentSnapshot(element));
+        retVal.add(PaymentModel.fromDocumentSnapshot(element));
       }
       // logger.d(retVal);
       // logger.d(retVal.length);
@@ -195,7 +195,7 @@ class Database {
 ///////////////////////////////////////////////////////////////////////////////
   ///////// ADD / Create  //////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
-  Future<void> addBesoin(Besoin besoin, String uid) async {
+  Future<void> addBesoin(BesoinModel besoin, String uid) async {
     try {
       await _users.collection(DBTables.besoins).add(besoin.toMap());
     } catch (e) {
@@ -216,7 +216,7 @@ class Database {
   }
 
   Future<void> addItem(
-    Item item,
+    ItemModel item,
   ) async {
     try {
       _users.collection(DBTables.goods).add(item.toMap());
@@ -226,7 +226,7 @@ class Database {
   }
 
   Future<void> addPayment(
-    Payment payment,
+    PaymentModel payment,
   ) async {
     try {
       await _users.collection(DBTables.payments).add(payment.toMap());
@@ -251,7 +251,7 @@ class Database {
   }
 
 // add KitchenItem to the kitchen
-  Future<void> addKitchenItem(KitchenItem kitchenItem) async {
+  Future<void> addKitchenItem(KitchenItemModel kitchenItem) async {
     try {
       await _users.collection(_collectionKitchenItems).add(kitchenItem.toMap());
     } catch (e) {
@@ -280,7 +280,7 @@ class Database {
 
 // update KitchenItem
   Future<void> updateKitchenItem(
-    KitchenItem kitchenItem,
+    KitchenItemModel kitchenItem,
   ) async {
     try {
       await _users
@@ -308,7 +308,7 @@ class Database {
   }
 
   Future<void> updateItem(
-    Item itemToUpdate,
+    ItemModel itemToUpdate,
   ) async {
     try {
       _users
@@ -324,7 +324,7 @@ class Database {
   }
 
   Future<void> updatePayment(
-    Payment itemToUpdate,
+    PaymentModel itemToUpdate,
   ) async {
     try {
       _users
@@ -338,7 +338,7 @@ class Database {
   }
 
   Future<void> updateBesoin(
-    Besoin itemToUpdate,
+    BesoinModel itemToUpdate,
     String uid,
   ) async {
     try {
@@ -372,7 +372,7 @@ class Database {
 
   // delete KitchenItem
   Future<void> deleteKitchenItem(
-    KitchenItem kitchenItem,
+    KitchenItemModel kitchenItem,
   ) async {
     try {
       await _users
@@ -394,7 +394,7 @@ class Database {
     }
   }
 
-  Future<void> deleteItem(Item item) async {
+  Future<void> deleteItem(ItemModel item) async {
     try {
       _users.collection(DBTables.goods).doc(item.id).delete();
     } catch (e) {
@@ -403,7 +403,7 @@ class Database {
     }
   }
 
-  Future<void> deletePayment(Payment payment) async {
+  Future<void> deletePayment(PaymentModel payment) async {
     try {
       _users.collection(DBTables.payments).doc(payment.id).delete();
     } catch (e) {

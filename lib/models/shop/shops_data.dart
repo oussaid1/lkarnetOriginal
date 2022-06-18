@@ -35,13 +35,13 @@ class ShopData {
   ShopData(this.shop, this.itemsFiltered, this.paymentsFiltered);
 
   // filtered list by Shop object passed to the constructor
-  List<Item> get allItems {
+  List<ItemModel> get allItems {
     return itemsFiltered.allItems
         .where((element) => element.shopName == shop.shopName)
         .toList();
   }
 
-  List<Payment> get allPayments {
+  List<PaymentModel> get allPayments {
     return paymentsFiltered.payments
         .where((element) => element.paidShopName == shop.shopName)
         .toList();
@@ -90,8 +90,8 @@ class ShopData {
 
 class DataSink {
   List<ShopModel> shops;
-  List<Item> items;
-  List<Payment> payments;
+  List<ItemModel> items;
+  List<PaymentModel> payments;
   DataSink(this.shops, this.items, this.payments);
   // get all shopsData
   List<ShopData> get allShopsData {

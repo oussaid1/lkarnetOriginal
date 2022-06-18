@@ -15,8 +15,8 @@ import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../widgets/kitchen_elements_spinner.dart';
 
 class AddKitchenItem extends ConsumerStatefulWidget {
-  final Item? item;
-  final KitchenItem? kitchenItem;
+  final ItemModel? item;
+  final KitchenItemModel? kitchenItem;
   final KitchenElementModel? kitchenElement;
   AddKitchenItem({Key? key, this.kitchenItem, this.kitchenElement, this.item})
       : super(key: key);
@@ -88,7 +88,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   @override
   Widget build(BuildContext context) {
-    Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
+    Iterable<ItemModel> _kOptions = ref.watch(itemsProvider.state).state;
 
     return GlassMaterial(
       circleWidgets: [
@@ -202,7 +202,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                         content: Text('Updating...'),
                       ));
                       final _op = ref.read(operationsProvider);
-                      final _kitchenItem = KitchenItem(
+                      final _kitchenItem = KitchenItemModel(
                         id: widget.kitchenItem!.id,
                         besoinTitle: '',
                         dateBought: _dateBought,
@@ -270,7 +270,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                         ),
                       );
                       final _op = ref.read(operationsProvider);
-                      final _kitchenItem = KitchenItem(
+                      final _kitchenItem = KitchenItemModel(
                         besoinTitle: '',
                         dateBought: _dateBought,
                         itemName: _itemNameController.text.trim(),
@@ -443,14 +443,14 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   }
 
   Padding _buildItemNameAutoComplete(
-      BuildContext context, Iterable<Item> _kOptions) {
+      BuildContext context, Iterable<ItemModel> _kOptions) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Form(
         key: _formKeyName,
         child: SizedBox(
           height: 50,
-          child: TypeAheadField<Item>(
+          child: TypeAheadField<ItemModel>(
             noItemsFoundBuilder: (context) => Text('No Items Found'),
             autoFlipDirection: true,
             minCharsForSuggestions: 2,

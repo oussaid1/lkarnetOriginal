@@ -27,7 +27,7 @@ class _KitchenItemDetailsScreenState
     extends ConsumerState<KitchenElementDetailsScreen> {
   DateTime? _expiryDate = DateTime.now();
 
-  List<KitchenItem> _kitchenItems = [];
+  List<KitchenItemModel> _kitchenItems = [];
 
   double _availability = 0;
   @override
@@ -124,7 +124,7 @@ class _KitchenItemDetailsScreenState
                             ref.read(operationsProvider).deleteKitchenElement(
                                   widget.kitchenElement.kitchenElement,
                                 );
-                            for (KitchenItem item in _kitchenItems) {
+                            for (KitchenItemModel item in _kitchenItems) {
                               ref.read(operationsProvider).deleteKitchenItem(
                                     item,
                                   );
@@ -184,7 +184,7 @@ class _KitchenItemDetailsScreenState
       margin: EdgeInsets.symmetric(horizontal: 8),
       // height: 340,
       width: MediaQuery.of(context).size.width,
-      child: StreamBuilder<List<KitchenItem>>(
+      child: StreamBuilder<List<KitchenItemModel>>(
           stream: ref.read(databaseProvider).kitchenItemsStream(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -201,7 +201,7 @@ class _KitchenItemDetailsScreenState
                 itemCount: _singleKitchenElementData.kitchenItems
                     .length, //widget.kitchenElement.sortedItems.length,
                 itemBuilder: (context, index) {
-                  final KitchenItem _kitchenItem =
+                  final KitchenItemModel _kitchenItem =
                       _singleKitchenElementData.kitchenItems[index];
                   return KitchenItemTileWidget(
                     onDoubleTap: () {

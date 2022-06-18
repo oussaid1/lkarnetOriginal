@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart' as df;
 
-class Payment {
+class PaymentModel {
   String? id;
   int count = 1;
   String? image = "logo.png";
@@ -24,7 +24,7 @@ class Payment {
     return _formatter.format(datePaid).toString();
   }
 
-  Payment(
+  PaymentModel(
       {this.id,
       this.besoinTitle,
       this.paidAmount = 0.0,
@@ -56,7 +56,7 @@ class Payment {
     return _formatter.format(datePaid);
   }
 
-  Payment.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+  PaymentModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
     paidAmount = documentSnapshot['paidAmount'] / 1;

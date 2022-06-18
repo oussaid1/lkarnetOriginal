@@ -17,7 +17,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
     this.onDoubleTap,
   }) : super(key: key);
 
-  final KitchenItem kitchenItem;
+  final KitchenItemModel kitchenItem;
 
   @override
   Widget build(BuildContext context, ref) {

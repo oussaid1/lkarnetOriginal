@@ -5,7 +5,7 @@ import 'kitchen_item.dart';
 
 class KitchenElementsData {
   List<KitchenElementModel> kitchenElementList = [];
-  late List<KitchenItem> kitchenItems;
+  late List<KitchenItemModel> kitchenItems;
   KitchenElementsData(
       {required this.kitchenElementList, required this.kitchenItems});
 
@@ -89,10 +89,10 @@ class TaggedKitchenElementDataModel {
 
 class KitchenElementDataModel {
   late KitchenElementModel kitchenElement;
-  List<KitchenItem> kitchenItems = [];
+  List<KitchenItemModel> kitchenItems = [];
   KitchenElementDataModel(
       {required this.kitchenElement,
-      required List<KitchenItem> kitchenItemList}) {
+      required List<KitchenItemModel> kitchenItemList}) {
     for (var i = 0; i < kitchenItemList.length; i++) {
       if (kitchenItemList[i].kitchenElementId == kitchenElement.id) {
         kitchenItems.add(kitchenItemList[i]);
@@ -103,7 +103,7 @@ class KitchenElementDataModel {
     //     .toList();
   }
 
-  List<KitchenItem> get sortedItems {
+  List<KitchenItemModel> get sortedItems {
     kitchenItems.sort((a, b) {
       if (a.dateExpired != null && b.dateExpired != null) {
         return a.dateExpired!.compareTo(b.dateExpired!);
@@ -142,7 +142,7 @@ class KitchenElementDataModel {
   }
 
 // get last item was bought
-  KitchenItem? get lastItemBought {
+  KitchenItemModel? get lastItemBought {
     // if items is empty return null
     if (kitchenItems.isEmpty) return null;
     // get last item

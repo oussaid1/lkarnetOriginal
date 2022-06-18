@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lkarnet/bloc/loginbloc/login_bloc.dart';
 import 'package:lkarnet/database/database.dart';
 import 'package:lkarnet/services/auth_service.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'bloc/authbloc/auth_bloc.dart';
+import 'bloc/bloc/login_bloc.dart';
 import 'components.dart';
 import 'navigator/rout_navigator.dart';
 import 'root.dart';
@@ -27,11 +28,11 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(),
+            create: (context) => AuthBloc(authService),
           ),
           BlocProvider<LoginBloc>(
             create: (context) => LoginBloc(
-              AuthBloc(),
+              AuthBloc(authService),
               authService,
             ),
           ),
@@ -46,16 +47,18 @@ class LkarnetApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // var appThemeState = ref.watch(appThemeStateNotifier);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: Locale('ar'),
-      //title: 'حانوتي - لكارني',
-      theme: MThemeData.lightThemeData,
-      darkTheme: MThemeData.darkThemeData,
-      themeMode: ThemeMode.light,
-      initialRoute: '/',
-      onGenerateRoute: RouteGenerator.generateRoute,
-      home: Root(),
+    return OverlaySupport.global(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: Locale('ar'),
+        //title: 'حانوتي - لكارني',
+        theme: MThemeData.lightThemeData,
+        darkTheme: MThemeData.darkThemeData,
+        themeMode: ThemeMode.light,
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.generateRoute,
+        home: Root(),
+      ),
     );
   }
 }

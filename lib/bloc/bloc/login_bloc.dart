@@ -23,11 +23,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginRequestedEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
     if (event.loginCredentials.isValid) {
+      log('LoginBloc _onLogInRequested :' +
+          event.loginCredentials.isValid.toString());
       var response = await _authService.signInWithEmailAndPassword(
           loginCredentials: event.loginCredentials);
-
+      log(response.toString());
       _authBloc.add(AuthSuccessfulEvent(user: response));
       emit(LogInSuccessfulState(user: response));
+      log('state : ${state.toString()}');
     } else {
       emit(LoginCredentialsInvalidState(
           loginCredentials: event.loginCredentials));

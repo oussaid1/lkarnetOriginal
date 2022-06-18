@@ -1,48 +1,63 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
+import '../bloc/itemsbloc/items_bloc.dart';
+import '../database/database.dart';
 import '../models/shop/shops_data.dart';
 import '../providers/streamproviders/items_stream_provider.dart';
 import '../providers/streamproviders/payments_stream_provider.dart';
 import '../providers/streamproviders/shops_stream_provider.dart';
+import '../repository/database_operations.dart';
 import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';
 import 'stats/stats_all.dart';
 import 'package:flutter/material.dart';
 
-final appTittleProvider = StateProvider<String>((ref) {
-  return "Home";
-});
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-class HomePage extends ConsumerStatefulWidget {
-  HomePage({
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ItemsBloc(
+        databaseOperations: GetIt.I<DatabaseOperations>(),
+      ),
+      child: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends ConsumerStatefulWidget {
+  HomeScreen({
     Key? key,
   }) : super(key: key);
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   //File _pickedFile = File('/storage/emulated/0/Download/test.txt');
   final PageController _pageController = PageController();
   @override
   void initState() {
-    _notificationsPermition(context);
+    // _notificationsPermition(context);
     // Workmanager().initialize(
     //     callbackDispatcher, // The top level function, aka callbackDispatcher
     //     isInDebugMode:
     //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
     //     );
-    _getToken();
+    // _getToken();
     super.initState();
   }
 
 // get device token and insert it in firebase
-  Future<String?> _getToken() async {
+  Future<String?> getToken() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     if (fcmToken != null) {
       log("FCM Token: $fcmToken");
@@ -121,14 +136,44 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
-      centerWidget: Scaffold(
-        bottomNavigationBar: buildNavigationBar(
-            context, _selectedPageIndex, _pageController, ref),
-        backgroundColor: Colors.transparent,
-        body: buildPageView(_pageController, ref, context,
-            dataSink: dataSink,
-            shopsDataList: _shopsDataList,
-            recentOperations: _recentOperations),
+      centerWidget: BlocConsumer<ItemsBloc, ItemsState>(
+        // buildWhen: (previous, current) => current is ItemsLoadedState,
+        listener: (context, state) {
+          if (state is ItemsLoadedState) {
+            dataSink.items = state.items;
+            log("items loaded ${state.items.length}");
+          }
+        },
+        builder: (context, state) {
+          log("db ${GetIt.I.get<Database>().uid.toString()}");
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "LKarnet ${state} ",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    context.read<ItemsBloc>().add(GetItemsEvent());
+                  },
+                ),
+              ],
+            ),
+            bottomNavigationBar: buildNavigationBar(
+                context, _selectedPageIndex, _pageController, ref),
+            backgroundColor: Colors.transparent,
+            body: buildPageView(_pageController, ref, context,
+                dataSink: dataSink,
+                shopsDataList: _shopsDataList,
+                recentOperations: _recentOperations),
+          );
+        },
       ),
     );
   }

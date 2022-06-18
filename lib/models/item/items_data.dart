@@ -3,7 +3,7 @@ import 'item.dart';
 import 'package:lkarnet/components.dart';
 
 class ItemsData {
-  List<Item> items;
+  List<ItemModel> items;
   ItemsData({required this.items});
 // compare two Strings and check number of matching letters
   int compareStrings(String a, String b) {
@@ -62,7 +62,7 @@ class ItemsData {
     var sum = 0.0;
     var _lista = <ItemsChartData>[];
 
-    for (Item element in items) {
+    for (ItemModel element in items) {
       if (!map.containsKey(element.itemName)) {
         map[element.itemName] = {'count': 1, 'sum': element.itemPrix};
       } else {

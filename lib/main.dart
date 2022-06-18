@@ -25,14 +25,16 @@ Future<void> main() async {
         MNotificationModel.channels);
 
   /// register Database singleton
-  GetIt.I.registerSingleton<Database>(Database(uid: ''));
+  GetIt.I.registerSingleton<Database>(Database(uid: null));
+  GetIt.I.registerSingleton<DatabaseOperations>(
+      DatabaseOperations(GetIt.I<Database>()));
 
   runApp(
     ProviderScope(
       child: MyApp(
         authService: AuthService(
           FirebaseAuthService(),
-          DatabaseOperations(Database(uid: '')),
+          DatabaseOperations(GetIt.I.get<Database>()),
         ),
       ),
     ),

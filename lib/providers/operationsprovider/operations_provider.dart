@@ -17,18 +17,18 @@ class Operations {
 
   Operations(this._read);
 // item crud
-  Future<bool> addItem(Item _item) async {
+  Future<bool> addItem(ItemModel _item) async {
     // _item.toPrint();
     return await _read(databaseProvider).addItem(_item).then((value) => true);
   }
 
-  Future<bool> updateItem(Item _item) async {
+  Future<bool> updateItem(ItemModel _item) async {
     return await _read(databaseProvider)
         .updateItem(_item)
         .then((value) => true);
   }
 
-  Future<bool> deleteItem(Item item) async {
+  Future<bool> deleteItem(ItemModel item) async {
     return await _read(databaseProvider).deleteItem(item).then((value) => true);
   }
 // shop crud
@@ -61,38 +61,38 @@ class Operations {
   }
 // payment crud
 
-  Future<bool> addPayment(Payment payment) async {
+  Future<bool> addPayment(PaymentModel payment) async {
     return await _read(databaseProvider)
         .addPayment(payment)
         .then((value) => true);
   }
 
-  Future<bool> updatePayment(Payment payment) async {
+  Future<bool> updatePayment(PaymentModel payment) async {
     return await _read(databaseProvider)
         .updatePayment(payment)
         .then((value) => true);
   }
 
-  Future<bool> deletePayment(Payment payment) async {
+  Future<bool> deletePayment(PaymentModel payment) async {
     return await _read(databaseProvider)
         .deletePayment(payment)
         .then((value) => true);
   }
 // kitchenItem crud
 
-  Future<bool> addKitchenItem(KitchenItem kitchenItem) async {
+  Future<bool> addKitchenItem(KitchenItemModel kitchenItem) async {
     return await _read(databaseProvider)
         .addKitchenItem(kitchenItem)
         .then((value) => true);
   }
 
-  Future<bool> updateKitchenItem(KitchenItem kitchenItem) async {
+  Future<bool> updateKitchenItem(KitchenItemModel kitchenItem) async {
     return await _read(databaseProvider)
         .updateKitchenItem(kitchenItem)
         .then((value) => true);
   }
 
-  Future<bool> deleteKitchenItem(KitchenItem kitchenItem) async {
+  Future<bool> deleteKitchenItem(KitchenItemModel kitchenItem) async {
     return await _read(databaseProvider)
         .deleteKitchenItem(kitchenItem)
         .then((value) => true);

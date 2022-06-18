@@ -5,18 +5,18 @@ import 'package:lkarnet/providers/authproviders/database_providers.dart';
 
 import '../../screens/lists/items.dart';
 
-final itemsStream = StreamProvider<List<Item>>((ref) {
+final itemsStream = StreamProvider<List<ItemModel>>((ref) {
   final _db = ref.watch(databaseProvider);
   return _db.itemStream();
 });
 
-final itemsProvider = StateProvider<List<Item>>((ref) {
+final itemsProvider = StateProvider<List<ItemModel>>((ref) {
   final stream = ref.watch(itemsStream);
   return stream.maybeWhen(data: (items) => items, orElse: () => []);
 });
 
 final itemsListNotifierProvider =
-    StateProvider.family<List<Item>, List<Item>>((ref, list) {
+    StateProvider.family<List<ItemModel>, List<ItemModel>>((ref, list) {
   final _kitchenElementsItems = list; //ref.watch(itemsProvider.state).state;
   var _filterPattern = ref.watch(filterPatternProvider.state).state;
   var _filterType = ref.watch(filterTypeProvider.state).state;
@@ -55,6 +55,7 @@ final itemsListNotifierProvider =
       return _kitchenElementsItems;
   }
 });
+
 enum FilterType {
   all,
   byCategory,
@@ -71,11 +72,11 @@ class ItemsListNotifier extends ChangeNotifier {
   }
   FilterType filterType = FilterType.all;
   String filterPattern;
-  List<Item> itemsList = [];
-  List<Item> fakeitemsList = [];
+  List<ItemModel> itemsList = [];
+  List<ItemModel> fakeitemsList = [];
 
   // add item to list
-  void addItem(Item value) {
+  void addItem(ItemModel value) {
     itemsList.add(value);
     // state.add(value);
     notifyListeners();

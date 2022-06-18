@@ -17,7 +17,7 @@ class ItemTileWidget extends ConsumerWidget {
     this.animationController,
   }) : super(key: key);
   final VoidCallback? onTap;
-  final Item item;
+  final ItemModel item;
   final AnimationController? animationController;
 
   @override

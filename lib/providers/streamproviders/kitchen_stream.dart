@@ -57,12 +57,13 @@ class KitchenElementListNotifier extends ChangeNotifier {
 ///
 /// stream for KitchenElementItems
 
-final kitchenElementItemsStream = StreamProvider<List<KitchenItem>>((ref) {
+final kitchenElementItemsStream = StreamProvider<List<KitchenItemModel>>((ref) {
   final _db = ref.watch(databaseProvider);
   return _db.kitchenItemsStream();
 });
 // connvert stream to list
-final kitchenElementItemsProvider = StateProvider<List<KitchenItem>>((ref) {
+final kitchenElementItemsProvider =
+    StateProvider<List<KitchenItemModel>>((ref) {
   final stream = ref.watch(kitchenElementItemsStream);
   return stream.maybeWhen(data: (kitchenItem) => kitchenItem, orElse: () => []);
 });
@@ -81,9 +82,9 @@ class KitchenElementItemsListNotifier extends ChangeNotifier {
         : kitchenElementItemsList;
   }
 
-  List<KitchenItem> kitchenElementItemsList = [];
-  List<KitchenItem> fakekitchenElementItemsList =
-      KitchenItem.fakeKitchenitems();
+  List<KitchenItemModel> kitchenElementItemsList = [];
+  List<KitchenItemModel> fakekitchenElementItemsList =
+      KitchenItemModel.fakeKitchenitems();
 
   // List<SocialMediaProfile> get kitchenElementList => kitchenElementList;
 
@@ -93,7 +94,7 @@ class KitchenElementItemsListNotifier extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addSocialProfil(KitchenItem value) {
+  void addSocialProfil(KitchenItemModel value) {
     kitchenElementItemsList.add(value);
     // state.add(value);
     notifyListeners();

@@ -19,7 +19,7 @@ class KitchenStockHome extends ConsumerStatefulWidget {
 
 class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
   late List<KitchenElementModel> _kitchenElements;
-  late List<KitchenItem> _kitchenItems;
+  late List<KitchenItemModel> _kitchenItems;
   //KitchenElementDataModel? singleKitchenElementData;
   KitchenElementsData? _kitchenElementsData;
   @override
@@ -47,7 +47,7 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       start: 0.1,
       end: 0,
       borderColorOpacity: 0,
-      child: StreamBuilder<List<KitchenItem>>(
+      child: StreamBuilder<List<KitchenItemModel>>(
           stream: ref.read(databaseProvider).kitchenItemsStream(),
           builder: (context, snap) {
             return StreamBuilder<List<KitchenElementModel>>(

@@ -12,7 +12,7 @@ class Backup {
   DateTime? date;
 
   /// the items in the backup
-  List<Item> items = [];
+  List<ItemModel> items = [];
 
   /// the constructor for the backup class
   Backup({required this.date, required this.items});
@@ -30,7 +30,8 @@ class Backup {
   /// this method is used to convert a json format to a backup
   Backup.fromJson(Map<String, dynamic> json) {
     this.date = DateTime.parse(json['date']);
-    this.items = json['items'].map<Item>((x) => Item.fromJson(x)).toList();
+    this.items =
+        json['items'].map<ItemModel>((x) => ItemModel.fromJson(x)).toList();
   }
 
   /// a function to stroe the backup to a json file in the backup folder in the app directory with the name of the date of the backup and the extension .json
@@ -65,7 +66,7 @@ class Backup {
   /// this method is used to convert the backup to a excel format
   String toExcel() {
     String excel = 'Date,Item,Quantifier,Quantity,Price,Shop,Date Bought\n';
-    for (Item item in items) {
+    for (ItemModel item in items) {
       excel +=
           '${this.date!.toIso8601String()},${item.itemName},${item.quantifier},${item.quantity},${item.itemPrice},${item.shopName},${item.dateBought.toIso8601String()}\n';
     }

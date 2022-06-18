@@ -13,7 +13,7 @@ import 'package:lkarnet/widgets/glasswidget.dart';
 import 'package:lkarnet/widgets/shop_spinner.dart';
 
 class AddPayment extends ConsumerStatefulWidget {
-  final Payment? payment;
+  final PaymentModel? payment;
 
   const AddPayment({Key? key, this.payment}) : super(key: key);
   @override
@@ -146,7 +146,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                             ),
                             onPressed: () {
                               final _op = ref.read(operationsProvider);
-                              final _payment = Payment(
+                              final _payment = PaymentModel(
                                 paidAmount:
                                     double.parse(_paidAmountController.text),
                                 datePaid: ref.read(pickedDateTime.state).state,
@@ -186,7 +186,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                             ),
                             onPressed: () {
                               final _op = ref.read(operationsProvider);
-                              final _payment = Payment(
+                              final _payment = PaymentModel(
                                 id: widget.payment!.id,
                                 paidAmount:
                                     double.parse(_paidAmountController.text),

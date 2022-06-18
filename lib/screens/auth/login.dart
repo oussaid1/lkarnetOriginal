@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lkarnet/bloc/loginbloc/login_bloc.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../bloc/bloc/login_bloc.dart';
 import '../../models/login_credentials.dart';
 import '../../utils.dart';
 import 'signup.dart';
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final _passController = TextEditingController();
 
-  var _isLoading = true;
+  var _isLoading = false;
 
   var _obscPass = true;
 
@@ -175,13 +175,14 @@ class _LoginPageState extends State<LoginPage> {
                           : () {
                               if (_loginFormKey.currentState!.validate()) {
                                 setState(() {
-                                  _isLoading = true;
+                                  _isLoading = false;
                                 });
                                 BlocProvider.of<LoginBloc>(context).add(
                                     LoginRequestedEvent(
                                         loginCredentials: LoginCredentials(
                                             username: _emailController.text,
                                             password: _passController.text)));
+                                log('login button pressed event dispatched');
                               }
                               // ref.read(isLoadingProvider.state).state = true;
                               // if (_loginFormKey.currentState!.validate()) {

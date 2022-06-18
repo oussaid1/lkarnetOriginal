@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lkarnet/components.dart';
 
-class Item {
+class ItemModel {
   // a zero argument constructor
   // Item();
   String? id;
@@ -16,7 +16,7 @@ class Item {
 
   double get itemPrix => itemPrice * quantity;
 
-  Item(
+  ItemModel(
       {this.id,
       required this.itemName,
       this.besoinTitle,
@@ -61,7 +61,7 @@ class Item {
     return dateBought.formatted();
   }
 
-  Item.fromDocumentSnapshot(QueryDocumentSnapshot documentSnapshot) {
+  ItemModel.fromDocumentSnapshot(QueryDocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
     itemName = documentSnapshot['itemName'].trim();
@@ -112,7 +112,7 @@ class Item {
   }
 
   /// from json method
-  Item.fromJson(Map<String, dynamic> json) {
+  ItemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     itemName = json['itemName'];
     quantifier = json['quantifier'];

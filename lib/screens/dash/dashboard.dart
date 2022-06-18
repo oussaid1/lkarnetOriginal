@@ -86,9 +86,9 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           //     // Navigator.pushNamed(context, '/notifications');
           //   },
           // ),
-          NotificationsIconButton(
-            ref: ref,
-          ),
+          // NotificationsIconButton(
+          //   ref: ref,
+          // ),
         ],
         leading: IconButton(
           icon: Icon(Icons.dashboard),

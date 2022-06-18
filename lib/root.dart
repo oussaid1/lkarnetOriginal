@@ -1,9 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/navigator/rout_navigator.dart';
 import 'package:lkarnet/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:lkarnet/screens/splash.dart';
 
 import 'bloc/authbloc/auth_bloc.dart';
+import 'database/database.dart';
 import 'utils.dart';
 
 class Root extends StatelessWidget {
@@ -20,7 +23,7 @@ class Root extends StatelessWidget {
         }
 
         if (state is UnauthenticatedState) {
-          Navigator.of(context).pushReplacementNamed('/');
+          Navigator.of(context).pushNamed('/');
         }
 
         if (state is AuthenticatedState) {
@@ -28,7 +31,7 @@ class Root extends StatelessWidget {
             context,
             'تم تسجيل الدخول بنجاح',
           );
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.pushNamed(context, RouteGenerator.home);
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
@@ -37,6 +40,7 @@ class Root extends StatelessWidget {
             return SplashPage();
           }
           if (state is AuthenticatedState) {
+            GetIt.I<Database>().setUserUid(state.user.uid);
             return HomePage();
           }
           if (state is UnauthenticatedState) {

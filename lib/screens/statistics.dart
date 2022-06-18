@@ -189,7 +189,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
   }
 
 // build custom listTile
-  Widget buildShopPaymentTile(Payment payment) {
+  Widget buildShopPaymentTile(PaymentModel payment) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.radius),

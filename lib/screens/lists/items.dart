@@ -16,7 +16,7 @@ final filterTypeProvider = StateProvider<FilterType>((ref) {
 });
 
 class ItemsList extends ConsumerStatefulWidget {
-  final List<Item> lista;
+  final List<ItemModel> lista;
   ItemsList({
     Key? key,
     required this.lista,
@@ -170,7 +170,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                   shrinkWrap: true,
                   itemCount: _list.length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Item item = _list[index];
+                    ItemModel item = _list[index];
                     return ItemTileWidget(
                       item: item,
                     );
@@ -210,7 +210,7 @@ class _ItemsListState extends ConsumerState<ItemsList> {
 }
 
 class GoodsList extends ConsumerWidget {
-  final List<Item>? lista;
+  final List<ItemModel>? lista;
   GoodsList({Key? key, this.lista}) : super(key: key);
 
   @override
@@ -220,7 +220,7 @@ class GoodsList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: lista!.length,
         itemBuilder: (BuildContext context, int index) {
-          Item item = lista![index];
+          ItemModel item = lista![index];
           return ItemTileWidget(item: item);
         },
       ),

@@ -20,7 +20,7 @@ final itemStatisticsProvider = StateProvider<List<ItemStatistics>>((ref) {
 class ItemStatistics {
   String tag;
   List<String> distincts = [];
-  List<Item> items = [];
+  List<ItemModel> items = [];
 
   double get itemsSum {
     double _x = 0;

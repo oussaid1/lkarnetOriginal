@@ -9,7 +9,7 @@ final itemDistinctsProvider = StateProvider<ItemDistincts>((ref) {
 
 // get distincts from items
 class ItemDistincts {
-  List<Item> items = [];
+  List<ItemModel> items = [];
   ItemDistincts({
     required this.items,
   });
@@ -49,7 +49,7 @@ class ItemDistincts {
   }
 
   ItemDistincts copyWith({
-    List<Item>? items,
+    List<ItemModel>? items,
   }) {
     return ItemDistincts(
       items: items ?? this.items,

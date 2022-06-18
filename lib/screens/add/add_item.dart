@@ -15,7 +15,7 @@ import '../../widgets/item_listtile.dart';
 import '../../widgets/number_incrementer.dart';
 
 class AddItem extends ConsumerStatefulWidget {
-  final Item? item;
+  final ItemModel? item;
   AddItem({this.item});
   @override
   _AddItemState createState() => _AddItemState();
@@ -34,7 +34,7 @@ class _AddItemState extends ConsumerState<AddItem>
   String? _quantifier = 'واحدة';
   String? _shop;
   bool _isLoading = false;
-  Item? _localItem;
+  ItemModel? _localItem;
   void clear() {
     _itemNameController.clear();
     _itemPriceController.clear();
@@ -69,7 +69,7 @@ class _AddItemState extends ConsumerState<AddItem>
 
   @override
   Widget build(BuildContext context) {
-    Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
+    Iterable<ItemModel> _kOptions = ref.watch(itemsProvider.state).state;
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -186,7 +186,7 @@ class _AddItemState extends ConsumerState<AddItem>
                         content: Text('Updating...'),
                       ));
                       final _op = ref.read(operationsProvider);
-                      final _item = Item(
+                      final _item = ItemModel(
                         id: widget.item!.id,
                         besoinTitle: '',
                         dateBought: ref.read(pickedDateTime.state).state,
@@ -264,7 +264,7 @@ class _AddItemState extends ConsumerState<AddItem>
                       //   _isLoading = true;
                       // });
                       final _op = ref.read(operationsProvider);
-                      final _item = Item(
+                      final _item = ItemModel(
                           besoinTitle: '',
                           dateBought: _dateBought,
                           itemName: _itemNameController.text.trim(),
@@ -400,14 +400,14 @@ class _AddItemState extends ConsumerState<AddItem>
     );
   }
 
-  Padding _buildItemName(BuildContext context, Iterable<Item> _kOptions) {
+  Padding _buildItemName(BuildContext context, Iterable<ItemModel> _kOptions) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Form(
         key: _formKeyName,
         child: SizedBox(
           height: 50,
-          child: TypeAheadField<Item>(
+          child: TypeAheadField<ItemModel>(
             autoFlipDirection: true,
             minCharsForSuggestions: 2,
             direction: AxisDirection.up,

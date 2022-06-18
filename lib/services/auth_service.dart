@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/login_credentials.dart';
 import 'package:lkarnet/models/user/user.dart';
 import 'package:lkarnet/repository/database_operations.dart';
@@ -10,7 +10,7 @@ import '../providers/authproviders/auth_services.dart';
 
 class AuthService implements AuthServiceInterface {
   final FirebaseAuthService _firebaseAuth;
-  late final DatabaseOperations _databaseOperations;
+  late DatabaseOperations _databaseOperations;
 
   AuthService(this._firebaseAuth, this._databaseOperations);
   @override
@@ -26,9 +26,11 @@ class AuthService implements AuthServiceInterface {
   Future<User> signInWithEmailAndPassword(
       {required LoginCredentials loginCredentials}) async {
     User? user = await _firebaseAuth.signIn(loginCredentials: loginCredentials);
+    log('signIn AuthService' + user.toString());
     if (user != null) {
       GetIt.I<Database>().setUserUid(user.uid);
       var db = GetIt.I<Database>();
+      log('signIn AuthService Db uid :' + db.uid.toString());
       _databaseOperations = DatabaseOperations(db);
       await _databaseOperations.createUser(UserModel.fromUserCredential(user));
     }

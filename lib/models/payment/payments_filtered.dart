@@ -9,12 +9,12 @@ final paymentsFilteredProvider = StateProvider<PaymentsFiltered>((ref) {
 });
 
 class PaymentsFiltered {
-  List<Payment> payments = [];
+  List<PaymentModel> payments = [];
   String? tag;
   DateFilterType? dateFilterType;
   PaymentsFiltered({required this.payments, this.tag, this.dateFilterType});
 
-  List<Payment> get allPayments {
+  List<PaymentModel> get allPayments {
     if (dateFilterType == DateFilterType.ddmmyy) {
       return allItemByDDMMYYTag!;
     } else if (dateFilterType == DateFilterType.mmyy) {
@@ -25,32 +25,32 @@ class PaymentsFiltered {
     return [];
   }
 
-  List<Payment>? get allItemByDDMMYYTag {
+  List<PaymentModel>? get allItemByDDMMYYTag {
     return payments.where((item) => item.toDDMMYY == tag).toList();
   }
 
-  List<Payment>? get allItemByMMYYTag {
+  List<PaymentModel>? get allItemByMMYYTag {
     return payments.where((item) => item.toMMYY == tag).toList();
   }
 
-  List<Payment>? get allItemByYYTag {
+  List<PaymentModel>? get allItemByYYTag {
     return payments.where((item) => item.toYY == tag).toList();
   }
 
-  List<Payment> get allPaymentsThisMonth {
+  List<PaymentModel> get allPaymentsThisMonth {
     return payments
         .where((element) => element.datePaid.month == DateTime.now().month)
         .toList();
   }
 
-  List<Payment> get allPaymentsThisYear {
+  List<PaymentModel> get allPaymentsThisYear {
     return payments
         .where((element) => element.datePaid.year == DateTime.now().year)
         .toList();
   }
 
   PaymentsFiltered copyWith({
-    List<Payment>? payments,
+    List<PaymentModel>? payments,
     String? tag,
     DateFilterType? dateFilterType,
   }) {

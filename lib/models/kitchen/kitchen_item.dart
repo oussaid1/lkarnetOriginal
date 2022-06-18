@@ -9,7 +9,7 @@ import 'kitchen_element.dart';
 
 //import '../item/item.dart';
 
-class KitchenItem {
+class KitchenItemModel {
   String? id;
   String kitchenElementId = "";
   String? besoinTitle;
@@ -19,7 +19,7 @@ class KitchenItem {
   double quantity = 1;
   double itemPrice = 0;
   int count = 1;
-  KitchenItem({
+  KitchenItemModel({
     this.id,
     this.besoinTitle,
     required this.shopName,
@@ -40,7 +40,7 @@ class KitchenItem {
   }
 
   double get itemPrix => itemPrice * quantity;
-  KitchenItem copyWith({
+  KitchenItemModel copyWith({
     String? id,
     String? besoinTitle,
     String? shopName,
@@ -53,7 +53,7 @@ class KitchenItem {
     DateTime? dateExpired,
     required String kitchenElementId,
   }) {
-    return KitchenItem(
+    return KitchenItemModel(
         id: id ?? this.id,
         besoinTitle: besoinTitle ?? this.besoinTitle,
         shopName: shopName ?? this.shopName,
@@ -82,7 +82,8 @@ class KitchenItem {
     };
   }
 
-  KitchenItem.fromItem(Item item, KitchenElementModel kitchenElement) {
+  KitchenItemModel.fromItem(
+      ItemModel item, KitchenElementModel kitchenElement) {
     this.besoinTitle = item.besoinTitle;
     this.shopName = item.shopName;
     this.itemName = item.itemName;
@@ -94,7 +95,8 @@ class KitchenItem {
     this.dateExpired = null;
     this.kitchenElementId = kitchenElement.id!;
   }
-  KitchenItem.fromDocumentSnapShot(QueryDocumentSnapshot documentSnapshot) {
+  KitchenItemModel.fromDocumentSnapShot(
+      QueryDocumentSnapshot documentSnapshot) {
     id = documentSnapshot.id;
     besoinTitle = documentSnapshot['besoinTitle'];
     itemName = documentSnapshot['itemName'].trim();
@@ -141,8 +143,8 @@ class KitchenItem {
   }
 
 // from map
-  factory KitchenItem.fromMap(Map<String, dynamic> map) {
-    return KitchenItem(
+  factory KitchenItemModel.fromMap(Map<String, dynamic> map) {
+    return KitchenItemModel(
       id: map['id'],
       besoinTitle: map['besoinTitle'],
       shopName: map['shopName'],
@@ -158,8 +160,8 @@ class KitchenItem {
   }
   String toJson() => json.encode(toMap());
 
-  factory KitchenItem.fromJson(String source) =>
-      KitchenItem.fromMap(json.decode(source));
+  factory KitchenItemModel.fromJson(String source) =>
+      KitchenItemModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -170,7 +172,7 @@ class KitchenItem {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is KitchenItem &&
+    return other is KitchenItemModel &&
         other.id == id &&
         other.besoinTitle == besoinTitle &&
         other.shopName == shopName &&
@@ -200,9 +202,9 @@ class KitchenItem {
   }
 
   // list of fake data
-  static List<KitchenItem> fakeKitchenitems() {
+  static List<KitchenItemModel> fakeKitchenitems() {
     return [
-      KitchenItem(
+      KitchenItemModel(
         besoinTitle: 'test',
         shopName: 'مومو',
         itemName: 'test',
@@ -214,7 +216,7 @@ class KitchenItem {
         dateExpired: DateTime.now(),
         kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
-      KitchenItem(
+      KitchenItemModel(
         besoinTitle: 'test',
         shopName: 'مومو',
         itemName: 'test',
@@ -226,7 +228,7 @@ class KitchenItem {
         dateExpired: DateTime.now(),
         kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
-      KitchenItem(
+      KitchenItemModel(
         besoinTitle: 'test',
         shopName: 'مومو',
         itemName: 'test',
@@ -238,7 +240,7 @@ class KitchenItem {
         dateExpired: DateTime.now(),
         kitchenElementId: 'VtRluxV8Sy7tQaa6yoNO',
       ),
-      KitchenItem(
+      KitchenItemModel(
         besoinTitle: 'test',
         shopName: 'مومو',
         itemName: 'test',
@@ -250,7 +252,7 @@ class KitchenItem {
         dateExpired: DateTime.now(),
         kitchenElementId: 'I7ebCrvYuGKPL79sUhFl',
       ),
-      KitchenItem(
+      KitchenItemModel(
         besoinTitle: 'test',
         shopName: 'مومو',
         itemName: 'test',

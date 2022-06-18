@@ -5,7 +5,6 @@ import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart'
 
 import '../components.dart';
 
-
 final recentOperationsProvider = StateProvider<RecentOperation>((ref) {
   final items = ref.watch(itemsProvider);
   final payments = ref.watch(paymentsProvider);
@@ -13,8 +12,8 @@ final recentOperationsProvider = StateProvider<RecentOperation>((ref) {
 });
 
 class OperationsAdapter {
-  Item? item;
-  Payment? payment;
+  ItemModel? item;
+  PaymentModel? payment;
   OperationsAdapter.fromItemsAndPayments({this.item, this.payment}) {
     if (item != null) {
       title = item!.itemName;
@@ -46,16 +45,16 @@ class OperationsAdapter {
 }
 
 class RecentOperation {
-  List<Item> items;
-  List<Payment> payments;
+  List<ItemModel> items;
+  List<PaymentModel> payments;
   RecentOperation(this.items, this.payments);
   // get a list of 10 recent payments
-  List<Payment> get recentPayments {
+  List<PaymentModel> get recentPayments {
     return payments.take(10).toList();
   }
 
   // get a list of 10 recent items
-  List<Item> get recentItems {
+  List<ItemModel> get recentItems {
     return items.take(10).toList();
   }
 
