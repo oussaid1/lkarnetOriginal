@@ -7,7 +7,7 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
-import 'register.dart';
+import 'signup.dart';
 
 // isLoading: false,
 final isLoadingProvider = StateProvider<bool>((ref) {
@@ -221,8 +221,7 @@ class LoginPage extends ConsumerWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                RegisterPage()),
+                                            builder: (context) => SignUpPage()),
                                       );
                                     },
                                 ),

@@ -1,4 +1,3 @@
-import 'package:lkarnet/Exception/custom_exception.dart';
 import 'package:lkarnet/models/besoin/besoin.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
@@ -12,11 +11,18 @@ import '../models/kitchen/kitchen_item.dart';
 
 class DBTables {
   static const String users = 'users';
-  static const String shops = 'shops';
+  static const String variables = 'Variables';
+  static const String shops = 'Shops';
   static const String items = 'items';
+  static const String goods = 'Goods';
+  static const String kitchenItems = 'kitchenItems';
+  static const String kitchenElements = 'kitchenElements';
   static const String besoins = 'Besoins';
   static const String kitchen = 'kitchen';
-  static const String payments = 'payments';
+  static const String payments = 'Payments';
+  static const String archiveGoods = 'ArchiveGoods';
+  static const String categories = 'Categories';
+  static const String incomes = 'Incomes';
 }
 
 class Database {
@@ -24,7 +30,9 @@ class Database {
   var _setOptions = SetOptions(merge: true);
   final String _collectionKitchenElements = "KitchenElements";
   final String _collectionKitchenItems = "KitchenItems";
-
+  ///////////////////////////////////////////////////////////////////////////////
+  ///////// user CRUD  //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
   DocumentReference get _users =>
       _firestore.collection(DBTables.users).doc(uid);
   final String? uid;
@@ -74,7 +82,9 @@ class Database {
     return _user;
   }
 
-  // get
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////// get / read  //////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   Stream<List<Besoin>> besoinStream(String uid) {
     return _users
         .collection(DBTables.besoins)
@@ -89,7 +99,10 @@ class Database {
   }
 
   Stream<List<ShopModel>> shopsStream() {
-    return _users.collection("Shops").snapshots().map((QuerySnapshot query) {
+    return _users
+        .collection(DBTables.shops)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<ShopModel> retVal = [];
       query.docs.forEach((element) {
         retVal.add(ShopModel.fromDocumentSnapShot(element));
@@ -100,7 +113,7 @@ class Database {
 
   Future<double> dayLimitFuture() async {
     return _users
-        .collection("Variables")
+        .collection(DBTables.variables)
         .doc('dayLimit')
         .get()
         .then((value) => value['dayLimit']);
@@ -108,7 +121,7 @@ class Database {
 
   Stream<List<Item>> itemStream() {
     return _users
-        .collection("Goods")
+        .collection(DBTables.goods)
         .orderBy("dateBought", descending: true)
         .snapshots()
         .map((QuerySnapshot query) => query.docs
@@ -139,14 +152,17 @@ class Database {
   }
 
   Stream<List<Item>> archiveItemStream() {
-    return _users.collection("ArchiveGoods").snapshots().map(
+    return _users.collection(DBTables.archiveGoods).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => Item.fromDocumentSnapshot(element))
             .toList());
   }
 
   Stream<List<Payment>> streamPayments() {
-    return _users.collection("Payments").snapshots().map((QuerySnapshot query) {
+    return _users
+        .collection(DBTables.payments)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<Payment> retVal = [];
       for (var element in query.docs) {
         // logger.d(element.data());
@@ -158,10 +174,12 @@ class Database {
     });
   }
 
-// Add
+///////////////////////////////////////////////////////////////////////////////
+  ///////// ADD / Create  //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
   Future<void> addBesoin(Besoin besoin, String uid) async {
     try {
-      await _users.collection("Besoins").add(besoin.toMap());
+      await _users.collection(DBTables.besoins).add(besoin.toMap());
     } catch (e) {
       Exception(e);
       rethrow;
@@ -172,7 +190,7 @@ class Database {
     ShopModel shop,
   ) async {
     try {
-      await _users.collection("Shops").add(shop.toMap());
+      await _users.collection(DBTables.shops).add(shop.toMap());
     } catch (e) {
       Exception(e);
       rethrow;
@@ -183,7 +201,7 @@ class Database {
     Item item,
   ) async {
     try {
-      _users.collection("Goods").add(item.toMap());
+      _users.collection(DBTables.goods).add(item.toMap());
     } catch (e) {
       Exception(e);
     }
@@ -193,7 +211,7 @@ class Database {
     Payment payment,
   ) async {
     try {
-      await _users.collection("Payments").add(payment.toMap());
+      await _users.collection(DBTables.payments).add(payment.toMap());
     } catch (e) {
       Exception(e);
       rethrow;
@@ -224,7 +242,9 @@ class Database {
     }
   }
 
-// update ****/
+////////////////////////////////////////////////////////////////////////////////
+  ///////// Update  //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
 // update KitchenElement
   Future<void> updateKitchenElement(
     KitchenElementModel kitchenElement,
@@ -260,7 +280,7 @@ class Database {
   ) async {
     try {
       _users
-          .collection("Shops")
+          .collection(DBTables.shops)
           .doc(shopToUpdate.id)
           .update(shopToUpdate.toMap());
     } catch (e) {
@@ -274,7 +294,7 @@ class Database {
   ) async {
     try {
       _users
-          .collection("Goods")
+          .collection(DBTables.goods)
           .doc(
             itemToUpdate.id,
           )
@@ -290,7 +310,7 @@ class Database {
   ) async {
     try {
       _users
-          .collection('Payments')
+          .collection(DBTables.payments)
           .doc(itemToUpdate.id)
           .update(itemToUpdate.toMap());
     } catch (e) {
@@ -305,7 +325,7 @@ class Database {
   ) async {
     try {
       _users
-          .collection("Besoins")
+          .collection(DBTables.besoins)
           .doc(itemToUpdate.id)
           .update(itemToUpdate.toMap());
     } catch (e) {
@@ -314,7 +334,9 @@ class Database {
     }
   }
 
-//delete
+///////////////////////////////////////////////////////////////////////////////
+  ///////// Delete  //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
 // delete KitchenElement
   Future<void> deleteKitchenElement(
     KitchenElementModel kitchenElement,
@@ -347,7 +369,7 @@ class Database {
 
   Future<void> deleteShop(ShopModel shopToDelete) async {
     try {
-      _users.collection('Shops').doc(shopToDelete.id).delete();
+      _users.collection(DBTables.shops).doc(shopToDelete.id).delete();
     } catch (e) {
       Exception(e);
       rethrow;
@@ -356,7 +378,7 @@ class Database {
 
   Future<void> deleteItem(Item item) async {
     try {
-      _users.collection('Goods').doc(item.id).delete();
+      _users.collection(DBTables.goods).doc(item.id).delete();
     } catch (e) {
       Exception(e);
       rethrow;
@@ -365,7 +387,7 @@ class Database {
 
   Future<void> deletePayment(Payment payment) async {
     try {
-      _users.collection('Payments').doc(payment.id).delete();
+      _users.collection(DBTables.payments).doc(payment.id).delete();
     } catch (e) {
       Exception(e);
       rethrow;
@@ -375,7 +397,7 @@ class Database {
   Future<void> deleteShopData(ShopData shopsData) async {
     for (var item in shopsData.allItems)
       try {
-        _users.collection('Goods').doc(item.id).delete();
+        _users.collection(DBTables.shops).doc(item.id).delete();
       } catch (e) {
         Exception(e);
         rethrow;

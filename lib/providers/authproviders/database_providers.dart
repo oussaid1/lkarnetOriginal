@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:lkarnet/database/database.dart';
 import 'package:lkarnet/models/user/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +10,7 @@ import 'auth_providers.dart';
 final userModelProvider = FutureProvider<UserModel>((ref) async {
   final db = ref.watch(databaseProvider);
   var _user = await db.getUser();
+  log('user: $_user');
   return _user ?? UserModel.empty();
 });
 

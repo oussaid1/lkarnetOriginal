@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/screens/auth/login.dart';
-import 'package:lkarnet/screens/auth/register.dart';
+import 'package:lkarnet/screens/auth/signup.dart';
 import 'package:lkarnet/screens/home.dart';
 import 'package:lkarnet/screens/splash.dart';
 
@@ -17,7 +17,7 @@ class RouteGenerator {
             builder: (_) => LoginPage(), maintainState: false);
       case '/registerPage':
         return MaterialPageRoute(
-          builder: (_) => RegisterPage(),
+          builder: (_) => SignUpPage(),
         );
       case '/home':
         return MaterialPageRoute(

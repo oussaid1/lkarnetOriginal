@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'login.dart';
 
-class RegisterPage extends ConsumerWidget {
+class SignUpPage extends ConsumerWidget {
   final _registerFormKey = GlobalKey<FormState>();
 
   @override
