@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
@@ -27,7 +29,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final logger = Logger();
   //File _pickedFile = File('/storage/emulated/0/Download/test.txt');
   final PageController _pageController = PageController();
   @override
@@ -46,12 +47,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   Future<String?> _getToken() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     if (fcmToken != null) {
-      logger.d("FCM Token: $fcmToken");
+      log("FCM Token: $fcmToken");
       ref.read(databaseProvider).insertToken(fcmToken);
-      logger.d("token inserted $fcmToken");
+      log("token inserted $fcmToken");
       return fcmToken;
     } else {
-      logger.d("FCM Token: null");
+      log("FCM Token: null");
       return null;
     }
   }

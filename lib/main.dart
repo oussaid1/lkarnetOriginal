@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: Locale('ar'),
-      title: 'حانوتي - لكارني',
+      //title: 'حانوتي - لكارني',
       theme: MThemeData.lightThemeData,
       darkTheme: MThemeData.darkThemeData,
       themeMode: ThemeMode.light,

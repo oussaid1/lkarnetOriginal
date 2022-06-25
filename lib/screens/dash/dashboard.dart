@@ -5,7 +5,6 @@ import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 
 import '../../models/shop/shops_data.dart';
-import '../../notifications/notifications.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../providers/streamproviders/payments_stream_provider.dart';
 import '../../providers/streamproviders/shops_stream_provider.dart';

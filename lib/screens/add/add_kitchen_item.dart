@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
@@ -90,7 +92,6 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   Widget build(BuildContext context) {
     Iterable<Item> _kOptions = ref.watch(itemsProvider.state).state;
 
-    final logger = Logger();
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -165,8 +166,8 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                   height: 40,
                 ),
                 widget.kitchenItem == null
-                    ? _buildSave(context, logger)
-                    : _buildUpdate(context, logger),
+                    ? _buildSave(context)
+                    : _buildUpdate(context),
               ],
             ),
           ),
@@ -175,7 +176,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     );
   }
 
-  Row _buildUpdate(BuildContext context, Logger logger) {
+  Row _buildUpdate(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -216,7 +217,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                         dateExpired: _dateExpired,
                         kitchenElementId: widget.kitchenItem!.kitchenElementId,
                       );
-                      logger.d(_kitchenItem);
+                      log(_kitchenItem.toJson());
 
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
@@ -240,7 +241,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     );
   }
 
-  Row _buildSave(BuildContext context, Logger logger) {
+  Row _buildSave(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

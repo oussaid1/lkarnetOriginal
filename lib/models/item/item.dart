@@ -95,4 +95,32 @@ class Item {
     print('dateBought : $toMMYY');
     print('-------------------------------');
   }
+
+  /// to json method
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'itemName': itemName,
+      'quantifier': quantifier,
+      'besoinTitle': besoinTitle,
+      'quantity': quantity,
+      'itemPrice': itemPrice,
+      'shopName': shopName,
+      'dateBought': dateBought,
+      'count': count,
+    };
+  }
+
+  /// from json method
+  Item.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    itemName = json['itemName'];
+    quantifier = json['quantifier'];
+    besoinTitle = json['besoinTitle'];
+    quantity = json['quantity'].toDouble();
+    itemPrice = json['itemPrice'].toDouble();
+    shopName = json['shopName'];
+    dateBought = DateTime.parse(json['dateBought']);
+    count = json['count'];
+  }
 }

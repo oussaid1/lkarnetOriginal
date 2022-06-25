@@ -7,29 +7,36 @@ import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../components.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 
+class DBTables {
+  static const String users = 'users';
+  static const String shops = 'shops';
+  static const String items = 'items';
+  static const String besoins = 'Besoins';
+  static const String kitchen = 'kitchen';
+  static const String payments = 'payments';
+}
+
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  //final String _collection = 'users';
-  // tockens collection
-  //final String _tokens = 'tokens';
+  var _setOptions = SetOptions(merge: true);
   final String _collectionKitchenElements = "KitchenElements";
   final String _collectionKitchenItems = "KitchenItems";
 
-  DocumentReference get _users => _firestore.collection("users").doc(uid);
+  DocumentReference get _users =>
+      _firestore.collection(DBTables.users).doc(uid);
   final String? uid;
   Database({required this.uid});
-  final logger = Logger();
+
   // create user in firebase
   Future<bool> createNewUser(UserModel user) async {
     bool _done = false;
     await _firestore
-        .collection('users')
+        .collection(DBTables.users)
         .doc(user.id)
-        .set(user.toMap())
+        .set(user.toMap(), _setOptions)
         .then((value) => _done = true)
         .catchError((error) {
       _done = false;
@@ -42,9 +49,9 @@ class Database {
   Future<bool> insertToken(String token) async {
     bool _done = false;
     await _firestore
-        .collection('users')
+        .collection(DBTables.users)
         .doc(uid)
-        .set({'token': token})
+        .set({'token': token}, _setOptions)
         .then((value) => _done = true)
         .catchError((error) {
           _done = false;
@@ -53,17 +60,26 @@ class Database {
     return _done;
   }
 
-  Future<UserModel> getUser() async {
-    return await _users
+  Future<UserModel?> getUser() async {
+    UserModel? _user;
+    await _firestore
+        .collection(DBTables.users)
+        .doc(uid)
         .get()
-        .then(
-            (value) => UserModel.fromDocumentSnapshot(documentSnapshot: value))
-        .catchError((e) => throw CustomException(message: '$e'));
+        .then((value) =>
+            _user = UserModel.fromDocumentSnapshot(documentSnapshot: value))
+        .catchError((error) {
+      print("Failed to get user: $error");
+    });
+    return _user;
   }
 
   // get
   Stream<List<Besoin>> besoinStream(String uid) {
-    return _users.collection('Besoins').snapshots().map((QuerySnapshot query) {
+    return _users
+        .collection(DBTables.besoins)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<Besoin> retVal = [];
       query.docs.forEach((element) {
         retVal.add(Besoin.fromDocumentSnapshot(element));

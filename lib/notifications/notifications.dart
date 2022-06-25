@@ -11,7 +11,6 @@ class MNotificationModel {
   static const String _channelName1 = 'Remember to Buy Items';
   static const String _channelKey2 = 'schedule_remember_to_register_items';
   static const String _channelName2 = 'Schedule Remember to Register Items';
-
   static const String dateTime = 'DateTime';
   static const String iconUri = 'resource://drawable/res_notification_app_icon';
   static final MNotificationModel _singleton = MNotificationModel._();

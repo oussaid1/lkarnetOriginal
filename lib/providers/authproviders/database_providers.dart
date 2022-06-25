@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'auth_providers.dart';
 
-final userModelProvider = FutureProvider<UserModel>((ref) {
+final userModelProvider = FutureProvider<UserModel>((ref) async {
   final db = ref.watch(databaseProvider);
-  return db.getUser();
+  var _user = await db.getUser();
+  return _user ?? UserModel.empty();
 });
 
 final firebaseAuthProvider =
@@ -30,3 +31,32 @@ final uidProvider = Provider<String>((ref) {
 
   return uid;
 });
+
+class DbOperations {
+  final Database database;
+  DbOperations({required this.database});
+
+  Future<bool> createNewUser(UserModel user) async {
+    bool _done = false;
+    await database
+        .createNewUser(user)
+        .then((value) => _done = true)
+        .catchError((error) {
+      _done = false;
+      print("Failed to add user: $error");
+    });
+    return _done;
+  }
+
+  Future<bool> insertToken(String token) async {
+    bool _done = false;
+    await database
+        .insertToken(token)
+        .then((value) => _done = true)
+        .catchError((error) {
+      _done = false;
+      print("Failed to add token: $error");
+    });
+    return _done;
+  }
+}
