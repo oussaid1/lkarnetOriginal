@@ -30,12 +30,15 @@ class Database {
   var _setOptions = SetOptions(merge: true);
   final String _collectionKitchenElements = "KitchenElements";
   final String _collectionKitchenItems = "KitchenItems";
+
+  /// set uid of current user
+  void setUserUid(String uid) => this.uid = uid;
   ///////////////////////////////////////////////////////////////////////////////
   ///////// user CRUD  //////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
   DocumentReference get _users =>
       _firestore.collection(DBTables.users).doc(uid);
-  final String? uid;
+  String? uid;
   Database({required this.uid});
 
   // create user in firebase
@@ -80,6 +83,21 @@ class Database {
       print("Failed to get user: $error");
     });
     return _user;
+  }
+
+  /// update user in firebase
+  Future<bool> updateUser(UserModel user) async {
+    bool _done = false;
+    await _firestore
+        .collection(DBTables.users)
+        .doc(user.id)
+        .set(user.toMap(), _setOptions)
+        .then((value) => _done = true)
+        .catchError((error) {
+      _done = false;
+      print("Failed to update user: $error");
+    });
+    return _done;
   }
 
   ////////////////////////////////////////////////////////////////////////////////

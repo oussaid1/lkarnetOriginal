@@ -5,41 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
-class AuthenticationService {
-  final FirebaseAuth _firebaseAuth;
+import '../../models/login_credentials.dart';
+
+class FirebaseAuthService {
+  late final FirebaseAuth _firebaseAuth;
   // final gooleSignIn = GoogleSignIn();
-  AuthenticationService(this._firebaseAuth);
+  FirebaseAuthService() {
+    _firebaseAuth = FirebaseAuth.instance;
+  }
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Stream<User?> get authStateChange => _firebaseAuth.authStateChanges();
 
-// many unhandled google error exist
-// will push them soon
-  // Future<bool> googleSignIn() async {
-  //   GoogleSignInAccount? googleSignInAccount = await gooleSignIn.signIn();
-
-  //   if (googleSignInAccount != null) {
-  //     GoogleSignInAuthentication googleSignInAuthentication =
-  //         await googleSignInAccount.authentication;
-
-  //     OAuthCredential credential = GoogleAuthProvider.credential(
-  //         idToken: googleSignInAuthentication.idToken,
-  //         accessToken: googleSignInAuthentication.accessToken);
-
-  //     //User? user = _firebaseAuth.currentUser;
-  //     Map<String, dynamic> idMap =
-  //         parseJwt(googleSignInAuthentication.idToken)!;
-  //     final String firstName = idMap["given_name"];
-  //     // final String lastName = idMap["family_name"];
-
-  //     await _firebaseAuth.signInWithCredential(credential).then((value) =>
-  //         createNewUser(UserModel.fromUserCredential(value, firstName)));
-  //     return Future.value(true);
-  //   } else
-  //     return Future.value(false);
-  // }
-
+  /// get current user
+  User? get currentUser => _firebaseAuth.currentUser;
   static Map<String, dynamic>? parseJwt(String? token) {
     // validate token
     if (token == null) return null;
@@ -59,49 +39,53 @@ class AuthenticationService {
     return payloadMap;
   }
 
-  Future<String> signIn(
-      {required String email, required String password}) async {
+  Future<User?> signIn({required LoginCredentials loginCredentials}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+      var userCredentials = await _firebaseAuth.signInWithEmailAndPassword(
+        email: loginCredentials.username!,
+        password: loginCredentials.password!,
       );
 
-      return 'Successfully signed in';
+      return userCredentials.user;
     } on FirebaseAuthException catch (e) {
-      return '$e';
+      if (e.code == 'user-not-found') {
+        return null;
+      }
+
+      if (e.code == 'wrong-password') {
+        return null;
+      }
+      throw e;
+    } on PlatformException catch (e) {
+      throw e;
     }
   }
 
-  Future<String?> signUp(
-      {required String username,
-      required String email,
-      required String password}) async {
+  Future<User?> signUp({required SignUpCredentials signUpCredentials}) async {
     try {
-      await _firebaseAuth
-          .createUserWithEmailAndPassword(
-            email: email,
-            password: password,
-          )
-          .then((value) =>
-              createNewUser(UserModel.fromUserCredential(value, username)));
-      return 'Success';
+      var userCredentials = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: signUpCredentials.username!,
+        password: signUpCredentials.password!,
+      );
+
+      return userCredentials.user;
     } on FirebaseAuthException catch (e) {
-      return 'failed $e';
+      if (e.code == 'user-not-found') {
+        return null;
+      }
+
+      if (e.code == 'wrong-password') {
+        return null;
+      }
+      throw e;
+    } on PlatformException catch (e) {
+      throw e;
     }
   }
 
-  Future<bool> signout() async {
+  Future<bool> signOut() async {
     await _firebaseAuth.signOut();
-    // User? user = _firebaseAuth.currentUser;
 
-    // if (user!.providerData[1].providerId == 'google.com') {
-    //   await gooleSignIn.signOut().then(
-    //       (value) => value == null ? Future.value(true) : Future.value(false));
-    // }
-    // return await _firebaseAuth.signOut().then(
-    //       (value) => Future.value(true),
-    //     );
     return Future.value(true);
   }
 
@@ -133,7 +117,8 @@ class AuthenticationService {
         .invokeMethod<void>('SystemNavigator.pop', true);
   }
 
-  Future resetPass(String email) async {
+  /// send password reset email
+  Future resetPass({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } catch (e) {}

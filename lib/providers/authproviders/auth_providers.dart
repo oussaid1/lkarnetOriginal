@@ -12,8 +12,8 @@ final firebaseFirestoreProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
 });
 
-final authServicesProvider = Provider<AuthenticationService>((ref) {
-  return AuthenticationService(ref.read(firebaseAuthProvider));
+final authServicesProvider = Provider<FirebaseAuthService>((ref) {
+  return FirebaseAuthService();
 });
 
 final authStateProvider = StreamProvider<User?>((ref) {

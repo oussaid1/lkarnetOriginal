@@ -1,26 +1,32 @@
 import 'package:flutter/gestures.dart';
-import 'package:lkarnet/providers/authproviders/auth_providers.dart';
-import 'package:lkarnet/providers/authproviders/login_page_providers.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
-import 'package:lkarnet/root.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/bloc/loginbloc/login_bloc.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/login_credentials.dart';
+import '../../utils.dart';
 import 'signup.dart';
 
-// isLoading: false,
-final isLoadingProvider = StateProvider<bool>((ref) {
-  return false;
-});
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-class LoginPage extends ConsumerWidget {
+class _LoginPageState extends State<LoginPage> {
   final _loginFormKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
+
   final _passController = TextEditingController();
 
+  var _isLoading = true;
+
+  var _obscPass = true;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -47,17 +53,39 @@ class LoginPage extends ConsumerWidget {
       ],
       alignment: Alignment.center,
       centerWidget: SizedBox(
-          width: 380, height: 420, child: _buildLoginCard(context, ref)),
+        width: 380,
+        height: 420,
+        child: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            /// check the state and show snackbar using GlobalFunctions according to state
+            if (state is LoginLoadingState) {
+              GlobalFunctions.showSnackBar(
+                context,
+                'جاري تسجيل الدخول',
+              );
+            } else if (state is LoginFailedState) {
+              GlobalFunctions.showSnackBar(
+                context,
+                state.error,
+              );
+            } else if (state is LogInSuccessfulState) {
+              GlobalFunctions.showSnackBar(
+                context,
+                'تم تسجيل الدخول بنجاح',
+              );
+            }
+          },
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return _buildLoginCard(context);
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildLoginCard(BuildContext context, WidgetRef ref) {
-    var _email = ref.watch(emailProvider.state).state.trim();
-    var _pass = ref.watch(passwordProvider.state).state.trim();
-    var _isLoading = ref.watch(isLoadingProvider.state).state;
-    final _auth = ref.watch(authServicesProvider);
-    var _obscPass = ref.watch(passwordObscureProvider.state);
-
+  Widget _buildLoginCard(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GlassContainer(
@@ -80,13 +108,14 @@ class LoginPage extends ConsumerWidget {
                   SizedBox(height: 10),
                   Container(
                     child: TextFormField(
-                      onChanged: (value) =>
-                          ref.read(emailProvider.state).state = value,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
                         if (text!.trim().isEmpty) {
+                          setState(() {
+                            _isLoading = false;
+                          });
                           return "Please insert a valid email";
                         }
                         return null;
@@ -99,26 +128,29 @@ class LoginPage extends ConsumerWidget {
                   ), //text field: email
                   Container(
                     child: TextFormField(
-                      onChanged: (value) =>
-                          ref.read(passwordProvider.state).state = value,
                       controller: _passController,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
                         if (text!.trim().isEmpty) {
+                          setState(() {
+                            _isLoading = false;
+                          });
                           return "Please insert a valid password";
                         }
                         return null;
                       },
-                      obscureText: _obscPass.state,
+                      obscureText: _obscPass,
                       decoration: InputDecoration(
                           labelText: 'Password',
                           suffixIcon: IconButton(
-                            icon: Icon(_obscPass.state
+                            icon: Icon(_obscPass
                                 ? Icons.visibility
                                 : Icons.visibility_off),
                             onPressed: () {
-                              _obscPass.state = !_obscPass.state;
+                              setState(() {
+                                _obscPass = !_obscPass;
+                              });
                             },
                           ),
                           icon: Icon(Icons.vpn_key)),
@@ -141,19 +173,29 @@ class LoginPage extends ConsumerWidget {
                       onPressed: _isLoading
                           ? null
                           : () {
-                              ref.read(isLoadingProvider.state).state = true;
                               if (_loginFormKey.currentState!.validate()) {
-                                ref.read(isLoadingProvider.state).state = false;
-                                _auth
-                                    .signIn(email: _email, password: _pass)
-                                    .then(
-                                      (value) => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Root()),
-                                      ),
-                                    );
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                BlocProvider.of<LoginBloc>(context).add(
+                                    LoginRequestedEvent(
+                                        loginCredentials: LoginCredentials(
+                                            username: _emailController.text,
+                                            password: _passController.text)));
                               }
+                              // ref.read(isLoadingProvider.state).state = true;
+                              // if (_loginFormKey.currentState!.validate()) {
+                              //   ref.read(isLoadingProvider.state).state = false;
+                              //   _auth
+                              //       .signIn(email: _email, password: _pass)
+                              //       .then(
+                              //         (value) => Navigator.push(
+                              //           context,
+                              //           MaterialPageRoute(
+                              //               builder: (context) => Root()),
+                              //         ),
+                              //       );
+                              // }
                               // _auth.signInWithGoogle().then((value) => _auth.createNewUser(UserModel.fromUserCredential(value, value.user!.displayName.toString()) ));
                             },
                     ),

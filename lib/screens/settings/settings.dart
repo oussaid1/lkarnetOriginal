@@ -204,7 +204,7 @@ class SettingsPage extends ConsumerWidget {
   }
 
   Future<void> _buildSignOut(
-      BuildContext context, AuthenticationService authservice) {
+      BuildContext context, FirebaseAuthService authservice) {
     return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -240,7 +240,7 @@ class SettingsPage extends ConsumerWidget {
                           style: Theme.of(context).textTheme.headline3,
                         ),
                         onPressed: () {
-                          authservice.signout().then((value) =>
+                          authservice.signOut().then((value) =>
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) => Root()),

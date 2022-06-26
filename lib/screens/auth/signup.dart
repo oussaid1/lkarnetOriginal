@@ -1,17 +1,29 @@
-import 'package:lkarnet/providers/authproviders/auth_providers.dart';
-import 'package:lkarnet/providers/authproviders/login_page_providers.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/bloc/signupbloc/signup_bloc.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/login_credentials.dart';
 import 'login.dart';
 
-class SignUpPage extends ConsumerWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final _registerFormKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passController = TextEditingController();
+  final _confirmPassController = TextEditingController();
+  var _isLoading = false;
+  var _obscPass = true;
+  var _obscConfirmPass = true;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -40,17 +52,18 @@ class SignUpPage extends ConsumerWidget {
           child: SizedBox(
               width: 380,
               height: 420,
-              child: _getWidgetRegistrationCard(context, ref))),
+              child: BlocListener<SignUpBloc, SignUpState>(
+                listener: (context, state) {},
+                child: BlocBuilder<SignUpBloc, SignUpState>(
+                  builder: (context, state) {
+                    return _getWidgetRegistrationCard(context);
+                  },
+                ),
+              ))),
     );
   }
 
-  Widget _getWidgetRegistrationCard(BuildContext context, WidgetRef ref) {
-    var _obscConfirmPass = ref.watch(confirmPassObscureProvider.state);
-    var _obscPass = ref.watch(passwordObscureProvider.state);
-    var _auth = ref.watch(authServicesProvider);
-    var _username = ref.watch(regUsernameProvider.state).state.trim();
-    var _email = ref.watch(regEmailProvider.state).state.trim();
-    var _pass = ref.watch(regPasswordProvider.state).state.trim();
+  Widget _getWidgetRegistrationCard(BuildContext context) {
     //final _confirmPass = ref.watch(regConfPasswordProvider.state).state.trim();
     // final _db = ref.watch(databaseProvider);
     return Container(
@@ -74,12 +87,14 @@ class SignUpPage extends ConsumerWidget {
                 ), // title: login
                 Container(
                   child: TextFormField(
-                    onChanged: (value) =>
-                        ref.read(regUsernameProvider.state).state = value,
+                    controller: _usernameController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       if (text!.trim().isEmpty) {
+                        setState(() {
+                          _isLoading = false;
+                        });
                         return "Please insert a unique username";
                       }
                       return null;
@@ -92,12 +107,14 @@ class SignUpPage extends ConsumerWidget {
                 ), //text field : user name
                 Container(
                   child: TextFormField(
-                    onChanged: (value) =>
-                        ref.read(regEmailProvider.state).state = value,
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       if (text!.trim().isEmpty) {
+                        setState(() {
+                          _isLoading = false;
+                        });
                         return "Please insert a valid email";
                       }
                       return null;
@@ -110,25 +127,29 @@ class SignUpPage extends ConsumerWidget {
                 ), //text field: email
                 Container(
                   child: TextFormField(
-                    onChanged: (value) =>
-                        ref.read(regPasswordProvider.state).state = value,
+                    controller: _passController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       if (text!.trim().isEmpty) {
+                        setState(() {
+                          _isLoading = false;
+                        });
                         return "Please insert a valid password";
                       }
                       return null;
                     },
-                    obscureText: _obscPass.state,
+                    obscureText: _obscPass,
                     decoration: InputDecoration(
                         labelText: 'Password',
                         suffixIcon: IconButton(
-                          icon: Icon(_obscPass.state
+                          icon: Icon(_obscPass
                               ? Icons.visibility
                               : Icons.visibility_off),
                           onPressed: () {
-                            _obscPass.state = !_obscPass.state;
+                            setState(() {
+                              _obscPass = !_obscPass;
+                            });
                           },
                         ),
                         icon: Icon(Icons.vpn_key)),
@@ -136,8 +157,7 @@ class SignUpPage extends ConsumerWidget {
                 ), //text field: password
                 Container(
                   child: TextFormField(
-                      onChanged: (value) =>
-                          ref.read(regConfPasswordProvider.state).state = value,
+                      controller: _confirmPassController,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       validator: (text) {
@@ -148,15 +168,17 @@ class SignUpPage extends ConsumerWidget {
                         }
                         return null;
                       },
-                      obscureText: _obscConfirmPass.state,
+                      obscureText: _obscConfirmPass,
                       decoration: InputDecoration(
                           labelText: "Confirm Password",
                           suffixIcon: IconButton(
-                            icon: Icon(_obscConfirmPass.state
+                            icon: Icon(_obscConfirmPass
                                 ? Icons.visibility
                                 : Icons.visibility_off),
                             onPressed: () {
-                              _obscConfirmPass.state = !_obscConfirmPass.state;
+                              setState(() {
+                                _obscConfirmPass = !_obscConfirmPass;
+                              });
                             },
                           ),
                           icon: Icon(Icons.vpn_key))),
@@ -171,17 +193,24 @@ class SignUpPage extends ConsumerWidget {
                       'Register',
                       style: TextStyle(fontSize: 20.0),
                     ),
-                    onPressed: () {
-                      if (_registerFormKey.currentState!.validate()) {
-                        _auth
-                            .signUp(
-                                username: _username,
-                                email: _email,
-                                password: _pass)
-                            .then((value) =>
-                                _registerFormKey.currentState!.reset());
-                      }
-                    },
+                    onPressed: !_isLoading
+                        ? null
+                        : () {
+                            if (_registerFormKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              BlocProvider.of<SignUpBloc>(context).add(
+                                SignUpRequestedEvent(
+                                  signUpCredentials: SignUpCredentials(
+                                    username: _usernameController.text.trim(),
+                                    email: _emailController.text.trim(),
+                                    password: _passController.text.trim(),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                   ),
                 ), //button: login
                 Container(

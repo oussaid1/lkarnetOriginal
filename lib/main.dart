@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/notifications/notifications.dart';
-import 'package:lkarnet/root.dart';
+import 'package:lkarnet/providers/authproviders/auth_services.dart';
+import 'package:lkarnet/repository/database_operations.dart';
+import 'app.dart';
 import 'components.dart';
-import 'navigator/rout_navigator.dart';
-import 'settings/theme.dart';
-//import 'settings/theme/theme_provider.dart';
+import 'database/database.dart';
+import 'services/auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,23 +24,17 @@ Future<void> main() async {
     ..initialize('resource://drawable/res_notification_app_icon',
         MNotificationModel.channels);
 
-  runApp(ProviderScope(child: MyApp()));
-}
+  /// register Database singleton
+  GetIt.I.registerSingleton<Database>(Database(uid: ''));
 
-class MyApp extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // var appThemeState = ref.watch(appThemeStateNotifier);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: Locale('ar'),
-      //title: 'حانوتي - لكارني',
-      theme: MThemeData.lightThemeData,
-      darkTheme: MThemeData.darkThemeData,
-      themeMode: ThemeMode.light,
-      initialRoute: '/',
-      onGenerateRoute: RouteGenerator.generateRoute,
-      home: Root(),
-    );
-  }
+  runApp(
+    ProviderScope(
+      child: MyApp(
+        authService: AuthService(
+          FirebaseAuthService(),
+          DatabaseOperations(Database(uid: '')),
+        ),
+      ),
+    ),
+  );
 }

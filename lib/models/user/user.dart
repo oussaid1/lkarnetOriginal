@@ -42,10 +42,10 @@ class UserModel {
     createdAt = documentSnapshot["createdAt"].toDate();
     updatedAt = documentSnapshot["updatedAt"].toDate();
   }
-  UserModel.fromUserCredential(UserCredential userCredential, String username)
-      : id = userCredential.user!.uid,
-        name = username,
-        email = userCredential.user!.email,
+  UserModel.fromUserCredential(User user)
+      : id = user.uid,
+        name = user.displayName,
+        email = user.email,
         token = '',
         photoUrl = '',
         phoneNumber = '',
