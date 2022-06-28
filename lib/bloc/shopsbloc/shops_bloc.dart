@@ -11,6 +11,7 @@ part 'shops_state.dart';
 
 class ShopsBloc extends Bloc<ShopsEvent, ShopsState> {
   late final DatabaseOperations _databaseOperations;
+  // ignore: unused_field
   StreamSubscription<List<ShopModel>>? _itemsSubscription;
   ShopsBloc(DatabaseOperations databaseOperations) : super(ShopsInitial()) {
     this._databaseOperations = databaseOperations;

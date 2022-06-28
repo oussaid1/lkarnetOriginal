@@ -78,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  void _notificationsPermition(BuildContext context) async {
+  void notificationsPermition(BuildContext context) async {
     AwesomeNotifications().createdStream.listen((notification) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.teal,

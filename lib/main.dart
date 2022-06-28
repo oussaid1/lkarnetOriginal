@@ -28,14 +28,16 @@ Future<void> main() async {
   GetIt.I.registerSingleton<Database>(Database(uid: null));
   GetIt.I.registerSingleton<DatabaseOperations>(
       DatabaseOperations(GetIt.I<Database>()));
-
+  GetIt.I.registerSingleton<AuthService>(
+    AuthService(
+      FirebaseAuthService(),
+      DatabaseOperations(GetIt.I.get<Database>()),
+    ),
+  );
   runApp(
     ProviderScope(
       child: MyApp(
-        authService: AuthService(
-          FirebaseAuthService(),
-          DatabaseOperations(GetIt.I.get<Database>()),
-        ),
+        authService: GetIt.I.get<AuthService>(),
       ),
     ),
   );

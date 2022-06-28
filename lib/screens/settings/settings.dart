@@ -90,7 +90,7 @@ class SettingsPage extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${user.name}',
+                                  '${user.email!.split('.').first}',
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 Text(

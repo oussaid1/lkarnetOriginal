@@ -1,18 +1,36 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/bloc/signupbloc/signup_bloc.dart';
+import 'package:lkarnet/services/auth_service.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../bloc/authbloc/auth_bloc.dart';
 import '../../models/login_credentials.dart';
 import 'login.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({Key? key}) : super(key: key);
+
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SignUpBloc(
+        BlocProvider.of<AuthBloc>(context),
+        GetIt.I.get<AuthService>(),
+      ),
+      child: SignUpScreen(),
+    );
+  }
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpScreen extends StatefulWidget {
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final _registerFormKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -108,6 +126,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 Container(
                   child: TextFormField(
                     controller: _emailController,
+                    onChanged: (text) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
@@ -193,7 +216,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       'Register',
                       style: TextStyle(fontSize: 20.0),
                     ),
-                    onPressed: !_isLoading
+                    onPressed: _isLoading
                         ? null
                         : () {
                             if (_registerFormKey.currentState!.validate()) {

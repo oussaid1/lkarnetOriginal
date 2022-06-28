@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
@@ -9,12 +8,8 @@ import 'package:lkarnet/widgets/dialogs.dart';
 import '../../bloc/itemsbloc/items_bloc.dart';
 import '../../bloc/payments/payments_bloc.dart';
 import '../../bloc/shopsbloc/shops_bloc.dart';
-import '../../database/database.dart';
 import '../../models/item/item.dart';
 import '../../models/shop/shops_data.dart';
-import '../../providers/streamproviders/items_stream_provider.dart';
-import '../../providers/streamproviders/payments_stream_provider.dart';
-import '../../providers/streamproviders/shops_stream_provider.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
 import '../../widgets/price_curency_widget.dart';
@@ -350,7 +345,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Spendings ${items!.length}',
+                    'Spendings',
                     style: Theme.of(context).textTheme.headline2!.copyWith(
                           color: Color.fromRGBO(255, 255, 255, 1),
                         ),

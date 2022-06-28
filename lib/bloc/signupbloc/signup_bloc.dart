@@ -8,7 +8,7 @@ part 'signup_state.dart';
 
 class SignUpBloc extends Bloc<SignupEvent, SignUpState> {
   // late AuthBloc _authBloc;
-  late AuthService _authService;
+  late final AuthService _authService;
 
   /// initialize the bloc with the authBloc and authService
   ///
@@ -16,9 +16,7 @@ class SignUpBloc extends Bloc<SignupEvent, SignUpState> {
       : super(SignupInitial()) {
     //  _authBloc = authBloc;
     _authService = authService;
-    on<SignupEvent>((event, emit) {
-      on<SignUpRequestedEvent>(_onSignUpRequested);
-    });
+    on<SignUpRequestedEvent>(_onSignUpRequested);
   }
 
   /// sign up the user with the email and password and return the user if successful or throw an error if not successful
@@ -26,9 +24,12 @@ class SignUpBloc extends Bloc<SignupEvent, SignUpState> {
       SignUpRequestedEvent event, Emitter<SignUpState> emit) async {
     emit(SignupLoading());
     if (event.signUpCredentials.isValid) {
+      log('sign up with email and password');
       var response = await _authService.signUpWithEmailAndPassword(
           signUpCredentials: event.signUpCredentials);
-      emit(SignUpSuccessfulState(user: response!));
+      log('sign up with email and password response: ${response!.email}');
+      log(response.toString());
+      emit(SignUpSuccessfulState(user: response));
     } else {
       emit(SignupCredentialsInvalid());
     }
