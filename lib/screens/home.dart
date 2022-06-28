@@ -1,18 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lkarnet/bloc/payments/payments_bloc.dart';
 import 'package:lkarnet/components.dart';
-import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
 import '../bloc/itemsbloc/items_bloc.dart';
-import '../database/database.dart';
-import '../models/shop/shops_data.dart';
-import '../providers/streamproviders/items_stream_provider.dart';
-import '../providers/streamproviders/payments_stream_provider.dart';
-import '../providers/streamproviders/shops_stream_provider.dart';
+import '../bloc/shopsbloc/shops_bloc.dart';
 import '../repository/database_operations.dart';
 import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';
@@ -24,10 +20,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ItemsBloc(
-        databaseOperations: GetIt.I<DatabaseOperations>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ItemsBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => ShopsBloc(GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => PaymentsBloc(GetIt.I<DatabaseOperations>()),
+        )
+      ],
       child: HomeScreen(),
     );
   }
@@ -46,6 +51,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _pageController = PageController();
   @override
   void initState() {
+    context.read<ItemsBloc>().add(GetItemsEvent());
+    context.read<ShopsBloc>().add(GetShopsEvent());
+    context.read<PaymentsBloc>().add(GetPaymentsEvent());
     // _notificationsPermition(context);
     // Workmanager().initialize(
     //     callbackDispatcher, // The top level function, aka callbackDispatcher
@@ -102,13 +110,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     //final _currency = ref.watch(currencyProvider.state).state;
     int _selectedPageIndex = ref.watch(selectedPageIndex.state).state;
-    var items = ref.watch(itemsProvider.state).state;
-    var payments = ref.watch(paymentsProvider.state).state;
-    var shops = ref.watch(shopsProvider.state).state;
-    var dataSink = DataSink(shops, items, payments);
-    List<ShopData> _shopsDataList = dataSink.allShopsData;
+    //var items = <ItemModel>[];
+    //ref.watch(itemsProvider.state).state;
+    // var payments = ref.watch(paymentsProvider.state).state;
+    // var shops = ref.watch(shopsProvider.state).state;
+    //  var dataSink = DataSink(shops, items, payments);
+    // List<ShopData> _shopsDataList = dataSink.allShopsData;
     // ref.watch(shopsDataListProvider.state).state;
-    var _recentOperations = ref.watch(recentOperationsProvider.state).state;
+    //  var _recentOperations = ref.watch(recentOperationsProvider.state).state;
     // var chartData = ref.watch(shopsChartsDataProvider.state).state;
     //final _db = ref.watch(databaseProvider);
 
@@ -139,39 +148,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       centerWidget: BlocConsumer<ItemsBloc, ItemsState>(
         // buildWhen: (previous, current) => current is ItemsLoadedState,
         listener: (context, state) {
-          if (state is ItemsLoadedState) {
-            dataSink.items = state.items;
-            log("items loaded ${state.items.length}");
-          }
+          // if (state is ItemsLoadedState) {
+          //   dataSink.items = state.items;
+          //   log("items loaded ${state.items.length}");
+          // }
         },
         builder: (context, state) {
-          log("db ${GetIt.I.get<Database>().uid.toString()}");
           return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "LKarnet ${state} ",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    context.read<ItemsBloc>().add(GetItemsEvent());
-                  },
-                ),
-              ],
-            ),
+            // appBar: AppBar(
+            //   title: Text(
+            //     "LKarnet",
+            //     style: TextStyle(
+            //       fontSize: 30,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            //   centerTitle: true,
+            //   actions: [
+            //     IconButton(
+            //       icon: Icon(Icons.settings),
+            //       onPressed: () {
+            //         context.read<ItemsBloc>().add(GetItemsEvent());
+            //       },
+            //     ),
+            //   ],
+            // ),
             bottomNavigationBar: buildNavigationBar(
                 context, _selectedPageIndex, _pageController, ref),
             backgroundColor: Colors.transparent,
-            body: buildPageView(_pageController, ref, context,
-                dataSink: dataSink,
-                shopsDataList: _shopsDataList,
-                recentOperations: _recentOperations),
+            body: buildPageView(
+              _pageController,
+              ref,
+            ),
           );
         },
       ),
@@ -181,11 +189,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   buildPageView(
     PageController _pageController,
     WidgetRef ref,
-    BuildContext context, {
-    required DataSink dataSink,
-    required List<ShopData> shopsDataList,
-    required RecentOperation recentOperations,
-  }) {
+    // BuildContext context, {
+    // required DataSink dataSink,
+    // required List<ShopData> shopsDataList,
+    // required RecentOperation recentOperations,
+  ) {
     return Column(
       children: [
         Expanded(

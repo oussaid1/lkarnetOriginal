@@ -176,7 +176,7 @@ class Database {
             .toList());
   }
 
-  Stream<List<PaymentModel>> streamPayments() {
+  Stream<List<PaymentModel>> paymentsStream() {
     return _users
         .collection(DBTables.payments)
         .snapshots()

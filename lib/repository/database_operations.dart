@@ -100,7 +100,7 @@ class DatabaseOperations implements Database {
   @override
   Stream<List<ShopModel>> shopsStream() => _database.shopsStream();
   @override
-  Stream<List<PaymentModel>> streamPayments() => _database.streamPayments();
+  Stream<List<PaymentModel>> paymentsStream() => _database.paymentsStream();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////Update/////////////////////////////////////////////////////////////////////////////////////

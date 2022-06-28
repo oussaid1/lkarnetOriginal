@@ -93,6 +93,20 @@ class DataSink {
   List<ItemModel> items;
   List<PaymentModel> payments;
   DataSink(this.shops, this.items, this.payments);
+
+  /// copy with
+  DataSink copyWith({
+    List<ShopModel>? shops,
+    List<ItemModel>? items,
+    List<PaymentModel>? payments,
+  }) {
+    return DataSink(
+      shops ?? this.shops,
+      items ?? this.items,
+      payments ?? this.payments,
+    );
+  }
+
   // get all shopsData
   List<ShopData> get allShopsData {
     List<ShopData> list = [];

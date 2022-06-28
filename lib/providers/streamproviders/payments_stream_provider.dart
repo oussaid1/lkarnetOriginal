@@ -4,7 +4,7 @@ import 'package:lkarnet/providers/authproviders/database_providers.dart';
 
 final paymentsStream = StreamProvider<List<PaymentModel>>((ref) {
   final _db = ref.watch(databaseProvider);
-  return _db.streamPayments();
+  return _db.paymentsStream();
 });
 
 final paymentsProvider = StateProvider<List<PaymentModel>>((ref) {

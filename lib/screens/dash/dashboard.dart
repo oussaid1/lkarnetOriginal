@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
-
+import 'package:lkarnet/models/payment/payment_model.dart';
+import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-
+import '../../bloc/itemsbloc/items_bloc.dart';
+import '../../bloc/payments/payments_bloc.dart';
+import '../../bloc/shopsbloc/shops_bloc.dart';
+import '../../database/database.dart';
+import '../../models/item/item.dart';
 import '../../models/shop/shops_data.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../providers/streamproviders/payments_stream_provider.dart';
 import '../../providers/streamproviders/shops_stream_provider.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
-import '../../widgets/notification_badge_widget.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../../widgets/shop_square_tile.dart';
 import '../add/add_item.dart';
@@ -34,6 +40,10 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
   late AnimationController _animationController;
   //late List<KitchenElement> _kitchenElements;
   // /late List<KitchenItem> _kitchenItems;
+  late List<ItemModel> _items;
+  late List<ShopModel> _shops;
+  late List<PaymentModel> _payments;
+
   @override
   void initState() {
     _animationController = AnimationController(
@@ -46,11 +56,14 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
 
   @override
   Widget build(BuildContext context) {
-    var items = ref.watch(itemsProvider.state).state;
-    var payments = ref.watch(paymentsProvider.state).state;
-    var shops = ref.watch(shopsProvider.state).state;
-    var dataSink = DataSink(shops, items, payments);
-    List<ShopData> _shopsDataList = dataSink.allShopsData;
+    // var items = ref.watch(itemsProvider.state).state;
+    // var payments = ref.watch(paymentsProvider.state).state;
+    // var shops = ref.watch(shopsProvider.state).state;
+    context.read<ItemsBloc>().add(GetItemsEvent());
+    context.read<PaymentsBloc>().add(GetPaymentsEvent());
+    context.read<ShopsBloc>().add(GetShopsEvent());
+    //var dataSink = DataSink(shops, items, payments);
+    //  List<ShopData> _shopsDataList = dataSink.allShopsData;
     // ref.watch(shopsDataListProvider.state).state;
     var _recentOperations = ref.watch(recentOperationsProvider.state).state;
     // var chartData = ref.watch(shopsChartsDataProvider.state).state;
@@ -65,6 +78,10 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           style: Theme.of(context).textTheme.headline2,
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => context.read<ItemsBloc>().add(GetItemsEvent()),
+          ),
           // IconButton(
           //   icon: Icon(Icons.notifications),
           //   onPressed: () async {
@@ -102,16 +119,51 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
         end: 0,
         //borderColorOpacity: 0,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              buildTopWidget(dataSink),
-              buildShopsWidget(context, _shopsDataList),
-              buildRecentOpeerationsWidget(
-                context,
-                _recentOperations,
-              )
+          child: MultiBlocListener(
+            listeners: [
+              BlocListener<ItemsBloc, ItemsState>(
+                listener: (context, state) {
+                  if (state is ItemsLoadedState) {
+                    _items = state.items;
+                  }
+                },
+              ),
+              BlocListener<ShopsBloc, ShopsState>(
+                listener: (context, state) {
+                  if (state is ShopsLoaded) {
+                    _shops = state.shops;
+                  }
+                },
+              ),
+              BlocListener<PaymentsBloc, PaymentsState>(
+                  listener: (context, state) {
+                if (state is PaymentsLoaded) {
+                  _payments = state.payments;
+                }
+              }),
             ],
+            child: BlocBuilder<ItemsBloc, ItemsState>(
+              builder: (context, state) {
+                if (state is ItemsLoadedState) {
+                  var dataSink = DataSink(_shops, _items, _payments);
+                  return Column(
+                    children: [
+                      const SizedBox(height: 8),
+                      buildTopWidget(dataSink, items: state.items),
+                      buildShopsWidget(context, dataSink.allShopsData),
+                      buildRecentOpeerationsWidget(
+                        context,
+                        _recentOperations,
+                      )
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -279,7 +331,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
     );
   }
 
-  buildTopWidget(DataSink dataSink) {
+  buildTopWidget(DataSink dataSink, {List<ItemModel>? items}) {
     return BluredContainer(
       width: 390,
       height: 130,
@@ -298,7 +350,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Spendings',
+                    'Spendings ${items!.length}',
                     style: Theme.of(context).textTheme.headline2!.copyWith(
                           color: Color.fromRGBO(255, 255, 255, 1),
                         ),
