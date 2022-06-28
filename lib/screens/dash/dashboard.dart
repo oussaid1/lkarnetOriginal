@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
@@ -154,7 +155,10 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
                   );
                 } else {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: SpinKitSquareCircle(
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
                   );
                 }
               },

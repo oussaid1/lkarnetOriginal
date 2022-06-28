@@ -4,7 +4,7 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/bloc/login_bloc.dart';
+import '../../bloc/loginbloc/login_bloc.dart';
 import '../../models/login_credentials.dart';
 import '../../utils.dart';
 import 'signup.dart';

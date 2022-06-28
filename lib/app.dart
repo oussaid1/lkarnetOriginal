@@ -4,7 +4,7 @@ import 'package:lkarnet/database/database.dart';
 import 'package:lkarnet/services/auth_service.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'bloc/authbloc/auth_bloc.dart';
-import 'bloc/bloc/login_bloc.dart';
+import 'bloc/loginbloc/login_bloc.dart';
 import 'components.dart';
 import 'navigator/rout_navigator.dart';
 import 'root.dart';

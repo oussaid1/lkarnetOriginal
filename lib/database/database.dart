@@ -149,10 +149,16 @@ class Database {
 
 // get kitchenElements
   Stream<List<KitchenElementModel>> kitchenElementsStream() {
-    return _users.collection(_collectionKitchenElements).snapshots().map(
-        (QuerySnapshot query) => query.docs
-            .map((element) => KitchenElementModel.fromDocumentSnapShot(element))
-            .toList());
+    return _users
+        .collection(DBTables.kitchenElements)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      List<KitchenElementModel> retVal = [];
+      query.docs.forEach((element) {
+        retVal.add(KitchenElementModel.fromDocumentSnapShot(element));
+      });
+      return retVal;
+    });
   }
 
   // get kitchenItems
