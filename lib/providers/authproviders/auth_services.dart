@@ -84,7 +84,7 @@ class AuthenticationService {
             password: password,
           )
           .then((value) =>
-              createNewUser(UserModel.fromUserCredential(value, username)));
+              createNewUser(UserModel.fromUserCredential(value.user!)));
       return 'Success';
     } on FirebaseAuthException catch (e) {
       return 'failed $e';

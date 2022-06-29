@@ -93,9 +93,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
         ],
         leading: IconButton(
           icon: Icon(Icons.dashboard),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () {},
         ),
       ),
       body: GlassContainer(

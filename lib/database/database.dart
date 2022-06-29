@@ -29,7 +29,7 @@ class Database {
     await _firestore
         .collection('users')
         .doc(user.id)
-        .set(user.toMap())
+        .set(user.toMap(), SetOptions(merge: true))
         .then((value) => _done = true)
         .catchError((error) {
       _done = false;
@@ -44,7 +44,7 @@ class Database {
     await _firestore
         .collection('users')
         .doc(uid)
-        .set({'token': token})
+        .set({'token': token}, SetOptions(merge: true))
         .then((value) => _done = true)
         .catchError((error) {
           _done = false;
