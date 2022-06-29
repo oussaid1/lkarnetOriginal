@@ -28,7 +28,7 @@ class Database {
     bool _done = false;
     await _firestore
         .collection('users')
-        .doc(user.id)
+        .doc(uid)
         .set(user.toMap(), SetOptions(merge: true))
         .then((value) => _done = true)
         .catchError((error) {

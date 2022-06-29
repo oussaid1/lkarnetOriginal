@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
-
 import 'package:lkarnet/widgets/dialogs.dart';
-
 import '../../models/shop/shops_data.dart';
-import '../../notifications/notifications.dart';
 import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../providers/streamproviders/payments_stream_provider.dart';
 import '../../providers/streamproviders/shops_stream_provider.dart';
@@ -66,6 +63,21 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
           style: Theme.of(context).textTheme.headline2,
         ),
         actions: [
+          // IconButton(
+          //   icon: Icon(Icons.add),
+          //   onPressed: () {
+          //     final user = UserModel(
+          //       name: 'sana',
+          //       email: 'sana.abtla@gmail.com',
+          //       photoUrl: 'nothing',
+          //       phoneNumber: '06',
+          //       createdAt: DateTime.now(),
+          //       updatedAt: DateTime.now(),
+          //     );
+          //     final db = ref.watch(databaseProvider);
+          //     db.createNewUser(user);
+          //   },
+          // ),
           // IconButton(
           //   icon: Icon(Icons.notifications),
           //   onPressed: () async {
