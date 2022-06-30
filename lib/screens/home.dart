@@ -24,13 +24,16 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              ItemsBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+              ItemsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetItemsEvent()),
         ),
         BlocProvider(
-          create: (context) => ShopsBloc(GetIt.I<DatabaseOperations>()),
+          create: (context) =>
+              ShopsBloc(GetIt.I<DatabaseOperations>())..add(GetShopsEvent()),
         ),
         BlocProvider(
-          create: (context) => PaymentsBloc(GetIt.I<DatabaseOperations>()),
+          create: (context) => PaymentsBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetPaymentsEvent()),
         )
       ],
       child: HomeScreen(),
@@ -38,22 +41,19 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({
     Key? key,
   }) : super(key: key);
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   //File _pickedFile = File('/storage/emulated/0/Download/test.txt');
   final PageController _pageController = PageController();
   @override
   void initState() {
-    context.read<ItemsBloc>().add(GetItemsEvent());
-    context.read<ShopsBloc>().add(GetShopsEvent());
-    context.read<PaymentsBloc>().add(GetPaymentsEvent());
     // _notificationsPermition(context);
     // Workmanager().initialize(
     //     callbackDispatcher, // The top level function, aka callbackDispatcher
@@ -69,7 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     if (fcmToken != null) {
       log("FCM Token: $fcmToken");
-      ref.read(databaseProvider).insertToken(fcmToken);
+      // ref.read(databaseProvider).insertToken(fcmToken);
       log("token inserted $fcmToken");
       return fcmToken;
     } else {
@@ -106,21 +106,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
+  int _selectedPageIndex = 0;
   @override
   Widget build(BuildContext context) {
-    //final _currency = ref.watch(currencyProvider.state).state;
-    int _selectedPageIndex = ref.watch(selectedPageIndex.state).state;
-    //var items = <ItemModel>[];
-    //ref.watch(itemsProvider.state).state;
-    // var payments = ref.watch(paymentsProvider.state).state;
-    // var shops = ref.watch(shopsProvider.state).state;
-    //  var dataSink = DataSink(shops, items, payments);
-    // List<ShopData> _shopsDataList = dataSink.allShopsData;
-    // ref.watch(shopsDataListProvider.state).state;
-    //  var _recentOperations = ref.watch(recentOperationsProvider.state).state;
-    // var chartData = ref.watch(shopsChartsDataProvider.state).state;
-    //final _db = ref.watch(databaseProvider);
-
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -145,65 +133,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: AppAssets.blueCircleWidget,
         ),
       ],
-      centerWidget: BlocConsumer<ItemsBloc, ItemsState>(
-        // buildWhen: (previous, current) => current is ItemsLoadedState,
-        listener: (context, state) {
-          // if (state is ItemsLoadedState) {
-          //   dataSink.items = state.items;
-          //   log("items loaded ${state.items.length}");
-          // }
-        },
-        builder: (context, state) {
-          return Scaffold(
-            // appBar: AppBar(
-            //   title: Text(
-            //     "LKarnet",
-            //     style: TextStyle(
-            //       fontSize: 30,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            //   centerTitle: true,
-            //   actions: [
-            //     IconButton(
-            //       icon: Icon(Icons.settings),
-            //       onPressed: () {
-            //         context.read<ItemsBloc>().add(GetItemsEvent());
-            //       },
-            //     ),
-            //   ],
-            // ),
-            bottomNavigationBar: buildNavigationBar(
-                context, _selectedPageIndex, _pageController, ref),
-            backgroundColor: Colors.transparent,
-            body: buildPageView(
-              _pageController,
-              ref,
-            ),
-          );
-        },
+      centerWidget: Scaffold(
+        bottomNavigationBar:
+            buildNavigationBar(context, _selectedPageIndex, _pageController),
+        backgroundColor: Colors.transparent,
+        body: buildPageView(
+          _pageController,
+        ),
       ),
     );
   }
 
   buildPageView(
     PageController _pageController,
-    WidgetRef ref,
-    // BuildContext context, {
-    // required DataSink dataSink,
-    // required List<ShopData> shopsDataList,
-    // required RecentOperation recentOperations,
   ) {
     return Column(
       children: [
         Expanded(
           child: PageView(
-            //allowImplicitScrolling:true ,
-            //clipBehavior:Clip.hardEdge ,
             controller: _pageController,
             physics: NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
-              ref.read(selectedPageIndex.state).state = index;
+              setState(() {
+                _selectedPageIndex = index;
+              });
             },
             children: [
               DashBoardPage(),
@@ -221,18 +174,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  buildNavigationBar(context, int _selectedPageIndex,
-      PageController _pageController, WidgetRef ref) {
+  buildNavigationBar(
+      context, int _selectedPageIndex, PageController _pageController) {
     return BottomNavigationBar(
       backgroundColor: Colors.transparent,
       type: BottomNavigationBarType.shifting,
       currentIndex: _selectedPageIndex,
       elevation: 8,
       onTap: (index) {
-        ref.read(selectedPageIndex.state).state = index;
-        _pageController.jumpToPage(
-          index,
-        );
+        _pageController.jumpToPage(index);
+        setState(() {
+          _selectedPageIndex = index;
+        });
       },
       items: [
         BottomNavigationBarItem(

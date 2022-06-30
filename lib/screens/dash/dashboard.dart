@@ -24,14 +24,14 @@ import '../lists/payments.dart';
 import '../lists/shops.dart';
 import '../shop_details.dart';
 
-class DashBoardPage extends ConsumerStatefulWidget {
+class DashBoardPage extends StatefulWidget {
   const DashBoardPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<DashBoardPage> createState() => _DashBoardPageState();
+  State<DashBoardPage> createState() => _DashBoardPageState();
 }
 
-class _DashBoardPageState extends ConsumerState<DashBoardPage>
+class _DashBoardPageState extends State<DashBoardPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   //late List<KitchenElement> _kitchenElements;
@@ -50,20 +50,9 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
     super.initState();
   }
 
+  //late RecentOperation _recentOperation;
   @override
   Widget build(BuildContext context) {
-    // var items = ref.watch(itemsProvider.state).state;
-    // var payments = ref.watch(paymentsProvider.state).state;
-    // var shops = ref.watch(shopsProvider.state).state;
-    context.read<ItemsBloc>().add(GetItemsEvent());
-    context.read<PaymentsBloc>().add(GetPaymentsEvent());
-    context.read<ShopsBloc>().add(GetShopsEvent());
-    //var dataSink = DataSink(shops, items, payments);
-    //  List<ShopData> _shopsDataList = dataSink.allShopsData;
-    // ref.watch(shopsDataListProvider.state).state;
-    var _recentOperations = ref.watch(recentOperationsProvider.state).state;
-    // var chartData = ref.watch(shopsChartsDataProvider.state).state;
-    //final _db = ref.watch(databaseProvider);
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: MyExpandableFab(),
@@ -105,9 +94,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
         ],
         leading: IconButton(
           icon: Icon(Icons.dashboard),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () {},
         ),
       ),
       body: GlassContainer(
@@ -149,7 +136,7 @@ class _DashBoardPageState extends ConsumerState<DashBoardPage>
                       buildShopsWidget(context, dataSink.allShopsData),
                       buildRecentOpeerationsWidget(
                         context,
-                        _recentOperations,
+                        RecentOperation(_items, _payments),
                       )
                     ],
                   );

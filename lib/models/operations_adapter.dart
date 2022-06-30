@@ -1,15 +1,5 @@
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
-import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
-
-import '../components.dart';
-
-final recentOperationsProvider = StateProvider<RecentOperation>((ref) {
-  final items = ref.watch(itemsProvider);
-  final payments = ref.watch(paymentsProvider);
-  return RecentOperation(items, payments);
-});
 
 class OperationsAdapter {
   ItemModel? item;
