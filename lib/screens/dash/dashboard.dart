@@ -65,7 +65,11 @@ class _DashBoardPageState extends State<DashBoardPage>
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => context.read<ItemsBloc>().add(GetItemsEvent()),
+            onPressed: () {
+              context.read<ItemsBloc>().add(GetItemsEvent());
+              context.read<ShopsBloc>().add(GetShopsEvent());
+              context.read<PaymentsBloc>().add(GetPaymentsEvent());
+            },
           ),
           // IconButton(
           //   icon: Icon(Icons.notifications),
@@ -141,7 +145,9 @@ class _DashBoardPageState extends State<DashBoardPage>
                     ],
                   );
                 } else {
-                  return Center(
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
                     child: SpinKitSquareCircle(
                       color: Colors.white,
                       size: 50.0,

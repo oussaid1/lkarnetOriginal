@@ -32,7 +32,7 @@ class ShopsBloc extends Bloc<ShopsEvent, ShopsState> {
   /// on get shops event
   Future<void> _onGetShops(ShopsEvent event, Emitter<ShopsState> emit) async {
     // if (_itemsSubscription != null) {
-    //   _itemsSubscription!.cancel();
+    //  _itemsSubscription!.cancel();
     // }
     _itemsSubscription = _databaseOperations
         .shopsStream()

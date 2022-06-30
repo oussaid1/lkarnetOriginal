@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/bloc/payments/payments_bloc.dart';
 import 'package:lkarnet/components.dart';
-import 'package:lkarnet/providers/authproviders/database_providers.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
+
 import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
 import '../bloc/itemsbloc/items_bloc.dart';

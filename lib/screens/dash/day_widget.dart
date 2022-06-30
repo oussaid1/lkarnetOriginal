@@ -16,7 +16,7 @@ class DailyDash extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    var _listOfTagged = ref.watch(taggedListDDMMYYProvider.state).state;
+    var _listOfTagged;
     var _currentIndex = ref.watch(mlistIndex.state).state;
 
     final _tagged = _listOfTagged[_currentIndex];

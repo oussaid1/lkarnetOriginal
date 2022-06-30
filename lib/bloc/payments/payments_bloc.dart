@@ -34,7 +34,7 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
   Future<void> _onGetPayments(
       PaymentsEvent event, Emitter<PaymentsState> emit) async {
     // if (_itemsSubscription != null) {
-    //   _itemsSubscription!.cancel();
+    //  _itemsSubscription!.cancel();
     // }
     _itemsSubscription = _databaseOperations
         .paymentsStream()

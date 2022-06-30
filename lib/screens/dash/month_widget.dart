@@ -27,7 +27,7 @@ class _MonthlyDashState extends ConsumerState<MonthlyDash> {
   // Tagged? _tagged;
   @override
   Widget build(BuildContext context) {
-    var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
+    var _listOfTagged;
     //var _currentIndex = ref.watch(listIndex.state).state;
     var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
     return Scaffold(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/providers/dataprovider/data_providers.dart';
 import 'package:lkarnet/widgets/charts.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
@@ -13,7 +12,7 @@ class StatsAll extends ConsumerWidget {
     var chartData = ref.watch(frequentItemsProvider.state).state;
     var chartData2 = ref.watch(shopsChartsDataProvider.state).state;
 
-    var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
+    var _listOfTagged;
     return Scaffold(
       appBar: MyAppBar(
         title: Text("All Statistics"),

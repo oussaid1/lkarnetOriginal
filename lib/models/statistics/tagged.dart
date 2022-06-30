@@ -1,48 +1,106 @@
 import 'package:lkarnet/components.dart';
+import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/item_distincts.dart';
 import 'package:lkarnet/models/payment/payments_filtered.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
-import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
-import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
 
-final taggedListDDMMYYProvider = StateProvider<List<Tagged>>((ref) {
-  List<Tagged> _list = [];
-  var _distincts = ref.watch(itemDistinctsProvider.state).state;
-  var _items = ref.watch(itemsProvider.state).state;
-  var _payments = ref.watch(paymentsProvider.state).state;
-  var _shops = ref.watch(shopsProvider.state).state;
-  _distincts.distinctItemDays.forEach((tag) {
-    _list.add(
-      Tagged(
+import '../payment/payment_model.dart';
+
+// final taggedListDDMMYYProvider = StateProvider<List<Tagged>>((ref) {
+//   List<Tagged> _list = [];
+//   var _distincts = ref.watch(itemDistinctsProvider.state).state;
+//   var _items = ref.watch(itemsProvider.state).state;
+//   var _payments = ref.watch(paymentsProvider.state).state;
+//   var _shops = ref.watch(shopsProvider.state).state;
+//   _distincts.distinctItemDays.forEach((tag) {
+//     _list.add(
+//       Tagged(
+//         tag: tag,
+//         dateFilterType: DateFilterType.ddmmyy,
+//         shops: _shops,
+//         itemsFiltered: ItemsFiltered(
+//           items: _items,
+//           tag: tag,
+//           dateFilterType: DateFilterType.ddmmyy,
+//         ),
+//         paymentsFiltered: PaymentsFiltered(
+//           payments: _payments,
+//           tag: tag,
+//           dateFilterType: DateFilterType.ddmmyy,
+//         ),
+//       ),
+//     );
+//   });
+//   return _list;
+// });
+// final taggedListMMYYProvider = StateProvider<List<Tagged>>((ref) {
+//   List<Tagged> _list = [];
+//   var distincts = ref.watch(itemDistinctsProvider.state).state;
+//   var items = ref.watch(itemsProvider.state).state;
+//   var payments = ref.watch(paymentsProvider.state).state;
+//   var shops = ref.watch(shopsProvider.state).state;
+//   distincts.itemsDistinctItemMonthsYrs.forEach((tag) {
+//     _list.add(Tagged(
+//         tag: tag,
+//         dateFilterType: DateFilterType.mmyy,
+//         shops: shops,
+//         itemsFiltered: ItemsFiltered(
+//           items: items,
+//           tag: tag,
+//           dateFilterType: DateFilterType.mmyy,
+//         ),
+//         paymentsFiltered: PaymentsFiltered(
+//           payments: payments,
+//           tag: tag,
+//           dateFilterType: DateFilterType.mmyy,
+//         )));
+//   });
+//   return _list;
+// });
+
+class TaggedDataSink {
+  List<ItemModel> items = [];
+  List<PaymentModel> payments = [];
+  List<ShopModel> shops = [];
+
+  TaggedDataSink({
+    required this.items,
+    required this.payments,
+    required this.shops,
+  });
+
+  /// tagged of DDMMYY
+  List<Tagged> get taggedDDMMYY {
+    List<Tagged> _list = [];
+    var distincts = ItemDistincts(items: items);
+    distincts.distinctItemDays.forEach((tag) {
+      _list.add(Tagged(
         tag: tag,
         dateFilterType: DateFilterType.ddmmyy,
-        shops: _shops,
+        shops: shops,
         itemsFiltered: ItemsFiltered(
-          items: _items,
+          items: items,
           tag: tag,
           dateFilterType: DateFilterType.ddmmyy,
         ),
         paymentsFiltered: PaymentsFiltered(
-          payments: _payments,
+          payments: payments,
           tag: tag,
           dateFilterType: DateFilterType.ddmmyy,
         ),
-      ),
-    );
-  });
-  return _list;
-});
-final taggedListMMYYProvider = StateProvider<List<Tagged>>((ref) {
-  List<Tagged> _list = [];
-  var distincts = ref.watch(itemDistinctsProvider.state).state;
-  var items = ref.watch(itemsProvider.state).state;
-  var payments = ref.watch(paymentsProvider.state).state;
-  var shops = ref.watch(shopsProvider.state).state;
-  distincts.itemsDistinctItemMonthsYrs.forEach((tag) {
-    _list.add(Tagged(
+      ));
+    });
+    return _list;
+  }
+
+  /// tagged of MMYY
+  List<Tagged> get taggedMMYY {
+    List<Tagged> _list = [];
+    var distincts = ItemDistincts(items: items);
+    distincts.itemsDistinctItemMonthsYrs.forEach((tag) {
+      _list.add(Tagged(
         tag: tag,
         dateFilterType: DateFilterType.mmyy,
         shops: shops,
@@ -55,10 +113,36 @@ final taggedListMMYYProvider = StateProvider<List<Tagged>>((ref) {
           payments: payments,
           tag: tag,
           dateFilterType: DateFilterType.mmyy,
-        )));
-  });
-  return _list;
-});
+        ),
+      ));
+    });
+    return _list;
+  }
+
+  /// tagged of YYYY
+  List<Tagged> get taggedYYYY {
+    List<Tagged> _list = [];
+    var distincts = ItemDistincts(items: items);
+    distincts.distinctItemYears.forEach((tag) {
+      _list.add(Tagged(
+        tag: tag,
+        dateFilterType: DateFilterType.yy,
+        shops: shops,
+        itemsFiltered: ItemsFiltered(
+          items: items,
+          tag: tag,
+          dateFilterType: DateFilterType.yy,
+        ),
+        paymentsFiltered: PaymentsFiltered(
+          payments: payments,
+          tag: tag,
+          dateFilterType: DateFilterType.yy,
+        ),
+      ));
+    });
+    return _list;
+  }
+}
 
 class Tagged {
   bool seledcted = false;

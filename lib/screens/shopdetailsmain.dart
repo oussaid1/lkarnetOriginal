@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/models/item/item.dart';
+import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
-
+import '../bloc/itemsbloc/items_bloc.dart';
+import '../bloc/payments/payments_bloc.dart';
+import '../bloc/shopsbloc/shops_bloc.dart';
 import '../components.dart';
+import '../models/payment/payment_model.dart';
 import '../models/statistics/tagged.dart';
 import '../widgets/price_curency_widget.dart';
 import '../widgets/shop_square_tile.dart';
@@ -19,21 +25,27 @@ class ShopDetailsMain extends ConsumerStatefulWidget {
 
 class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   Tagged? _tagged;
+  List<ItemModel> _items = [];
+  List<ShopModel> _shops = [];
+  List<PaymentModel> _payments = [];
 
   //var _isSelected = false;
   @override
   void initState() {
-    //  _tagged = Tagged.fakeTagged();
+    context.read<ItemsBloc>().add(GetItemsEvent());
+    context.read<PaymentsBloc>().add(GetPaymentsEvent());
+    context.read<ShopsBloc>().add(GetShopsEvent());
     super.initState();
   }
 
+  //List<Tagged> _listOfTagged = [];
   @override
   Widget build(BuildContext context) {
-    var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
+    //var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
     //var _currentIndex = ref.watch(listIndex.state).state;
     // var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
     //return MonthlyDash();
-    _tagged == null ? _tagged = _listOfTagged[0] : _tagged;
+    //_tagged == null ? _tagged = _listOfTagged[0] : _tagged;
     return BluredContainer(
       start: 0,
       end: 0,
@@ -43,9 +55,11 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
         floatingActionButton: MyExpandableFab(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: MyAppBar(
-          title: Text(
-            '${_tagged!.date!.mMMyy()}',
-          ),
+          title: _tagged != null
+              ? Text(
+                  '${_tagged!.date!.mMMyy()}',
+                )
+              : Text('No tag'),
           leading: Icon(Icons.calendar_month, color: Colors.black),
         ),
 
@@ -65,21 +79,65 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 ),
               ),
             ),
-            Container(
-              height: 235,
-              width: double.infinity,
-              // color: Color.fromARGB(94, 255, 193, 7),
-              child: Stack(
-                //fit: StackFit.loose,
-                children: [
-                  _buildMonthlyCard(context, _tagged!),
-                  Positioned(
-                    top: 195,
-                    width: 360,
-                    left: MediaQuery.of(context).size.width / 2 - 180,
-                    child: _buildSelector(_listOfTagged),
-                  ),
-                ],
+            MultiBlocListener(
+              listeners: [
+                BlocListener<ItemsBloc, ItemsState>(
+                  listener: (context, state) {
+                    if (state is ItemsLoadedState) {
+                      setState(() {
+                        _items = state.items;
+                      });
+                    }
+                  },
+                ),
+                BlocListener<ShopsBloc, ShopsState>(
+                  listener: (context, state) {
+                    if (state is ShopsLoaded) {
+                      setState(() {
+                        _shops = state.shops;
+                      });
+                    }
+                  },
+                ),
+                BlocListener<PaymentsBloc, PaymentsState>(
+                    listener: (context, state) {
+                  if (state is PaymentsLoaded) {
+                    setState(() {
+                      _payments = state.payments;
+                    });
+                  }
+                }),
+              ],
+              child: BlocBuilder<ItemsBloc, ItemsState>(
+                // buildWhen: (previous, current) =>
+                //     previous is ItemsLoadedState && current is ItemsLoadedState,
+                builder: (context, state) {
+                  TaggedDataSink _taggedDataSink = TaggedDataSink(
+                      items: _items, payments: _payments, shops: _shops);
+                  log('items:${_items.length} payments:${_payments.length} shops:${_shops.length}');
+
+                  _tagged == null ? _taggedDataSink.taggedMMYY[0] : _tagged;
+
+                  return Container(
+                    height: 235,
+                    width: double.infinity,
+                    // color: Color.fromARGB(94, 255, 193, 7),
+                    child: Stack(
+                      //fit: StackFit.loose,
+                      children: [
+                        _tagged != null
+                            ? _buildMonthlyCard(context, _tagged!)
+                            : Container(),
+                        Positioned(
+                          top: 195,
+                          width: 360,
+                          left: MediaQuery.of(context).size.width / 2 - 180,
+                          child: _buildSelector(_taggedDataSink.taggedMMYY),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 10),
@@ -139,7 +197,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  tagged.seledcted = !tagged.seledcted;
+                  // tagged.seledcted = !tagged.seledcted;
 
                   _tagged = tagged;
                 });
