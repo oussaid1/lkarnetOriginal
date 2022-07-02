@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:lkarnet/components.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'item/item.dart';
@@ -22,7 +23,7 @@ class Backup {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['date'] = this.date!.toIso8601String();
-    data['items'] = this.items.map((x) => x.toMap()).toList();
+    data['items'] = this.items.map((x) => x.toJson()).toList();
     return data;
   }
 
@@ -36,9 +37,11 @@ class Backup {
 
   /// a function to stroe the backup to a json file in the backup folder in the app directory with the name of the date of the backup and the extension .json
   Future<void> store() async {
-    final String path =
-        '${(await getApplicationDocumentsDirectory()).path}/backup/${this.date!.toIso8601String()}.json';
+    final directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path + '/backup/oussaid.json';
+    log('path: $path');
     final File file = File(path);
+    log('file: ${file}');
     await file.writeAsString(json.encode(this.toJson()));
   }
 

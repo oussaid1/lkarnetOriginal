@@ -106,7 +106,7 @@ class ItemModel {
       'quantity': quantity,
       'itemPrice': itemPrice,
       'shopName': shopName,
-      'dateBought': dateBought,
+      'dateBought': dateBought.toIso8601String(),
       'count': count,
     };
   }

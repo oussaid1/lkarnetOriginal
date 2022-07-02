@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lkarnet/components.dart';
+import 'package:lkarnet/models/backup.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../bloc/itemsbloc/items_bloc.dart';
 import '../../bloc/payments/payments_bloc.dart';
 import '../../bloc/shopsbloc/shops_bloc.dart';
@@ -13,6 +16,7 @@ import '../../models/item/item.dart';
 import '../../models/shop/shops_data.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
+import '../../widgets/notification_badge_widget.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../../widgets/shop_square_tile.dart';
 import '../add/add_item.dart';
@@ -65,10 +69,21 @@ class _DashBoardPageState extends State<DashBoardPage>
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              context.read<ItemsBloc>().add(GetItemsEvent());
-              context.read<ShopsBloc>().add(GetShopsEvent());
-              context.read<PaymentsBloc>().add(GetPaymentsEvent());
+            onPressed: () async {
+              var status = await Permission.storage.request().isGranted;
+              if (!status) {
+                toast('Please grant camera permission');
+              } else {
+                final backup = Backup(
+                    date: DateTime.now(), items: _items.take(2).toList());
+                backup.store().then((value) => toast('Backup created'));
+              }
+
+// You can can also directly ask the permission about its status.
+
+              // context.read<ItemsBloc>().add(GetItemsEvent());
+              // context.read<ShopsBloc>().add(GetShopsEvent());
+              // context.read<PaymentsBloc>().add(GetPaymentsEvent());
             },
           ),
           // IconButton(
@@ -92,9 +107,7 @@ class _DashBoardPageState extends State<DashBoardPage>
           //     // Navigator.pushNamed(context, '/notifications');
           //   },
           // ),
-          // NotificationsIconButton(
-          //   ref: ref,
-          // ),
+          // NotificationsIconButton(),
         ],
         leading: IconButton(
           icon: Icon(Icons.dashboard),
