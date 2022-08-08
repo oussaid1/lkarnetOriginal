@@ -28,7 +28,7 @@ class PriceNumberZone extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '${price.toPrecision()} ',
+            '${price.toPrecision(2)} ',
             style: style,
           ),
           withDollarSign

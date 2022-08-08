@@ -419,9 +419,19 @@ class Database {
   }
 
   Future<void> deleteShopData(ShopData shopsData) async {
-    for (var item in shopsData.allItems)
+    /// delete all the items of the shop
+    for (var item in shopsData.items)
       try {
         _users.collection(DBTables.shops).doc(item.id).delete();
+      } catch (e) {
+        Exception(e);
+        rethrow;
+      }
+
+    /// delete all the payments of the shop
+    for (var payment in shopsData.payments)
+      try {
+        _users.collection(DBTables.payments).doc(payment.id).delete();
       } catch (e) {
         Exception(e);
         rethrow;

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/database/database.dart';
 import 'package:lkarnet/services/auth_service.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'bloc/authbloc/auth_bloc.dart';
-import 'bloc/loginbloc/login_bloc.dart';
+import 'blocs/authbloc/auth_bloc.dart';
+import 'blocs/itemsbloc/items_bloc.dart';
+import 'blocs/loginbloc/login_bloc.dart';
 import 'components.dart';
 import 'navigator/rout_navigator.dart';
+import 'repository/database_operations.dart';
 import 'root.dart';
 import 'settings/theme.dart';
 
@@ -35,6 +38,12 @@ class MyApp extends StatelessWidget {
               AuthBloc(authService),
               authService,
             ),
+          ),
+
+          /// provide items bloc
+          BlocProvider<ItemsBloc>(
+            create: (context) =>
+                ItemsBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
           ),
         ],
         child: LkarnetApp(),

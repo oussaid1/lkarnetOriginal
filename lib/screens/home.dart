@@ -1,13 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lkarnet/bloc/payments/payments_bloc.dart';
+import 'package:lkarnet/blocs/payments/payments_bloc.dart';
 import 'package:lkarnet/components.dart';
 
 import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
-import '../bloc/itemsbloc/items_bloc.dart';
-import '../bloc/shopsbloc/shops_bloc.dart';
+import '../blocs/itemsbloc/items_bloc.dart';
+import '../blocs/shopsbloc/shops_bloc.dart';
 import '../repository/database_operations.dart';
 import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';

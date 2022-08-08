@@ -49,10 +49,14 @@ extension ContextExtension on BuildContext {
 extension DtExtension on DateTime {
   String formatted() {
     try {
-      return DateFormat("ddMMM/yy").format(this).toUpperCase();
+      return DateFormat("yyyy-MM-dd").format(this);
     } catch (e) {
       return '';
     }
+  }
+
+  String ddmmyyyy() {
+    return '$day/$month/$year';
   }
 
   String formattedHH() {
@@ -63,59 +67,56 @@ extension DtExtension on DateTime {
     }
   }
 
-  String ddmmyyyy() {
-    try {
-      return DateFormat("yyyy-MM-dd").format(this);
-    } catch (e) {
-      return '';
+  /// check if given date is today
+  bool isMatchToday(DateTime date) {
+    if (day == date.day && month == date.month && year == date.year) {
+      return true;
     }
+    return false;
   }
 
-  String mmyyyy() {
-    try {
-      return DateFormat("yyyy-MM").format(this);
-    } catch (e) {
-      return '';
+  bool isMatchToWeek(DateTime date) {
+    if (weekday == date.weekday && month == date.month && year == date.year) {
+      return true;
     }
+    return false;
   }
 
-  String mMMyy() {
-    try {
-      return DateFormat("MMM-yy").format(this);
-    } catch (e) {
-      return '';
+  /// check if given date is this month
+  bool isMatchToMonth(DateTime date) {
+    if (month == date.month) {
+      return true;
     }
+    return false;
   }
 
-  String yyyy() {
-    try {
-      return DateFormat("yyyy").format(this);
-    } catch (e) {
-      return '';
+  bool isMatchToYear(DateTime date) {
+    if (year == date.year) {
+      return true;
     }
+    return false;
   }
 
-  DateTime stripTime() {
-    {
-      return DateTime(year, month, day, 0, 0, 0);
-    }
+  bool isAs(DateTime other) {
+    return day == DateTime.now().day &&
+        month == DateTime.now().month &&
+        year == DateTime.now().year;
   }
+}
 
-  DateTime stripTimeDay() {
-    {
-      return DateTime(year, month, 00);
+/// extension on [List<String>] to turn all items to lower case
+extension LowerCaseList on List<String> {
+  List<String> toLowerCase() {
+    for (int i = 0; i < length; i++) {
+      this[i] = this[i].toLowerCase();
     }
-  }
-
-  DateTime stripTimeDayMonth() {
-    {
-      return DateTime(year, 00, 00);
-    }
+    return this;
   }
 }
 
 extension Ex on double {
-  double toPrecision() => double.parse(toStringAsFixed(2));
+  double toPrecision(int digitsAfter) =>
+      double.parse(toStringAsFixed(digitsAfter));
 }
 
 extension CountMatch on String {

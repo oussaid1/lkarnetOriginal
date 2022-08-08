@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
@@ -33,7 +34,7 @@ class _AddItemState extends ConsumerState<AddItem>
 //  KitchenElement? _kitchenElement;
   String? _quantifier = 'واحدة';
   String? _shop;
-  bool _isLoading = false;
+  bool _isUpdate = false, _canSave = false;
   ItemModel? _localItem;
   void clear() {
     _itemNameController.clear();
@@ -42,11 +43,13 @@ class _AddItemState extends ConsumerState<AddItem>
 
   void _update() {
     if (widget.item != null) {
+      _isUpdate = true;
       _localItem = widget.item;
       _itemNameController.text = widget.item!.itemName;
       _itemPriceController.text = (widget.item!.itemPrice).toString();
       _quantity = widget.item!.quantity;
       _quantifier = widget.item!.quantifier;
+      _dateBought = widget.item!.dateBought;
     }
   }
 
@@ -145,9 +148,7 @@ class _AddItemState extends ConsumerState<AddItem>
                   _buildSelectDateBought(),
                   _buildQuantityFier(),
                   SizedBox(height: 50),
-                  widget.item == null
-                      ? _buildSaveButton(context)
-                      : _buildUpdateButton(context),
+                  _buildUpdateButton(context),
                 ],
               ),
             ),
@@ -175,21 +176,19 @@ class _AddItemState extends ConsumerState<AddItem>
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text(
-                'Update',
-              ),
-              onPressed: _isLoading
+              child: Text(_isUpdate ? 'Update' : 'Add'),
+              onPressed: !_canSave
                   ? null
                   : () {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: Duration(seconds: 1),
-                        content: Text('Updating...'),
+                        content: Text('Saving...'),
                       ));
-                      final _op = ref.read(operationsProvider);
+                      final _op = context.read<ItemsBloc>();
                       final _item = ItemModel(
                         id: widget.item!.id,
                         besoinTitle: '',
-                        dateBought: ref.read(pickedDateTime.state).state,
+                        dateBought: _dateBought,
                         itemName: _itemNameController.text.trim(),
                         itemPrice:
                             double.parse(_itemPriceController.text.trim()),
@@ -203,100 +202,18 @@ class _AddItemState extends ConsumerState<AddItem>
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
                         setState(() {
-                          _isLoading = true;
+                          _canSave = false;
                         });
-                        _op.updateItem(_item).then((value) {
-                          if (value) {
-                            _formKeyName.currentState!.reset();
-                            _formKeyPrice.currentState!.reset();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: AppConstants.greenOpacity,
-                              content: Text('Item Updated'),
-                              duration: Duration(seconds: 1),
-                            ));
-                            Navigator.pop(context);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('Error'),
-                            ));
-                          }
-                        });
-                      } //_op.addItem();
-                    },
-              style: MThemeData.raisedButtonStyleSave),
-        ),
-      ],
-    );
-  }
-
-  Row _buildSaveButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Cancel',
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: MThemeData.raisedButtonStyleCancel),
-        ),
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Save',
-              ),
-              onPressed: _isLoading
-                  ? null
-                  : () {
-                      // saving
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          duration: Duration(seconds: 1),
-                          content: Text('Saving...'),
-                        ),
-                      );
-                      // setState(() {
-                      //   _isLoading = true;
-                      // });
-                      final _op = ref.read(operationsProvider);
-                      final _item = ItemModel(
-                          besoinTitle: '',
-                          dateBought: _dateBought,
-                          itemName: _itemNameController.text.trim(),
-                          itemPrice:
-                              double.parse(_itemPriceController.text.trim()),
-                          quantifier: _quantifier,
-                          quantity: _quantity,
-                          shopName: _shop! //ref.read(pickedShop.state).state!,
-                          );
-                      // logger.d(_item);
-                      if (_formKeyName.currentState!.validate() &&
-                          _formKeyPrice.currentState!.validate() &&
-                          _shop != null) {
                         _localItem = _item;
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        _op.addItem(_item);
-
-                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //         content: Text('Saved'),
-                        //         duration: Duration(seconds: 1),
-                        //         backgroundColor: AppConstants
-                        //             .greenOpacity) //AppConstants.greenOpacity
-                        //     );
-                        // _itemNameController.clear();
-                        //_itemPriceController.clear();
-                        //_quantity = 1;
-                      }
-                      mBottomSheet(context, controller: _controller);
-
-                      // popup dialog do you want to save to kitchen
+                        if (_isUpdate) {
+                          _op.add(UpdateItemEvent(_item));
+                        } else {
+                          _op.add(AddItemEvent(_item));
+                        }
+                        mBottomSheet(context, controller: _controller);
+                        clear();
+                        Navigator.of(context).pop();
+                      } //_op.addItem();
                     },
               style: MThemeData.raisedButtonStyleSave),
         ),
@@ -334,7 +251,6 @@ class _AddItemState extends ConsumerState<AddItem>
               padding: MediaQuery.of(context).viewInsets,
               child: AddToKitchenFromItem(
                 item: _localItem!,
-                op: ref.read(operationsProvider),
               ),
             ),
           );
@@ -414,7 +330,9 @@ class _AddItemState extends ConsumerState<AddItem>
             hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
               focusNode: _itemNameFocusNode,
-              onChanged: (value) => _isLoading = false,
+              onChanged: (value) => setState(() {
+                _canSave = _itemNameController.text.trim().isNotEmpty;
+              }),
               controller: _itemNameController,
               autofocus: true,
               textAlign: TextAlign.center,
@@ -495,7 +413,7 @@ class _AddItemState extends ConsumerState<AddItem>
             },
             onChanged: (value) {
               setState(() {
-                _isLoading = false;
+                _canSave = _itemNameController.text.trim().isNotEmpty;
               });
             },
             textAlign: TextAlign.center,

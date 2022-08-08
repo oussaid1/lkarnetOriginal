@@ -16,88 +16,106 @@ class ItemsData {
     return count;
   }
 
-  // get distinct mmyyy from items
-  List<String> get mmyyyDistincts {
-    var _list = <String>[];
-    for (var item in items) {
-      _list.add(item.dateBought.mmyyyy());
+  //// get distinct item names ///////////////////////////////////////////////
+  List<String> get distinctItemNames {
+    List<String> distinctItemNames = [];
+    for (ItemModel item in items) {
+      distinctItemNames.add(item.itemName);
     }
-    return _list.toSet().toList();
+    return distinctItemNames..toSet().toList();
   }
 
   // get distinct ddmmyyyy
-  List<String> get ddmmyyyDistincts {
-    var _list = <String>[];
+  List<DateTime> get distinctDays {
+    List<DateTime> ddmmyyyys = [];
+    for (ItemModel item in items) {
+      ddmmyyyys.add(DateTime(
+          item.dateBought.year, item.dateBought.month, item.dateBought.day));
+    }
+    return ddmmyyyys..toSet().toList();
+  }
+
+  // get distinct mmyyy from items
+  List<DateTime> get distinctMonths {
+    var _list = <DateTime>[];
     for (var item in items) {
-      _list.add(item.dateBought.ddmmyyyy());
+      _list.add(DateTime(item.dateBought.year, item.dateBought.month));
     }
     return _list.toSet().toList();
   }
 
 // get distinct yyyy
-  List<String> get yyyDistincts {
-    var _list = <String>[];
+  List<DateTime> get distinctYears {
+    var _list = <DateTime>[];
     for (var item in items) {
-      _list.add(item.dateBought.ddmmyyyy());
+      _list.add(DateTime(item.dateBought.year));
     }
     return _list.toSet().toList();
   }
 
 // get mmyyy ItemsData
-  List<ItemsData> get mmyyyItemsChartData {
-    var _list = <ItemsData>[];
-    for (var distinctItem in mmyyyDistincts) {
-      _list.add(ItemsData(
+  List<ItemsChartData> get ddmmyyyyItemsData {
+    var _list = <ItemsChartData>[];
+    for (var i = 0; i < distinctDays.length; i++) {
+      _list.add(ItemsChartData(
+          tag: distinctDays[i].ddmmyyyy(),
           items: items
-              .where((element) => element.dateBought.mmyyyy() == distinctItem)
+              .where((element) => element.dateBought.isAs(distinctDays[i]))
               .toList()));
     }
     return _list;
   }
 
-  // get how many items for each itemName
-  List<ItemsChartData> get countSumItems {
-    var map = {};
-    int count = 1;
-    var sum = 0.0;
-    var _lista = <ItemsChartData>[];
-
-    for (ItemModel element in items) {
-      if (!map.containsKey(element.itemName)) {
-        map[element.itemName] = {'count': 1, 'sum': element.itemPrix};
-      } else {
-        count = map[element.itemName]['count'] + 1;
-        sum = map[element.itemName]['sum'] + element.itemPrix;
-        map[element.itemName] = {'count': count, 'sum': sum};
-      }
+  // get mmyyy ItemsData
+  List<ItemsChartData> get mmyyyItemsData {
+    var _list = <ItemsChartData>[];
+    for (var i = 0; i < distinctMonths.length; i++) {
+      _list.add(ItemsChartData(
+          tag: distinctMonths[i].ddmmyyyy(),
+          items: items
+              .where((element) => element.dateBought.isAs(distinctMonths[i]))
+              .toList()));
     }
-
-    map.forEach((key, element) {
-      _lista.add(ItemsChartData(
-          itemName: key,
-          itemCount: element['count'],
-          itemPrix: element['sum']));
-    });
-    //_lista.sort((b, a) => a.sumAll.compareTo(b.sumAll));
-    // if (_lista.length >= 17) return _lista.sublist(0, 17);
-    return _lista;
+    return _list;
   }
 
-  // get 10 most frequent items
-  List<ItemsChartData> getMostFrequentItems() {
-    countSumItems.sort((a, b) => b.itemCount!.compareTo(a.itemCount!));
-    if (countSumItems.length >= 10) {
-      return countSumItems.sublist(0, 10);
+  // get yyyy ItemsData
+  List<ItemsChartData> get yyyyItemsData {
+    var _list = <ItemsChartData>[];
+    for (var i = 0; i < distinctYears.length; i++) {
+      _list.add(ItemsChartData(
+          tag: distinctYears[i].ddmmyyyy(),
+          items: items
+              .where((element) => element.dateBought.isAs(distinctYears[i]))
+              .toList()));
     }
-    return countSumItems;
+    return _list;
   }
 
-  // get 10 most expensive items
-  List<ItemsChartData> getMostExpensiveItems() {
-    countSumItems.sort((a, b) => b.itemPrix!.compareTo(a.itemPrix!));
-    if (countSumItems.length >= 10) {
-      return countSumItems.sublist(0, 10);
+  //// get chartData for each item name
+  List<ItemsChartData> get itemNameChartData {
+    var _list = <ItemsChartData>[];
+    for (var i = 0; i < distinctItemNames.length; i++) {
+      _list.add(ItemsChartData(
+          tag: distinctItemNames[i],
+          items: items
+              .where((element) =>
+                  element.itemName.trim() == distinctItemNames[i].trim())
+              .toList()));
     }
-    return countSumItems;
+    return _list;
+  }
+
+////////////////////////////////////////////////////
+///////////////////////////////////////////////////
+  /// get this most recent items bought
+  List<ItemModel> get mostRecentItems {
+    if (items.length == 0) {
+      return [];
+    }
+    DateTime mostRecent = items[0].dateBought;
+    return items
+        .where((element) => element.dateBought.isMatchToday(mostRecent))
+        .toList();
   }
 }

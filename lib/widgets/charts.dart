@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/models/statistics/statistics_model.dart';
-import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../components.dart';
 import '../models/kitchen/kitchen_element.dart';
 
 class SemiPeiWidget extends ConsumerWidget {
-  final List<ChartData> chartData;
+  final List<ItemsChartData> chartData;
   final Widget widget;
   SemiPeiWidget(this.chartData, this.widget);
 
@@ -21,12 +20,12 @@ class SemiPeiWidget extends ConsumerWidget {
       ],
       margin: EdgeInsets.zero,
       series: <CircularSeries>[
-        DoughnutSeries<ChartData, String>(
+        DoughnutSeries<ItemsChartData, String>(
           innerRadius: '80',
           dataSource: chartData,
-          xValueMapper: (ChartData data, _) => data.tag,
-          yValueMapper: (ChartData data, _) => data.value,
-          dataLabelMapper: (ChartData data, _) => data.tag,
+          xValueMapper: (ItemsChartData data, _) => data.tag,
+          yValueMapper: (ItemsChartData data, _) => data.value,
+          dataLabelMapper: (ItemsChartData data, _) => data.tag,
 
           // All the segments will be exploded
 
@@ -43,7 +42,7 @@ class SemiPeiWidget extends ConsumerWidget {
 }
 
 class PeiWidget extends ConsumerWidget {
-  final List<ChartData> chartData;
+  final List<ItemsChartData> chartData;
 
   PeiWidget(this.chartData);
 
@@ -65,11 +64,13 @@ class PeiWidget extends ConsumerWidget {
       // //  centerY: '220',
 
       series: <CircularSeries>[
-        PieSeries<ChartData, String>(
+        PieSeries<ItemsChartData, String>(
           dataSource: chartData,
-          xValueMapper: (ChartData data, _) => data.tag,
-          yValueMapper: (ChartData data, _) => data.value,
-          dataLabelMapper: (ChartData data, _) => data.count.toString(),
+          xValueMapper: (ItemsChartData data, _) => data.tag,
+          yValueMapper: (ItemsChartData data, _) =>
+              data.itemCalculations.totalPrice,
+          dataLabelMapper: (ItemsChartData data, _) =>
+              data.itemCalculations.totalCount.toString(),
           explode: true,
           // All the segments will be exploded
 
@@ -90,7 +91,7 @@ class PeiWidget extends ConsumerWidget {
 }
 
 class LineChartWidgetDate extends ConsumerWidget {
-  final List<Tagged> chartData;
+  final List<ItemsChartData> chartData;
 
   LineChartWidgetDate(this.chartData);
 
@@ -109,14 +110,14 @@ class LineChartWidgetDate extends ConsumerWidget {
         maximum: DateTime.now(),
       ),
       series: <ChartSeries>[
-        SplineSeries<Tagged, DateTime>(
+        SplineSeries<ItemsChartData, DateTime>(
           xAxisName: 'Date',
           yAxisName: 'Consumption',
           dataSource: chartData,
-          xValueMapper: (Tagged data, _) => DateTime.fromMicrosecondsSinceEpoch(
-              data.date!.microsecondsSinceEpoch),
-          yValueMapper: (Tagged data, _) => data.itemsSum,
-          dataLabelMapper: (Tagged data, _) =>
+          xValueMapper: (ItemsChartData data, _) => data.date,
+          yValueMapper: (ItemsChartData data, _) =>
+              data.itemCalculations.totalPrice,
+          dataLabelMapper: (ItemsChartData data, _) =>
               DateFormat('MM-yy').format(data.date!).toString(),
           color: Colors.white.withOpacity(0.5),
           width: 1,
@@ -183,7 +184,7 @@ class LineChartWidgetDate extends ConsumerWidget {
 // }
 
 class ColumnChartWidget extends ConsumerWidget {
-  final List<ChartData> chartData;
+  final List<ItemsChartData> chartData;
 
   ColumnChartWidget(this.chartData);
 
@@ -195,15 +196,15 @@ class ColumnChartWidget extends ConsumerWidget {
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[
         // Renders spline chart
-        ColumnSeries<ChartData, String>(
+        ColumnSeries<ItemsChartData, String>(
           width: 0.4,
           dataSource: chartData,
           //color: AppConstants.whiteOpacity,
           color: Colors.white.withOpacity(0.5),
-          xValueMapper: (ChartData sales, _) => sales.tag,
-          yValueMapper: (ChartData sales, _) => sales.value,
-          pointColorMapper: (ChartData sales, _) => sales.color,
-          dataLabelMapper: (ChartData sales, _) => sales.count.toString(),
+          xValueMapper: (ItemsChartData sales, _) => sales.tag,
+          yValueMapper: (ItemsChartData sales, _) => sales.value,
+          pointColorMapper: (ItemsChartData sales, _) => sales.color,
+          dataLabelMapper: (ItemsChartData sales, _) => sales.value.toString(),
         ),
       ],
     );

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
-import '../bloc/itemsbloc/items_bloc.dart';
-import '../bloc/payments/payments_bloc.dart';
-import '../bloc/shopsbloc/shops_bloc.dart';
+import '../blocs/itemsbloc/items_bloc.dart';
+import '../blocs/payments/payments_bloc.dart';
+import '../blocs/shopsbloc/shops_bloc.dart';
 import '../components.dart';
 import '../models/payment/payment_model.dart';
 import '../models/statistics/tagged.dart';
@@ -83,7 +83,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
               listeners: [
                 BlocListener<ItemsBloc, ItemsState>(
                   listener: (context, state) {
-                    if (state is ItemsLoadedState) {
+                    if (state.items.isNotEmpty) {
                       setState(() {
                         _items = state.items;
                       });
@@ -92,7 +92,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 ),
                 BlocListener<ShopsBloc, ShopsState>(
                   listener: (context, state) {
-                    if (state is ShopsLoaded) {
+                    if (state.shops.isNotEmpty) {
                       setState(() {
                         _shops = state.shops;
                       });
@@ -101,7 +101,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 ),
                 BlocListener<PaymentsBloc, PaymentsState>(
                     listener: (context, state) {
-                  if (state is PaymentsLoaded) {
+                  if (state.payments.isNotEmpty) {
                     setState(() {
                       _payments = state.payments;
                     });

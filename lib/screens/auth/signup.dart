@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lkarnet/bloc/signupbloc/signup_bloc.dart';
+import 'package:lkarnet/blocs/signupbloc/signup_bloc.dart';
 import 'package:lkarnet/services/auth_service.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/authbloc/auth_bloc.dart';
+import '../../blocs/authbloc/auth_bloc.dart';
 import '../../models/login_credentials.dart';
 import 'login.dart';
 

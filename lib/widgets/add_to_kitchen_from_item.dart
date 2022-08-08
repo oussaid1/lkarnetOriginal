@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import '../models/item/item.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
-import '../providers/operationsprovider/operations_provider.dart';
 import '../settings/theme.dart';
 import 'kitchen_elements_spinner.dart';
 
 class AddToKitchenFromItem extends StatefulWidget {
-  const AddToKitchenFromItem({Key? key, required this.item, required this.op})
-      : super(key: key);
+  const AddToKitchenFromItem({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
   final ItemModel item;
-  final Operations op;
+
   @override
   State<AddToKitchenFromItem> createState() => _StateAddToKitchenFromItem();
 }
@@ -64,8 +67,9 @@ class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
                           //     .read(operationsProvider)
                           //
                           //
-                          widget.op.addKitchenItem(KitchenItemModel.fromItem(
-                              widget.item, _kitchenElement!));
+                          var db = context.read<KitchenItemBloc>();
+                          db.add(AddKitchenItemEvent(KitchenItemModel.fromItem(
+                              widget.item, _kitchenElement!)));
                           Navigator.of(context).pop();
                         },
                   style: MThemeData.raisedButtonStyleSave),

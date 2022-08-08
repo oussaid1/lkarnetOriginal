@@ -115,13 +115,6 @@ class KitchenItemModel {
     }
     kitchenElementId = documentSnapshot['kitchenElementId'] ?? '';
   }
-  String get toYY {
-    return dateBought.yyyy();
-  }
-
-  String get toMMYY {
-    return dateBought.mmyyyy();
-  }
 
   String get toDDMMYY {
     return dateBought.ddmmyyyy();
@@ -136,7 +129,7 @@ class KitchenItemModel {
     print('itemPrice : $itemPrice');
     print('besoinTitle : $besoinTitle');
     print('shopName : $shopName');
-    print('dateBought : $toMMYY');
+    print('dateBought : $toDDMMYY');
     print('dateExpired : $dateExpired');
     print('kitchenElementId : $kitchenElementId');
     print('-------------------------------');

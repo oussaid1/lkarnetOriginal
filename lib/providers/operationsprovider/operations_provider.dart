@@ -51,10 +51,10 @@ class Operations {
 
   Future<bool> deleteShopData(ShopData shopsData) async {
     deleteShop(shopsData.shop);
-    for (var item in shopsData.allItems) {
+    for (var item in shopsData.items) {
       deleteItem(item);
     }
-    for (var payment in shopsData.allPayments) {
+    for (var payment in shopsData.payments) {
       deletePayment(payment);
     }
     return true;

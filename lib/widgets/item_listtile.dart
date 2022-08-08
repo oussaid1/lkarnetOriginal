@@ -131,8 +131,7 @@ class ItemTileWidget extends ConsumerWidget {
                     padding: MediaQuery.of(context).viewInsets,
                     // height: MediaQuery.of(context).size.height * 0.5,
                     child: GlassContainer(
-                      child: AddToKitchenFromItem(
-                          item: item, op: ref.read(operationsProvider)),
+                      child: AddToKitchenFromItem(item: item),
                     ),
                   ));
         },

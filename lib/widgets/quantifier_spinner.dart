@@ -1,15 +1,14 @@
-import 'package:lkarnet/components.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:flutter/material.dart';
 
-class QuantifierSpinner extends ConsumerWidget {
-  const QuantifierSpinner({Key? key, required this.onValueChanged})
+class QuantifierSpinner extends StatelessWidget {
+  const QuantifierSpinner(
+      {Key? key, required this.onValueChanged, this.initialQuantifier})
       : super(key: key);
-  final void Function(String) onValueChanged;
+  final void Function(String quantifier) onValueChanged;
+  final String? initialQuantifier;
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     final _list = <String>['واحدة', 'كيلو', 'علبة', 'لتر'];
-    var picked = ref.watch(selectedQuantifierProvider.state).state;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -34,10 +33,11 @@ class QuantifierSpinner extends ConsumerWidget {
               iconSize: 30,
               icon: Icon(Icons.arrow_drop_down),
               isExpanded: true,
-              value: _list.contains(picked) ? picked : null,
+              value: _list.contains(initialQuantifier)
+                  ? initialQuantifier
+                  : _list[0],
               onChanged: (value) {
                 onValueChanged(value ?? _list[0]);
-                ref.read(selectedQuantifierProvider.state).state = value;
               },
               items: _list.toSet().map((itemName) {
                 return DropdownMenuItem<String>(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
-import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 import 'package:lkarnet/widgets/items_listview.dart';
 

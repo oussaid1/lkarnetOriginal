@@ -5,7 +5,8 @@ import 'package:lkarnet/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:lkarnet/screens/splash.dart';
 
-import 'bloc/authbloc/auth_bloc.dart';
+import 'blocs/authbloc/auth_bloc.dart';
+import 'cubits/userCubit/usermodel_cubit.dart';
 import 'database/database.dart';
 import 'utils.dart';
 
@@ -14,6 +15,15 @@ class Root extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        if (state is AuthenticatedState) {
+          GetIt.I<Database>().setUserUid(state.user.uid);
+          context.read<UserModelCubit>().loadUser();
+          GlobalFunctions.showSuccessSnackBar(
+            context,
+            'تم تسجيل الدخول بنجاح',
+          );
+          Navigator.pushNamed(context, RouteGenerator.home);
+        }
         if (state is AuthenticationFailedState) {
           GlobalFunctions.showErrorSnackBar(
             context,
@@ -24,14 +34,6 @@ class Root extends StatelessWidget {
 
         if (state is UnauthenticatedState) {
           Navigator.of(context).pushNamed('/');
-        }
-
-        if (state is AuthenticatedState) {
-          GlobalFunctions.showSuccessSnackBar(
-            context,
-            'تم تسجيل الدخول بنجاح',
-          );
-          Navigator.pushNamed(context, RouteGenerator.home);
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(

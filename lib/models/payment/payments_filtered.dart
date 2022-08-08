@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
@@ -10,53 +10,35 @@ final paymentsFilteredProvider = StateProvider<PaymentsFiltered>((ref) {
 
 class PaymentsFiltered {
   List<PaymentModel> payments = [];
-  String? tag;
-  DateFilterType? dateFilterType;
-  PaymentsFiltered({required this.payments, this.tag, this.dateFilterType});
+  DateFilter? dateFilterType;
+  PaymentsFiltered({required this.payments, this.dateFilterType});
 
-  List<PaymentModel> get allPayments {
-    if (dateFilterType == DateFilterType.ddmmyy) {
-      return allItemByDDMMYYTag!;
-    } else if (dateFilterType == DateFilterType.mmyy) {
-      return allItemByMMYYTag!;
-    } else if (dateFilterType == DateFilterType.yy) {
-      return allItemByYYTag!;
+  /// get filtered payments by dateFilter
+  List<PaymentModel> get paymentsByDateFilter {
+    if (dateFilterType == null) {
+      return payments;
     }
-    return [];
+    return payments;
   }
 
-  List<PaymentModel>? get allItemByDDMMYYTag {
-    return payments.where((item) => item.toDDMMYY == tag).toList();
+  /// get payments today
+  List<PaymentModel> get paymentsToday {
+    return payments.where((payment) {
+      return payment.datePaid.day == DateTime.now().day;
+    }).toList();
   }
 
-  List<PaymentModel>? get allItemByMMYYTag {
-    return payments.where((item) => item.toMMYY == tag).toList();
-  }
-
-  List<PaymentModel>? get allItemByYYTag {
-    return payments.where((item) => item.toYY == tag).toList();
-  }
-
-  List<PaymentModel> get allPaymentsThisMonth {
+  /// get payments this month
+  List<PaymentModel> get paymentsThisMonth {
     return payments
-        .where((element) => element.datePaid.month == DateTime.now().month)
+        .where((payment) => payment.datePaid.isMatchToMonth(DateTime.now()))
         .toList();
   }
 
-  List<PaymentModel> get allPaymentsThisYear {
+  /// get payments this year
+  List<PaymentModel> get paymentsThisYear {
     return payments
-        .where((element) => element.datePaid.year == DateTime.now().year)
+        .where((payment) => payment.datePaid.isMatchToYear(DateTime.now()))
         .toList();
-  }
-
-  PaymentsFiltered copyWith({
-    List<PaymentModel>? payments,
-    String? tag,
-    DateFilterType? dateFilterType,
-  }) {
-    return PaymentsFiltered(
-        payments: payments ?? this.payments,
-        tag: tag ?? this.tag,
-        dateFilterType: dateFilterType ?? this.dateFilterType);
   }
 }

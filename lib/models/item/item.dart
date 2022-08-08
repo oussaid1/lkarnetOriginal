@@ -15,7 +15,7 @@ class ItemModel {
   DateTime dateBought = DateTime.now();
 
   double get itemPrix => itemPrice * quantity;
-
+  bool isSelected = false;
   ItemModel(
       {this.id,
       required this.itemName,
@@ -72,14 +72,6 @@ class ItemModel {
     Timestamp f = documentSnapshot['dateBought'];
     dateBought = f.toDate();
   }
-  String get toYY {
-    return dateBought.yyyy();
-  }
-
-  String get toMMYY {
-    return dateBought.mmyyyy();
-  }
-
   String get toDDMMYY {
     return dateBought.ddmmyyyy();
   }
@@ -92,7 +84,7 @@ class ItemModel {
     print('itemPrice : $itemPrice');
     print('besoinTitle : $besoinTitle');
     print('shopName : $shopName');
-    print('dateBought : $toMMYY');
+    print('dateBought : $toDDMMYY');
     print('-------------------------------');
   }
 

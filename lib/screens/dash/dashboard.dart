@@ -9,14 +9,16 @@ import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../bloc/itemsbloc/items_bloc.dart';
-import '../../bloc/payments/payments_bloc.dart';
-import '../../bloc/shopsbloc/shops_bloc.dart';
+import '../../blocs/datefilterbloc/date_filter_bloc.dart';
+import '../../blocs/itemsbloc/items_bloc.dart';
+import '../../blocs/payments/payments_bloc.dart';
+import '../../blocs/shopsbloc/shops_bloc.dart';
 import '../../models/item/item.dart';
+import '../../models/item/items_filtered.dart';
+import '../../models/payment/payments_filtered.dart';
 import '../../models/shop/shops_data.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
-import '../../widgets/notification_badge_widget.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../../widgets/shop_square_tile.dart';
 import '../add/add_item.dart';
@@ -40,9 +42,6 @@ class _DashBoardPageState extends State<DashBoardPage>
   late AnimationController _animationController;
   //late List<KitchenElement> _kitchenElements;
   // /late List<KitchenItem> _kitchenItems;
-  late List<ItemModel> _items;
-  late List<ShopModel> _shops;
-  late List<PaymentModel> _payments;
 
   @override
   void initState() {
@@ -66,49 +65,49 @@ class _DashBoardPageState extends State<DashBoardPage>
           'Dashboard',
           style: Theme.of(context).textTheme.headline2,
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () async {
-              var status = await Permission.storage.request().isGranted;
-              if (!status) {
-                toast('Please grant camera permission');
-              } else {
-                final backup = Backup(
-                    date: DateTime.now(), items: _items.take(2).toList());
-                backup.store().then((value) => toast('Backup created'));
-              }
+        //  actions: [
+        // IconButton(
+        //   icon: Icon(Icons.add),
+        //   onPressed: () async {
+        //     var status = await Permission.storage.request().isGranted;
+        //     if (!status) {
+        //       toast('Please grant camera permission');
+        //     } else {
+        //       final backup = Backup(
+        //           date: DateTime.now(), items: _items.take(2).toList());
+        //       backup.store().then((value) => toast('Backup created'));
+        //     }
 
 // You can can also directly ask the permission about its status.
 
-              // context.read<ItemsBloc>().add(GetItemsEvent());
-              // context.read<ShopsBloc>().add(GetShopsEvent());
-              // context.read<PaymentsBloc>().add(GetPaymentsEvent());
-            },
-          ),
-          // IconButton(
-          //   icon: Icon(Icons.notifications),
-          //   onPressed: () async {
-          //     //  MNotificationModel.createPlantFoodNotification(expired: '1');
-          //     MNotificationModel.createOneTimeNotification(
-          //       expired: '2',
-          //     );
-          //   },
-          // ),
-          // IconButton(
-          //   icon: Icon(Icons.send),
-          //   onPressed: () async {
-          //     await Workmanager().registerPeriodicTask(
-          //         "test_workertask", "test_workertask",
-          //         inputData: {"data1": "value1", "data2": "value2"},
-          //         frequency: Duration(minutes: 15),
-          //         initialDelay: Duration(seconds: 10),
-          //         existingWorkPolicy: ExistingWorkPolicy.replace);
-          //     // Navigator.pushNamed(context, '/notifications');
-          //   },
-          // ),
-          // NotificationsIconButton(),
-        ],
+        // context.read<ItemsBloc>().add(GetItemsEvent());
+        // context.read<ShopsBloc>().add(GetShopsEvent());
+        // context.read<PaymentsBloc>().add(GetPaymentsEvent());
+        //      },
+        //   ),
+        // IconButton(
+        //   icon: Icon(Icons.notifications),
+        //   onPressed: () async {
+        //     //  MNotificationModel.createPlantFoodNotification(expired: '1');
+        //     MNotificationModel.createOneTimeNotification(
+        //       expired: '2',
+        //     );
+        //   },
+        // ),
+        // IconButton(
+        //   icon: Icon(Icons.send),
+        //   onPressed: () async {
+        //     await Workmanager().registerPeriodicTask(
+        //         "test_workertask", "test_workertask",
+        //         inputData: {"data1": "value1", "data2": "value2"},
+        //         frequency: Duration(minutes: 15),
+        //         initialDelay: Duration(seconds: 10),
+        //         existingWorkPolicy: ExistingWorkPolicy.replace);
+        //     // Navigator.pushNamed(context, '/notifications');
+        //   },
+        // ),
+        // NotificationsIconButton(),
+        //],
         leading: IconButton(
           icon: Icon(Icons.dashboard),
           onPressed: () {},
@@ -122,51 +121,100 @@ class _DashBoardPageState extends State<DashBoardPage>
           child: MultiBlocListener(
             listeners: [
               BlocListener<ItemsBloc, ItemsState>(
-                listener: (context, state) {
-                  if (state is ItemsLoadedState) {
-                    _items = state.items;
-                  }
-                },
+                listener: (context, state) {},
               ),
               BlocListener<ShopsBloc, ShopsState>(
                 listener: (context, state) {
-                  if (state is ShopsLoaded) {
-                    _shops = state.shops;
-                  }
+                  if (state.status == ShopsStatus.loaded) {}
                 },
               ),
               BlocListener<PaymentsBloc, PaymentsState>(
                   listener: (context, state) {
-                if (state is PaymentsLoaded) {
-                  _payments = state.payments;
-                }
+                if (state.status == PaymentsStatus.loaded) {}
               }),
             ],
             child: BlocBuilder<ItemsBloc, ItemsState>(
-              builder: (context, state) {
-                if (state is ItemsLoadedState) {
-                  var dataSink = DataSink(_shops, _items, _payments);
-                  return Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      buildTopWidget(dataSink, items: state.items),
-                      buildShopsWidget(context, dataSink.allShopsData),
-                      buildRecentOpeerationsWidget(
-                        context,
-                        RecentOperation(_items, _payments),
-                      )
-                    ],
-                  );
-                } else {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: SpinKitSquareCircle(
-                      color: Colors.white,
-                      size: 50.0,
-                    ),
-                  );
-                }
+              builder: (context, itemsState) {
+                return BlocBuilder<PaymentsBloc, PaymentsState>(
+                  builder: (context, paymentsState) {
+                    return BlocBuilder<ShopsBloc, ShopsState>(
+                      builder: (context, shopsState) {
+                        return BlocBuilder<DateFilterBloc, DateFilterState>(
+                          builder: (context, filterState) {
+                            return BlocBuilder<ItemsBloc, ItemsState>(
+                              builder: (context, state) {
+                                if (state.items.isEmpty) {
+                                  //////////////////////////////////////////////////////
+                                  //////////////////////////////////////////////////////
+                                  //////////////////////////////////////////////////////
+                                  //////////////////////////////////////////////////////
+
+                                  //////////////////////////////////////////////////////
+                                  /// filtered items
+                                  ItemsFiltered _filteredItems =
+                                      ItemsFiltered(items: itemsState.items);
+
+                                  /// filtered payments
+                                  PaymentsFiltered _filteredPayments =
+                                      PaymentsFiltered(
+                                          payments: paymentsState.payments);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                  List<ItemModel> _items =
+                                      _filteredItems.itemsByDateFilter;
+                                  //////////////////////////////////////////////////////
+                                  List<PaymentModel> _payments =
+                                      _filteredPayments.paymentsByDateFilter;
+                                  List<ShopModel> _shops = shopsState.shops;
+                                  //////////////////////////////////////////////////////
+                                  var dataSink =
+                                      DataSink(_shops, _items, _payments);
+                                  //////////////////////////////////////////////////////
+                                  ///////////////////////////////////////////////////////
+                                  ShopDataCalculations _shopDataCalculations =
+                                      ShopDataCalculations(
+                                    items: itemsState.items,
+                                    payments: paymentsState.payments,
+                                  );
+                                  ///////////////////////////////////////////////////////
+                                  ///////////////////////////////////////////////////////
+                                  return Column(
+                                    children: [
+                                      const SizedBox(height: 8),
+                                      buildTopWidget(_shopDataCalculations,
+                                          items: state.items),
+                                      buildShopsWidget(
+                                          context, dataSink.allShopsData),
+                                      buildRecentOpeerationsWidget(
+                                        context,
+                                        RecentOperation(itemsState.items,
+                                            paymentsState.payments),
+                                      )
+                                    ],
+                                  );
+                                } else {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text('no items...'),
+                                        SpinKitSquareCircle(
+                                          color: Colors.white,
+                                          size: 50.0,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -336,7 +384,8 @@ class _DashBoardPageState extends State<DashBoardPage>
     );
   }
 
-  buildTopWidget(DataSink dataSink, {List<ItemModel>? items}) {
+  buildTopWidget(ShopDataCalculations shopDataCalculations,
+      {List<ItemModel>? items}) {
     return BluredContainer(
       width: 390,
       height: 130,
@@ -366,14 +415,14 @@ class _DashBoardPageState extends State<DashBoardPage>
                   PriceNumberZone(
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
-                    price: dataSink.itemsSumAfterPayment,
+                    price: shopDataCalculations.itemsSumAfterPayment,
                     style: Theme.of(context).textTheme.headline2!,
                   ),
                 ],
               ),
               Row(
                 children: [
-                  buildCircularProgress(dataSink),
+                  buildCircularProgress(shopDataCalculations),
                 ],
               ),
             ],
@@ -383,7 +432,8 @@ class _DashBoardPageState extends State<DashBoardPage>
     );
   }
 
-  CircularPercentIndicator buildCircularProgress(DataSink dataSink) {
+  CircularPercentIndicator buildCircularProgress(
+      ShopDataCalculations dataSink) {
     return CircularPercentIndicator(
       animateFromLastPercent: true,
       animation: true,
@@ -464,7 +514,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    '${operation.amount!.toPrecision()}',
+                    '${operation.amount!.toPrecision(2)}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),

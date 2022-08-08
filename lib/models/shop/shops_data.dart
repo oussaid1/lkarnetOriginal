@@ -1,90 +1,23 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
-import 'package:lkarnet/models/payment/payments_filtered.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
-import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
-import 'package:lkarnet/providers/streamproviders/shops_stream_provider.dart';
 import '../item/items_data.dart';
 import 'shop_model.dart';
 
-final shopsDataListProvider = StateProvider<List<ShopData>>((ref) {
-  List<ShopData> list = [];
-  final items = ref.watch(itemsProvider.state);
-  final payments = ref.watch(paymentsProvider.state).state;
-  final shops = ref.watch(shopsProvider.state);
-  shops.state.forEach((shop) => list.add(new ShopData(
-      shop,
-      new ItemsFiltered(
-          items: items.state
-              .where((item) => item.shopName == shop.shopName)
-              .toList()),
-      new PaymentsFiltered(
-          payments: payments
-              .where((payment) => payment.paidShopName == shop.shopName)
-              .toList()))));
-  list.sort((a, b) => b.itemsSumAfterPayment.compareTo(a.itemsSumAfterPayment));
-  return list;
-});
-
 class ShopData {
   ShopModel shop;
-  ItemsFiltered itemsFiltered;
-  PaymentsFiltered paymentsFiltered;
-  ShopData(this.shop, this.itemsFiltered, this.paymentsFiltered);
+  List<ItemModel> items;
+  List<PaymentModel> payments;
+  ShopData({required this.shop, required this.items, required this.payments});
+  /////////////////////////////////////////////////////////////////
+  /// get an inctance of shopdata calculations
+  ShopDataCalculations get shopDataCalculations =>
+      ShopDataCalculations(items: items, payments: payments);
 
-  // filtered list by Shop object passed to the constructor
-  List<ItemModel> get allItems {
-    return itemsFiltered.allItems
-        .where((element) => element.shopName == shop.shopName)
-        .toList();
-  }
-
-  List<PaymentModel> get allPayments {
-    return paymentsFiltered.payments
-        .where((element) => element.paidShopName == shop.shopName)
-        .toList();
-  }
-
-// get distinct item names
-
-// all items for current shop in the form of Statistics
-
-  double get itemsSum {
-    double _x = 0;
-    _x = allItems.fold(
-        0, (previousValue, element) => previousValue + element.itemPrix);
-    return _x;
-  }
-
-  double get itemsSumAfterPayment {
-    double _x = 0;
-    _x = itemsSum - paymentsSum;
-    return _x;
-  }
-
-  int get countItems {
-    int _x = 0;
-    allItems.forEach((element) => _x += element.count);
-    return _x;
-  }
-
-  double get paymentsSum {
-    double _x = 0;
-    _x = allPayments.fold(
-        0, (previousValue, element) => previousValue + element.paid);
-    return _x;
-  }
-
-  int get countPayments {
-    int _x = 0;
-    allPayments.forEach((element) => _x += element.count);
-    return _x;
-  }
-
-  ItemsData get itemsData {
-    return ItemsData(items: itemsFiltered.allItems);
+///////////////////////////////////////////////////////////////
+  // get itemsData
+  ItemsData get itemsDataForAll {
+    return ItemsData(items: items);
   }
 }
 
@@ -110,20 +43,22 @@ class DataSink {
   // get all shopsData
   List<ShopData> get allShopsData {
     List<ShopData> list = [];
-    shops.forEach((shop) => list.add(new ShopData(
-        shop,
-        new ItemsFiltered(
-            items: items
-                .where((element) => element.shopName == shop.shopName)
-                .toList()),
-        new PaymentsFiltered(
-            payments: payments
-                .where((element) => element.paidShopName == shop.shopName)
-                .toList()))));
-    list.sort(
-        (a, b) => b.itemsSumAfterPayment.compareTo(a.itemsSumAfterPayment));
+    for (var shop in shops) {
+      list.add(ShopData(
+        shop: shop,
+        items: items,
+        payments: payments,
+      ));
+    }
     return list;
   }
+}
+
+class ShopDataCalculations {
+  List<ItemModel> items;
+  List<PaymentModel> payments;
+  ShopDataCalculations({required this.items, required this.payments});
+  /////////////////////////////////////////////////////////////////
 
   double get itemsSum {
     return items.fold(0, (sum, item) => sum + item.itemPrix);
@@ -176,11 +111,6 @@ class DataSink {
     if (_percentage < 0) {
       return 0;
     }
-    return _percentage.toPrecision();
-  }
-
-  // get itemsData
-  ItemsData get itemsDataForAll {
-    return ItemsData(items: items);
+    return _percentage.toPrecision(2);
   }
 }
