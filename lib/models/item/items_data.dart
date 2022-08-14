@@ -54,7 +54,7 @@ class ItemsData {
   }
 
 // get mmyyy ItemsData
-  List<ItemsChartData> get ddmmyyyyItemsData {
+  List<ItemsChartData> get ddmmyyyyItemsChartData {
     var _list = <ItemsChartData>[];
     for (var i = 0; i < distinctDays.length; i++) {
       _list.add(ItemsChartData(
@@ -67,7 +67,7 @@ class ItemsData {
   }
 
   // get mmyyy ItemsData
-  List<ItemsChartData> get mmyyyItemsData {
+  List<ItemsChartData> get mmyyyItemsChartData {
     var _list = <ItemsChartData>[];
     for (var i = 0; i < distinctMonths.length; i++) {
       _list.add(ItemsChartData(
@@ -80,7 +80,7 @@ class ItemsData {
   }
 
   // get yyyy ItemsData
-  List<ItemsChartData> get yyyyItemsData {
+  List<ItemsChartData> get yyyyItemsChartData {
     var _list = <ItemsChartData>[];
     for (var i = 0; i < distinctYears.length; i++) {
       _list.add(ItemsChartData(
@@ -93,7 +93,7 @@ class ItemsData {
   }
 
   //// get chartData for each item name
-  List<ItemsChartData> get itemNameChartData {
+  List<ItemsChartData> get itemsByNameChartData {
     var _list = <ItemsChartData>[];
     for (var i = 0; i < distinctItemNames.length; i++) {
       _list.add(ItemsChartData(
@@ -115,7 +115,7 @@ class ItemsData {
     }
     DateTime mostRecent = items[0].dateBought;
     return items
-        .where((element) => element.dateBought.isMatchToday(mostRecent))
+        .where((element) => element.dateBought.isMatchDay(mostRecent))
         .toList();
   }
 }

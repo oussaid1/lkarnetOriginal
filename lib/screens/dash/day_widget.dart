@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lkarnet/models/data_sink.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
+import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 import 'package:lkarnet/widgets/items_listview.dart';
 
@@ -10,22 +12,29 @@ import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../blocs/payments/payments_bloc.dart';
 import '../../blocs/shopsbloc/shops_bloc.dart';
 import '../../models/item/item.dart';
-import '../../models/item/items_filtered.dart';
 import '../../models/payment/payment_model.dart';
-import '../../models/payment/payments_filtered.dart';
 import '../../models/shop/shop_model.dart';
 
 final mlistIndex = StateProvider<int>((ref) {
   return 0;
 });
 
-class DailyDash extends ConsumerWidget {
+class DailyDash extends StatefulWidget {
   const DailyDash({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  State<DailyDash> createState() => _DailyDashState();
+}
+
+class _DailyDashState extends State<DailyDash> {
+  // final _scrollController = ScrollController();
+  int _currentIndex = 0;
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return BlocBuilder<ItemsBloc, ItemsState>(
       builder: (context, itemsState) {
         return BlocBuilder<PaymentsBloc, PaymentsState>(
@@ -34,136 +43,108 @@ class DailyDash extends ConsumerWidget {
               builder: (context, shopsState) {
                 return BlocBuilder<DateFilterBloc, DateFilterState>(
                   builder: (context, filterState) {
-                    return BlocBuilder<ItemsBloc, ItemsState>(
-                      builder: (context, state) {
-                        //////////////////////////////////////////////////////
-                        //////////////////////////////////////////////////////
-                        //////////////////////////////////////////////////////
-                        //////////////////////////////////////////////////////
-                        List<Ta _listOfTagged;
-                        var _currentIndex = ref.watch(mlistIndex.state).state;
+                    //////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////
+                    List<ItemModel> _items = itemsState.items;
+                    List<PaymentModel> _payments = paymentsState.payments;
+                    List<ShopModel> _shops = shopsState.shops;
+                    //////////////////////////////////////////////////////
 
-                        final _tagged = _listOfTagged[_currentIndex];
-                        //////////////////////////////////////////////////////
-                        /// filtered items
-                        ItemsFiltered _filteredItems =
-                            ItemsFiltered(items: itemsState.items);
+                    //////////////////////////////////////////////////////
+                    var _dataSink = DataSink(_shops, _items, _payments);
+                    //////////////////////////////////////////////////////
+                    List<Tagged> _listOfTagged = _dataSink.taggedDistinctDates;
 
-                        /// filtered payments
-                        PaymentsFiltered _filteredPayments =
-                            PaymentsFiltered(payments: paymentsState.payments);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        List<ItemModel> _items =
-                            _filteredItems.itemsByDateFilter;
-                        //////////////////////////////////////////////////////
-                        List<PaymentModel> _payments =
-                            _filteredPayments.paymentsByDateFilter;
-                        List<ShopModel> _shops = shopsState.shops;
-                        //////////////////////////////////////////////////////
-                        var dataSink = DataSink(_shops, _items, _payments);
-                        //////////////////////////////////////////////////////
-                        ///////////////////////////////////////////////////////
-                        ShopDataCalculations _shopDataCalculations =
-                            ShopDataCalculations(
-                          items: itemsState.items,
-                          payments: paymentsState.payments,
-                        );
-                        ///////////////////////////////////////////////////////
-                        ///////////////////////////////////////////////////////
-                        /// create a list that contains a date tag and a list of shopdata for that date tag
-                        _listOfTagged = _shopDataCalculations.createListOfTagged();
-                        ///////////////////////////////////////////////////////
-                        ///////////////////////////////////////////////////////
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                    final _tagged = _listOfTagged[_currentIndex];
+                    //////////////////////////////////////////////////////
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                    icon: Icon(Icons.arrow_back_ios_rounded),
+                                    onPressed: () {
+                                      if (_currentIndex > 0)
+                                        setState(() {
+                                          _currentIndex--;
+                                        });
+                                    }),
+                                Row(
                                   children: [
-                                    IconButton(
-                                        icon:
-                                            Icon(Icons.arrow_back_ios_rounded),
-                                        onPressed: () {
-                                          if (_currentIndex > 0)
-                                            ref.read(mlistIndex.state).state--;
-                                        }),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Day: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2,
-                                        ),
-                                        Text('${_tagged.tag}'),
-                                      ],
+                                    Text(
+                                      'Day: ',
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
                                     ),
-                                    IconButton(
-                                        icon: Icon(
-                                            Icons.arrow_forward_ios_rounded),
-                                        onPressed: () {
-                                          if (_currentIndex <
-                                              _listOfTagged.length - 1) {
-                                            ref.read(mlistIndex.state).state +=
-                                                1;
-                                          }
-                                        }),
+                                    Text('${_tagged.tag}'),
                                   ],
                                 ),
-                              ),
-                              _buildMonthlyCard(context, _tagged),
-                              Container(
-                                width: 420,
-                                height: 400,
-                                child: ListView.builder(
-                                    itemCount: _tagged.shopDataList.length,
-                                    itemBuilder: (context, index) {
-                                      ShopData shopsData =
-                                          _tagged.shopDataList[index];
-                                      return BluredContainer(
-                                        child: ExpansionTile(
-                                          collapsedTextColor: Colors.white,
-                                          textColor: Colors.white,
-                                          title: Text(
-                                              '${shopsData.shop.shopName}'),
-                                          trailing:
-                                              Text('${shopsData.itemsSum}'),
-                                          subtitle: Text(
-                                            'N° items : ' +
-                                                '${shopsData.countItems}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2,
-                                          ),
-                                          leading: CircleAvatar(
-                                            child: Icon(
-                                              Icons.account_circle,
-                                              color: Colors.grey,
-                                            ),
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                          ),
-                                          children: [
-                                            Container(
-                                                width: 400,
-                                                height: 400,
-                                                child: ItemsListWidget(
-                                                    items: shopsData.allItems)),
-                                          ],
-                                        ),
-                                      );
+                                IconButton(
+                                    icon: Icon(Icons.arrow_forward_ios_rounded),
+                                    onPressed: () {
+                                      if (_currentIndex <
+                                          _listOfTagged.length - 1) {
+                                        setState(() {
+                                          _currentIndex++;
+                                        });
+                                      }
                                     }),
-                              ),
-                              SizedBox(
-                                height: 50,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        );
-                      },
+                          _buildMonthlyCard(context, _tagged),
+                          Container(
+                            width: 420,
+                            height: 400,
+                            child: ListView.builder(
+                                itemCount: _tagged.shopsDataList.length,
+                                itemBuilder: (context, index) {
+                                  ShopData shopData =
+                                      _tagged.shopsDataList[index];
+                                  return BluredContainer(
+                                    child: ExpansionTile(
+                                      collapsedTextColor: Colors.white,
+                                      textColor: Colors.white,
+                                      title: Text('${shopData.shop.shopName}'),
+                                      trailing: Text(
+                                          '${shopData.shopDataCalculations.itemsSum}'),
+                                      subtitle: Text(
+                                        'N° items : ' +
+                                            '${shopData.shopDataCalculations.countItems}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2,
+                                      ),
+                                      leading: CircleAvatar(
+                                        child: Icon(
+                                          Icons.account_circle,
+                                          color: Colors.grey,
+                                        ),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      children: [
+                                        Container(
+                                            width: 400,
+                                            height: 400,
+                                            child: ItemsListWidget(
+                                              items: shopData.items,
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 );
@@ -195,7 +176,8 @@ class DailyDash extends ConsumerWidget {
                       //style: Theme.of(context).textTheme.headline3,
                     ),
                     Text(
-                      tagged.itemsSum.toString(),
+                      tagged.shopDataCalculations.itemsSumAfterPayment
+                          .toString(),
                       //style: AkThemeData.darkThemeData.textTheme.headline4,
                     ),
                   ],
@@ -211,7 +193,7 @@ class DailyDash extends ConsumerWidget {
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                     Text(
-                      '${tagged.countItems}',
+                      '${tagged.shopDataCalculations.countItems}',
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ],

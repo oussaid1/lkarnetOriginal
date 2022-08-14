@@ -1,14 +1,21 @@
-import 'package:lkarnet/models/payment/payment_model.dart';
-import 'package:lkarnet/models/shop/shops_data.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/screens/add/add_payment.dart';
-import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/datefilterbloc/date_filter_bloc.dart';
+import '../../blocs/itemsbloc/items_bloc.dart';
+import '../../blocs/payments/payments_bloc.dart';
+import '../../blocs/shopsbloc/shops_bloc.dart';
 import '../../components.dart';
+import '../../models/data_sink.dart';
+import '../../models/item/item.dart';
+import '../../models/payment/payment_model.dart';
+import '../../models/shop/shop_model.dart';
+import '../../models/shop/shops_data.dart';
 import '../../providers/varproviders/var_providers.dart';
 import '../../settings/theme.dart';
+import '../../widgets/dialogs.dart';
 import '../../widgets/price_curency_widget.dart';
+import '../add/add_payment.dart';
 
 class PaymentsList extends ConsumerWidget {
   final List<PaymentModel>? lista;
@@ -19,38 +26,66 @@ class PaymentsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
+    return BlocBuilder<ItemsBloc, ItemsState>(
+      builder: (context, itemsState) {
+        return BlocBuilder<PaymentsBloc, PaymentsState>(
+          builder: (context, paymentsState) {
+            return BlocBuilder<ShopsBloc, ShopsState>(
+              builder: (context, shopsState) {
+                return BlocBuilder<DateFilterBloc, DateFilterState>(
+                  builder: (context, filterState) {
+                    //////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////
+                    List<ItemModel> _items = itemsState.items;
+                    List<PaymentModel> _payments = paymentsState.payments;
+                    List<ShopModel> _shops = shopsState.shops;
+                    //////////////////////////////////////////////////////
 
-    return Container(
-      margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-      child: ListView.builder(
-        itemCount: _shopsDataList.length,
-        itemBuilder: (BuildContext context, int index) {
-          ShopData shopsData = _shopsDataList[index];
-          return new ExpansionTile(
-            title: Text('${shopsData.shop.shopName}'),
-            trailing: Text('${shopsData.paymentsSum}'),
-            leading: CircleAvatar(
-              child: const Icon(
-                Icons.account_circle,
-                size: 40,
-                color: Colors.grey,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-            ),
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 300,
-                width: 400,
-                child: PayList(
-                  lista: shopsData.allPayments,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+                    DataSink _dataSink = DataSink(_shops, _items, _payments);
+                    List<ShopData> _shopsDataList = _dataSink.allShopsData;
+
+                    return Container(
+                      margin: EdgeInsets.only(
+                          top: 10, left: 4, right: 4, bottom: 8),
+                      child: ListView.builder(
+                        itemCount: _shopsDataList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          ShopData shopsData = _shopsDataList[index];
+                          return new ExpansionTile(
+                            title: Text('${shopsData.shop.shopName}'),
+                            trailing: Text(
+                                '${shopsData.shopDataCalculations.paymentsSum}'),
+                            leading: CircleAvatar(
+                              child: const Icon(
+                                Icons.account_circle,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                            ),
+                            expandedCrossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 300,
+                                width: 400,
+                                child: PayList(
+                                  lista: shopsData.payments,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -141,11 +176,11 @@ class PaymentTile extends ConsumerWidget {
                                   'Ok',
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
-                                onPressed: () => ref
-                                    .read(operationsProvider)
-                                    .deletePayment(payment)
-                                    .then(
-                                        (value) => Navigator.of(context).pop()),
+                                onPressed: () {
+                                  BlocProvider.of<PaymentsBloc>(context)
+                                      .add(DeletePaymentEvent(payment));
+                                  Navigator.pop(context);
+                                },
                                 style: MThemeData.raisedButtonStyleSave,
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/models/statistics/statistics_model.dart';
+import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../components.dart';
@@ -71,6 +72,55 @@ class PeiWidget extends ConsumerWidget {
               data.itemCalculations.totalPrice,
           dataLabelMapper: (ItemsChartData data, _) =>
               data.itemCalculations.totalCount.toString(),
+          explode: true,
+          // All the segments will be exploded
+
+          explodeAll: true,
+          enableTooltip: true,
+          // name: 'Home',
+          dataLabelSettings: DataLabelSettings(
+              isVisible: true,
+              labelPosition: ChartDataLabelPosition.inside,
+              // Renders background rectangle and fills it with series color
+              useSeriesColor: true),
+
+          // ending angle of pie
+        ),
+      ],
+    );
+  }
+}
+
+class PeiWidgetForTagged extends ConsumerWidget {
+  final List<Tagged> chartData;
+
+  PeiWidgetForTagged(this.chartData);
+
+  @override
+  Widget build(BuildContext context, wacth) {
+    return SfCircularChart(
+      margin: EdgeInsets.zero,
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.left,
+        // alignment: ChartAlignment.center,
+        // width: '120',
+      ),
+
+      // title: ChartTitle(
+      //     textStyle: Theme.of(context).textTheme.subtitle1,
+      //     text: 'Most Frequent Products',
+      //     alignment: ChartAlignment.far),
+      // //  centerY: '220',
+
+      series: <CircularSeries>[
+        PieSeries<Tagged, String>(
+          dataSource: chartData,
+          xValueMapper: (Tagged data, _) => data.tag,
+          yValueMapper: (Tagged data, _) =>
+              data.shopDataCalculations.itemsSumAfterPayment,
+          dataLabelMapper: (Tagged data, _) =>
+              data.shopDataCalculations.itemsSumAfterPayment.toString(),
           explode: true,
           // All the segments will be exploded
 
@@ -184,27 +234,32 @@ class LineChartWidgetDate extends ConsumerWidget {
 // }
 
 class ColumnChartWidget extends ConsumerWidget {
-  final List<ItemsChartData> chartData;
+  final List<Tagged> chartData;
 
   ColumnChartWidget(this.chartData);
 
   @override
   Widget build(BuildContext context, wacth) {
+    chartData
+      ..sort((a, b) => b.shopDataCalculations.itemsSumAfterPayment
+          .compareTo(a.shopDataCalculations.itemsSumAfterPayment));
     return SfCartesianChart(
       title: ChartTitle(text: 'Shops  Consumption'),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[
         // Renders spline chart
-        ColumnSeries<ItemsChartData, String>(
+        ColumnSeries<Tagged, String>(
           width: 0.4,
           dataSource: chartData,
           //color: AppConstants.whiteOpacity,
           color: Colors.white.withOpacity(0.5),
-          xValueMapper: (ItemsChartData sales, _) => sales.tag,
-          yValueMapper: (ItemsChartData sales, _) => sales.value,
-          pointColorMapper: (ItemsChartData sales, _) => sales.color,
-          dataLabelMapper: (ItemsChartData sales, _) => sales.value.toString(),
+          xValueMapper: (Tagged sales, _) => sales.tag,
+          yValueMapper: (Tagged sales, _) =>
+              sales.shopDataCalculations.itemsSumAfterPayment,
+          // pointColorMapper: (Tagged sales, _) => sales.color,
+          dataLabelMapper: (Tagged sales, _) =>
+              sales.shopDataCalculations.itemsSumAfterPayment.toString(),
         ),
       ],
     );

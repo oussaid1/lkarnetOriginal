@@ -1,12 +1,37 @@
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 
+import '../shop/shop_model.dart';
+import '../shop/shopdata_calculations.dart';
+import '../shop/shops_data.dart';
+
 class Tagged {
   dynamic tag;
   List<ItemModel> items;
   List<PaymentModel> payments;
-
-  Tagged({required this.tag, required this.items, required this.payments});
+  List<ShopModel> shops;
+  Tagged(
+      {required this.tag,
+      required this.shops,
+      required this.items,
+      required this.payments});
 
   /// get a list of shopData
+  List<ShopData> get shopsDataList {
+    List<ShopData> list = [];
+    for (var shop in shops) {
+      list.add(ShopData(
+        shop: shop,
+        items: items,
+        payments: payments,
+      ));
+    }
+    return list;
+  }
+
+  /// shopDataCalculations
+  ShopDataCalculations get shopDataCalculations =>
+      ShopDataCalculations(items: items, payments: payments);
+
+  /// get itemsData
 }

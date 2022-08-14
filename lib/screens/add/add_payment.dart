@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lkarnet/blocs/payments/payments_bloc.dart';
 import 'package:lkarnet/const/constents.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
@@ -23,15 +22,17 @@ class AddPayment extends ConsumerStatefulWidget {
 class _AddPaymentState extends ConsumerState<AddPayment> {
   final GlobalKey<FormState> _formKeyPaidAmount = GlobalKey<FormState>();
   final TextEditingController _paidAmountController = TextEditingController();
-
+  bool canSave = false;
   late DateTime _datePaid;
+  String? _id;
   final FocusNode _paidAmountFocusNode = FocusNode();
-  String? _shop;
+  String? _shopName;
   void _update() {
     if (widget.payment != null) {
-      setState(() {
-        _paidAmountController.text = widget.payment!.paidAmount.toString();
-      });
+      _id = widget.payment!.id!;
+      _paidAmountController.text = widget.payment!.paidAmount.toString();
+      _datePaid = widget.payment!.datePaid;
+      _shopName = widget.payment!.paidShopName;
     }
   }
 
@@ -60,162 +61,139 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 8),
-                  child: ShopSpinner(
-                    initialValue: widget.payment?.paidShopName,
-                    focusNode: _paidAmountFocusNode,
-                    onShopSelected: (value) {
-                      setState(() {
-                        _shop = value;
-                      });
-                      // ref.read(pickedShop.state).state = value;
-                    },
-                  ),
-                ),
-                Form(
-                  key: _formKeyPaidAmount,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      focusNode: _paidAmountFocusNode,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (text) {
-                        if (text!.isEmpty) {
-                          return 'please enter amount';
-                        }
-                        return null;
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'(^\-?\d*\.?\d*)')),
-                      ],
-                      controller: _paidAmountController,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: '00.00',
-                        hintStyle: GoogleFonts.robotoSlab(),
-                        contentPadding: EdgeInsets.only(top: 4),
-                        // prefixIcon: Icon(Icons.qr_code),
-                        fillColor: AppConstants.whiteOpacity,
-                        filled: true,
-                        label: Text(
-                          'Paid Amount',
-                          style: GoogleFonts.robotoSlab(),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.monetization_on_outlined,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SelectDate(
-                    onDateSelected: (value) {
-                      _datePaid = value;
-                      ref.read(pickedDateTime.state).state = value;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                widget.payment == null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            child: Text(
-                              'Cancel',
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: MThemeData.raisedButtonStyleCancel,
-                          ),
-                          ElevatedButton(
-                            child: Text(
-                              'Save',
-                            ),
-                            onPressed: () {
-                              final _op = ref.read(operationsProvider);
-                              final _payment = PaymentModel(
-                                paidAmount:
-                                    double.parse(_paidAmountController.text),
-                                datePaid: ref.read(pickedDateTime.state).state,
-                                paidShopName:
-                                    _shop!, // ref.read(pickedShop.state).state,
-                              );
-                              if (_formKeyPaidAmount.currentState!.validate()) {
-                                _op.addPayment(_payment).then((value) {
-                                  if (value)
-                                    _formKeyPaidAmount.currentState!.reset();
-                                });
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(Dialogs.snackBar('error'));
-                              }
-                              //
-                            },
-                            style: MThemeData.raisedButtonStyleSave,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            child: Text(
-                              'Cancel',
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: MThemeData.raisedButtonStyleCancel,
-                          ),
-                          ElevatedButton(
-                            child: Text(
-                              'Update',
-                            ),
-                            onPressed: () {
-                              final _op = ref.read(operationsProvider);
-                              final _payment = PaymentModel(
-                                id: widget.payment!.id,
-                                paidAmount:
-                                    double.parse(_paidAmountController.text),
-                                datePaid:
-                                    _datePaid, //ref.read(pickedDateTime.state).state,
-                                paidShopName:
-                                    _shop!, // ref.read(pickedShop.state).state,
-                              );
-                              if (_formKeyPaidAmount.currentState!.validate()) {
-                                _op.updatePayment(_payment).then((value) {
-                                  if (value) Navigator.pop(context);
-                                });
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(Dialogs.snackBar('error'));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(Dialogs.snackBar('error'));
-                              }
-                              //
-                            },
-                            style: MThemeData.raisedButtonStyleSave,
-                          ),
-                        ],
-                      )
+                SizedBox(height: 20),
+                _buildShopDropDown(),
+                _buildAmountPaid(),
+                _buildDatePaid(),
+                SizedBox(height: 30),
+                _buildSaveButton(context)
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Row _buildSaveButton(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      ElevatedButton(
+        child: Text(
+          'Cancel',
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        style: MThemeData.raisedButtonStyleCancel,
+      ),
+      ElevatedButton(
+        child: Text(
+          widget.payment == null ? 'Save' : 'Update',
+        ),
+        onPressed: !canSave
+            ? null
+            : () {
+                final _payment = PaymentModel(
+                  id: _id,
+                  paidAmount: double.parse(_paidAmountController.text),
+                  datePaid: _datePaid,
+                  paidShopName: _shopName!, // ref.read(pickedShop.state).state,
+                );
+                if (_formKeyPaidAmount.currentState!.validate()) {
+                  if (widget.payment == null) {
+                    _addPayment(context, _payment);
+                  } else {
+                    _updatePayment(context, _payment);
+                  }
+                } else {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(Dialogs.snackBar('error'));
+                }
+                //
+              },
+        style: MThemeData.raisedButtonStyleSave,
+      ),
+    ]);
+  }
+
+  Padding _buildDatePaid() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SelectDate(
+        onDateSelected: (value) {
+          setState(() {
+            _datePaid = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Form _buildAmountPaid() {
+    return Form(
+      key: _formKeyPaidAmount,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          focusNode: _paidAmountFocusNode,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (text) {
+            if (text!.isEmpty) {
+              return 'please enter amount';
+            }
+            return null;
+          },
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)')),
+          ],
+          controller: _paidAmountController,
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          textAlign: TextAlign.center,
+          maxLength: 10,
+          decoration: InputDecoration(
+            counterText: '',
+            hintText: '00.00',
+            hintStyle: GoogleFonts.robotoSlab(),
+            contentPadding: EdgeInsets.only(top: 4),
+            // prefixIcon: Icon(Icons.qr_code),
+            fillColor: AppConstants.whiteOpacity,
+            filled: true,
+            label: Text(
+              'Paid Amount',
+              style: GoogleFonts.robotoSlab(),
+            ),
+            prefixIcon: Icon(
+              Icons.monetization_on_outlined,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildShopDropDown() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 8),
+      child: ShopSpinner(
+        initialValue: widget.payment?.paidShopName,
+        focusNode: _paidAmountFocusNode,
+        onShopSelected: (value) {
+          setState(() {
+            _shopName = value;
+          });
+          // ref.read(pickedShop.state).state = value;
+        },
+      ),
+    );
+  }
+
+  void _addPayment(context, PaymentModel payment) {
+    context.read<PaymentsBloc>().add(AddPayment(payment: payment));
+    Navigator.of(context).pop();
+  }
+
+  void _updatePayment(context, PaymentModel payment) {
+    context.read<PaymentsBloc>().add(AddPaymentEvent(payment));
+    Navigator.of(context).pop();
   }
 }

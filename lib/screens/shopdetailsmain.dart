@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
+import '../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../blocs/itemsbloc/items_bloc.dart';
 import '../blocs/payments/payments_bloc.dart';
 import '../blocs/shopsbloc/shops_bloc.dart';
 import '../components.dart';
+import '../models/data_sink.dart';
 import '../models/payment/payment_model.dart';
 import '../models/statistics/tagged.dart';
 import '../widgets/price_curency_widget.dart';
@@ -25,9 +27,8 @@ class ShopDetailsMain extends ConsumerStatefulWidget {
 
 class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   Tagged? _tagged;
-  List<ItemModel> _items = [];
-  List<ShopModel> _shops = [];
-  List<PaymentModel> _payments = [];
+
+  int _currentIndex = 0;
 
   //var _isSelected = false;
   @override
@@ -46,132 +47,158 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
     // var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
     //return MonthlyDash();
     //_tagged == null ? _tagged = _listOfTagged[0] : _tagged;
-    return BluredContainer(
-      start: 0,
-      end: 0,
-      borderColorOpacity: 0,
-      child: Scaffold(
-        backgroundColor: Color.fromARGB(0, 255, 255, 255),
-        floatingActionButton: MyExpandableFab(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        appBar: MyAppBar(
-          title: _tagged != null
-              ? Text(
-                  '${_tagged!.date!.mMMyy()}',
-                )
-              : Text('No tag'),
-          leading: Icon(Icons.calendar_month, color: Colors.black),
-        ),
+    return BlocBuilder<ItemsBloc, ItemsState>(
+      builder: (context, itemsState) {
+        return BlocBuilder<PaymentsBloc, PaymentsState>(
+          builder: (context, paymentsState) {
+            return BlocBuilder<ShopsBloc, ShopsState>(
+              builder: (context, shopsState) {
+                return BlocBuilder<DateFilterBloc, DateFilterState>(
+                  builder: (context, filterState) {
+                    //////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////
+                    List<ItemModel> _items = itemsState.items;
+                    List<PaymentModel> _payments = paymentsState.payments;
+                    List<ShopModel> _shops = shopsState.shops;
+                    //////////////////////////////////////////////////////
 
-        // Next, create a SliverList
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 40,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Monthly',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(186, 255, 255, 255),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            MultiBlocListener(
-              listeners: [
-                BlocListener<ItemsBloc, ItemsState>(
-                  listener: (context, state) {
-                    if (state.items.isNotEmpty) {
-                      setState(() {
-                        _items = state.items;
-                      });
-                    }
-                  },
-                ),
-                BlocListener<ShopsBloc, ShopsState>(
-                  listener: (context, state) {
-                    if (state.shops.isNotEmpty) {
-                      setState(() {
-                        _shops = state.shops;
-                      });
-                    }
-                  },
-                ),
-                BlocListener<PaymentsBloc, PaymentsState>(
-                    listener: (context, state) {
-                  if (state.payments.isNotEmpty) {
-                    setState(() {
-                      _payments = state.payments;
-                    });
-                  }
-                }),
-              ],
-              child: BlocBuilder<ItemsBloc, ItemsState>(
-                // buildWhen: (previous, current) =>
-                //     previous is ItemsLoadedState && current is ItemsLoadedState,
-                builder: (context, state) {
-                  TaggedDataSink _taggedDataSink = TaggedDataSink(
-                      items: _items, payments: _payments, shops: _shops);
-                  log('items:${_items.length} payments:${_payments.length} shops:${_shops.length}');
+                    //////////////////////////////////////////////////////
+                    var _dataSink = DataSink(_shops, _items, _payments);
+                    //////////////////////////////////////////////////////
+                    List<Tagged> _listOfTagged = _dataSink.taggedDistinctDates;
 
-                  _tagged == null ? _taggedDataSink.taggedMMYY[0] : _tagged;
-
-                  return Container(
-                    height: 235,
-                    width: double.infinity,
-                    // color: Color.fromARGB(94, 255, 193, 7),
-                    child: Stack(
-                      //fit: StackFit.loose,
-                      children: [
-                        _tagged != null
-                            ? _buildMonthlyCard(context, _tagged!)
-                            : Container(),
-                        Positioned(
-                          top: 195,
-                          width: 360,
-                          left: MediaQuery.of(context).size.width / 2 - 180,
-                          child: _buildSelector(_taggedDataSink.taggedMMYY),
+                    final Tagged? _tagged = _listOfTagged[_currentIndex];
+                    //////////////////////////////////////////////////////
+                    _tagged == null ? _listOfTagged[0] : _tagged;
+                    return BluredContainer(
+                      start: 0,
+                      end: 0,
+                      borderColorOpacity: 0,
+                      child: Scaffold(
+                        backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                        floatingActionButton: MyExpandableFab(),
+                        floatingActionButtonLocation:
+                            FloatingActionButtonLocation.centerFloat,
+                        appBar: MyAppBar(
+                          title: _tagged != null
+                              ? Text(
+                                  '${_tagged.tag!.mMMyy()}',
+                                )
+                              : Text('No tag'),
+                          leading:
+                              Icon(Icons.calendar_month, color: Colors.black),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            _tagged == null
-                ? SizedBox.shrink()
-                : Container(
-                    margin: EdgeInsets.symmetric(horizontal: 4),
-                    height: 300,
-                    width: MediaQuery.of(context).size.width,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1.5,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10),
-                      itemCount: _tagged!.shopDataList.length,
-                      itemBuilder: (context, index) {
-                        return ShopSquareTile(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShopDetails(
-                                shopData: _tagged!.shopDataList[index],
+
+                        // Next, create a SliverList
+                        body: Column(
+                          children: [
+                            const SizedBox(
+                              height: 40,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Monthly',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color.fromARGB(186, 255, 255, 255),
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                          shopData: _tagged!.shopDataList[index],
-                        );
-                      },
-                    ),
-                  ),
-          ],
-        ),
-      ),
+                            MultiBlocListener(
+                              listeners: [
+                                BlocListener<ItemsBloc, ItemsState>(
+                                  listener: (context, state) {
+                                    if (state.items.isNotEmpty) {
+                                      setState(() {
+                                        _items = state.items;
+                                      });
+                                    }
+                                  },
+                                ),
+                                BlocListener<ShopsBloc, ShopsState>(
+                                  listener: (context, state) {
+                                    if (state.shops.isNotEmpty) {
+                                      setState(() {
+                                        _shops = state.shops;
+                                      });
+                                    }
+                                  },
+                                ),
+                                BlocListener<PaymentsBloc, PaymentsState>(
+                                    listener: (context, state) {
+                                  if (state.payments.isNotEmpty) {
+                                    setState(() {
+                                      _payments = state.payments;
+                                    });
+                                  }
+                                }),
+                              ],
+                              child: Container(
+                                height: 235,
+                                width: double.infinity,
+                                // color: Color.fromARGB(94, 255, 193, 7),
+                                child: Stack(
+                                  //fit: StackFit.loose,
+                                  children: [
+                                    _tagged != null
+                                        ? _buildMonthlyCard(context, _tagged)
+                                        : Container(),
+                                    Positioned(
+                                      top: 195,
+                                      width: 360,
+                                      left: MediaQuery.of(context).size.width /
+                                              2 -
+                                          180,
+                                      child: _buildSelector(_listOfTagged),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _tagged == null
+                                ? SizedBox.shrink()
+                                : Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 4),
+                                    height: 300,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 1.5,
+                                              mainAxisSpacing: 10,
+                                              crossAxisSpacing: 10),
+                                      itemCount: _tagged.shopsDataList.length,
+                                      itemBuilder: (context, index) {
+                                        return ShopSquareTile(
+                                          onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ShopDetails(
+                                                shopData: _tagged
+                                                    .shopsDataList[index],
+                                              ),
+                                            ),
+                                          ),
+                                          shopData:
+                                              _tagged.shopsDataList[index],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 
@@ -244,7 +271,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   PriceNumberZone(
                       right: const SizedBox.shrink(),
                       withDollarSign: true,
-                      price: tagged.itemsSumAfterPayment,
+                      price: tagged.shopDataCalculations.itemsSumAfterPayment,
                       style: Theme.of(context).textTheme.headline2!),
                 ],
               ),
@@ -264,7 +291,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   PriceNumberZone(
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
-                    price: tagged.itemsSum,
+                    price: tagged.shopDataCalculations.itemsSum,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: AppConstants.hintColor,
                         ),
@@ -287,7 +314,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   PriceNumberZone(
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
-                    price: tagged.paymentsSum,
+                    price: tagged.shopDataCalculations.paymentsSum,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: AppConstants.hintColor,
                         ),
@@ -310,7 +337,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   PriceNumberZone(
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
-                    price: tagged.countItems.toDouble(),
+                    price: tagged.shopDataCalculations.countItems.toDouble(),
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: AppConstants.hintColor,
                         ),
@@ -333,7 +360,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   PriceNumberZone(
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
-                    price: tagged.countPayments.toDouble(),
+                    price: tagged.shopDataCalculations.countPayments.toDouble(),
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: AppConstants.hintColor,
                         ),

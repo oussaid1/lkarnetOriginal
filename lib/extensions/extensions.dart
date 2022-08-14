@@ -68,7 +68,7 @@ extension DtExtension on DateTime {
   }
 
   /// check if given date is today
-  bool isMatchToday(DateTime date) {
+  bool isMatchDay(DateTime date) {
     if (day == date.day && month == date.month && year == date.year) {
       return true;
     }

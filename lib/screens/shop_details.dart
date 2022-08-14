@@ -142,7 +142,7 @@ class ShopItemsDetailsWidget extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ItemsList(lista: shopsData.allItems),
+                                    ItemsList(lista: shopsData.items),
                               ),
                             );
                           },
@@ -159,7 +159,8 @@ class ShopItemsDetailsWidget extends StatelessWidget {
                               text: 'count :',
                               style: Theme.of(context).textTheme.subtitle2!),
                           TextSpan(
-                              text: ' ${shopsData.countItems}',
+                              text:
+                                  ' ${shopsData.shopDataCalculations.countItems}',
                               style: Theme.of(context).textTheme.headline5!),
                         ])),
                         RichText(
@@ -168,7 +169,8 @@ class ShopItemsDetailsWidget extends StatelessWidget {
                               text: 'total :',
                               style: Theme.of(context).textTheme.subtitle2!),
                           TextSpan(
-                              text: ' ${shopsData.itemsSum}',
+                              text:
+                                  ' ${shopsData.shopDataCalculations.itemsSum}',
                               style: Theme.of(context).textTheme.headline4!),
                         ])),
                       ],
@@ -181,10 +183,10 @@ class ShopItemsDetailsWidget extends StatelessWidget {
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   return ItemTileWidget(
-                    item: shopsData.allItems[index],
+                    item: shopsData.items[index],
                   );
                 },
-                itemCount: shopsData.allItems.length,
+                itemCount: shopsData.items.length,
               ),
             ),
           ],
@@ -249,7 +251,8 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
                               text: 'count :',
                               style: Theme.of(context).textTheme.bodyText1!),
                           TextSpan(
-                              text: ' ${shopsData.countPayments}',
+                              text:
+                                  ' ${shopsData.shopDataCalculations.countPayments}',
                               style: Theme.of(context).textTheme.headline3!),
                         ])),
                         RichText(
@@ -258,7 +261,8 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
                               text: 'total :',
                               style: Theme.of(context).textTheme.bodyText1!),
                           TextSpan(
-                              text: ' ${shopsData.paymentsSum}',
+                              text:
+                                  ' ${shopsData.shopDataCalculations.paymentsSum}',
                               style: Theme.of(context).textTheme.headline3!),
                         ])),
                       ],
@@ -270,9 +274,9 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return PaymentTile(payment: shopsData.allPayments[index]);
+                  return PaymentTile(payment: shopsData.payments[index]);
                 },
-                itemCount: shopsData.allPayments.length,
+                itemCount: shopsData.payments.length,
               ),
             ),
           ],

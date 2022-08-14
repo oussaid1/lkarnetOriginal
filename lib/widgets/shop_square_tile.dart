@@ -30,7 +30,7 @@ class ShopSquareTile extends StatelessWidget {
             PriceNumberZone(
               right: const SizedBox.shrink(),
               withDollarSign: true,
-              price: shopData.itemsSumAfterPayment,
+              price: shopData.shopDataCalculations.itemsSumAfterPayment,
               style: Theme.of(context).textTheme.headline3!.copyWith(
                     color: AppConstants.hintColor,
                   ),

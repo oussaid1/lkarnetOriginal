@@ -33,46 +33,32 @@ class ItemsFiltered {
   }
 
   //// get distinct item names ///////////////////////////////////////////////
-  List<String> get distinctItemNames {
-    List<String> distinctItemNames = [];
-    for (ItemModel item in items) {
-      distinctItemNames.add(item.itemName);
-    }
-    return distinctItemNames..toSet().toList();
-  }
+  List<String> get distinctItemNames =>
+      items.map((item) => item.itemName).toSet().toList();
 
   // get distinct ddmmyyyy
-  List<DateTime> get distinctDays {
-    List<DateTime> ddmmyyyys = [];
-    for (ItemModel item in items) {
-      ddmmyyyys.add(DateTime(
-          item.dateBought.year, item.dateBought.month, item.dateBought.day));
-    }
-    return ddmmyyyys..toSet().toList();
-  }
+  List<DateTime> get distinctDays => items
+      .map((item) => DateTime(
+          item.dateBought.day, item.dateBought.month, item.dateBought.year))
+      .toSet()
+      .toList();
 
   // get distinct mmyyy from items
-  List<DateTime> get distinctMonths {
-    var _list = <DateTime>[];
-    for (var item in items) {
-      _list.add(DateTime(item.dateBought.year, item.dateBought.month));
-    }
-    return _list.toSet().toList();
-  }
+  List<DateTime> get distinctMonths => items
+      .map((item) => DateTime(item.dateBought.year, item.dateBought.month, 1))
+      .toSet()
+      .toList();
 
 // get distinct yyyy
-  List<DateTime> get distinctYears {
-    var _list = <DateTime>[];
-    for (var item in items) {
-      _list.add(DateTime(item.dateBought.year));
-    }
-    return _list.toSet().toList();
-  }
+  List<DateTime> get distinctYears => items
+      .map((item) => DateTime(item.dateBought.year, 1, 1))
+      .toSet()
+      .toList();
 
 // get all items for today
   List<ItemModel> get allItemsToday {
     return items
-        .where((element) => element.dateBought.isMatchToday(DateTime.now()))
+        .where((element) => element.dateBought.isMatchDay(DateTime.now()))
         .toList();
   }
 
@@ -92,6 +78,27 @@ class ItemsFiltered {
   List<ItemModel> get allItemsThisYear {
     return items
         .where((element) => element.dateBought.isMatchToYear(DateTime.now()))
+        .toList();
+  }
+
+  /// methods with parameters
+  itemsForDate(DateTime date) {
+    return items
+        .where((element) => element.dateBought.isMatchDay(date))
+        .toList();
+  }
+
+  /// methods with parameters
+  itemsForMonth(DateTime date) {
+    return items
+        .where((element) => element.dateBought.isMatchToMonth(date))
+        .toList();
+  }
+
+  /// methods with parameters
+  itemsForYear(DateTime date) {
+    return items
+        .where((element) => element.dateBought.isMatchToYear(date))
         .toList();
   }
 }

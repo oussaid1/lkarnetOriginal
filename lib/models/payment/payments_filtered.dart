@@ -41,4 +41,55 @@ class PaymentsFiltered {
         .where((payment) => payment.datePaid.isMatchToYear(DateTime.now()))
         .toList();
   }
+
+  /////////////////////////////////////////////////////////////////
+  /// get distinct dates
+  List<DateTime> get distinctDates {
+    return payments
+        .map((payment) => DateTime(payment.datePaid.day, payment.datePaid.month,
+            payment.datePaid.year))
+        .toSet()
+        .toList();
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// get distinct months
+  List<DateTime> get distinctMonths {
+    return payments
+        .map((payment) =>
+            DateTime(payment.datePaid.year, payment.datePaid.month, 1))
+        .toSet()
+        .toList();
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// get distinct years
+  List<DateTime> get distinctYears {
+    return payments
+        .map((payment) => DateTime(payment.datePaid.year, 1, 1))
+        .toSet()
+        .toList();
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// methods with parameters
+  List<PaymentModel> paymentsForDate(DateTime date) {
+    return payments
+        .where((payment) => payment.datePaid.isMatchDay(date))
+        .toList();
+  }
+
+  /// methods with parameters
+  List<PaymentModel> paymentsForMonth(DateTime date) {
+    return payments
+        .where((payment) => payment.datePaid.isMatchToMonth(date))
+        .toList();
+  }
+
+  /// methods with parameters
+  List<PaymentModel> paymentsForYear(DateTime date) {
+    return payments
+        .where((payment) => payment.datePaid.isMatchToYear(date))
+        .toList();
+  }
 }
