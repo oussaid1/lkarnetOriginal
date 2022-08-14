@@ -16,6 +16,9 @@ class Tagged {
       required this.items,
       required this.payments});
 
+  /// get date from tag
+  DateTime get date => DateTime.tryParse(tag) ?? DateTime.now();
+
   /// get a list of shopData
   List<ShopData> get shopsDataList {
     List<ShopData> list = [];

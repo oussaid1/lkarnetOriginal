@@ -33,9 +33,9 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   //var _isSelected = false;
   @override
   void initState() {
-    context.read<ItemsBloc>().add(GetItemsEvent());
-    context.read<PaymentsBloc>().add(GetPaymentsEvent());
-    context.read<ShopsBloc>().add(GetShopsEvent());
+    // context.read<ItemsBloc>().add(GetItemsEvent());
+    //context.read<PaymentsBloc>().add(GetPaymentsEvent());
+    //context.read<ShopsBloc>().add(GetShopsEvent());
     super.initState();
   }
 
@@ -69,7 +69,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
 
                     final Tagged? _tagged = _listOfTagged[_currentIndex];
                     //////////////////////////////////////////////////////
-                    _tagged == null ? _listOfTagged[0] : _tagged;
+                    // _tagged == null ? _listOfTagged[0] : _tagged;
                     return BluredContainer(
                       start: 0,
                       end: 0,
@@ -82,7 +82,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                         appBar: MyAppBar(
                           title: _tagged != null
                               ? Text(
-                                  '${_tagged.tag!.mMMyy()}',
+                                  '${_tagged.date.ddmmyyyy()}',
                                 )
                               : Text('No tag'),
                           leading:
@@ -105,55 +105,25 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                                 ),
                               ),
                             ),
-                            MultiBlocListener(
-                              listeners: [
-                                BlocListener<ItemsBloc, ItemsState>(
-                                  listener: (context, state) {
-                                    if (state.items.isNotEmpty) {
-                                      setState(() {
-                                        _items = state.items;
-                                      });
-                                    }
-                                  },
-                                ),
-                                BlocListener<ShopsBloc, ShopsState>(
-                                  listener: (context, state) {
-                                    if (state.shops.isNotEmpty) {
-                                      setState(() {
-                                        _shops = state.shops;
-                                      });
-                                    }
-                                  },
-                                ),
-                                BlocListener<PaymentsBloc, PaymentsState>(
-                                    listener: (context, state) {
-                                  if (state.payments.isNotEmpty) {
-                                    setState(() {
-                                      _payments = state.payments;
-                                    });
-                                  }
-                                }),
-                              ],
-                              child: Container(
-                                height: 235,
-                                width: double.infinity,
-                                // color: Color.fromARGB(94, 255, 193, 7),
-                                child: Stack(
-                                  //fit: StackFit.loose,
-                                  children: [
-                                    _tagged != null
-                                        ? _buildMonthlyCard(context, _tagged)
-                                        : Container(),
-                                    Positioned(
-                                      top: 195,
-                                      width: 360,
-                                      left: MediaQuery.of(context).size.width /
-                                              2 -
-                                          180,
-                                      child: _buildSelector(_listOfTagged),
-                                    ),
-                                  ],
-                                ),
+                            Container(
+                              height: 235,
+                              width: double.infinity,
+                              // color: Color.fromARGB(94, 255, 193, 7),
+                              child: Stack(
+                                //fit: StackFit.loose,
+                                children: [
+                                  _tagged != null
+                                      ? _buildMonthlyCard(context, _tagged)
+                                      : Container(),
+                                  Positioned(
+                                    top: 195,
+                                    width: 360,
+                                    left:
+                                        MediaQuery.of(context).size.width / 2 -
+                                            180,
+                                    child: _buildSelector(_listOfTagged),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -239,7 +209,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   children: [
                     // tagged == _tagged ? Text('Selected') : Text(''),
                     Text(
-                      tagged.tag,
+                      tagged.date.ddmmyyyy(),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ],

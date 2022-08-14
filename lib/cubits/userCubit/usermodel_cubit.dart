@@ -19,7 +19,7 @@ class UserModelCubit extends Cubit<UserModel?> {
     // log("loadUser token: $token");
     await _db.getUser().then((retVal) {
       if (retVal != null) {
-        //   log("loadUser success : ${retVal.value}");
+        log("loadUser success : ${retVal.email}");
         emit(retVal);
       }
 

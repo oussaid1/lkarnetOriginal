@@ -13,39 +13,39 @@ import 'utils.dart';
 class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthenticationState>(
       listener: (context, state) {
-        if (state is AuthenticatedState) {
-          GetIt.I<Database>().setUserUid(state.user.uid);
+        if (state.status == AuthStatus.authenticationFailed) {
+          GetIt.I<Database>().setUserUid(state.user!.uid);
           context.read<UserModelCubit>().loadUser();
           GlobalFunctions.showSuccessSnackBar(
             context,
             'تم تسجيل الدخول بنجاح',
           );
-          Navigator.pushNamed(context, RouteGenerator.home);
+          Navigator.pushReplacementNamed(context, RouteGenerator.home);
         }
-        if (state is AuthenticationFailedState) {
+        if (state.status == AuthStatus.authenticationFailed) {
           GlobalFunctions.showErrorSnackBar(
             context,
-            state.error,
+            state.error ?? 'حدث خطأ ما',
           );
           Navigator.of(context).pushReplacementNamed('/login');
         }
 
-        if (state is UnauthenticatedState) {
+        if (state.status == AuthStatus.unauthenticated) {
           Navigator.of(context).pushNamed('/');
         }
       },
-      child: BlocBuilder<AuthBloc, AuthState>(
+      child: BlocBuilder<AuthBloc, AuthenticationState>(
         builder: (context, state) {
-          if (state is AuthInitState) {
+          if (state.status == AuthStatus.authenticating) {
             return SplashPage();
           }
-          if (state is AuthenticatedState) {
-            GetIt.I<Database>().setUserUid(state.user.uid);
+          if (state.status == AuthStatus.authenticated) {
+            GetIt.I<Database>().setUserUid(state.user!.uid);
             return HomePage();
           }
-          if (state is UnauthenticatedState) {
+          if (state.status == AuthStatus.unauthenticated) {
             return SplashPage();
           }
           return Container();

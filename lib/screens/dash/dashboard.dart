@@ -142,7 +142,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                           builder: (context, filterState) {
                             return BlocBuilder<ItemsBloc, ItemsState>(
                               builder: (context, state) {
-                                if (state.items.isEmpty) {
+                                if (state.items.isNotEmpty) {
                                   //////////////////////////////////////////////////////
                                   //////////////////////////////////////////////////////
                                   //////////////////////////////////////////////////////

@@ -38,7 +38,7 @@ class Database {
   ///////////////////////////////////////////////////////////////////////////////
   DocumentReference get _users =>
       _firestore.collection(DBTables.users).doc(uid);
-  String? uid;
+  String? uid = '';
   Database({required this.uid});
 
   // create user in firebase
