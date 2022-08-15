@@ -124,10 +124,10 @@ class DataSink {
 
   /// get a list of tagged for each shop
   List<Tagged> get taggedShops {
-    List<Tagged> list = [];
+    List<Tagged<String>> list = [];
     for (var i = 0; i < shopNames.length; i++) {
       list.add(Tagged(
-        tag: shops[i],
+        tag: shops[i].shopName!,
         shops: shops,
         items: items
             .where((element) => element.shopName.trim() == shopNames[i].trim())

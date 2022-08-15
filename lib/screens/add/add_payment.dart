@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lkarnet/blocs/payments/payments_bloc.dart';
 import 'package:lkarnet/const/constents.dart';
@@ -10,6 +11,8 @@ import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 import 'package:lkarnet/widgets/shop_spinner.dart';
+
+import '../../repository/database_operations.dart';
 
 class AddPayment extends ConsumerStatefulWidget {
   final PaymentModel? payment;
@@ -47,9 +50,8 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
+    final pmntBloc = PaymentsBloc((GetIt.I.get<DatabaseOperations>()));
     return Material(
       color: Colors.transparent,
       child: SingleChildScrollView(
@@ -66,7 +68,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 _buildAmountPaid(),
                 _buildDatePaid(),
                 SizedBox(height: 30),
-                _buildSaveButton(context)
+                _buildSaveButton(context, pmntBloc),
               ],
             ),
           ),
@@ -75,7 +77,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
     );
   }
 
-  Row _buildSaveButton(BuildContext context) {
+  Row _buildSaveButton(BuildContext context, pmntBloc) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       ElevatedButton(
         child: Text(
@@ -101,9 +103,9 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 );
                 if (_formKeyPaidAmount.currentState!.validate()) {
                   if (widget.payment == null) {
-                    _addPayment(context, _payment);
+                    _addPayment(context, _payment, pmntBloc);
                   } else {
-                    _updatePayment(context, _payment);
+                    _updatePayment(context, _payment, pmntBloc);
                   }
                 } else {
                   ScaffoldMessenger.of(context)
@@ -187,13 +189,13 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
     );
   }
 
-  void _addPayment(context, PaymentModel payment) {
-    context.read<PaymentsBloc>().add(AddPayment(payment: payment));
+  void _addPayment(context, PaymentModel payment, bloc) {
+    bloc.add(AddPayment(payment: payment));
     Navigator.of(context).pop();
   }
 
-  void _updatePayment(context, PaymentModel payment) {
-    context.read<PaymentsBloc>().add(AddPaymentEvent(payment));
+  void _updatePayment(context, PaymentModel payment, bloc) {
+    bloc.add(AddPaymentEvent(payment));
     Navigator.of(context).pop();
   }
 }

@@ -5,8 +5,8 @@ import '../shop/shop_model.dart';
 import '../shop/shopdata_calculations.dart';
 import '../shop/shops_data.dart';
 
-class Tagged {
-  dynamic tag;
+class Tagged<T> {
+  T tag;
   List<ItemModel> items;
   List<PaymentModel> payments;
   List<ShopModel> shops;
@@ -17,7 +17,7 @@ class Tagged {
       required this.payments});
 
   /// get date from tag
-  DateTime get date => DateTime.tryParse(tag) ?? DateTime.now();
+  DateTime get date => DateTime.tryParse(tag.toString()) ?? DateTime.now();
 
   /// get a list of shopData
   List<ShopData> get shopsDataList {

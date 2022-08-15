@@ -42,13 +42,13 @@ class SemiPeiWidget extends ConsumerWidget {
   }
 }
 
-class PeiWidget extends ConsumerWidget {
+class PeiWidget extends StatelessWidget {
   final List<ItemsChartData> chartData;
-
-  PeiWidget(this.chartData);
+  final String? title;
+  const PeiWidget({Key? key, required this.chartData, this.title});
 
   @override
-  Widget build(BuildContext context, wacth) {
+  Widget build(BuildContext context) {
     return SfCircularChart(
       margin: EdgeInsets.zero,
       legend: Legend(
@@ -57,7 +57,13 @@ class PeiWidget extends ConsumerWidget {
         // alignment: ChartAlignment.center,
         // width: '120',
       ),
-
+      title: ChartTitle(
+        text: title ?? '',
+        // textStyle: TextStyle(
+        //   fontSize: 20,
+        //   fontWeight: FontWeight.bold,
+        // ),
+      ),
       // title: ChartTitle(
       //     textStyle: Theme.of(context).textTheme.subtitle1,
       //     text: 'Most Frequent Products',
@@ -91,13 +97,17 @@ class PeiWidget extends ConsumerWidget {
   }
 }
 
-class PeiWidgetForTagged extends ConsumerWidget {
+class PeiWidgetForTagged extends StatelessWidget {
   final List<Tagged> chartData;
-
-  PeiWidgetForTagged(this.chartData);
+  final String? title;
+  const PeiWidgetForTagged({
+    Key? key,
+    required this.chartData,
+    this.title,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, wacth) {
+  Widget build(BuildContext context) {
     return SfCircularChart(
       margin: EdgeInsets.zero,
       legend: Legend(
@@ -107,11 +117,10 @@ class PeiWidgetForTagged extends ConsumerWidget {
         // width: '120',
       ),
 
-      // title: ChartTitle(
-      //     textStyle: Theme.of(context).textTheme.subtitle1,
-      //     text: 'Most Frequent Products',
-      //     alignment: ChartAlignment.far),
-      // //  centerY: '220',
+      title: ChartTitle(
+        text: title ?? '',
+      ),
+      //  centerY: '220',
 
       series: <CircularSeries>[
         PieSeries<Tagged, String>(
@@ -140,24 +149,25 @@ class PeiWidgetForTagged extends ConsumerWidget {
   }
 }
 
-class LineChartWidgetDate extends ConsumerWidget {
+class LineChartWidgetDate extends StatelessWidget {
   final List<ItemsChartData> chartData;
+  final String? title;
 
-  LineChartWidgetDate(this.chartData);
+  const LineChartWidgetDate({Key? key, required this.chartData, this.title})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context, wacth) {
+  Widget build(BuildContext context) {
     return SfCartesianChart(
-      title: ChartTitle(text: 'Monthly Consumption'),
+      title: ChartTitle(text: title ?? ''),
       margin: EdgeInsets.zero,
-      legend: Legend(isVisible: false),
+      legend: Legend(isVisible: true, position: LegendPosition.top),
       primaryXAxis: DateTimeAxis(
         majorGridLines: MajorGridLines(width: 0),
-        interval: 2,
+
         dateFormat: DateFormat('MMM-yy'),
-        intervalType: DateTimeIntervalType.months,
+        // intervalType: DateTimeIntervalType.months,
         labelRotation: 90,
-        maximum: DateTime.now(),
       ),
       series: <ChartSeries>[
         SplineSeries<ItemsChartData, DateTime>(
@@ -233,18 +243,19 @@ class LineChartWidgetDate extends ConsumerWidget {
 //   }
 // }
 
-class ColumnChartWidget extends ConsumerWidget {
+class ColumnChartWidget extends StatelessWidget {
   final List<Tagged> chartData;
-
-  ColumnChartWidget(this.chartData);
+  final String? title;
+  const ColumnChartWidget({Key? key, required this.chartData, this.title})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context, wacth) {
+  Widget build(BuildContext context) {
     chartData
       ..sort((a, b) => b.shopDataCalculations.itemsSumAfterPayment
           .compareTo(a.shopDataCalculations.itemsSumAfterPayment));
     return SfCartesianChart(
-      title: ChartTitle(text: 'Shops  Consumption'),
+      title: ChartTitle(text: title ?? ''),
       //primaryXAxis: DateTimeAxis(),
       primaryXAxis: CategoryAxis(),
       series: <ChartSeries>[

@@ -1,8 +1,11 @@
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/shopsbloc/shops_bloc.dart';
 import 'package:lkarnet/components.dart';
 
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +26,8 @@ class _AddShopState extends ConsumerState<AddShop> {
   final TextEditingController _shopPhoneController = TextEditingController();
   final TextEditingController _shopLimitController = TextEditingController();
   final TextEditingController _shopBesoinController = TextEditingController();
-  void _update() {
+  bool canSave = false;
+  void _updateControllers() {
     if (widget.shop != null) {
       _shopNameController.text = widget.shop!.shopName.toString();
       _shopEmailController.text = widget.shop!.email.toString();
@@ -44,7 +48,7 @@ class _AddShopState extends ConsumerState<AddShop> {
   @override
   void initState() {
     super.initState();
-    _update();
+    _updateControllers();
   }
 
   @override
@@ -53,6 +57,7 @@ class _AddShopState extends ConsumerState<AddShop> {
     super.dispose();
   }
 
+  final _shopBloc = ShopsBloc((GetIt.I.get<DatabaseOperations>()));
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -210,94 +215,43 @@ class _AddShopState extends ConsumerState<AddShop> {
                     SizedBox(
                       height: 50,
                     ),
-                    widget.shop == null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                width: 120,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    'Cancel',
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: MThemeData.raisedButtonStyleCancel,
-                                ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          width: 120,
+                          child: ElevatedButton(
+                            child: Text(
+                              'Cancel',
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: MThemeData.raisedButtonStyleCancel,
+                          ),
+                        ),
+                        Container(
+                          width: 120,
+                          child: ElevatedButton(
+                              child: Text(
+                                widget.shop == null ? 'Save' : 'Update',
                               ),
-                              Container(
-                                width: 120,
-                                child: ElevatedButton(
-                                    child: Text(
-                                      'Save',
-                                    ),
-                                    onPressed: () {
-                                      final _op = ref.read(operationsProvider);
-                                      final ShopModel _shop = ShopModel(
-                                        shopName:
-                                            _shopNameController.text.trim(),
-                                        phone: _shopPhoneController.text.trim(),
-                                        besoinTitle:
-                                            _shopBesoinController.text.trim(),
-                                        limit: double.parse(
-                                            _shopLimitController.text.trim()),
-                                      );
+                              onPressed: !canSave
+                                  ? null
+                                  : () {
                                       if (_formKeyShop.currentState!
                                           .validate()) {
-                                        _op.addShop(_shop).then((value) {
-                                          if (value) clear();
-                                          Navigator.of(context).pop();
-                                        });
+                                        if (widget.shop == null) {
+                                          _saveShop();
+                                        } else {
+                                          _updateShop();
+                                        }
                                       }
                                     },
-                                    style: MThemeData.raisedButtonStyleSave),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                width: 120,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    'Cancel',
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: MThemeData.raisedButtonStyleCancel,
-                                ),
-                              ),
-                              Container(
-                                width: 120,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    'Update',
-                                  ),
-                                  onPressed: () {
-                                    final _op = ref.read(operationsProvider);
-                                    final ShopModel _shop = ShopModel(
-                                      id: widget.shop!.id,
-                                      shopName: _shopNameController.text.trim(),
-                                      phone: _shopPhoneController.text.trim(),
-                                      besoinTitle:
-                                          _shopBesoinController.text.trim(),
-                                      limit: double.parse(
-                                          _shopLimitController.text.trim()),
-                                    );
-                                    if (_formKeyShop.currentState!.validate()) {
-                                      _op.updateShop(_shop).then((value) {
-                                        if (value) Navigator.pop(context);
-                                      });
-                                    }
-                                  },
-                                  style: MThemeData.raisedButtonStyleCancel,
-                                ),
-                              ),
-                            ],
-                          ),
+                              style: MThemeData.raisedButtonStyleSave),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -306,5 +260,29 @@ class _AddShopState extends ConsumerState<AddShop> {
         ),
       ),
     );
+  }
+
+  /// save shop
+  void _saveShop() {
+    var shop = ShopModel(
+      shopName: _shopNameController.text,
+      email: _shopEmailController.text,
+      phone: _shopPhoneController.text,
+      besoinTitle: _shopBesoinController.text,
+      limit: double.parse(_shopLimitController.text),
+    );
+    _shopBloc.add(AddShopEvent(shop));
+  }
+
+  /// update shop
+  void _updateShop() {
+    var shop = ShopModel(
+      shopName: _shopNameController.text,
+      email: _shopEmailController.text,
+      phone: _shopPhoneController.text,
+      besoinTitle: _shopBesoinController.text,
+      limit: double.parse(_shopLimitController.text),
+    );
+    _shopBloc.add(UpdateShopEvent(shop));
   }
 }

@@ -62,52 +62,7 @@ class ItemTileWidget extends ConsumerWidget {
               key: const Key('action-12'),
               backgroundColor: Colors.transparent,
               label: 'Delete',
-              onPressed: (context2) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Cancel',
-                                ),
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: MThemeData.raisedButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {
-                                  ref.read(operationsProvider).deleteItem(item);
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text('Item Deleted'),
-                                    duration: Duration(seconds: 1),
-                                    backgroundColor: AppConstants.greenOpacity,
-                                  ));
-                                },
-                                style: MThemeData.raisedButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
-              },
+              onPressed: (context2) {},
               icon: Icons.delete),
         ],
       ),

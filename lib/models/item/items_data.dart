@@ -32,6 +32,7 @@ class ItemsData {
       ddmmyyyys.add(DateTime(
           item.dateBought.year, item.dateBought.month, item.dateBought.day));
     }
+    log(ddmmyyyys.length.toString());
     return ddmmyyyys..toSet().toList();
   }
 

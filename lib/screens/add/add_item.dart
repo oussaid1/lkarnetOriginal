@@ -1,8 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/providers/varproviders/var_providers.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
@@ -159,6 +161,8 @@ class _AddItemState extends ConsumerState<AddItem>
   }
 
   Row _buildUpdateButton(BuildContext context) {
+    final _op =
+        ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -184,7 +188,7 @@ class _AddItemState extends ConsumerState<AddItem>
                         duration: Duration(seconds: 1),
                         content: Text('Saving...'),
                       ));
-                      final _op = context.read<ItemsBloc>();
+
                       final _item = ItemModel(
                         id: widget.item!.id,
                         besoinTitle: '',

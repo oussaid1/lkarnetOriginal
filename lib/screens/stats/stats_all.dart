@@ -74,35 +74,28 @@ class StatsAll extends ConsumerWidget {
                               height: 240,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: LineChartWidgetDate(_itemsDataList),
+                                child: LineChartWidgetDate(
+                                    chartData: _itemsDataList,
+                                    title: "Items by Date"),
                               ),
                             ),
                             BluredContainer(
                               margin: EdgeInsets.all(8),
                               width: 410,
                               height: 300,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Most Frequent Products',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  SizedBox(
-                                      width: 410,
-                                      height: 240,
-                                      child: PeiWidget(_itemsDataList))
-                                ],
+                              child: PeiWidgetForTagged(
+                                chartData: _dataByShops,
+                                title: "Items by Shop",
                               ),
                             ),
                             BluredContainer(
                               margin: EdgeInsets.all(8),
                               width: 400,
                               height: 220,
-                              child: ColumnChartWidget(_dataByShops),
+                              child: ColumnChartWidget(
+                                chartData: _dataByShops,
+                                title: "Items by Shop",
+                              ),
                             ),
                             const SizedBox(
                               width: 100,
