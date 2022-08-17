@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/settings/theme.dart';
-import 'package:lkarnet/widgets/dialogs.dart';
 import '../components.dart';
 import '../models/item/item.dart';
-import '../providers/operationsprovider/operations_provider.dart';
 import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_item.dart';
 import 'add_to_kitchen_from_item.dart';

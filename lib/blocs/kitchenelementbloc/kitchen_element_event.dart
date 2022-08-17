@@ -7,32 +7,32 @@ abstract class KitchenElementEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAllKitchenElements extends KitchenElementEvent {}
+class GetAllKitchenElementsEvent extends KitchenElementEvent {}
 
-class LoadKitchenElements extends KitchenElementEvent {
+class LoadKitchenElementsEvent extends KitchenElementEvent {
   final List<KitchenElementModel> kitchenElements;
-  LoadKitchenElements({required this.kitchenElements});
+  LoadKitchenElementsEvent({required this.kitchenElements});
   @override
   List<Object> get props => [kitchenElements];
 }
 
-class AddKitchenElement extends KitchenElementEvent {
+class AddKitchenElementEvent extends KitchenElementEvent {
   final KitchenElementModel kitchenElement;
-  AddKitchenElement({required this.kitchenElement});
+  AddKitchenElementEvent({required this.kitchenElement});
   @override
   List<Object> get props => [kitchenElement];
 }
 
-class UpdateKitchenElement extends KitchenElementEvent {
+class UpdateKitchenElementEvent extends KitchenElementEvent {
   final KitchenElementModel kitchenElement;
-  UpdateKitchenElement({required this.kitchenElement});
+  UpdateKitchenElementEvent({required this.kitchenElement});
   @override
   List<Object> get props => [kitchenElement];
 }
 
-class DeleteKitchenElement extends KitchenElementEvent {
+class DeleteKitchenElementEvent extends KitchenElementEvent {
   final KitchenElementModel kitchenElement;
-  DeleteKitchenElement({required this.kitchenElement});
+  DeleteKitchenElementEvent({required this.kitchenElement});
   @override
   List<Object> get props => [kitchenElement];
 }

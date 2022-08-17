@@ -182,7 +182,6 @@ class _LoginPageState extends State<LoginPage> {
                                         loginCredentials: LoginCredentials(
                                             username: _emailController.text,
                                             password: _passController.text)));
-                                log('login button pressed event dispatched');
                               }
                               // ref.read(isLoadingProvider.state).state = true;
                               // if (_loginFormKey.currentState!.validate()) {

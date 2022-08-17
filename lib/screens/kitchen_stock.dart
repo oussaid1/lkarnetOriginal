@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
+import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/kitchen/kitchen_element_data.dart';
-import 'package:lkarnet/providers/authproviders/database_providers.dart';
-import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../widgets/availability_widget.dart';
@@ -47,79 +48,70 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
       start: 0.1,
       end: 0,
       borderColorOpacity: 0,
-      child: StreamBuilder<List<KitchenItemModel>>(
-          stream: ref.read(databaseProvider).kitchenItemsStream(),
-          builder: (context, snap) {
-            return StreamBuilder<List<KitchenElementModel>>(
-                stream: ref.read(databaseProvider).kitchenElementsStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snap.hasData) {
-                    clearListsts();
-                    _kitchenElements = snapshot.data!;
-                    _kitchenItems = snap.data!;
-                    _kitchenElementsData = KitchenElementsData(
-                      kitchenElementList: _kitchenElements,
-                      kitchenItems: _kitchenItems,
-                    );
-                  }
-                  //kitchenElements = KitchenElement.fakeKitchenElements;
-                  return Scaffold(
-                    backgroundColor: Colors.transparent,
-                    floatingActionButtonLocation:
-                        FloatingActionButtonLocation.centerFloat,
-                    floatingActionButton: FloatingActionButton(
-                      heroTag: 'add_kitchen_element',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddKitchenElement(),
-                          ),
-                        );
-                      },
-                      child: Icon(Icons.add),
-                    ),
-                    appBar: AppBar(
-                      actions: [
-                        NotificationsIconButton(
-                          ref: ref,
-                        ),
-                      ],
-                      leading:
-                          Icon(Icons.kitchen_outlined, color: Colors.black),
-                      title: Text(
-                        'Kitchen Stock  ${_kitchenItems.length}',
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      excludeHeaderSemantics: true,
-                      toolbarHeight: 40,
-                      backgroundColor: AppConstants.whiteOpacity,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(AppConstants.radius),
-                          bottom: Radius.circular(AppConstants.radius),
-                        ),
-                      ),
-                    ),
-                    // Next, create a SliverList
-                    body: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          _buildBarChartWidget(_kitchenElements),
-                          const SizedBox(height: 20),
-                          _kitchenElementsData != null
-                              ? _buildGridView(context, _kitchenElementsData!)
-                              : const SizedBox(height: 20),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
-                    ),
-                  );
-                });
-          }),
+      child: BlocBuilder<KitchenItemBloc, KitchenItemState>(
+          builder: (context, kItemsState) {
+        return BlocBuilder<KitchenElementBloc, KitchenElementState>(
+            builder: (context, kElmntsState) {
+          if (kItemsState.kitchenItems.isNotEmpty &&
+              kElmntsState.kitchenElements.isNotEmpty) {
+            clearListsts();
+            _kitchenElements = kElmntsState.kitchenElements;
+            _kitchenItems = kItemsState.kitchenItems;
+            _kitchenElementsData = KitchenElementsData(
+              kitchenElementList: _kitchenElements,
+              kitchenItems: _kitchenItems,
+            );
+          }
+          //kitchenElements = KitchenElement.fakeKitchenElements;
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton(
+              heroTag: 'add_kitchen_element',
+              onPressed: () {},
+              child: Icon(Icons.add),
+            ),
+            appBar: AppBar(
+              actions: [
+                NotificationsIconButton(
+                  ref: ref,
+                ),
+              ],
+              leading: Icon(Icons.kitchen_outlined, color: Colors.black),
+              title: Text(
+                'Kitchen Stock  ${_kitchenItems.length}',
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              excludeHeaderSemantics: true,
+              toolbarHeight: 40,
+              backgroundColor: AppConstants.whiteOpacity,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(AppConstants.radius),
+                  bottom: Radius.circular(AppConstants.radius),
+                ),
+              ),
+            ),
+            // Next, create a SliverList
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  _buildBarChartWidget(_kitchenElements),
+                  const SizedBox(height: 20),
+                  _kitchenElementsData != null
+                      ? _buildGridView(context, _kitchenElementsData!)
+                      : const SizedBox(height: 20),
+                  const SizedBox(height: 50),
+                ],
+              ),
+            ),
+          );
+        });
+      }),
     );
   }
 

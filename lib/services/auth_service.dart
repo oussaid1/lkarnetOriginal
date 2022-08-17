@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/login_credentials.dart';

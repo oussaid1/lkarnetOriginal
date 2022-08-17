@@ -27,7 +27,7 @@ import '../add/add_shop.dart';
 import '../lists/items.dart';
 import '../lists/payments.dart';
 import '../lists/shops.dart';
-import '../shop_details.dart';
+import '../shop_details/shop_details.dart';
 
 class DashBoardPage extends StatefulWidget {
   const DashBoardPage({Key? key}) : super(key: key);
@@ -165,8 +165,10 @@ class _DashBoardPageState extends State<DashBoardPage>
                                       _filteredPayments.paymentsByDateFilter;
                                   List<ShopModel> _shops = shopsState.shops;
                                   //////////////////////////////////////////////////////
-                                  var dataSink =
-                                      DataSink(_shops, _items, _payments);
+                                  var dataSink = DataSink(
+                                      items: _items,
+                                      payments: _payments,
+                                      shops: _shops);
                                   //////////////////////////////////////////////////////
                                   ///////////////////////////////////////////////////////
                                   ShopDataCalculations _shopDataCalculations =

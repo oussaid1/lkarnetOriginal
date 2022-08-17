@@ -105,8 +105,8 @@ class ShopsList extends ConsumerWidget {
                         List<ShopModel> _shops = shopsState.shops;
                         //////////////////////////////////////////////////////
 
-                        DataSink _dataSink =
-                            DataSink(_shops, _items, _payments);
+                        DataSink _dataSink = DataSink(
+                            items: _items, payments: _payments, shops: _shops);
                         List<ShopData> _shopsDataList = _dataSink.allShopsData;
 
                         return SingleChildScrollView(

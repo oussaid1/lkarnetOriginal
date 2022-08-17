@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lkarnet/screens/stats/stats_all.dart';
-import 'package:lkarnet/screens/stats/stats_day.dart';
-import 'package:lkarnet/screens/stats/stats_month.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
 
 class StatsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 1,
       initialIndex: 0,
       child: BluredContainer(
         child: Scaffold(
@@ -20,8 +18,6 @@ class StatsTab extends StatelessWidget {
               unselectedLabelColor: Theme.of(context).dividerColor,
               tabs: [
                 Tab(text: 'All'),
-                Tab(text: 'Days'),
-                Tab(text: 'Months'),
               ],
             ),
           ),
@@ -29,8 +25,6 @@ class StatsTab extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             children: [
               StatsAll(),
-              StatsDay(),
-              StatsMonth(),
             ],
           ),
         ),

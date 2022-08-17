@@ -1,18 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
-
-import '../shop/shop_model.dart';
 import '../shop/shopdata_calculations.dart';
 import '../shop/shops_data.dart';
 
-class Tagged<T> {
-  T tag;
-  List<ItemModel> items;
-  List<PaymentModel> payments;
-  List<ShopModel> shops;
+@immutable
+class Tagged<T> extends Equatable {
+  final T tag;
+  final List<ItemModel> items;
+  final List<PaymentModel> payments;
+  //List<ShopModel> shops;
   Tagged(
       {required this.tag,
-      required this.shops,
+      // required this.shops,
       required this.items,
       required this.payments});
 
@@ -22,13 +23,13 @@ class Tagged<T> {
   /// get a list of shopData
   List<ShopData> get shopsDataList {
     List<ShopData> list = [];
-    for (var shop in shops) {
-      list.add(ShopData(
-        shop: shop,
-        items: items,
-        payments: payments,
-      ));
-    }
+    // for (var shop in shops) {
+    //   list.add(ShopData(
+    //     shop: shop,
+    //     items: items,
+    //     payments: payments,
+    //   ));
+    // }
     return list;
   }
 
@@ -36,5 +37,6 @@ class Tagged<T> {
   ShopDataCalculations get shopDataCalculations =>
       ShopDataCalculations(items: items, payments: payments);
 
-  /// get itemsData
+  @override
+  List<Object> get props => [tag!, items, payments];
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
@@ -46,7 +45,7 @@ class _AddItemState extends ConsumerState<AddItem>
   void _update() {
     if (widget.item != null) {
       _isUpdate = true;
-      _localItem = widget.item;
+      //   _localItem = widget.item;
       _itemNameController.text = widget.item!.itemName;
       _itemPriceController.text = (widget.item!.itemPrice).toString();
       _quantity = widget.item!.quantity;
@@ -289,7 +288,7 @@ class _AddItemState extends ConsumerState<AddItem>
         //: ref.watch(shopsProvider.state).state,
         onShopSelected: (value) {
           setState(() {
-            _shop = value;
+            _shop = value!.shopName ?? '';
           });
         },
       ),
@@ -304,6 +303,10 @@ class _AddItemState extends ConsumerState<AddItem>
         child: SizedBox(
           height: 50,
           child: TypeAheadField<ItemModel>(
+            suggestionsBoxDecoration: SuggestionsBoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
             autoFlipDirection: true,
             minCharsForSuggestions: 2,
             direction: AxisDirection.up,
@@ -311,7 +314,7 @@ class _AddItemState extends ConsumerState<AddItem>
             textFieldConfiguration: TextFieldConfiguration(
               focusNode: _itemNameFocusNode,
               onChanged: (value) => setState(() {
-                _canSave = _itemNameController.text.trim().isNotEmpty;
+                _canSave = _itemNameController.text.trim().trim().isNotEmpty;
               }),
               controller: _itemNameController,
               autofocus: true,
@@ -352,8 +355,11 @@ class _AddItemState extends ConsumerState<AddItem>
                   .toList(growable: true);
             },
             itemBuilder: (context, suggestion) {
-              return ItemTileWidget(
-                item: suggestion,
+              return SizedBox(
+                width: 300,
+                child: ItemTileWidget(
+                  item: suggestion,
+                ),
               );
             },
             onSuggestionSelected: (suggestion) {
@@ -393,7 +399,7 @@ class _AddItemState extends ConsumerState<AddItem>
             },
             onChanged: (value) {
               setState(() {
-                _canSave = _itemNameController.text.trim().isNotEmpty;
+                _canSave = _itemNameController.text.trim().trim().isNotEmpty;
               });
             },
             textAlign: TextAlign.center,
@@ -429,16 +435,34 @@ class _AddItemState extends ConsumerState<AddItem>
   save() {
     setState(() => _canSave = true);
     final ItemModel item = ItemModel(
-      itemName: _itemNameController.text,
-      itemPrice: double.parse(_itemPriceController.text),
+      itemName: _itemNameController.text.trim(),
+      itemPrice: double.parse(_itemPriceController.text.trim()),
       quantity: _quantity,
       dateBought: _dateBought,
-      shopName: _shop?,
+      shopName: _shop ?? '',
       quantifier: _quantifier,
     );
-    _localItem=item;
+    _localItem = item;
     _itmBloc.add(AddItemEvent(item));
     mBottomSheet(context, controller: _controller);
+    clear();
+    Navigator.of(context).pop();
+  }
+
+  /// update the item in the database
+  update() {
+    setState(() => _canSave = true);
+    final ItemModel item = ItemModel(
+      itemName: _itemNameController.text.trim(),
+      itemPrice: double.parse(_itemPriceController.text.trim()),
+      quantity: _quantity,
+      dateBought: _dateBought,
+      shopName: _shop ?? '',
+      quantifier: _quantifier,
+    );
+    // _localItem=item;
+    _itmBloc.add(UpdateItemEvent(item));
+    //mBottomSheet(context, controller: _controller);
     clear();
     Navigator.of(context).pop();
   }

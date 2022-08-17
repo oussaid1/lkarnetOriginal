@@ -18,19 +18,6 @@ class GlobalFunctions {
     toast(message);
   }
 
-  // /// show ios style dialoge
-  // static void showIosStyleDialog(BuildContext context, String message) {
-  //   showOverlay((_, t) {
-  //     return Theme(
-  //       data: Theme.of(context),
-  //       child: Opacity(
-  //         opacity: t,
-  //         child: IosStyleToast(),
-  //       ),
-  //     );
-  //   }, key: ValueKey('hello'));
-  // }
-
   /// loading snackbar
   static void showLoadingSnackBar(BuildContext context, String message) {
     toast(message);

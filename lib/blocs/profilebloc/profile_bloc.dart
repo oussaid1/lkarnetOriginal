@@ -31,7 +31,6 @@ class EditProfileBloc extends Bloc<ProfileEvent, EditProfileState> {
   void _onProfilePictureUploadRequested(
       ProfilePictureUploadRequestedEvent event,
       Emitter<EditProfileState> emit) async {
-    log('profile picture upload requested event ${state.toString()}');
     emit(ProfilePictureUploadingState());
   }
 

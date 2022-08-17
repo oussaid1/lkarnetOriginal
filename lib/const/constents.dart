@@ -36,7 +36,8 @@ class AppConstants {
   static final Color blackOpacity = Colors.black.withOpacity(opacity);
   static final Color hintColor =
       Color.fromARGB(255, 36, 36, 36).withOpacity(0.6);
-  static final Color primaryColor = Color.fromARGB(255, 235, 166, 150);
+  static final Color primaryColor = Color.fromARGB(255, 150, 163, 235);
+  static final Color accentColor = Color.fromARGB(255, 235, 205, 150);
   // list of colors
   static const List<Color> myGradients = [Color(0xD52A76DA), Color(0xBDD43FCD)];
 }

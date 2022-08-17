@@ -181,7 +181,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
         focusNode: _paidAmountFocusNode,
         onShopSelected: (value) {
           setState(() {
-            _shopName = value;
+            _shopName = value!.shopName;
           });
           // ref.read(pickedShop.state).state = value;
         },

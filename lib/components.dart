@@ -1,5 +1,4 @@
 export '../const/constents.dart';
-export 'dart:developer';
 export 'package:awesome_notifications/awesome_notifications.dart';
 export 'package:bloc/bloc.dart';
 export 'package:equatable/equatable.dart';

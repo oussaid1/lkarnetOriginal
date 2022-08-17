@@ -1,6 +1,3 @@
-import 'package:lkarnet/components.dart';
-import 'package:lkarnet/models/item/items_filtered.dart';
-import 'package:lkarnet/models/payment/payments_filtered.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
 
 import 'item/item.dart';
@@ -9,10 +6,10 @@ import 'shop/shop_model.dart';
 import 'shop/shops_data.dart';
 
 class DataSink {
-  List<ShopModel> shops;
-  List<ItemModel> items;
-  List<PaymentModel> payments;
-  DataSink(this.shops, this.items, this.payments);
+  final List<ShopModel> shops;
+  final List<ItemModel> items;
+  final List<PaymentModel> payments;
+  DataSink({required this.shops, required this.items, required this.payments});
 
   /// copy with
   DataSink copyWith({
@@ -21,9 +18,9 @@ class DataSink {
     List<PaymentModel>? payments,
   }) {
     return DataSink(
-      shops ?? this.shops,
-      items ?? this.items,
-      payments ?? this.payments,
+      shops: shops ?? this.shops,
+      items: items ?? this.items,
+      payments: payments ?? this.payments,
     );
   }
 
@@ -33,12 +30,9 @@ class DataSink {
     for (var shop in shops) {
       list.add(ShopData(
         shop: shop,
-        items: items
-            .wereItemsForShop((item) => item.shopName, shop.shopName!)
-            .toList(),
+        items: items.where((item) => item.shopName == shop.shopName).toList(),
         payments: payments
-            .wereItemsForShop(
-                (payment) => payment.paidShopName!, shop.shopName!)
+            .where((payment) => payment.paidShopName == shop.shopName)
             .toList(),
       ));
     }
@@ -46,11 +40,43 @@ class DataSink {
   }
 
   /////////////////////////////////////////////////////////////////
+
+  //// get distinct item names ///////////////////////////////////////////////
+  List<String> get distinctItemNames =>
+      items.map((item) => item.itemName).toSet().toList();
+
+  // get distinct ddmmyyyy
+  List<DateTime> get distinctDays => items
+      .map((item) => DateTime(
+          item.dateBought.day, item.dateBought.month, item.dateBought.year))
+      .toSet()
+      .toList()
+    ..addAll(
+      payments
+          .map((payment) => DateTime(payment.datePaid.day,
+              payment.datePaid.month, payment.datePaid.year))
+          .toSet()
+          .toList(),
+    );
+
+  // get distinct mmyyy from items
+  /// TODO : join with it distincs from payments
+  List<DateTime> get distinctMonths => items
+      .map((item) => DateTime(item.dateBought.year, item.dateBought.month, 1))
+      .toSet()
+      .toList();
+
+// get distinct yyyy
+  List<DateTime> get distinctYears => items
+      .map((item) => DateTime(item.dateBought.year, 1, 1))
+      .toSet()
+      .toList();
+
   /// get filtered items
-  ItemsFiltered get filteredItems => ItemsFiltered(items: items);
+  //ItemsFiltered get filteredItems => ItemsFiltered(items: items);
 
   // get filtered payments
-  PaymentsFiltered get filteredPayments => PaymentsFiltered(payments: payments);
+  //PaymentsFiltered get filteredPayments => PaymentsFiltered(payments: payments);
 
   /// /////////////////////////////////////////////////////////////////
   /// distinct shopnames
@@ -58,27 +84,25 @@ class DataSink {
       shops.map((shop) => shop.shopName.toString()).toList();
 
   /// get a list of distinct dates from payments and items
-  List<DateTime> get distinctDates {
+  List<DateTime> get distinctDayDates {
     List<DateTime> list = [];
-    list.addAll(filteredItems.distinctDays);
-    list.addAll(filteredPayments.distinctDates);
+    list.addAll(distinctDays);
     return list..toSet().toList();
   }
 
   // get distinct months from items and payments
 
-  List<DateTime> get distinctMonths {
+  List<DateTime> get distinctMonthDates {
     List<DateTime> list = [];
-    list.addAll(filteredItems.distinctMonths);
-    list.addAll(filteredPayments.distinctMonths);
+    list.addAll(distinctMonths);
     return list..toSet().toList();
   }
 
   // get distinct years from items and payments
-  List<DateTime> get distinctYears {
+  List<DateTime> get distinctYearDates {
     List<DateTime> list = [];
-    list.addAll(filteredItems.distinctYears);
-    list.addAll(filteredPayments.distinctYears);
+    list.addAll(distinctYears);
+
     return list..toSet().toList();
   }
 
@@ -86,12 +110,22 @@ class DataSink {
   ///get a list of tagged distinct dates from payments and items
   List<Tagged> get taggedDistinctDates {
     List<Tagged> list = [];
-    for (var i = 0; i < distinctDates.length; i++) {
+    for (var i = 0; i < distinctDays.length; i++) {
       list.add(Tagged(
-        tag: distinctDates[i],
-        shops: shops,
-        items: filteredItems.itemsForDate(distinctDates[i]),
-        payments: filteredPayments.paymentsForDate(distinctDates[i]),
+        tag: distinctDays[i],
+        // shops: shops,
+        items: items
+            .where((item) =>
+                item.dateBought.day == distinctDays[i].day &&
+                item.dateBought.month == distinctDays[i].month &&
+                item.dateBought.year == distinctDays[i].year)
+            .toList(),
+        payments: payments
+            .where((payment) =>
+                payment.datePaid.day == distinctDays[i].day &&
+                payment.datePaid.month == distinctDays[i].month &&
+                payment.datePaid.year == distinctDays[i].year)
+            .toList(),
       ));
     }
 
@@ -101,14 +135,14 @@ class DataSink {
   // get tagged distinct months from items and payments
   List<Tagged> get taggedDistinctMonths {
     List<Tagged> list = [];
-    for (var i = 0; i < distinctMonths.length; i++) {
-      list.add(Tagged(
-        tag: distinctMonths[i],
-        shops: shops,
-        items: filteredItems.itemsForMonth(distinctMonths[i]),
-        payments: filteredPayments.paymentsForMonth(distinctMonths[i]),
-      ));
-    }
+    // for (var i = 0; i < distinctMonths.length; i++) {
+    //   list.add(Tagged(
+    //     tag: distinctMonths[i],
+    //     shops: shops,
+    //     items: filteredItems.itemsForMonth(distinctMonths[i]),
+    //     payments: filteredPayments.paymentsForMonth(distinctMonths[i]),
+    //   ));
+    // }
 
     return list;
   }
@@ -119,9 +153,13 @@ class DataSink {
     for (var i = 0; i < distinctYears.length; i++) {
       list.add(Tagged(
         tag: distinctYears[i],
-        shops: shops,
-        items: filteredItems.itemsForYear(distinctYears[i]),
-        payments: filteredPayments.paymentsForYear(distinctYears[i]),
+        // shops: shops,
+        items: items
+            .where((item) => item.dateBought.year == distinctYears[i].year)
+            .toList(),
+        payments: payments
+            .where((payment) => payment.datePaid.year == distinctYears[i].year)
+            .toList(),
       ));
     }
 
@@ -134,7 +172,7 @@ class DataSink {
     for (var i = 0; i < shopNames.length; i++) {
       list.add(Tagged(
         tag: shops[i].shopName!,
-        shops: shops,
+        //  shops: shops,
         items: items
             .where((element) => element.shopName.trim() == shopNames[i].trim())
             .toList(),

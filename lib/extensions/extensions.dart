@@ -67,6 +67,18 @@ extension DtExtension on DateTime {
     }
   }
 
+  DateTime toDate() {
+    return DateTime(year, month, day);
+  }
+
+  DateTime toMonth() {
+    return DateTime(year, month, 1);
+  }
+
+  DateTime toYear() {
+    return DateTime(year, 1, 1);
+  }
+
   /// check if given date is today
   bool isMatchDay(DateTime date) {
     if (day == date.day && month == date.month && year == date.year) {
@@ -101,6 +113,16 @@ extension DtExtension on DateTime {
     return day == DateTime.now().day &&
         month == DateTime.now().month &&
         year == DateTime.now().year;
+  }
+}
+
+/// extension on [List<T>] to limit the list size to [limit]
+extension ListExtension<T> on List<T> {
+  List<T> limit(int limit) {
+    if (this.length > limit) {
+      return this.sublist(0, limit);
+    }
+    return this;
   }
 }
 

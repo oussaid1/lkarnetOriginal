@@ -24,12 +24,9 @@ class SignUpBloc extends Bloc<SignupEvent, SignUpState> {
       SignUpRequestedEvent event, Emitter<SignUpState> emit) async {
     emit(SignupLoading());
     if (event.signUpCredentials.isValid) {
-      log('sign up with email and password');
       var response = await _authService.signUpWithEmailAndPassword(
           signUpCredentials: event.signUpCredentials);
-      log('sign up with email and password response: ${response!.email}');
-      log(response.toString());
-      emit(SignUpSuccessfulState(user: response));
+      emit(SignUpSuccessfulState(user: response!));
     } else {
       emit(SignupCredentialsInvalid());
     }

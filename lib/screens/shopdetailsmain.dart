@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
+import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
-import '../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../blocs/itemsbloc/items_bloc.dart';
 import '../blocs/payments/payments_bloc.dart';
 import '../blocs/shopsbloc/shops_bloc.dart';
 import '../components.dart';
-import '../models/data_sink.dart';
 import '../models/payment/payment_model.dart';
 import '../models/statistics/tagged.dart';
 import '../widgets/price_curency_widget.dart';
 import '../widgets/shop_square_tile.dart';
 import 'dash/dashboard.dart';
-import 'shop_details.dart';
+import 'shop_details/shop_details.dart';
+import 'shop_details/shop_details_tab.dart';
 
 class ShopDetailsMain extends ConsumerStatefulWidget {
   const ShopDetailsMain({
@@ -27,142 +27,175 @@ class ShopDetailsMain extends ConsumerStatefulWidget {
 
 class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   Tagged? _tagged;
+  List<Tagged> _taggedList = [];
+  List<ItemModel> _items = [];
+  List<PaymentModel> _payments = [];
+  List<ShopModel> _shops = [];
+  int filter = 0;
+  int groupValue = 0;
 
-  int _currentIndex = 0;
-
-  //var _isSelected = false;
   @override
   void initState() {
-    // context.read<ItemsBloc>().add(GetItemsEvent());
-    //context.read<PaymentsBloc>().add(GetPaymentsEvent());
-    //context.read<ShopsBloc>().add(GetShopsEvent());
     super.initState();
   }
 
-  //List<Tagged> _listOfTagged = [];
+  List<Tagged> _listOfTags() {
+    List<Tagged> _list = [];
+    List<DateTime> _distinctDates =
+        _items.map((item) => item.dateBought.toDate()).toSet().toList();
+    List<DateTime> _distinctMonths =
+        _items.map((item) => item.dateBought.toMonth()).toSet().toList();
+    List<DateTime> _distinctYears =
+        _items.map((item) => item.dateBought.toYear()).toSet().toList();
+    //////////////////////////////////////////////////////
+    switch (filter) {
+      case 0:
+        return _list = _distinctDates
+            .map((dstDate) => Tagged(
+                  tag: dstDate,
+                  items: _items
+                      .where((item) => item.dateBought.isMatchDay(dstDate))
+                      .toList(),
+                  payments: _payments
+                      .where((payment) => payment.datePaid.isMatchDay(dstDate))
+                      .toList(),
+                ))
+            .toList();
+      case 1:
+        return _list = _distinctMonths
+            .map((dstDate) => Tagged(
+                  tag: dstDate,
+                  items: _items
+                      .where((item) => item.dateBought.isMatchToMonth(dstDate))
+                      .toList(),
+                  payments: _payments
+                      .where(
+                          (payment) => payment.datePaid.isMatchToMonth(dstDate))
+                      .toList(),
+                ))
+            .toList();
+      case 2:
+        return _list = _distinctYears
+            .map((dstDate) => Tagged(
+                  tag: dstDate,
+                  items: _items
+                      .where((item) => item.dateBought.isMatchToYear(dstDate))
+                      .toList(),
+                  payments: _payments
+                      .where(
+                          (payment) => payment.datePaid.isMatchToYear(dstDate))
+                      .toList(),
+                ))
+            .toList();
+      default:
+    }
+    return _list;
+  }
+
   @override
   Widget build(BuildContext context) {
-    //var _listOfTagged = ref.watch(taggedListMMYYProvider.state).state;
-    //var _currentIndex = ref.watch(listIndex.state).state;
-    // var _tagged = _listOfTagged[ref.watch(tagIndexProvider.state).state];
-    //return MonthlyDash();
-    //_tagged == null ? _tagged = _listOfTagged[0] : _tagged;
-    return BlocBuilder<ItemsBloc, ItemsState>(
-      builder: (context, itemsState) {
+    return BlocBuilder<ShopsBloc, ShopsState>(
+      buildWhen: (previous, current) =>
+          previous.shops.length != current.shops.length,
+      builder: (context, shopsState) {
         return BlocBuilder<PaymentsBloc, PaymentsState>(
+          buildWhen: (previous, current) =>
+              previous.payments.length != current.payments.length,
           builder: (context, paymentsState) {
-            return BlocBuilder<ShopsBloc, ShopsState>(
-              builder: (context, shopsState) {
-                return BlocBuilder<DateFilterBloc, DateFilterState>(
-                  builder: (context, filterState) {
-                    //////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////
-                    List<ItemModel> _items = itemsState.items;
-                    List<PaymentModel> _payments = paymentsState.payments;
-                    List<ShopModel> _shops = shopsState.shops;
-                    //////////////////////////////////////////////////////
+            return BlocBuilder<ItemsBloc, ItemsState>(
+              buildWhen: (previous, current) =>
+                  previous.items.length != current.items.length,
+              builder: (context, itemsState) {
+                //////////////////////////////////////////////////////
 
-                    //////////////////////////////////////////////////////
-                    var _dataSink = DataSink(_shops, _items, _payments);
-                    //////////////////////////////////////////////////////
-                    List<Tagged> _listOfTagged = _dataSink.taggedDistinctDates;
+                //////////////////////////////////////////////////////
+                _items = itemsState.items;
+                _payments = paymentsState.payments;
+                _shops = shopsState.shops;
+                //////////////////////////////////////////////////////
+                _taggedList = _listOfTags();
+                //////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////
+                // DataSink _dataSink = DataSink(_shops, _items, _payments);
+                //////////////////////////////////////////////////////
+                ////////////////////////////////////////////////
+                //////////////////////////////////////////////////////
+                var _shopDataList = shopsDataList(_shops, _tagged);
+                //////////////////////////////////////////////////////
+                // _tagged == null ? _listOfTagged[0] : _tagged;
+                return BluredContainer(
+                  start: 0,
+                  end: 0,
+                  borderColorOpacity: 0,
+                  child: Scaffold(
+                    backgroundColor: Color.fromARGB(0, 255, 255, 255),
+                    floatingActionButton: MyExpandableFab(),
+                    floatingActionButtonLocation:
+                        FloatingActionButtonLocation.endFloat,
+                    appBar: MyAppBar(
+                      title: Text('Shop Details'),
+                    ),
 
-                    final Tagged? _tagged = _listOfTagged[_currentIndex];
-                    //////////////////////////////////////////////////////
-                    // _tagged == null ? _listOfTagged[0] : _tagged;
-                    return BluredContainer(
-                      start: 0,
-                      end: 0,
-                      borderColorOpacity: 0,
-                      child: Scaffold(
-                        backgroundColor: Color.fromARGB(0, 255, 255, 255),
-                        floatingActionButton: MyExpandableFab(),
-                        floatingActionButtonLocation:
-                            FloatingActionButtonLocation.centerFloat,
-                        appBar: MyAppBar(
-                          title: _tagged != null
-                              ? Text(
-                                  '${_tagged.date.ddmmyyyy()}',
-                                )
-                              : Text('No tag'),
-                          leading:
-                              Icon(Icons.calendar_month, color: Colors.black),
-                        ),
-
-                        // Next, create a SliverList
-                        body: Column(
-                          children: [
-                            const SizedBox(
-                              height: 40,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Monthly',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Color.fromARGB(186, 255, 255, 255),
-                                      fontWeight: FontWeight.bold),
+                    // Next, create a SliverList
+                    body: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          buildSelectFilter(),
+                          Container(
+                            height: 235,
+                            width: double.infinity,
+                            // color: Color.fromARGB(94, 255, 193, 7),
+                            child: Stack(
+                              //fit: StackFit.loose,
+                              children: [
+                                _tagged != null
+                                    ? _buildMonthlyCard(context, _tagged!)
+                                    : Container(),
+                                Positioned(
+                                  top: 195,
+                                  width: 360,
+                                  left: MediaQuery.of(context).size.width / 2 -
+                                      180,
+                                  child: _buildSelector(),
                                 ),
-                              ),
+                              ],
                             ),
-                            Container(
-                              height: 235,
-                              width: double.infinity,
-                              // color: Color.fromARGB(94, 255, 193, 7),
-                              child: Stack(
-                                //fit: StackFit.loose,
-                                children: [
-                                  _tagged != null
-                                      ? _buildMonthlyCard(context, _tagged)
-                                      : Container(),
-                                  Positioned(
-                                    top: 195,
-                                    width: 360,
-                                    left:
-                                        MediaQuery.of(context).size.width / 2 -
-                                            180,
-                                    child: _buildSelector(_listOfTagged),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            _tagged == null
-                                ? SizedBox.shrink()
-                                : Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 4),
-                                    height: 300,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 1.5,
-                                              mainAxisSpacing: 10,
-                                              crossAxisSpacing: 10),
-                                      itemCount: _tagged.shopsDataList.length,
-                                      itemBuilder: (context, index) {
-                                        return ShopSquareTile(
-                                          onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ShopDetails(
-                                                shopData: _tagged
-                                                    .shopsDataList[index],
-                                              ),
+                          ),
+                          const SizedBox(height: 10),
+                          _tagged == null
+                              ? SizedBox.shrink()
+                              : Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 4),
+                                  height: 300,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 1.5,
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10),
+                                    itemCount: _shopDataList.length,
+                                    itemBuilder: (context, index) {
+                                      return ShopSquareTile(
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ShopDetailsTab(
+                                              shopData: _shopDataList[index],
                                             ),
                                           ),
-                                          shopData:
-                                              _tagged.shopsDataList[index],
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                        shopData: _shopDataList[index],
+                                      );
+                                    },
                                   ),
-                          ],
-                        ),
+                                ),
+                        ],
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 );
               },
             );
@@ -172,9 +205,85 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
     );
   }
 
+  SizedBox buildSelectFilter() {
+    return SizedBox(
+      height: 45,
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            /// a dropDownButton
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+                color: Color.fromARGB(157, 255, 255, 255),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  alignment: Alignment.center,
+                  value: filter,
+                  icon: Container(),
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      filter = newValue ?? 0;
+                    });
+                  },
+                  items: <int>[0, 1, 2]
+                      .map<DropdownMenuItem<int>>((int value) =>
+                          DropdownMenuItem<int>(
+                            value: value,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Text(value == 0
+                                  ? 'Day'
+                                  : value == 1
+                                      ? 'Month'
+                                      : 'Year'),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<ShopData> shopsDataList(List<ShopModel> shops, Tagged? tegged) {
+    List<ShopData> shopsDataList = [];
+    if (tegged == null) return shopsDataList;
+    for (ShopModel shop in shops) {
+      shopsDataList.add(
+        ShopData(
+          shop: shop,
+          items: tegged.items
+              .where((item) => item.shopName == shop.shopName)
+              .toList(),
+          payments: tegged.payments
+              .where((payment) => payment.paidShopName == shop.shopName)
+              .toList(),
+        ),
+      );
+    }
+    return shopsDataList;
+  }
 // build custom listTile
 
-  Widget _buildSelector(List<Tagged> _listOfTagged) {
+  Widget _buildSelector() {
+    // _tagged = _taggedList[filter];
     return BluredContainer(
       start: 0.5,
       end: 0.5,
@@ -182,11 +291,9 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
       width: 380,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: _listOfTagged.length,
+        itemCount: _taggedList.length,
         itemBuilder: (context, index) {
-          Tagged tagged = _listOfTagged[index];
-          // ref.read(tagedProvider.state).state = tagged;
-          // _tagged = tagged;
+          final Tagged mtagged = _taggedList[index];
 
           return SizedBox(
             width: 100,
@@ -194,13 +301,11 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  // tagged.seledcted = !tagged.seledcted;
-
-                  _tagged = tagged;
+                  _tagged = mtagged;
                 });
               },
               child: Card(
-                color: _tagged == tagged
+                color: _tagged == _taggedList[index]
                     ? AppConstants.primaryColor
                     : AppConstants.whiteOpacity,
                 child: Column(
@@ -209,7 +314,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   children: [
                     // tagged == _tagged ? Text('Selected') : Text(''),
                     Text(
-                      tagged.date.ddmmyyyy(),
+                      mtagged.date.ddmmyyyy(),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ],
@@ -242,7 +347,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                       right: const SizedBox.shrink(),
                       withDollarSign: true,
                       price: tagged.shopDataCalculations.itemsSumAfterPayment,
-                      style: Theme.of(context).textTheme.headline2!),
+                      style: Theme.of(context).textTheme.headline3!),
                 ],
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lkarnet/models/item/item.dart';
@@ -532,9 +534,9 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         Padding(
           padding: EdgeInsets.all(4),
           child: ShopSpinner(
-            onShopSelected: (String? s) {
+            onShopSelected: (shp) {
               setState(() {
-                _shop = s!;
+                _shop = shp!.shopName;
               });
 
               // ref.read(pickedShop.state).state = s;

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +10,8 @@ import 'package:lkarnet/screens/dash/dashboard.dart';
 import 'package:lkarnet/screens/settings/settings.dart';
 import '../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../blocs/itemsbloc/items_bloc.dart';
+import '../blocs/kitchenelementbloc/kitchen_element_bloc.dart';
+import '../blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import '../blocs/shopsbloc/shops_bloc.dart';
 import '../cubits/userCubit/usermodel_cubit.dart';
 import '../models/item/items_filtered.dart';
@@ -36,6 +40,19 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => PaymentsBloc(GetIt.I<DatabaseOperations>())
             ..add(GetPaymentsEvent()),
+        ),
+        //////////////////////////////////////////////////////
+        /// //////////////////////////////////////////////////////
+        /// Kitchen Blocs
+        /// //////////////////////////////////////////////////////
+
+        BlocProvider(
+          create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetAllKitchenElementsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetKitchenItems()),
         ),
         BlocProvider<DateFilterBloc>(
           create: (context) => DateFilterBloc()

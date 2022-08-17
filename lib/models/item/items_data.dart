@@ -1,10 +1,17 @@
+import 'dart:developer';
+
 import '../statistics/statistics_model.dart';
 import 'item.dart';
 import 'package:lkarnet/components.dart';
 
 class ItemsData {
-  List<ItemModel> items;
+  final List<ItemModel> items;
   ItemsData({required this.items});
+  // int countIterations = 0;
+
+  /// a setter for the items list
+  /// a getter for the items list
+  List<ItemModel> get itemz => items;
 // compare two Strings and check number of matching letters
   int compareStrings(String a, String b) {
     int count = 0;
@@ -19,21 +26,20 @@ class ItemsData {
   //// get distinct item names ///////////////////////////////////////////////
   List<String> get distinctItemNames {
     List<String> distinctItemNames = [];
-    for (ItemModel item in items) {
-      distinctItemNames.add(item.itemName);
+    for (var it in items) {
+      distinctItemNames.add(it.itemName);
     }
-    return distinctItemNames..toSet().toList();
+    return distinctItemNames.toSet().toList();
   }
 
   // get distinct ddmmyyyy
   List<DateTime> get distinctDays {
     List<DateTime> ddmmyyyys = [];
-    for (ItemModel item in items) {
-      ddmmyyyys.add(DateTime(
-          item.dateBought.year, item.dateBought.month, item.dateBought.day));
+    for (var it in items) {
+      ddmmyyyys.add(
+          DateTime(it.dateBought.year, it.dateBought.month, it.dateBought.day));
     }
-    log(ddmmyyyys.length.toString());
-    return ddmmyyyys..toSet().toList();
+    return ddmmyyyys.toSet().toList();
   }
 
   // get distinct mmyyy from items
@@ -51,43 +57,44 @@ class ItemsData {
     for (var item in items) {
       _list.add(DateTime(item.dateBought.year));
     }
+
     return _list.toSet().toList();
   }
 
 // get mmyyy ItemsData
-  List<ItemsChartData> get ddmmyyyyItemsChartData {
-    var _list = <ItemsChartData>[];
-    for (var i = 0; i < distinctDays.length; i++) {
-      _list.add(ItemsChartData(
-          tag: distinctDays[i].ddmmyyyy(),
+  List<ItemsChartData<DateTime>> get dailyItemsChartData {
+    var _list = <ItemsChartData<DateTime>>[];
+    for (var date in distinctDays) {
+      _list.add(ItemsChartData<DateTime>(
+          tag: date,
           items: items
-              .where((element) => element.dateBought.isAs(distinctDays[i]))
+              .where((element) => element.dateBought.isMatchDay(date))
               .toList()));
     }
     return _list;
   }
 
   // get mmyyy ItemsData
-  List<ItemsChartData> get mmyyyItemsChartData {
-    var _list = <ItemsChartData>[];
-    for (var i = 0; i < distinctMonths.length; i++) {
-      _list.add(ItemsChartData(
-          tag: distinctMonths[i].ddmmyyyy(),
+  List<ItemsChartData<DateTime>> get monthlyItemsChartData {
+    var _list = <ItemsChartData<DateTime>>[];
+    for (var it in distinctMonths) {
+      _list.add(ItemsChartData<DateTime>(
+          tag: it,
           items: items
-              .where((element) => element.dateBought.isAs(distinctMonths[i]))
+              .where((element) => element.dateBought.isMatchToMonth(it))
               .toList()));
     }
     return _list;
   }
 
   // get yyyy ItemsData
-  List<ItemsChartData> get yyyyItemsChartData {
-    var _list = <ItemsChartData>[];
-    for (var i = 0; i < distinctYears.length; i++) {
-      _list.add(ItemsChartData(
-          tag: distinctYears[i].ddmmyyyy(),
+  List<ItemsChartData<DateTime>> get yearlyItemsChartData {
+    var _list = <ItemsChartData<DateTime>>[];
+    for (var it in distinctYears) {
+      _list.add(ItemsChartData<DateTime>(
+          tag: it,
           items: items
-              .where((element) => element.dateBought.isAs(distinctYears[i]))
+              .where((element) => element.dateBought.isMatchToYear(it))
               .toList()));
     }
     return _list;
@@ -96,12 +103,11 @@ class ItemsData {
   //// get chartData for each item name
   List<ItemsChartData> get itemsByNameChartData {
     var _list = <ItemsChartData>[];
-    for (var i = 0; i < distinctItemNames.length; i++) {
+    for (var it in distinctItemNames) {
       _list.add(ItemsChartData(
-          tag: distinctItemNames[i],
+          tag: it,
           items: items
-              .where((element) =>
-                  element.itemName.trim() == distinctItemNames[i].trim())
+              .where((element) => element.itemName.trim() == it.trim())
               .toList()));
     }
     return _list;

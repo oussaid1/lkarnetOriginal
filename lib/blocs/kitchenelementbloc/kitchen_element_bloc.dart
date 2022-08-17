@@ -19,14 +19,14 @@ class KitchenElementBloc
           error: '',
         )) {
     this.databaseOperations = databaseOperations;
-    on<GetAllKitchenElements>(_onGetAllKitchenElements);
-    on<LoadKitchenElements>(_onLoadKitchenElements);
-    on<AddKitchenElement>(_onAddKitchenElement);
-    on<UpdateKitchenElement>(_onUpdateKitchenElement);
-    on<DeleteKitchenElement>(_onDeleteKitchenElement);
+    on<GetAllKitchenElementsEvent>(_onGetAllKitchenElements);
+    on<LoadKitchenElementsEvent>(_onLoadKitchenElements);
+    on<AddKitchenElementEvent>(_onAddKitchenElement);
+    on<UpdateKitchenElementEvent>(_onUpdateKitchenElement);
+    on<DeleteKitchenElementEvent>(_onDeleteKitchenElement);
   }
-  void _onGetAllKitchenElements(
-      GetAllKitchenElements event, Emitter<KitchenElementState> emit) async {
+  void _onGetAllKitchenElements(GetAllKitchenElementsEvent event,
+      Emitter<KitchenElementState> emit) async {
     _kitchenElementSubscription = databaseOperations
         .kitchenElementsStream()
         .listen((kitchenElements) => emit(state.copyWith(
@@ -35,14 +35,14 @@ class KitchenElementBloc
   }
 
   void _onLoadKitchenElements(
-      LoadKitchenElements event, Emitter<KitchenElementState> emit) async {
+      LoadKitchenElementsEvent event, Emitter<KitchenElementState> emit) async {
     emit(state.copyWith(
         status: KitchenElementStatus.loading,
         kitchenElements: event.kitchenElements));
   }
 
   void _onAddKitchenElement(
-      AddKitchenElement event, Emitter<KitchenElementState> emit) async {
+      AddKitchenElementEvent event, Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.addKitchenElement(event.kitchenElement);
       emit(state.copyWith(status: KitchenElementStatus.added));
@@ -51,8 +51,8 @@ class KitchenElementBloc
     }
   }
 
-  void _onUpdateKitchenElement(
-      UpdateKitchenElement event, Emitter<KitchenElementState> emit) async {
+  void _onUpdateKitchenElement(UpdateKitchenElementEvent event,
+      Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.updateKitchenElement(event.kitchenElement);
       emit(state.copyWith(status: KitchenElementStatus.updated));
@@ -61,8 +61,8 @@ class KitchenElementBloc
     }
   }
 
-  void _onDeleteKitchenElement(
-      DeleteKitchenElement event, Emitter<KitchenElementState> emit) async {
+  void _onDeleteKitchenElement(DeleteKitchenElementEvent event,
+      Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.deleteKitchenElement(event.kitchenElement);
       emit(state.copyWith(status: KitchenElementStatus.deleted));
