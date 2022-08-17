@@ -22,8 +22,6 @@ class ShopSpinner extends ConsumerStatefulWidget {
 class _ShopSpinnerState extends ConsumerState<ShopSpinner> {
   @override
   Widget build(BuildContext context) {
-    var _list = ref.watch(shopsProvider.state).state;
-    var picked = ref.watch(pickedShop.state).state;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),

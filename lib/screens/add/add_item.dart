@@ -72,9 +72,12 @@ class _AddItemState extends ConsumerState<AddItem>
     super.dispose();
   }
 
+  final _itmBloc =
+      ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>());
   @override
   Widget build(BuildContext context) {
     Iterable<ItemModel> _kOptions = ref.watch(itemsProvider.state).state;
+
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -161,8 +164,6 @@ class _AddItemState extends ConsumerState<AddItem>
   }
 
   Row _buildUpdateButton(BuildContext context) {
-    final _op =
-        ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -186,38 +187,13 @@ class _AddItemState extends ConsumerState<AddItem>
                   : () {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: Duration(seconds: 1),
-                        content: Text('Saving...'),
+                        content: Text(_isUpdate ? 'updating...' : 'Saving...'),
                       ));
-
-                      final _item = ItemModel(
-                        id: widget.item!.id,
-                        besoinTitle: '',
-                        dateBought: _dateBought,
-                        itemName: _itemNameController.text.trim(),
-                        itemPrice:
-                            double.parse(_itemPriceController.text.trim()),
-                        quantifier:
-                            _quantifier, //ref.read(selectedQuantifierProvider),
-                        quantity: _quantity,
-                        shopName: _shop!, // ref.read(pickedShop.state).state!,
-                      );
-                      //  logger.d(_item);
 
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
-                        setState(() {
-                          _canSave = false;
-                        });
-                        _localItem = _item;
-                        if (_isUpdate) {
-                          _op.add(UpdateItemEvent(_item));
-                        } else {
-                          _op.add(AddItemEvent(_item));
-                        }
-                        mBottomSheet(context, controller: _controller);
-                        clear();
-                        Navigator.of(context).pop();
-                      } //_op.addItem();
+                        _isUpdate ? update() : save();
+                      }
                     },
               style: MThemeData.raisedButtonStyleSave),
         ),
@@ -447,5 +423,23 @@ class _AddItemState extends ConsumerState<AddItem>
         ),
       ),
     );
+  }
+
+  /// save the item to the database
+  save() {
+    setState(() => _canSave = true);
+    final ItemModel item = ItemModel(
+      itemName: _itemNameController.text,
+      itemPrice: double.parse(_itemPriceController.text),
+      quantity: _quantity,
+      dateBought: _dateBought,
+      shopName: _shop?,
+      quantifier: _quantifier,
+    );
+    _localItem=item;
+    _itmBloc.add(AddItemEvent(item));
+    mBottomSheet(context, controller: _controller);
+    clear();
+    Navigator.of(context).pop();
   }
 }

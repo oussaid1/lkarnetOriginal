@@ -1,3 +1,4 @@
+import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/payment/payments_filtered.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
@@ -32,8 +33,13 @@ class DataSink {
     for (var shop in shops) {
       list.add(ShopData(
         shop: shop,
-        items: items,
-        payments: payments,
+        items: items
+            .wereItemsForShop((item) => item.shopName, shop.shopName!)
+            .toList(),
+        payments: payments
+            .wereItemsForShop(
+                (payment) => payment.paidShopName!, shop.shopName!)
+            .toList(),
       ));
     }
     return list;

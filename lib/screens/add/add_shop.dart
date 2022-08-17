@@ -26,7 +26,7 @@ class _AddShopState extends ConsumerState<AddShop> {
   final TextEditingController _shopPhoneController = TextEditingController();
   final TextEditingController _shopLimitController = TextEditingController();
   final TextEditingController _shopBesoinController = TextEditingController();
-  bool canSave = false;
+  bool _canSave = false;
   void _updateControllers() {
     if (widget.shop != null) {
       _shopNameController.text = widget.shop!.shopName.toString();
@@ -86,7 +86,15 @@ class _AddShopState extends ConsumerState<AddShop> {
                           }
                           return null;
                         },
+                        onChanged: (text) {
+                          setState(() {
+                            _canSave =
+                                _shopBesoinController.text.trim().isNotEmpty;
+                          });
+                        },
+                        maxLength: 20,
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: 'shop-name',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
@@ -112,7 +120,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                           // }
                           return null;
                         },
+                        maxLength: 50,
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: 'email',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
@@ -138,7 +148,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                           // }
                           return null;
                         },
+                        maxLength: 10,
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: 'phone-number',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
@@ -158,7 +170,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         controller: _shopBesoinController,
+                        maxLength: 10,
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: 'category',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
@@ -196,7 +210,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
                         textAlign: TextAlign.center,
+                        maxLength: 10,
                         decoration: InputDecoration(
+                          counterText: '',
                           hintText: ' 00.00',
                           hintStyle: GoogleFonts.robotoSlab(),
                           contentPadding: EdgeInsets.only(top: 4),
@@ -236,7 +252,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                               child: Text(
                                 widget.shop == null ? 'Save' : 'Update',
                               ),
-                              onPressed: !canSave
+                              onPressed: !_canSave
                                   ? null
                                   : () {
                                       if (_formKeyShop.currentState!
@@ -264,25 +280,33 @@ class _AddShopState extends ConsumerState<AddShop> {
 
   /// save shop
   void _saveShop() {
+    setState(() {
+      _canSave = false;
+    });
     var shop = ShopModel(
-      shopName: _shopNameController.text,
-      email: _shopEmailController.text,
-      phone: _shopPhoneController.text,
-      besoinTitle: _shopBesoinController.text,
+      shopName: _shopNameController.text.trim(),
+      email: _shopEmailController.text.trim(),
+      phone: _shopPhoneController.text.trim(),
+      besoinTitle: _shopBesoinController.text.trim(),
       limit: double.parse(_shopLimitController.text),
     );
     _shopBloc.add(AddShopEvent(shop));
+    clear();
   }
 
   /// update shop
   void _updateShop() {
+    setState(() {
+      _canSave = false;
+    });
     var shop = ShopModel(
-      shopName: _shopNameController.text,
-      email: _shopEmailController.text,
-      phone: _shopPhoneController.text,
-      besoinTitle: _shopBesoinController.text,
+      shopName: _shopNameController.text.trim(),
+      email: _shopEmailController.text.trim(),
+      phone: _shopPhoneController.text.trim(),
+      besoinTitle: _shopBesoinController.text.trim(),
       limit: double.parse(_shopLimitController.text),
     );
     _shopBloc.add(UpdateShopEvent(shop));
+    clear();
   }
 }

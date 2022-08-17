@@ -69,13 +69,9 @@ class StatsMonth extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Text("highest shop consumption"),
-                                PeiWidgetForTagged(_dataByShops),
-                              ],
-                            ),
+                          PeiWidgetForTagged(
+                            chartData: _dataByShops,
+                            title: 'Items by shop',
                           ),
                           SizedBox(
                             height: 50,

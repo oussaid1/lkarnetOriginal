@@ -157,3 +157,16 @@ extension on String {
         (codeUnit >= 97 && codeUnit <= 122));
   }
 }
+
+extension Group<T> on Iterable<T> {
+  Iterable<T> wereItemsForShop(String Function(T) predicate, String shopId) {
+    List<T> list = [];
+    for (var item in this) {
+      var key = predicate(item);
+      if (key == shopId) {
+        list.add(item);
+      }
+    }
+    return list;
+  }
+}
