@@ -40,7 +40,7 @@ class _SelectDateState extends State<SelectDate> {
       onTap: () => _selectDate(context),
       child: BluredContainer(
         height: 50,
-        width: 300,
+        width: 200,
         child: Row(
           children: [
             Container(

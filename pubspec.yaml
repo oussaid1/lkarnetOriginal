@@ -10,19 +10,20 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   awesome_notifications: ^0.6.21
   bloc: ^8.1.0
   bottom_navy_bar: ^6.0.0
   cloud_firestore: ^3.4.3
   cloud_functions: ^3.3.3
+  convex_bottom_bar: ^3.0.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
   firebase_app_check: ^0.0.6+18
   firebase_auth: ^3.6.2
   firebase_core: ^1.20.0
   firebase_messaging: ^12.0.1
+  flutter:
+    sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^1.0.4

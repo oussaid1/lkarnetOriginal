@@ -162,6 +162,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
       centerWidget: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: ExpandableFab(
+          distance: 0,
+          children: [
+            AddStuffWidget(
+              context: context,
+            )
+          ],
+        ),
         bottomNavigationBar:
             buildNavigationBar(context, _selectedPageIndex, _pageController),
         backgroundColor: Colors.transparent,

@@ -38,14 +38,37 @@ class RecentOperation {
   List<ItemModel> items;
   List<PaymentModel> payments;
   RecentOperation(this.items, this.payments);
-  // get a list of 10 recent payments
-  List<PaymentModel> get recentPayments {
-    return payments.take(10).toList();
+
+  /// take the last  items for current day else take the last items for the previous day
+  List<ItemModel> get recentItems {
+    var list = items;
+    if (list.isNotEmpty) {
+      list.sort((a, b) => b.dateBought.compareTo(a.dateBought));
+      DateTime date = list[0].dateBought;
+      list = list
+          .where((element) =>
+              element.dateBought.day == date.day &&
+              element.dateBought.month == date.month &&
+              element.dateBought.year == date.year)
+          .toList();
+    }
+    return list;
   }
 
-  // get a list of 10 recent items
-  List<ItemModel> get recentItems {
-    return items.take(10).toList();
+  /// take the last payments for current day else take the last payments for the previous day
+  List<PaymentModel> get recentPayments {
+    var list = payments;
+    if (list.isNotEmpty) {
+      list.sort((a, b) => b.datePaid.compareTo(a.datePaid));
+      DateTime date = list[0].datePaid;
+      list = list
+          .where((element) =>
+              element.datePaid.day == date.day &&
+              element.datePaid.month == date.month &&
+              element.datePaid.year == date.year)
+          .toList();
+    }
+    return list;
   }
 
   // get a list of OperationsAdapter.fromItemsAndPayments for current shop

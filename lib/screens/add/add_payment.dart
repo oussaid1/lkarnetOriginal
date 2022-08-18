@@ -25,7 +25,7 @@ class AddPayment extends ConsumerStatefulWidget {
 class _AddPaymentState extends ConsumerState<AddPayment> {
   final GlobalKey<FormState> _formKeyPaidAmount = GlobalKey<FormState>();
   final TextEditingController _paidAmountController = TextEditingController();
-  bool canSave = false;
+  bool _canSave = false;
   late DateTime _datePaid;
   String? _id;
   final FocusNode _paidAmountFocusNode = FocusNode();
@@ -52,14 +52,66 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   @override
   Widget build(BuildContext context) {
     final pmntBloc = PaymentsBloc((GetIt.I.get<DatabaseOperations>()));
-    return Material(
-      color: Colors.transparent,
-      child: SingleChildScrollView(
-        child: BluredContainer(
-          width: 400,
-          height: 400,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+    return GlassMaterial(
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
+        ),
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
+        ),
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      gradientColors: AppConstants.myGradients,
+      centerWidget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          title: Text(
+            widget.payment != null ? "تعديل " : "اضافة ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: BluredContainer(
+            width: 400,
+            height: 400,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -67,7 +119,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                 _buildShopDropDown(),
                 _buildAmountPaid(),
                 _buildDatePaid(),
-                SizedBox(height: 30),
+                SizedBox(height: 40),
                 _buildSaveButton(context, pmntBloc),
               ],
             ),
@@ -92,7 +144,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
         child: Text(
           widget.payment == null ? 'Save' : 'Update',
         ),
-        onPressed: !canSave
+        onPressed: !_canSave
             ? null
             : () {
                 final _payment = PaymentModel(
@@ -118,54 +170,58 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
     ]);
   }
 
-  Padding _buildDatePaid() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SelectDate(
-        onDateSelected: (value) {
-          setState(() {
-            _datePaid = value;
-          });
-        },
-      ),
+  _buildDatePaid() {
+    return SelectDate(
+      onDateSelected: (value) {
+        setState(() {
+          _datePaid = value;
+        });
+      },
     );
   }
 
-  Form _buildAmountPaid() {
-    return Form(
-      key: _formKeyPaidAmount,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          focusNode: _paidAmountFocusNode,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (text) {
-            if (text!.isEmpty) {
-              return 'please enter amount';
-            }
-            return null;
-          },
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)')),
-          ],
-          controller: _paidAmountController,
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          textAlign: TextAlign.center,
-          maxLength: 10,
-          decoration: InputDecoration(
-            counterText: '',
-            hintText: '00.00',
-            hintStyle: GoogleFonts.robotoSlab(),
-            contentPadding: EdgeInsets.only(top: 4),
-            // prefixIcon: Icon(Icons.qr_code),
-            fillColor: AppConstants.whiteOpacity,
-            filled: true,
-            label: Text(
-              'Paid Amount',
-              style: GoogleFonts.robotoSlab(),
-            ),
-            prefixIcon: Icon(
-              Icons.monetization_on_outlined,
+  _buildAmountPaid() {
+    return SizedBox(
+      width: 215,
+      child: Form(
+        key: _formKeyPaidAmount,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            focusNode: _paidAmountFocusNode,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (text) {
+              if (text!.isEmpty) {
+                return 'please enter amount';
+              }
+              return null;
+            },
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'(^\-?\d*\.?\d*)')),
+            ],
+            controller: _paidAmountController,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            //textAlign: TextAlign.center,
+            maxLength: 10,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppConstants.radius),
+              ),
+
+              counterText: '',
+              hintText: '00.00',
+              hintStyle: GoogleFonts.robotoSlab(),
+              contentPadding: EdgeInsets.only(top: 4),
+              // prefixIcon: Icon(Icons.qr_code),
+              fillColor: AppConstants.whiteOpacity,
+              filled: true,
+              label: Text(
+                'Paid Amount',
+                style: GoogleFonts.robotoSlab(),
+              ),
+              prefixIcon: Icon(
+                Icons.monetization_on_outlined,
+              ),
             ),
           ),
         ),
@@ -173,19 +229,17 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
     );
   }
 
-  Padding _buildShopDropDown() {
-    return Padding(
-      padding: EdgeInsets.only(top: 20, bottom: 8),
-      child: ShopSpinner(
-        initialValue: widget.payment?.paidShopName,
-        focusNode: _paidAmountFocusNode,
-        onShopSelected: (value) {
-          setState(() {
-            _shopName = value!.shopName;
-          });
-          // ref.read(pickedShop.state).state = value;
-        },
-      ),
+  _buildShopDropDown() {
+    return ShopSpinner(
+      initialValue: widget.payment?.paidShopName,
+      focusNode: _paidAmountFocusNode,
+      onShopSelected: (value) {
+        setState(() {
+          _canSave = true;
+          _shopName = value!.shopName;
+        });
+        // ref.read(pickedShop.state).state = value;
+      },
     );
   }
 

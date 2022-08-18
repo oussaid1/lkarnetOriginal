@@ -1,10 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/components.dart';
 import 'package:flutter/material.dart';
 import '../blocs/shopsbloc/shops_bloc.dart';
+import '../repository/database_operations.dart';
 
-class ShopSpinner extends StatefulWidget {
+class ShopSpinner extends StatelessWidget {
   const ShopSpinner({
     Key? key,
     required this.onShopSelected,
@@ -15,10 +17,35 @@ class ShopSpinner extends StatefulWidget {
   final FocusNode? focusNode;
   final String? initialValue;
   @override
-  State<ShopSpinner> createState() => _ShopSpinnerState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ShopsBloc(
+        GetIt.I<DatabaseOperations>(),
+      )..add(GetShopsEvent()),
+      child: ShopDropDown(
+        onShopSelected: onShopSelected,
+        focusNode: focusNode,
+        initialValue: initialValue,
+      ),
+    );
+  }
 }
 
-class _ShopSpinnerState extends State<ShopSpinner> {
+class ShopDropDown extends StatefulWidget {
+  const ShopDropDown({
+    Key? key,
+    required this.onShopSelected,
+    this.focusNode,
+    this.initialValue,
+  }) : super(key: key);
+  final void Function(ShopModel?) onShopSelected;
+  final FocusNode? focusNode;
+  final String? initialValue;
+  @override
+  State<ShopDropDown> createState() => _ShopDropDownState();
+}
+
+class _ShopDropDownState extends State<ShopDropDown> {
   ShopModel? _selectedShop;
   List<ShopModel> _shops = [];
 
@@ -40,63 +67,60 @@ class _ShopSpinnerState extends State<ShopSpinner> {
             borderRadius: BorderRadius.circular(6),
             color: AppConstants.whiteOpacity,
           ),
-          width: 200.0,
           margin: EdgeInsets.all(8),
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ButtonTheme(
-              // focusColor: Colors.red,
-              //highlightColor: Colors.red,
-              alignedDropdown: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppConstants.radius),
-              ),
-              child: DropdownButtonFormField<ShopModel>(
-                borderRadius: BorderRadius.circular(AppConstants.radius),
-                dropdownColor:
-                    Color.fromARGB(108, 255, 255, 255).withOpacity(0.6),
-                alignment: Alignment.center,
-                autofocus: true,
-                autovalidateMode: AutovalidateMode.always,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(0),
-                ),
-                elevation: 4,
-                iconSize: 30,
-                validator: (value) {
-                  if (value == null) {
-                    return 'please select shop first !';
-                  }
-                  return null;
-                },
-                icon: Icon(Icons.arrow_drop_down),
-                isExpanded: false,
-                // hint: Text(
-                //   "Select Shop",
-                //   textAlign: TextAlign.center,
-                //   style: Theme.of(context).textTheme.subtitle2,
-                // ),
-                value: _selectedShop,
-                focusColor: AppConstants.primaryColor,
-                onChanged: (value) {
-                  widget.onShopSelected(value);
+          height: 45,
+          width: 200,
+          child: ButtonTheme(
+            // focusColor: Colors.red,
+            //highlightColor: Colors.red,
+            alignedDropdown: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.radius),
+            ),
+            child: DropdownButtonFormField<ShopModel>(
+              alignment: Alignment.center,
+              borderRadius: BorderRadius.circular(AppConstants.radius),
+              dropdownColor:
+                  Color.fromARGB(108, 255, 255, 255).withOpacity(0.6),
+              autofocus: true,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                  widget.focusNode != null
-                      ? widget.focusNode!.requestFocus()
-                      : null;
-                },
-                items: _shops.map((shop) {
-                  return DropdownMenuItem<ShopModel>(
-                    value: shop,
-                    child: Text(
-                      shop.shopName ?? '',
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  );
-                }).toList(),
+              decoration: InputDecoration(
+                border: InputBorder.none,
               ),
+              elevation: 4,
+              iconSize: 30,
+              validator: (value) {
+                if (value == null) {
+                  return 'please select shop first !';
+                }
+                return null;
+              },
+              icon: Icon(Icons.arrow_drop_down),
+              isExpanded: false,
+              // hint: Text(
+              //   "Select Shop",
+              //   textAlign: TextAlign.center,
+              //   style: Theme.of(context).textTheme.subtitle2,
+              // ),
+              value: _selectedShop,
+              focusColor: AppConstants.primaryColor,
+              onChanged: (value) {
+                widget.onShopSelected(value);
+
+                widget.focusNode != null
+                    ? widget.focusNode!.requestFocus()
+                    : null;
+              },
+              items: _shops.map((shop) {
+                return DropdownMenuItem<ShopModel>(
+                  value: shop,
+                  child: Text(
+                    shop.shopName ?? '',
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                );
+              }).toList(),
             ),
           ),
         );

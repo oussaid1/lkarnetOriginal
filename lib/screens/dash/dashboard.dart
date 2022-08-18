@@ -57,8 +57,6 @@ class _DashBoardPageState extends State<DashBoardPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: MyExpandableFab(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: MyAppBar(
         title: Text(
           'Dashboard',
@@ -533,113 +531,73 @@ class _DashBoardPageState extends State<DashBoardPage>
   }
 }
 
-class MyExpandableFab extends StatelessWidget {
-  const MyExpandableFab({
+class AddStuffWidget extends StatelessWidget {
+  final BuildContext context;
+  const AddStuffWidget({
     Key? key,
+    required this.context,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ExpandableFab(
-      distance: 90.0,
+  Widget build(BuildContext cxt) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ActionButton(
-          onPressed: () => Dialogs.botomUpDialog(
-            context,
-            AddPayment(),
-          ),
-          icon: const Icon(
-            Icons.monetization_on,
-            size: 32,
-          ),
-        ),
-        ActionButton(
-          onPressed: () => Dialogs.botomUpDialog(
-            context,
-            AddShop(),
-          ),
-          icon: const Icon(
-            Icons.person_add,
-            size: 30,
-          ),
-        ),
-        ActionButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddItem(),
+        buildExpandedFab(context,
+            icon: Icon(
+              Icons.monetization_on,
+              color: Colors.white,
             ),
-          ),
-          icon: const Icon(
-            Icons.add_shopping_cart_sharp,
-            size: 30,
-          ),
-        ),
+            title: "Payments",
+            child: const AddPayment()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context,
+            icon: Icon(
+              Icons.person_add,
+              color: Colors.white,
+            ),
+            title: "Shop",
+            child: const AddShop()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context,
+            icon: Icon(
+              Icons.add_shopping_cart,
+              color: Colors.white,
+            ),
+            title: "Item",
+            child: AddItem()),
+        const SizedBox(height: 10),
       ],
     );
   }
+
+  FloatingActionButton buildExpandedFab(BuildContext context,
+      {String? title, required Widget child, Widget? icon}) {
+    return FloatingActionButton(
+      heroTag: title,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => child,
+          ),
+        );
+        // Dialogs.botomUpDialog(
+        //   context,
+        //   SizedBox(
+        //     // height: 400,
+        //     width: 410,
+        //     child: child ?? const SizedBox.shrink(),
+        //   ),
+        // );
+      },
+      child: icon ?? Icon(Icons.add),
+
+      // label: Text(title ?? '', style: Theme.of(context).textTheme.bodySmall),
+    );
+  }
 }
-
-// class CounterStorage {
-//   Future<String> get _localPath async {
-//     final directory = await getApplicationDocumentsDirectory();
-
-//     return directory.path;
-//   }
-
-//   Future<File> get _localFile async {
-//     // storage permission ask
-//     var status = await Permission.storage.status;
-//     if (!status.isGranted) {
-//       await Permission.storage.request();
-//     }
-//     // the downloads folder path
-//     Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
-//     String tempPath = tempDir.path;
-//     var filePath = tempPath + '/json.json';
-//     // final path = await _localPath;
-//     return File('$filePath');
-//   }
-
-//   Future<int> readCounter() async {
-//     try {
-//       final file = await _localFile;
-
-//       // Read the file
-//       final contents = await file.readAsString();
-
-//       return int.parse(contents);
-//     } catch (e) {
-//       // If encountering an error, return 0
-//       return 0;
-//     }
-//   }
-
-//   Future<File> writeCounter(int counter) async {
-//     final file = await _localFile;
-
-//     // Write the file
-//     return file.writeAsString('$counter');
-//   }
-
-//   Future<File> writeFile(String data, String name) async {
-//     // storage permission ask
-//     var status = await Permission.storage.status;
-//     if (!status.isGranted) {
-//       await Permission.storage.request();
-//     }
-//     // the downloads folder path
-//     Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
-//     String tempPath = tempDir.path;
-//     var filePath = tempPath + '/$name';
-//     //
-
-//     // the data
-//     // var bytes = ByteData.view(data.buffer);
-//     // final buffer = bytes.buffer;
-//     // // save the data in the path
-//     // return File(filePath).writeAsBytes(
-//     //     buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-//     return File(filePath).writeAsString(data);
-//   }
-// }

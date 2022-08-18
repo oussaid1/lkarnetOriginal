@@ -127,9 +127,9 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                   borderColorOpacity: 0,
                   child: Scaffold(
                     backgroundColor: Color.fromARGB(0, 255, 255, 255),
-                    floatingActionButton: MyExpandableFab(),
-                    floatingActionButtonLocation:
-                        FloatingActionButtonLocation.endFloat,
+                    // floatingActionButton: MyExpandableFab(),
+                    // floatingActionButtonLocation:
+                    //     FloatingActionButtonLocation.endFloat,
                     appBar: MyAppBar(
                       title: Text('Shop Details'),
                     ),

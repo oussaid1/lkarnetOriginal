@@ -285,7 +285,6 @@ class _AddItemState extends ConsumerState<AddItem>
       child: ShopSpinner(
         initialValue: widget.item?.shopName,
         focusNode: _itemNameFocusNode,
-        //: ref.watch(shopsProvider.state).state,
         onShopSelected: (value) {
           setState(() {
             _shop = value!.shopName ?? '';

@@ -36,8 +36,8 @@ class _StatsAllState extends State<StatsAll> {
         title: Text("All Statistics"),
       ),
       backgroundColor: Colors.transparent,
-      floatingActionButton: MyExpandableFab(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: MyExpandableFab(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocBuilder<ItemsBloc, ItemsState>(
         buildWhen: (previous, current) =>
             previous.items.length != current.items.length,
