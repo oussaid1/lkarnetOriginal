@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/widgets/myappbar.dart';
+import 'package:lkarnet/components.dart';
 import '../../models/shop/shops_data.dart';
-import '../../widgets/glasswidget.dart';
 import 'shop_stats_charts.dart';
 
 class ShopStatsPage extends StatefulWidget {
@@ -37,26 +36,14 @@ class _ShopStatsPageState extends State<ShopStatsPage> {
               padding: const EdgeInsets.all(8.0),
               child: _shopData != null
                   ? LineChartWidgetDate(
-                      chartData:
-                          _shopData!.itemsDataForAll.monthlyItemsChartData,
+                      chartData: _shopData!.itemsDataForAll.dailyItemsChartData,
                       title: "All Items")
-                  : SizedBox(
-                      // width: 400,
-                      // height: 400,
-                      // child: Column(
-                      //   children: _shopData!.itemsDataForAll
-                      //       .monthlyItemsChartData
-                      //       .map((e) => Text(e
-                      //           .itemCalculations.totalPrice
-                      //           .toString()))
-                      //       .toList(),
-                      // ),
-                      )),
+                  : const SizedBox()),
         ),
         BluredContainer(
           margin: EdgeInsets.all(8),
           width: 410,
-          height: 300,
+          height: 220,
           child: _shopData != null
               ? PeiWidget(
                   chartData: _shopData!.itemsDataForAll.itemsByNameChartData,
@@ -69,7 +56,7 @@ class _ShopStatsPageState extends State<ShopStatsPage> {
           width: 400,
           height: 220,
           child: ColumnChartWidget(
-            chartData: [],
+            chartData: _shopData!.itemsDataForAll.itemsByNameChartData,
             title: "Most Frequent Items",
           ),
         ),

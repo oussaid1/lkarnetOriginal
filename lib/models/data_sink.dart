@@ -60,17 +60,27 @@ class DataSink {
     );
 
   // get distinct mmyyy from items
-  /// TODO : join with it distincs from payments
   List<DateTime> get distinctMonths => items
-      .map((item) => DateTime(item.dateBought.year, item.dateBought.month, 1))
+      .map((item) => DateTime(1, item.dateBought.month, item.dateBought.year))
       .toSet()
-      .toList();
+      .toList()
+    ..addAll(
+      payments
+          .map((payment) =>
+              DateTime(1, payment.datePaid.month, payment.datePaid.year))
+          .toSet()
+          .toList(),
+    );
 
 // get distinct yyyy
-  List<DateTime> get distinctYears => items
-      .map((item) => DateTime(item.dateBought.year, 1, 1))
-      .toSet()
-      .toList();
+  List<DateTime> get distinctYears =>
+      items.map((item) => DateTime(1, 1, item.dateBought.year)).toSet().toList()
+        ..addAll(
+          payments
+              .map((payment) => DateTime(1, 1, payment.datePaid.year))
+              .toSet()
+              .toList(),
+        );
 
   /// get filtered items
   //ItemsFiltered get filteredItems => ItemsFiltered(items: items);

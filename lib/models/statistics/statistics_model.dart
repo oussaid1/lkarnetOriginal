@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'dart:math';
+import 'package:flutter/material.dart';
+
 import '../item/item.dart';
 import '../item/item_calculations.dart';
 
@@ -24,6 +26,12 @@ class ItemsChartData<T> {
     return Random().nextInt(100);
   }
 
+  /// get a random color as rgb for the tag
+  Color get randomColor {
+    return Color.fromARGB(
+        150, Random().nextInt(255), Random().nextInt(255), (167));
+  }
+
   //////// get ItemCalculations /////////////////////////////////
   ItemCalculations get itemCalculations => ItemCalculations(items: items);
 }
@@ -37,3 +45,5 @@ class ItemsChartData<T> {
 //   final Color? color;
 //   DateTime? date;
 // }
+
+var d = Color.fromARGB(151, 255, 167, 167);

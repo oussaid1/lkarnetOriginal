@@ -5,18 +5,23 @@ import '../../components.dart';
 
 class SemiPeiWidget extends ConsumerWidget {
   final List<ItemsChartData> chartData;
+  final String? title;
   final Widget widget;
-  SemiPeiWidget(this.chartData, this.widget);
+  SemiPeiWidget(
+      {Key? key, required this.chartData, required this.widget, this.title});
 
   @override
   Widget build(BuildContext context, wacth) {
     return SfCircularChart(
+      title: ChartTitle(
+          text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
       annotations: <CircularChartAnnotation>[
         CircularChartAnnotation(
           widget: Container(child: widget),
         )
       ],
       margin: EdgeInsets.zero,
+      tooltipBehavior: TooltipBehavior(enable: true),
       series: <CircularSeries>[
         DoughnutSeries<ItemsChartData, String>(
           innerRadius: '80',
@@ -58,33 +63,23 @@ class PeiWidget extends StatelessWidget {
       margin: EdgeInsets.zero,
       legend: Legend(
         isVisible: true,
-        position: LegendPosition.left,
+        position: LegendPosition.right,
         // alignment: ChartAlignment.center,
         // width: '120',
       ),
+      tooltipBehavior: TooltipBehavior(enable: true),
       title: ChartTitle(
-        text: title ?? '',
-        // textStyle: TextStyle(
-        //   fontSize: 20,
-        //   fontWeight: FontWeight.bold,
-        // ),
-      ),
-      // title: ChartTitle(
-      //     textStyle: Theme.of(context).textTheme.subtitle1,
-      //     text: 'Most Frequent Products',
-      //     alignment: ChartAlignment.far),
-      // //  centerY: '220',
-
+          text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
       series: <CircularSeries>[
         PieSeries<ItemsChartData, String>(
+          radius: '70%',
           dataSource: chartData.limit(10),
           xValueMapper: (ItemsChartData data, _) => data.tag,
           yValueMapper: (ItemsChartData data, _) =>
               data.itemCalculations.totalPrice,
           dataLabelMapper: (ItemsChartData data, _) =>
               data.itemCalculations.totalCount.toString(),
-          explode: true,
-          // All the segments will be exploded
+          explode: false,
 
           explodeAll: true,
           enableTooltip: true,
@@ -116,21 +111,27 @@ class LineChartWidgetDate extends StatelessWidget {
       title: ChartTitle(
           text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
       margin: EdgeInsets.zero,
-      legend: Legend(isVisible: true, position: LegendPosition.top),
+      legend: Legend(
+        isVisible: true,
+        position: LegendPosition.top,
+      ),
+      tooltipBehavior: TooltipBehavior(enable: true),
       primaryXAxis: DateTimeAxis(
         majorGridLines: MajorGridLines(width: 0),
-        dateFormat: DateFormat.yMMMd(),
-        intervalType: DateTimeIntervalType.months,
+        dateFormat: DateFormat.MMMd(),
+        intervalType: DateTimeIntervalType.days,
         labelRotation: 90,
       ),
       series: <ChartSeries>[
         SplineSeries<ItemsChartData, DateTime>(
           // sortingOrder: SortingOrder.ascending,
+          legendItemText: 'Item Price',
           dataSource: chartData,
           xValueMapper: (ItemsChartData data, _) => data.date,
           yValueMapper: (ItemsChartData data, _) =>
               data.itemCalculations.totalPrice,
-          dataLabelMapper: (ItemsChartData data, _) => data.date.ddmmyyyy(),
+          dataLabelMapper: (ItemsChartData data, _) =>
+              DateFormat.MMMd().format(data.date),
           color: Colors.white.withOpacity(0.5),
           width: 1,
           enableTooltip: true,
@@ -156,17 +157,23 @@ class ColumnChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // chartData
-    //   ..sort((a, b) => b.shopDataCalculations.itemsSumAfterPayment
-    //       .compareTo(a.shopDataCalculations.itemsSumAfterPayment));
+    chartData
+      ..sort((a, b) => b.itemCalculations.totalCount
+          .compareTo(a.itemCalculations.totalCount))
+      ..limit(10);
     return SfCartesianChart(
       title: ChartTitle(
           text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
-      primaryXAxis: DateTimeAxis(),
-      //primaryXAxis: CategoryAxis(),
+      // primaryXAxis: DateTimeAxis(),
+      tooltipBehavior: TooltipBehavior(enable: true),
+      primaryXAxis: CategoryAxis(
+        majorGridLines: MajorGridLines(width: 0),
+        labelRotation: 90,
+      ),
       series: <ChartSeries>[
         // Renders spline chart
-        ColumnSeries<ItemsChartData, DateTime>(
+        ColumnSeries<ItemsChartData, String>(
+          enableTooltip: true,
           width: 0.4,
           dataSource: chartData,
           //color: AppConstants.whiteOpacity,
@@ -174,7 +181,7 @@ class ColumnChartWidget extends StatelessWidget {
           xValueMapper: (ItemsChartData sales, _) => sales.tag,
           yValueMapper: (ItemsChartData sales, _) =>
               sales.itemCalculations.totalCount,
-          // pointColorMapper: (Tagged sales, _) => sales.color,
+          //pointColorMapper: (Tagged sales, _) => sales.color,
           dataLabelMapper: (ItemsChartData sales, _) =>
               sales.itemCalculations.totalCount.toString(),
         ),

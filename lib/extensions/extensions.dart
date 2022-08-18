@@ -87,22 +87,21 @@ extension DtExtension on DateTime {
     return false;
   }
 
-  bool isMatchToWeek(DateTime date) {
+  bool isMatchWeek(DateTime date) {
     if (weekday == date.weekday && month == date.month && year == date.year) {
       return true;
     }
     return false;
   }
 
-  /// check if given date is this month
-  bool isMatchToMonth(DateTime date) {
-    if (month == date.month) {
+  bool isMatchMonth(DateTime date) {
+    if (month == date.month && year == date.year) {
       return true;
     }
     return false;
   }
 
-  bool isMatchToYear(DateTime date) {
+  bool isMatchYear(DateTime date) {
     if (year == date.year) {
       return true;
     }

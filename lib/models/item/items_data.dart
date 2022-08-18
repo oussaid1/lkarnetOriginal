@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../statistics/statistics_model.dart';
 import 'item.dart';
 import 'package:lkarnet/components.dart';
@@ -81,7 +79,7 @@ class ItemsData {
       _list.add(ItemsChartData<DateTime>(
           tag: it,
           items: items
-              .where((element) => element.dateBought.isMatchToMonth(it))
+              .where((element) => element.dateBought.isMatchMonth(it))
               .toList()));
     }
     return _list;
@@ -94,7 +92,7 @@ class ItemsData {
       _list.add(ItemsChartData<DateTime>(
           tag: it,
           items: items
-              .where((element) => element.dateBought.isMatchToYear(it))
+              .where((element) => element.dateBought.isMatchYear(it))
               .toList()));
     }
     return _list;

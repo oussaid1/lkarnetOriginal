@@ -65,19 +65,19 @@ class ItemsFiltered {
   /// all items for this week
   List<ItemModel> get allItemsThisWeek {
     return items
-        .where((element) => element.dateBought.isMatchToWeek(DateTime.now()))
+        .where((element) => element.dateBought.isMatchWeek(DateTime.now()))
         .toList();
   }
 
   List<ItemModel> get allItemsThisMonth {
     return items
-        .where((element) => element.dateBought.isMatchToMonth(DateTime.now()))
+        .where((element) => element.dateBought.isMatchMonth(DateTime.now()))
         .toList();
   }
 
   List<ItemModel> get allItemsThisYear {
     return items
-        .where((element) => element.dateBought.isMatchToYear(DateTime.now()))
+        .where((element) => element.dateBought.isMatchYear(DateTime.now()))
         .toList();
   }
 
@@ -91,14 +91,14 @@ class ItemsFiltered {
   /// methods with parameters
   itemsForMonth(DateTime date) {
     return items
-        .where((element) => element.dateBought.isMatchToMonth(date))
+        .where((element) => element.dateBought.isMatchMonth(date))
         .toList();
   }
 
   /// methods with parameters
   itemsForYear(DateTime date) {
     return items
-        .where((element) => element.dateBought.isMatchToYear(date))
+        .where((element) => element.dateBought.isMatchYear(date))
         .toList();
   }
 }

@@ -1,12 +1,6 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/items_filtered.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
-import 'package:lkarnet/providers/streamproviders/payments_stream_provider.dart';
-
-final paymentsFilteredProvider = StateProvider<PaymentsFiltered>((ref) {
-  var payments = ref.watch(paymentsProvider.state).state;
-  return PaymentsFiltered(payments: payments);
-});
 
 class PaymentsFiltered {
   List<PaymentModel> payments = [];
@@ -31,14 +25,14 @@ class PaymentsFiltered {
   /// get payments this month
   List<PaymentModel> get paymentsThisMonth {
     return payments
-        .where((payment) => payment.datePaid.isMatchToMonth(DateTime.now()))
+        .where((payment) => payment.datePaid.isMatchMonth(DateTime.now()))
         .toList();
   }
 
   /// get payments this year
   List<PaymentModel> get paymentsThisYear {
     return payments
-        .where((payment) => payment.datePaid.isMatchToYear(DateTime.now()))
+        .where((payment) => payment.datePaid.isMatchYear(DateTime.now()))
         .toList();
   }
 
@@ -82,14 +76,14 @@ class PaymentsFiltered {
   /// methods with parameters
   List<PaymentModel> paymentsForMonth(DateTime date) {
     return payments
-        .where((payment) => payment.datePaid.isMatchToMonth(date))
+        .where((payment) => payment.datePaid.isMatchMonth(date))
         .toList();
   }
 
   /// methods with parameters
   List<PaymentModel> paymentsForYear(DateTime date) {
     return payments
-        .where((payment) => payment.datePaid.isMatchToYear(date))
+        .where((payment) => payment.datePaid.isMatchYear(date))
         .toList();
   }
 }

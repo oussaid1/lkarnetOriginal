@@ -11,9 +11,9 @@ import '../../blocs/payments/payments_bloc.dart';
 import '../../blocs/shopsbloc/shops_bloc.dart';
 import '../../models/data_sink.dart';
 import '../../models/item/item.dart';
+import '../../models/item/items_data.dart';
 import '../../models/payment/payment_model.dart';
 import '../../models/shop/shop_model.dart';
-import '../../models/shop/shops_data.dart';
 import '../../widgets/glasswidget.dart';
 import '../dash/dashboard.dart';
 
@@ -26,7 +26,7 @@ class _StatsAllState extends State<StatsAll> {
   List<ItemModel> _items = [];
   List<PaymentModel> _payments = [];
   List<ShopModel> _shops = [];
-  ShopData? _shopData;
+
   @override
   Widget build(BuildContext context) {
     // var chartData = ref.watch(frequentItemsProvider.state).state;
@@ -37,7 +37,7 @@ class _StatsAllState extends State<StatsAll> {
       ),
       backgroundColor: Colors.transparent,
       floatingActionButton: MyExpandableFab(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: BlocBuilder<ItemsBloc, ItemsState>(
         buildWhen: (previous, current) =>
             previous.items.length != current.items.length,
@@ -61,7 +61,7 @@ class _StatsAllState extends State<StatsAll> {
                       log('error build ${itemsState.items.length}');
 
                       /// //////////////////////////////////////////////////////
-                      //  final ItemsData _itemsData = ItemsData(items: _items);
+                      final ItemsData _itemsData = ItemsData(items: _items);
 
                       /// //////////////////////////////////////////////////////
                       DataSink _dataSink = DataSink(
@@ -71,7 +71,12 @@ class _StatsAllState extends State<StatsAll> {
                       );
 
                       /// //////////////////////////////////////////////////////
-                      List<ShopData> _shopsDataList = _dataSink.allShopsData;
+                      // List<ShopData> _shopsDataList = _dataSink.allShopsData;
+                      // ShopDataCalculations _shopDataCalculations =
+                      //     ShopDataCalculations(
+                      //   items: _items,
+                      //   payments: _payments,
+                      // );
 
                       /// //////////////////////////////////////////////////////
                       // _shopsDataList.isNotEmpty
@@ -89,42 +94,6 @@ class _StatsAllState extends State<StatsAll> {
                             const SizedBox(width: 12),
                             BluredContainer(
                               margin: EdgeInsets.all(8),
-                              width: MediaQuery.of(context).size.width,
-                              height: 240,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: _shopData != null
-                                      ? LineChartWidgetDate(
-                                          chartData: _shopData!.itemsDataForAll
-                                              .monthlyItemsChartData,
-                                          title: "Items Sold By Month")
-                                      : SizedBox(
-                                          // width: 400,
-                                          // height: 400,
-                                          // child: Column(
-                                          //   children: _shopData!.itemsDataForAll
-                                          //       .monthlyItemsChartData
-                                          //       .map((e) => Text(e
-                                          //           .itemCalculations.totalPrice
-                                          //           .toString()))
-                                          //       .toList(),
-                                          // ),
-                                          )),
-                            ),
-                            BluredContainer(
-                              margin: EdgeInsets.all(8),
-                              width: 410,
-                              height: 300,
-                              child: _shopData != null
-                                  ? PeiWidget(
-                                      chartData: _shopData!
-                                          .itemsDataForAll.itemsByNameChartData,
-                                      title: "Items by Shop",
-                                    )
-                                  : const SizedBox(),
-                            ),
-                            BluredContainer(
-                              margin: EdgeInsets.all(8),
                               width: 400,
                               height: 220,
                               child: ColumnChartWidget(
@@ -132,6 +101,25 @@ class _StatsAllState extends State<StatsAll> {
                                 title: "Items by Shop",
                               ),
                             ),
+                            BluredContainer(
+                              margin: EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width,
+                              height: 240,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: LineChartWidgetDate(
+                                      chartData:
+                                          _itemsData.monthlyItemsChartData,
+                                      title: "Items Sold By Month")),
+                            ),
+                            BluredContainer(
+                                margin: EdgeInsets.all(8),
+                                width: 410,
+                                height: 300,
+                                child: PeiWidget(
+                                  chartData: _itemsData.itemsByNameChartData,
+                                  title: "Highest Items",
+                                )),
                             const SizedBox(
                               width: 100,
                             ),

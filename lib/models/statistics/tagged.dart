@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
@@ -31,6 +33,12 @@ class Tagged<T> extends Equatable {
     //   ));
     // }
     return list;
+  }
+
+  /// get a random color as rgb for the tag
+  Color get randomColor {
+    return Color.fromARGB(
+        150, Random().nextInt(255), Random().nextInt(255), (167));
   }
 
   /// shopDataCalculations

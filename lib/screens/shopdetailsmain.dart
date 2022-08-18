@@ -13,7 +13,6 @@ import '../models/statistics/tagged.dart';
 import '../widgets/price_curency_widget.dart';
 import '../widgets/shop_square_tile.dart';
 import 'dash/dashboard.dart';
-import 'shop_details/shop_details.dart';
 import 'shop_details/shop_details_tab.dart';
 
 class ShopDetailsMain extends ConsumerStatefulWidget {
@@ -66,11 +65,11 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
             .map((dstDate) => Tagged(
                   tag: dstDate,
                   items: _items
-                      .where((item) => item.dateBought.isMatchToMonth(dstDate))
+                      .where((item) => item.dateBought.isMatchMonth(dstDate))
                       .toList(),
                   payments: _payments
                       .where(
-                          (payment) => payment.datePaid.isMatchToMonth(dstDate))
+                          (payment) => payment.datePaid.isMatchMonth(dstDate))
                       .toList(),
                 ))
             .toList();
@@ -79,11 +78,10 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
             .map((dstDate) => Tagged(
                   tag: dstDate,
                   items: _items
-                      .where((item) => item.dateBought.isMatchToYear(dstDate))
+                      .where((item) => item.dateBought.isMatchYear(dstDate))
                       .toList(),
                   payments: _payments
-                      .where(
-                          (payment) => payment.datePaid.isMatchToYear(dstDate))
+                      .where((payment) => payment.datePaid.isMatchYear(dstDate))
                       .toList(),
                 ))
             .toList();

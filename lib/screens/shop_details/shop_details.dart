@@ -1,10 +1,7 @@
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:flutter/material.dart';
-import 'package:lkarnet/widgets/myappbar.dart';
-
 import '../../components.dart';
 import '../../widgets/item_listtile.dart';
-import '../dash/dashboard.dart';
 import '../lists/items.dart';
 import '../lists/payments.dart';
 
@@ -97,7 +94,7 @@ class ShopsDetailsBody extends StatelessWidget {
   }
 }
 
-class ShopItemsDetailsWidget extends StatelessWidget {
+class ShopItemsDetailsWidget extends StatefulWidget {
   const ShopItemsDetailsWidget({
     Key? key,
     required this.shopsData,
@@ -106,73 +103,118 @@ class ShopItemsDetailsWidget extends StatelessWidget {
   final ShopData shopsData;
 
   @override
+  State<ShopItemsDetailsWidget> createState() => _ShopItemsDetailsWidgetState();
+}
+
+class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
+  bool _isExpanded = false;
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 390,
-      height: 300,
-      child: Container(
-        color: AppConstants.whiteOpacity,
-        child: ExpansionTile(
-          trailing: IconButton(
-            icon: Icon(Icons.menu_sharp,
-                color: Color.fromARGB(106, 255, 255, 255)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ItemsList(lista: shopsData.items),
-                ),
-              );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ExpansionPanelList(
+            elevation: 0,
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                _isExpanded = !isExpanded;
+              });
             },
-          ),
-          title: Text(
-            'Items',
-            style: Theme.of(context)
-                .textTheme
-                .headline3!
-                .copyWith(color: Colors.white),
-          ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            animationDuration: Duration(milliseconds: 1600),
             children: [
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: 'count :',
-                    style: Theme.of(context).textTheme.subtitle2!),
-                TextSpan(
-                    text: ' ${shopsData.shopDataCalculations.countItems}',
-                    style: Theme.of(context).textTheme.headline5!),
-              ])),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: 'total :',
-                    style: Theme.of(context).textTheme.subtitle2!),
-                TextSpan(
-                    text: ' ${shopsData.shopDataCalculations.itemsSum}',
-                    style: Theme.of(context).textTheme.headline4!),
-              ])),
-            ],
-          ),
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return ItemTileWidget(
-                  item: shopsData.items[index],
-                );
-              },
-              itemCount: shopsData.items.length,
-            ),
-          ],
-        ),
-      ),
+              ExpansionPanel(
+                isExpanded: _isExpanded,
+                canTapOnHeader: true,
+                backgroundColor: AppConstants.whiteOpacity,
+                headerBuilder: (context, isExpanded) {
+                  return ListTile(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Items',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: Colors.white),
+                        ),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'count :',
+                              style: Theme.of(context).textTheme.subtitle2!),
+                          TextSpan(
+                              text:
+                                  ' ${widget.shopsData.shopDataCalculations.countItems}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color:
+                                          Color.fromARGB(189, 255, 255, 255))),
+                        ])),
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: 'total :',
+                              style: Theme.of(context).textTheme.subtitle2!),
+                          TextSpan(
+                              text:
+                                  ' ${widget.shopsData.shopDataCalculations.itemsSum}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color:
+                                          Color.fromARGB(189, 255, 255, 255))),
+                        ])),
+                      ],
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    leading: IconButton(
+                      icon: Icon(Icons.menu_sharp,
+                          color: Color.fromARGB(106, 255, 255, 255)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ItemsList(lista: widget.shopsData.items),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                body: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ItemTileWidget(
+                          item: widget.shopsData.items[index],
+                        );
+                      },
+                      itemCount: widget.shopsData.items.length,
+                    ),
+                  ],
+                ),
+              ),
+            ]),
+      ],
     );
   }
 }
 
-class ShopPaymentsDetailWidget extends StatelessWidget {
+class ShopPaymentsDetailWidget extends StatefulWidget {
   const ShopPaymentsDetailWidget({
     Key? key,
     required this.shopsData,
@@ -181,83 +223,114 @@ class ShopPaymentsDetailWidget extends StatelessWidget {
   final ShopData shopsData;
 
   @override
+  State<ShopPaymentsDetailWidget> createState() =>
+      _ShopPaymentsDetailWidgetState();
+}
+
+class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
+  bool _isExpanded = false;
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 390,
-      height: 300,
-      child: Container(
-        child: Column(
-          children: [
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ExpansionPanelList(
+            elevation: 0,
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                _isExpanded = !isExpanded;
+              });
+            },
+            animationDuration: Duration(milliseconds: 1600),
+            children: [
+              ExpansionPanel(
+                isExpanded: _isExpanded,
+                canTapOnHeader: true,
+                backgroundColor: AppConstants.whiteOpacity,
+                headerBuilder: (context, isExpanded) {
+                  return ListTile(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                    title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
                           'Payments',
                           style: Theme.of(context)
                               .textTheme
-                              .headline3!
+                              .titleMedium!
                               .copyWith(color: Colors.white),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.list,
-                              color: Color.fromARGB(106, 255, 255, 255)),
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         ItemsList(lista: recentOperations.items),
-                            //   ),
-                            // );
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'count :',
-                              style: Theme.of(context).textTheme.bodyText1!),
+                              style: Theme.of(context).textTheme.subtitle2!),
                           TextSpan(
                               text:
-                                  ' ${shopsData.shopDataCalculations.countPayments}',
-                              style: Theme.of(context).textTheme.headline3!),
+                                  ' ${widget.shopsData.shopDataCalculations.countPayments}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color:
+                                          Color.fromARGB(189, 255, 255, 255))),
                         ])),
                         RichText(
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'total :',
-                              style: Theme.of(context).textTheme.bodyText1!),
+                              style: Theme.of(context).textTheme.subtitle2!),
                           TextSpan(
                               text:
-                                  ' ${shopsData.shopDataCalculations.paymentsSum}',
-                              style: Theme.of(context).textTheme.headline3!),
+                                  ' ${widget.shopsData.shopDataCalculations.paymentsSum}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color:
+                                          Color.fromARGB(189, 255, 255, 255))),
                         ])),
                       ],
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    leading: IconButton(
+                      icon: Icon(Icons.menu_sharp,
+                          color: Color.fromARGB(106, 255, 255, 255)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PaymentsList(lista: widget.shopsData.payments),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                body: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return PaymentTile(
+                          payment: widget.shopsData.payments[index],
+                        );
+                      },
+                      itemCount: widget.shopsData.payments.length,
                     ),
                   ],
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return PaymentTile(payment: shopsData.payments[index]);
-                },
-                itemCount: shopsData.payments.length,
-              ),
-            ),
-          ],
-        ),
-      ),
+            ]),
+      ],
     );
   }
 }
