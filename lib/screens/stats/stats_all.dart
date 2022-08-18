@@ -15,7 +15,6 @@ import '../../models/item/items_data.dart';
 import '../../models/payment/payment_model.dart';
 import '../../models/shop/shop_model.dart';
 import '../../widgets/glasswidget.dart';
-import '../dash/dashboard.dart';
 
 class StatsAll extends StatefulWidget {
   @override

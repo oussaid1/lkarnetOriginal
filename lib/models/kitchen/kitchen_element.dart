@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //import '../item/item.dart';
@@ -22,76 +21,6 @@ class KitchenElementModel {
   });
 
   // list of fake data
-  static List<KitchenElementModel> get fakeKitchenElements {
-    return [
-      KitchenElementModel(
-        title: 'Sugar',
-
-        ///: 1,
-        category: 'Sweet',
-        availability: 1,
-        priority: 1,
-        //items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Milk',
-        // quantity: 1,
-        category: 'Dairy',
-        availability: 1,
-        priority: 2,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Bread',
-        //  quantity: 5,
-        category: 'Bakery',
-        availability: 4,
-        priority: 3,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Eggs',
-
-        ///   quantity: 1,
-        category: 'Dairy',
-        availability: 1,
-        priority: 2,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Coffee',
-        //  quantity: 1,
-        category: 'Beverage',
-        availability: 1,
-        priority: 1,
-        //items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Tea',
-        //   quantity: 1,
-        category: 'Beverage',
-        availability: 1,
-        priority: 1,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Oil',
-        //   quantity: 1,
-        category: 'Tableware',
-        availability: 1,
-        priority: 1,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-      KitchenElementModel(
-        title: 'Sugar',
-        //   quantity: 1,
-        category: 'Sweet',
-        availability: 1,
-        priority: 1,
-        // items: KitchenItem.fakeKitchenitems(),
-      ),
-    ];
-  }
 
   KitchenElementModel copyWith({
     String? id,

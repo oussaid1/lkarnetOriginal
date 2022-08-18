@@ -12,7 +12,6 @@ import '../models/payment/payment_model.dart';
 import '../models/statistics/tagged.dart';
 import '../widgets/price_curency_widget.dart';
 import '../widgets/shop_square_tile.dart';
-import 'dash/dashboard.dart';
 import 'shop_details/shop_details_tab.dart';
 
 class ShopDetailsMain extends ConsumerStatefulWidget {

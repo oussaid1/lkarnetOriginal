@@ -15,8 +15,8 @@ class DBTables {
   static const String shops = 'Shops';
   static const String items = 'items';
   static const String goods = 'Goods';
-  static const String kitchenItems = 'kitchenItems';
-  static const String kitchenElements = 'kitchenElements';
+  static const String kitchenItems = 'KitchenItems';
+  static const String kitchenElements = 'KitchenElements';
   static const String besoins = 'Besoins';
   static const String kitchen = 'kitchen';
   static const String payments = 'Payments';

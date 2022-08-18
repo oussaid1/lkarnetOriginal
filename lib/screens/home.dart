@@ -16,8 +16,8 @@ import '../blocs/shopsbloc/shops_bloc.dart';
 import '../cubits/userCubit/usermodel_cubit.dart';
 import '../models/item/items_filtered.dart';
 import '../repository/database_operations.dart';
-import 'shopdetailsmain.dart';
 import 'kitchen_stock.dart';
+import 'shopdetailsmain.dart';
 import 'stats/stats_all.dart';
 import 'package:flutter/material.dart';
 
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => KitchenStockHome(),
+          builder: (_) => KitchenStockHomeView(),
         ),
         (route) => route.isFirst,
       );
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ShopDetailsMain(),
               // ListTab(),
               //ShopsList(),
-              KitchenStockHome(),
+              KitchenStockHomeView(),
               StatsAll(),
               SettingsPage(),
             ],

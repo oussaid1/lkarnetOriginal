@@ -25,23 +25,28 @@ class KitchenElementBloc
     on<UpdateKitchenElementEvent>(_onUpdateKitchenElement);
     on<DeleteKitchenElementEvent>(_onDeleteKitchenElement);
   }
-  void _onGetAllKitchenElements(GetAllKitchenElementsEvent event,
+
+  //////////////////////////////////////////////////////
+  _onGetAllKitchenElements(GetAllKitchenElementsEvent event,
       Emitter<KitchenElementState> emit) async {
     _kitchenElementSubscription = databaseOperations
         .kitchenElementsStream()
-        .listen((kitchenElements) => emit(state.copyWith(
-            status: KitchenElementStatus.loaded,
-            kitchenElements: kitchenElements)));
+        .listen((kitchenElements) =>
+            add(LoadKitchenElementsEvent(kitchenElements: kitchenElements)));
   }
 
-  void _onLoadKitchenElements(
+//////////////////////////////////////////////////////
+  _onLoadKitchenElements(
       LoadKitchenElementsEvent event, Emitter<KitchenElementState> emit) async {
     emit(state.copyWith(
-        status: KitchenElementStatus.loading,
+        status: KitchenElementStatus.loaded,
         kitchenElements: event.kitchenElements));
   }
 
-  void _onAddKitchenElement(
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+  ///Crud operations for kitchen elements ///////////////
+  _onAddKitchenElement(
       AddKitchenElementEvent event, Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.addKitchenElement(event.kitchenElement);
@@ -51,7 +56,7 @@ class KitchenElementBloc
     }
   }
 
-  void _onUpdateKitchenElement(UpdateKitchenElementEvent event,
+  _onUpdateKitchenElement(UpdateKitchenElementEvent event,
       Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.updateKitchenElement(event.kitchenElement);
@@ -61,7 +66,7 @@ class KitchenElementBloc
     }
   }
 
-  void _onDeleteKitchenElement(DeleteKitchenElementEvent event,
+  _onDeleteKitchenElement(DeleteKitchenElementEvent event,
       Emitter<KitchenElementState> emit) async {
     try {
       await databaseOperations.deleteKitchenElement(event.kitchenElement);
@@ -72,7 +77,7 @@ class KitchenElementBloc
   }
 
   @override
-  Future<void> close() {
+  close() {
     _kitchenElementSubscription?.cancel();
     return super.close();
   }

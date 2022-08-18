@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lkarnet/providers/authproviders/database_providers.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
+import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
+import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/settings/theme.dart';
@@ -14,17 +15,17 @@ import '../../widgets/availability_widget.dart';
 import '../../widgets/expired_switch.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 
-class KitchenElementDetailsScreen extends ConsumerStatefulWidget {
+class KitchenElementDetailsScreen extends StatefulWidget {
   const KitchenElementDetailsScreen({Key? key, required this.kitchenElement})
       : super(key: key);
   final KitchenElementDataModel kitchenElement;
   @override
-  ConsumerState<KitchenElementDetailsScreen> createState() =>
+  State<KitchenElementDetailsScreen> createState() =>
       _KitchenItemDetailsScreenState();
 }
 
 class _KitchenItemDetailsScreenState
-    extends ConsumerState<KitchenElementDetailsScreen> {
+    extends State<KitchenElementDetailsScreen> {
   DateTime? _expiryDate = DateTime.now();
 
   List<KitchenItemModel> _kitchenItems = [];
@@ -121,13 +122,20 @@ class _KitchenItemDetailsScreenState
                           child: Text('Delete'),
                           style: MThemeData.raisedButtonStyleSave,
                           onPressed: () {
-                            ref.read(operationsProvider).deleteKitchenElement(
+                            ///  delete kitchen element
+                            BlocProvider.of<KitchenElementBloc>(context)
+                                .add(DeleteKitchenElementEvent(
+                              kitchenElement:
                                   widget.kitchenElement.kitchenElement,
-                                );
+                            ));
+
+                            /// then loop over all the items in the kitchen element and delete them
                             for (KitchenItemModel item in _kitchenItems) {
-                              ref.read(operationsProvider).deleteKitchenItem(
+                              context
+                                  .read<KitchenItemBloc>()
+                                  .add(DeleteKitchenItemEvent(
                                     item,
-                                  );
+                                  ));
                             }
 
                             Navigator.of(context).pop();
@@ -184,95 +192,87 @@ class _KitchenItemDetailsScreenState
       margin: EdgeInsets.symmetric(horizontal: 8),
       // height: 340,
       width: MediaQuery.of(context).size.width,
-      child: StreamBuilder<List<KitchenItemModel>>(
-          stream: ref.read(databaseProvider).kitchenItemsStream(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              _kitchenItems = snapshot.data!;
+      child: BlocBuilder<KitchenItemBloc, KitchenItemState>(
+          builder: (context, kitchenItemsState) {
+        if (kitchenItemsState.kitchenItems.isNotEmpty) {
+          _kitchenItems = kitchenItemsState.kitchenItems;
 
-              final KitchenElementDataModel _singleKitchenElementData =
-                  KitchenElementDataModel(
-                kitchenElement: widget.kitchenElement.kitchenElement,
-                kitchenItemList: _kitchenItems,
-              );
-              return ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: _singleKitchenElementData.kitchenItems
-                    .length, //widget.kitchenElement.sortedItems.length,
-                itemBuilder: (context, index) {
-                  final KitchenItemModel _kitchenItem =
-                      _singleKitchenElementData.kitchenItems[index];
-                  return KitchenItemTileWidget(
-                    onDoubleTap: () {
-                      setState(() {
-                        _expiryDate = null;
-                      });
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: ExpiredSwitch(
-                            onChanged: (value) {
+          final KitchenElementDataModel _singleKitchenElementData =
+              KitchenElementDataModel(
+            kitchenElement: widget.kitchenElement.kitchenElement,
+            kitchenItemList: _kitchenItems,
+          );
+          return ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _singleKitchenElementData.kitchenItems
+                .length, //widget.kitchenElement.sortedItems.length,
+            itemBuilder: (context, index) {
+              final KitchenItemModel _kitchenItem =
+                  _singleKitchenElementData.kitchenItems[index];
+              return KitchenItemTileWidget(
+                onDoubleTap: () {
+                  setState(() {
+                    _expiryDate = null;
+                  });
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: ExpiredSwitch(
+                        onChanged: (value) {
+                          setState(() {
+                            if (value['isExpired']) {
                               setState(() {
-                                if (value['isExpired']) {
-                                  setState(() {
-                                    //  _isLoading = false;
-                                    _expiryDate = value['expiryDate'];
-                                  });
-                                } else {
-                                  setState(() {
-                                    _expiryDate = null;
-                                    //_isLoading = false;
-                                  });
-                                }
+                                //  _isLoading = false;
+                                _expiryDate = value['expiryDate'];
                               });
-                            },
-                          ),
-                          //content:
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  child: Text(
-                                    'Cancel',
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
+                            } else {
+                              setState(() {
+                                _expiryDate = null;
+                                //_isLoading = false;
+                              });
+                            }
+                          });
+                        },
+                      ),
+                      //content:
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              child: Text(
+                                'Cancel',
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
 
-                                //const Spacer(),
-                                ElevatedButton(
-                                  child: Text('Ok'),
-                                  onPressed: () {
-                                    // setState(() {
-                                    //   _isLoading = true;
-                                    // });
-                                    // _kitchenItem.toPrint();
-                                    ref
-                                        .read(databaseProvider)
-                                        .updateKitchenItem(
-                                            _kitchenItem.copyWith(
-                                                dateExpired: _expiryDate,
-                                                kitchenElementId: _kitchenItem
-                                                    .kitchenElementId));
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
+                            //const Spacer(),
+                            ElevatedButton(
+                              child: Text('Ok'),
+                              onPressed: () {
+                                BlocProvider.of<KitchenItemBloc>(context)
+                                    .add(UpdateKitchenItemEvent(
+                                  _kitchenItem,
+                                ));
+                                Navigator.of(context).pop();
+                              },
                             ),
                           ],
                         ),
-                      );
-                    },
-                    kitchenItem: _kitchenItem,
+                      ],
+                    ),
                   );
                 },
+                kitchenItem: _kitchenItem,
               );
-            } else
-              return Center(child: Text('something went wrong'));
-          }),
+            },
+          );
+        } else
+          return Center(child: Text('something went wrong'));
+      }),
     );
   }
 
@@ -326,16 +326,6 @@ class _KitchenItemDetailsScreenState
                                               style: MThemeData
                                                   .raisedButtonStyleSave,
                                               onPressed: () {
-                                                final db = ref
-                                                    .read(operationsProvider);
-
-                                                db.updateKitchenElement(widget
-                                                    .kitchenElement
-                                                    .kitchenElement
-                                                    .copyWith(
-                                                        availability:
-                                                            _availability));
-
                                                 Navigator.of(context).pop();
                                               },
                                               child: Text(
@@ -511,7 +501,7 @@ class _KitchenItemDetailsScreenState
 //   return 0;
 // });
 
-class PiorityRatingWidget extends ConsumerWidget {
+class PiorityRatingWidget extends StatelessWidget {
   const PiorityRatingWidget({
     Key? key,
     required this.onRatingChanged,
@@ -524,7 +514,7 @@ class PiorityRatingWidget extends ConsumerWidget {
   final double initialRating;
   final bool ignoreGestures;
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

@@ -1,47 +1,41 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
 import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/kitchen/kitchen_element_data.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../repository/database_operations.dart';
 import '../widgets/availability_widget.dart';
 import '../widgets/charts.dart';
-import '../widgets/notification_badge_widget.dart';
 import 'tabs/kitchen_element_detailed.dart';
 
-class KitchenStockHome extends ConsumerStatefulWidget {
-  const KitchenStockHome({Key? key}) : super(key: key);
+class KitchenStockHomeView extends StatelessWidget {
+  const KitchenStockHomeView({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<KitchenStockHome> createState() => _KitchenStockHomeState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              KitchenElementBloc(GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>()),
+        ),
+      ],
+      child: KitchenStockWidget(),
+    );
+  }
 }
 
-class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
-  late List<KitchenElementModel> _kitchenElements;
-  late List<KitchenItemModel> _kitchenItems;
-  //KitchenElementDataModel? singleKitchenElementData;
-  KitchenElementsData? _kitchenElementsData;
-  @override
-  void initState() {
-    _kitchenElements = [];
-    _kitchenItems = [];
-
-    super.initState();
-  }
-
-  void clearListsts() {
-    _kitchenElements = [];
-    _kitchenItems = [];
-  }
-
-  @override
-  void dispose() {
-    clearListsts();
-    super.dispose();
-  }
-
+class KitchenStockWidget extends StatelessWidget {
+  const KitchenStockWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BluredContainer(
@@ -52,64 +46,71 @@ class _KitchenStockHomeState extends ConsumerState<KitchenStockHome> {
           builder: (context, kItemsState) {
         return BlocBuilder<KitchenElementBloc, KitchenElementState>(
             builder: (context, kElmntsState) {
-          if (kItemsState.kitchenItems.isNotEmpty &&
+          if (kItemsState.kitchenItems.isNotEmpty ||
               kElmntsState.kitchenElements.isNotEmpty) {
-            clearListsts();
-            _kitchenElements = kElmntsState.kitchenElements;
-            _kitchenItems = kItemsState.kitchenItems;
-            _kitchenElementsData = KitchenElementsData(
+            List<KitchenElementModel> _kitchenElements =
+                kElmntsState.kitchenElements;
+            List<KitchenItemModel> _kitchenItems = kItemsState.kitchenItems;
+            KitchenElementsData? _kitchenElementsData = KitchenElementsData(
               kitchenElementList: _kitchenElements,
               kitchenItems: _kitchenItems,
             );
-          }
-          //kitchenElements = KitchenElement.fakeKitchenElements;
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: FloatingActionButton(
-              heroTag: 'add_kitchen_element',
-              onPressed: () {},
-              child: Icon(Icons.add),
-            ),
-            appBar: AppBar(
-              actions: [
-                NotificationsIconButton(
-                  ref: ref,
-                ),
-              ],
-              leading: Icon(Icons.kitchen_outlined, color: Colors.black),
-              title: Text(
-                'Kitchen Stock  ${_kitchenItems.length}',
-                style: Theme.of(context).textTheme.headline2,
+            log('KitchenStockHome: _kitchenElementsData: ${kElmntsState.status}');
+            //kitchenElements = KitchenElement.fakeKitchenElements;
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: FloatingActionButton(
+                heroTag: 'add_kitchen_element',
+                onPressed: () {
+                  context
+                      .read<KitchenElementBloc>()
+                      .add(GetAllKitchenElementsEvent());
+                },
+                child: Icon(Icons.add),
               ),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-              excludeHeaderSemantics: true,
-              toolbarHeight: 40,
-              backgroundColor: AppConstants.whiteOpacity,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(AppConstants.radius),
-                  bottom: Radius.circular(AppConstants.radius),
-                ),
-              ),
-            ),
-            // Next, create a SliverList
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  _buildBarChartWidget(_kitchenElements),
-                  const SizedBox(height: 20),
-                  _kitchenElementsData != null
-                      ? _buildGridView(context, _kitchenElementsData!)
-                      : const SizedBox(height: 20),
-                  const SizedBox(height: 50),
+              appBar: AppBar(
+                actions: [
+                  // NotificationsIconButton(
+                  //   ref: ref,
+                  // ),
                 ],
+                leading: Icon(Icons.kitchen_outlined, color: Colors.black),
+                title: Text(
+                  'Kitchen Stock  ${_kitchenElementsData.kitchenElementList.length}',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                excludeHeaderSemantics: true,
+                toolbarHeight: 40,
+                backgroundColor: AppConstants.whiteOpacity,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppConstants.radius),
+                    bottom: Radius.circular(AppConstants.radius),
+                  ),
+                ),
               ),
-            ),
-          );
+              // Next, create a SliverList
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    _buildBarChartWidget(_kitchenElements),
+                    const SizedBox(height: 20),
+                    _buildGridView(context, _kitchenElementsData),
+                    const SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         });
       }),
     );
