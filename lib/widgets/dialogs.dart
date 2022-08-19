@@ -3,6 +3,39 @@ import 'package:flutter/material.dart';
 import '../const/constents.dart';
 
 class Dialogs {
+  static Future<bool> confirmDialogue(context,
+      {String? title, VoidCallback? onOK, VoidCallback? onCancel}) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title ?? 'Confirm !'),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text('Yes'),
+          ),
+          MaterialButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text('No'),
+          ),
+        ],
+      ),
+    ).then((value) {
+      if (value ?? false) {
+        onOK;
+        return Future.value(true);
+      } else {
+        onCancel;
+        return Future.value(false);
+      }
+    });
+  }
+
   static Future<void> dialogSimple(BuildContext context,
       {List<Widget>? widgets, String? title}) {
     return showDialog<void>(

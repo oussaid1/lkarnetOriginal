@@ -7,6 +7,9 @@ import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
 import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/kitchen/kitchen_element_data.dart';
+import 'package:lkarnet/screens/add/add_kitechen_element.dart';
+import '../blocs/datefilterbloc/date_filter_bloc.dart';
+import '../models/item/items_filtered.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
 import '../repository/database_operations.dart';
@@ -22,11 +25,16 @@ class KitchenStockHomeView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              KitchenElementBloc(GetIt.I<DatabaseOperations>()),
+          create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetAllKitchenElementsEvent()),
         ),
         BlocProvider(
-          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>()),
+          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetKitchenItemsEvent()),
+        ),
+        BlocProvider<DateFilterBloc>(
+          create: (context) => DateFilterBloc()
+            ..add(ChangeDateFilterEvent(dateFilter: DateFilter.all)),
         ),
       ],
       child: KitchenStockWidget(),
@@ -59,19 +67,20 @@ class KitchenStockWidget extends StatelessWidget {
             //kitchenElements = KitchenElement.fakeKitchenElements;
             return Scaffold(
               backgroundColor: Colors.transparent,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: FloatingActionButton(
-                heroTag: 'add_kitchen_element',
-                onPressed: () {
-                  context
-                      .read<KitchenElementBloc>()
-                      .add(GetAllKitchenElementsEvent());
-                },
-                child: Icon(Icons.add),
-              ),
+
               appBar: AppBar(
                 actions: [
+                  /// add kitchenEle to database
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AddKitchenElement(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.add_box_outlined),
+                  )
                   // NotificationsIconButton(
                   //   ref: ref,
                   // ),

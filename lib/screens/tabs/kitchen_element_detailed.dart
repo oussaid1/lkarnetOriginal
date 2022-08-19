@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
 import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/settings/theme.dart';
@@ -66,120 +68,124 @@ class _KitchenItemDetailsScreenState
           ),
         ],
         gradientColors: AppConstants.myGradients,
-        centerWidget: Scaffold(
-          backgroundColor: Colors.transparent,
+        centerWidget: BlocProvider(
+          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
+            ..add(GetKitchenItemsEvent()),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
 
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'kitchen_element_details_screen',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddKitchenItem(
-                    kitchenElement: widget.kitchenElement.kitchenElement,
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: FloatingActionButton(
+              heroTag: 'kitchen_element_details_screen',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddKitchenItem(
+                      kitchenElement: widget.kitchenElement.kitchenElement,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: Icon(Icons.add),
-          ),
-          appBar: MyAppBar(
-            title: Text('${widget.kitchenElement.kitchenElement.title}'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddKitchenElement(
-                        kitchenElement: widget.kitchenElement.kitchenElement,
+                );
+              },
+              child: Icon(Icons.add),
+            ),
+            appBar: MyAppBar(
+              title: Text('${widget.kitchenElement.kitchenElement.title}'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddKitchenElement(
+                          kitchenElement: widget.kitchenElement.kitchenElement,
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Are you sure?'),
-                      content: Text(
-                          'This will delete all the items in this kitchen element'),
-                      actionsAlignment: MainAxisAlignment.spaceBetween,
-                      actions: <Widget>[
-                        ElevatedButton(
-                          style: MThemeData.raisedButtonStyleCancel,
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ElevatedButton(
-                          child: Text('Delete'),
-                          style: MThemeData.raisedButtonStyleSave,
-                          onPressed: () {
-                            ///  delete kitchen element
-                            BlocProvider.of<KitchenElementBloc>(context)
-                                .add(DeleteKitchenElementEvent(
-                              kitchenElement:
-                                  widget.kitchenElement.kitchenElement,
-                            ));
-
-                            /// then loop over all the items in the kitchen element and delete them
-                            for (KitchenItemModel item in _kitchenItems) {
-                              context
-                                  .read<KitchenItemBloc>()
-                                  .add(DeleteKitchenItemEvent(
-                                    item,
-                                  ));
-                            }
-
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-
-          // Next, create a SliverList
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                _buildTopContainer(context),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    const SizedBox(width: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Items',
-                            style: Theme.of(context).textTheme.headline3,
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Are you sure?'),
+                        content: Text(
+                            'This will delete all the items in this kitchen element'),
+                        actionsAlignment: MainAxisAlignment.spaceBetween,
+                        actions: <Widget>[
+                          ElevatedButton(
+                            style: MThemeData.raisedButtonStyleCancel,
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                           ),
-                          Text(
-                            'Long press to set the expiration date ! if Item expired !',
-                            style: Theme.of(context).textTheme.subtitle2,
+                          ElevatedButton(
+                            child: Text('Delete'),
+                            style: MThemeData.raisedButtonStyleSave,
+                            onPressed: () {
+                              ///  delete kitchen element
+                              BlocProvider.of<KitchenElementBloc>(context)
+                                  .add(DeleteKitchenElementEvent(
+                                kitchenElement:
+                                    widget.kitchenElement.kitchenElement,
+                              ));
+
+                              /// then loop over all the items in the kitchen element and delete them
+                              for (KitchenItemModel item in _kitchenItems) {
+                                context
+                                    .read<KitchenItemBloc>()
+                                    .add(DeleteKitchenItemEvent(
+                                      item,
+                                    ));
+                              }
+
+                              Navigator.of(context).pop();
+                            },
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                SizedBox(height: 10),
-                _buildBottomContainer(context),
               ],
+            ),
+
+            // Next, create a SliverList
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 20),
+                  _buildTopContainer(context),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const SizedBox(width: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Items',
+                              style: Theme.of(context).textTheme.headline3,
+                            ),
+                            Text(
+                              'Long press to set the expiration date ! if Item expired !',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  _buildBottomContainer(context),
+                ],
+              ),
             ),
           ),
         ),

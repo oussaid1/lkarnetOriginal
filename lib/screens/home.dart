@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
-            ..add(GetKitchenItems()),
+            ..add(GetKitchenItemsEvent()),
         ),
         BlocProvider<DateFilterBloc>(
           create: (context) => DateFilterBloc()
@@ -78,7 +78,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //File _pickedFile = File('/storage/emulated/0/Download/test.txt');
   final PageController _pageController = PageController();
   @override
   void initState() {

@@ -1,20 +1,39 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
 import 'package:lkarnet/components.dart';
-import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 import '../models/kitchen/kitchen_element.dart';
 
-class KitchenElementsSpinner extends ConsumerStatefulWidget {
+class KitchenElementsSpinner extends StatelessWidget {
   const KitchenElementsSpinner({Key? key, required this.onSelected})
+      : super(key: key);
+  final void Function(KitchenElementModel) onSelected;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
+        ..add(GetAllKitchenElementsEvent()),
+      child: KitchenElementsDropDown(
+        onSelected: onSelected,
+      ),
+    );
+  }
+}
+
+class KitchenElementsDropDown extends ConsumerStatefulWidget {
+  const KitchenElementsDropDown({Key? key, required this.onSelected})
       : super(key: key);
   final void Function(KitchenElementModel) onSelected;
 
   @override
-  ConsumerState<KitchenElementsSpinner> createState() =>
-      _KitchenElementsSpinnerState();
+  ConsumerState<KitchenElementsDropDown> createState() =>
+      _KitchenElementsDropDownState();
 }
 
-class _KitchenElementsSpinnerState
-    extends ConsumerState<KitchenElementsSpinner> {
+class _KitchenElementsDropDownState
+    extends ConsumerState<KitchenElementsDropDown> {
   KitchenElementModel? _selectedKitchenElement;
   List<KitchenElementModel> _kitchenElements = [];
 
@@ -27,56 +46,54 @@ class _KitchenElementsSpinnerState
       // ),
       width: 160.0,
       height: 45,
-      child: StreamBuilder<List<KitchenElementModel>>(
-          stream: ref.read(databaseProvider).kitchenElementsStream(),
+      child: BlocBuilder<KitchenElementBloc, KitchenElementState>(
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              _kitchenElements = snapshot.data!;
+        if (snapshot.kitchenElements.isNotEmpty) {
+          _kitchenElements = snapshot.kitchenElements;
 
-              if (_selectedKitchenElement == null &&
-                  !_kitchenElements.isEmpty) {
-                _selectedKitchenElement = _kitchenElements.first;
-              }
-            }
-            return DropdownButtonHideUnderline(
-              child: ButtonTheme(
-                height: 200,
-                alignedDropdown: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: DropdownButton<KitchenElementModel>(
-                    elevation: 4,
-                    iconSize: 30,
-                    icon: Icon(Icons.arrow_drop_down),
-                    isExpanded: true,
-                    value: _selectedKitchenElement,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedKitchenElement = value;
-                      });
-                      widget.onSelected(value!);
-                    },
-                    items: _kitchenElements.toSet().map((element) {
-                      return DropdownMenuItem<KitchenElementModel>(
-                        value: element,
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: Text(
-                              element.title,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
+          if (_selectedKitchenElement == null && !_kitchenElements.isEmpty) {
+            _selectedKitchenElement = _kitchenElements.first;
+          }
+        }
+        return DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            height: 200,
+            alignedDropdown: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DropdownButton<KitchenElementModel>(
+                elevation: 4,
+                iconSize: 30,
+                icon: Icon(Icons.arrow_drop_down),
+                isExpanded: true,
+                value: _selectedKitchenElement,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedKitchenElement = value;
+                  });
+                  widget.onSelected(value!);
+                },
+                items: _kitchenElements.toSet().map((element) {
+                  return DropdownMenuItem<KitchenElementModel>(
+                    value: element,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Text(
+                          element.title,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
-                      );
-                    }).toList()),
-              ),
-            );
-          }),
+                      ),
+                    ),
+                  );
+                }).toList()),
+          ),
+        );
+      }),
     );
   }
 }

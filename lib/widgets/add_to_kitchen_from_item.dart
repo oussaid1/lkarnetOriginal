@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 
 import '../blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import '../models/item/item.dart';
@@ -52,24 +55,11 @@ class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
                   onPressed: _kitchenElement == null
                       ? null
                       : () {
-                          // final _kitchenItem = KitchenItem(
-                          //   itemName: _itemNameController.text,
-                          //   itemPrice: double.parse(
-                          //       _itemPriceController.text),
-                          //   quantity: _quantity,
-                          //   quantifier: _quantifier,
-                          //   dateBought: _dateBought,
-                          //   kitchenElementId: _kitchenElement!.id,
-                          //   shopName: _shop,
-                          //   dateExpired: null,
-                          // );
-                          // ref
-                          //     .read(operationsProvider)
-                          //
-                          //
-                          var db = context.read<KitchenItemBloc>();
-                          db.add(AddKitchenItemEvent(KitchenItemModel.fromItem(
-                              widget.item, _kitchenElement!)));
+                          final kElBloc =
+                              KitchenItemBloc(GetIt.I<DatabaseOperations>());
+                          kElBloc.add(AddKitchenItemEvent(
+                              KitchenItemModel.fromItem(
+                                  widget.item, _kitchenElement!)));
                           Navigator.of(context).pop();
                         },
                   style: MThemeData.raisedButtonStyleSave),

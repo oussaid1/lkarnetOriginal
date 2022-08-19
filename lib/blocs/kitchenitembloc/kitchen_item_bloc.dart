@@ -18,7 +18,7 @@ class KitchenItemBloc extends Bloc<KitchenItemEvent, KitchenItemState> {
           error: '',
         )) {
     _databaseOperations = databaseOperations;
-    on<GetKitchenItems>(_getKitchenItems);
+    on<GetKitchenItemsEvent>(_getKitchenItems);
     on<LoadKitchenItemsEvent>(_loadKitchenItems);
 
     /// crud operations
@@ -29,7 +29,7 @@ class KitchenItemBloc extends Bloc<KitchenItemEvent, KitchenItemState> {
 
   /// on Get kitchen items from the database.
   _getKitchenItems(
-      GetKitchenItems event, Emitter<KitchenItemState> emit) async {
+      GetKitchenItemsEvent event, Emitter<KitchenItemState> emit) async {
     _kitchenItemsSubscription?.cancel();
     _kitchenItemsSubscription =
         _databaseOperations.kitchenItemsStream().listen((kitchenItems) {

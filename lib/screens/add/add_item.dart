@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
@@ -11,14 +12,13 @@ import 'package:lkarnet/widgets/shop_spinner.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../widgets/add_to_kitchen_from_item.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/number_incrementer.dart';
 
 class AddItem extends ConsumerStatefulWidget {
   final ItemModel? item;
-  AddItem({this.item});
+  const AddItem({Key? key, this.item});
   @override
   _AddItemState createState() => _AddItemState();
 }
@@ -34,7 +34,7 @@ class _AddItemState extends ConsumerState<AddItem>
   DateTime _dateBought = DateTime.now();
 //  KitchenElement? _kitchenElement;
   String? _quantifier = 'واحدة';
-  String? _shop;
+  String _shop = 'unknown';
   bool _isUpdate = false, _canSave = false;
   ItemModel? _localItem;
   void clear() {
@@ -45,7 +45,7 @@ class _AddItemState extends ConsumerState<AddItem>
   void _update() {
     if (widget.item != null) {
       _isUpdate = true;
-      //   _localItem = widget.item;
+      _shop = widget.item!.shopName;
       _itemNameController.text = widget.item!.itemName;
       _itemPriceController.text = (widget.item!.itemPrice).toString();
       _quantity = widget.item!.quantity;
@@ -75,8 +75,9 @@ class _AddItemState extends ConsumerState<AddItem>
       ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>());
   @override
   Widget build(BuildContext context) {
-    Iterable<ItemModel> _kOptions = ref.watch(itemsProvider.state).state;
-
+    _itmBloc..add(GetItemsEvent());
+    // Iterable<ItemModel> _kOptions = _itmBloc.state.items;
+    // var items = GetIt.instance.get<ItemsBloc>().state.items;
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -147,7 +148,12 @@ class _AddItemState extends ConsumerState<AddItem>
               child: Column(
                 children: [
                   _buildShopSpinner(),
-                  _buildItemName(context, _kOptions),
+                  BlocBuilder<ItemsBloc, ItemsState>(
+                    bloc: _itmBloc,
+                    builder: (context, state) {
+                      return _buildItemName(context, state.items);
+                    },
+                  ),
                   _buildItemPrice(),
                   _buildSelectDateBought(),
                   _buildQuantityFier(),
@@ -241,6 +247,7 @@ class _AddItemState extends ConsumerState<AddItem>
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         NumberIncrementer(
+          initialValue: widget.item?.quantity,
           onDecrement: (value) {
             setState(() {
               _quantity = value;
@@ -255,6 +262,7 @@ class _AddItemState extends ConsumerState<AddItem>
         ),
         Container(
           child: QuantifierSpinner(
+            initialQuantifier: widget.item?.quantifier,
             onValueChanged: (value) {
               setState(() {
                 _quantifier = value;
@@ -438,7 +446,7 @@ class _AddItemState extends ConsumerState<AddItem>
       itemPrice: double.parse(_itemPriceController.text.trim()),
       quantity: _quantity,
       dateBought: _dateBought,
-      shopName: _shop ?? '',
+      shopName: _shop,
       quantifier: _quantifier,
     );
     _localItem = item;
@@ -452,11 +460,12 @@ class _AddItemState extends ConsumerState<AddItem>
   update() {
     setState(() => _canSave = true);
     final ItemModel item = ItemModel(
+      id: widget.item?.id,
       itemName: _itemNameController.text.trim(),
       itemPrice: double.parse(_itemPriceController.text.trim()),
       quantity: _quantity,
       dateBought: _dateBought,
-      shopName: _shop ?? '',
+      shopName: _shop,
       quantifier: _quantifier,
     );
     // _localItem=item;

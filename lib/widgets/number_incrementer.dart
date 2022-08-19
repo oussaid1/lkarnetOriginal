@@ -8,12 +8,12 @@ import '../const/constents.dart';
 class NumberIncrementer extends StatefulWidget {
   final Function(double) onDecrement;
   final Function(double) onIncrement;
-  //final int value;
+  final double? initialValue;
   NumberIncrementer({
     Key? key,
     required this.onDecrement,
     required this.onIncrement,
-    // this.value = 0,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -26,6 +26,14 @@ class _NumberIncrementerState extends State<NumberIncrementer> {
   void dispose() {
     _quantity = 1;
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    if (widget.initialValue != null) {
+      _quantity = widget.initialValue ?? 1;
+    }
+    super.initState();
   }
 
   @override

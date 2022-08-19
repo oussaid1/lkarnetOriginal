@@ -1,9 +1,12 @@
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
 import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element.dart';
+import '../../repository/database_operations.dart';
 import '../tabs/kitchen_element_detailed.dart';
 
 class AddKitchenElement extends ConsumerStatefulWidget {
@@ -128,16 +131,11 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                           _buildTitle(context),
                           _buildKitchenItemName(),
                           _buildElementName(context),
-                          const SizedBox(height: 10),
                           _buildPriority(context),
-                          const SizedBox(height: 10),
                           _buildDivider(),
-                          const SizedBox(height: 15),
                           _buildAvailability(context),
                           SizedBox(height: 40),
-                          widget.kitchenElement == null
-                              ? _buildSave(context)
-                              : _buildUpdate(context),
+                          _buildSave(context)
                         ],
                       ),
                     ),
@@ -166,7 +164,8 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     );
   }
 
-  Row _buildUpdate(BuildContext context) {
+  _buildSave(BuildContext context) {
+    final bloc = KitchenElementBloc(GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -185,59 +184,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           width: 120,
           child: ElevatedButton(
               child: Text(
-                'Update',
-              ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Updating...'),
-                ));
-
-                final db = ref.read(databaseProvider);
-                final kitchenElement = KitchenElementModel(
-                  title: _itemNameController.text.trim(),
-                  priority: _priorityRating,
-                  availability: _availability,
-                  id: widget.kitchenElement!.id,
-                  category: _elementCategoryController.text.trim(),
-                );
-                if (_formKeyTitle.currentState!.validate() &&
-                    _formKeyCat.currentState!.validate()) {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  db.updateKitchenElement(kitchenElement);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: AppConstants.greenOpacity,
-                    content: Text('Updated'),
-                  ));
-                }
-              },
-              style: MThemeData.raisedButtonStyleSave),
-        ),
-      ],
-    );
-  }
-
-  Row _buildSave(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Cancel',
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: MThemeData.raisedButtonStyleCancel),
-        ),
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Save',
+                widget.kitchenElement == null ? 'Save' : 'Update',
               ),
               onPressed: _isLoading
                   ? null
@@ -246,8 +193,9 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                         duration: Duration(seconds: 1),
                         content: Text('Saving...'),
                       ));
-                      final db = ref.read(databaseProvider);
+
                       final kitchenElement = KitchenElementModel(
+                        id: widget.kitchenElement?.id,
                         title: _itemNameController.text.trim(),
                         priority: _priorityRating,
                         availability: _availability,
@@ -258,11 +206,12 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                         setState(() {
                           _isLoading = true;
                         });
-                        db.addKitchenElement(kitchenElement);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: AppConstants.greenOpacity,
-                          content: Text('Saved'),
-                        ));
+
+                        widget.kitchenElement == null
+                            ? bloc.add(AddKitchenElementEvent(
+                                kitchenElement: kitchenElement))
+                            : bloc.add(UpdateKitchenElementEvent(
+                                kitchenElement: kitchenElement));
                         Navigator.of(context).pop();
                       }
                       ;
@@ -275,7 +224,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
 
   Padding _buildAvailability(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

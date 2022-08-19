@@ -56,10 +56,11 @@ class _ShopDropDownState extends State<ShopDropDown> {
         if (state.shops.isNotEmpty) {
           _shops = state.shops;
           if (widget.initialValue != null) {
-            _selectedShop = _shops.firstWhere(
-              (shop) => shop.id == widget.initialValue,
-              orElse: () => _selectedShop!,
-            );
+            _selectedShop = _shops
+                .where(
+                  (shop) => shop.shopName == widget.initialValue,
+                )
+                .toList()[0];
           }
         }
         return Container(

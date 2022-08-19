@@ -8,7 +8,7 @@ abstract class KitchenItemEvent extends Equatable {
 }
 
 /// get kitchen items event
-class GetKitchenItems extends KitchenItemEvent {}
+class GetKitchenItemsEvent extends KitchenItemEvent {}
 
 /// load kitchen items event
 class LoadKitchenItemsEvent extends KitchenItemEvent {

@@ -196,10 +196,14 @@ class _DashBoardPageState extends State<DashBoardPage>
                                     width: MediaQuery.of(context).size.width,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        const Text('no items...'),
+                                        const Text('no items... Add new ones'),
+                                        const SizedBox(height: 40),
                                         SpinKitSquareCircle(
-                                          color: Colors.white,
+                                          color: Color.fromARGB(
+                                              190, 255, 255, 255),
                                           size: 50.0,
                                         ),
                                       ],

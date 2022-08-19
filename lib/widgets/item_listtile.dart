@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import '../components.dart';
 import '../models/item/item.dart';
 import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_item.dart';
 import 'add_to_kitchen_from_item.dart';
+import 'dialogs.dart';
 import 'price_curency_widget.dart';
 
 class ItemTileWidget extends ConsumerWidget {
@@ -31,11 +34,6 @@ class ItemTileWidget extends ConsumerWidget {
             key: const Key('action-1'),
             backgroundColor: Colors.transparent,
             onPressed: (context) {
-              ref.read(pickedDateTime.state).state = item.dateBought;
-              ref.read(pickedShop.state).state = item.shopName;
-              ref.watch(selectedQuantifierProvider.state).state =
-                  item.quantifier;
-
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -59,7 +57,14 @@ class ItemTileWidget extends ConsumerWidget {
               key: const Key('action-12'),
               backgroundColor: Colors.transparent,
               label: 'Delete',
-              onPressed: (context2) {},
+              onPressed: (context2) async {
+                Dialogs.confirmDialogue(
+                  context,
+                ).then((value) => value
+                    ? BlocProvider.of<ItemsBloc>(context)
+                        .add(DeleteItemEvent(item))
+                    : null);
+              },
               icon: Icons.delete),
         ],
       ),
