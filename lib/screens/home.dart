@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
 
         BlocProvider(
           create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
-            ..add(GetAllKitchenElementsEvent()),
+            ..add(GetKitchenElementsEvent()),
         ),
         BlocProvider(
           create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())

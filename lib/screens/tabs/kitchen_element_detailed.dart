@@ -14,6 +14,7 @@ import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
 import '../../widgets/availability_widget.dart';
+import '../../widgets/dialogs.dart';
 import '../../widgets/expired_switch.dart';
 import '../../widgets/kitchen_item_listtile.dart';
 
@@ -30,18 +31,13 @@ class _KitchenItemDetailsScreenState
     extends State<KitchenElementDetailsScreen> {
   DateTime? _expiryDate = DateTime.now();
 
+  /// this is used in setting the expiration date of the kitchen item
   List<KitchenItemModel> _kitchenItems = [];
-
-  double _availability = 0;
-  @override
-  void initState() {
-    _availability = widget.kitchenElement.kitchenElement.availability!;
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final _kelmbloc = KitchenElementBloc(GetIt.I<DatabaseOperations>());
+    final _kitmbloc = KitchenItemBloc(GetIt.I<DatabaseOperations>());
     return Scaffold(
       body: GlassMaterial(
         circleWidgets: [
@@ -68,9 +64,19 @@ class _KitchenItemDetailsScreenState
           ),
         ],
         gradientColors: AppConstants.myGradients,
-        centerWidget: BlocProvider(
-          create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
-            ..add(GetKitchenItemsEvent()),
+        centerWidget: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  KitchenElementBloc(GetIt.I<DatabaseOperations>())
+                    ..add(GetKitchenElementsEvent()),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  KitchenItemBloc(GetIt.I<DatabaseOperations>())
+                    ..add(GetKitchenItemsEvent()),
+            ),
+          ],
           child: Scaffold(
             backgroundColor: Colors.transparent,
 
@@ -90,7 +96,7 @@ class _KitchenItemDetailsScreenState
               child: Icon(Icons.add),
             ),
             appBar: MyAppBar(
-              title: Text('${widget.kitchenElement.kitchenElement.title}'),
+              title: Text('//${widget.kitchenElement.kitchenElement.title}'),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit),
@@ -108,47 +114,25 @@ class _KitchenItemDetailsScreenState
                 IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Are you sure?'),
-                        content: Text(
-                            'This will delete all the items in this kitchen element'),
-                        actionsAlignment: MainAxisAlignment.spaceBetween,
-                        actions: <Widget>[
-                          ElevatedButton(
-                            style: MThemeData.raisedButtonStyleCancel,
-                            child: Text('Cancel'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            child: Text('Delete'),
-                            style: MThemeData.raisedButtonStyleSave,
-                            onPressed: () {
+                    Dialogs.confirmDialogue(
+                      context,
+                      title: 'Delete',
+                      message: 'Are you sure you want to delete this item?',
+                    ).then((value) => {
+                          if (value)
+                            {
                               ///  delete kitchen element
-                              BlocProvider.of<KitchenElementBloc>(context)
-                                  .add(DeleteKitchenElementEvent(
-                                kitchenElement:
-                                    widget.kitchenElement.kitchenElement,
-                              ));
+                              _kelmbloc.add(DeleteKitchenElementEvent(
+                                  kitchenElement:
+                                      widget.kitchenElement.kitchenElement)),
 
                               /// then loop over all the items in the kitchen element and delete them
-                              for (KitchenItemModel item in _kitchenItems) {
-                                context
-                                    .read<KitchenItemBloc>()
-                                    .add(DeleteKitchenItemEvent(
-                                      item,
-                                    ));
-                              }
 
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    );
+                              _kitmbloc.add(DeleteAllKitchenItems(
+                                widget.kitchenElement.kitchenItems,
+                              )),
+                            }
+                        });
                   },
                 ),
               ],
@@ -159,7 +143,7 @@ class _KitchenItemDetailsScreenState
               child: Column(
                 children: [
                   SizedBox(height: 20),
-                  _buildTopContainer(context),
+                  _buildTopContainer(context, _kelmbloc, _kitmbloc),
                   SizedBox(height: 10),
                   Row(
                     children: [
@@ -183,7 +167,7 @@ class _KitchenItemDetailsScreenState
                     ],
                   ),
                   SizedBox(height: 10),
-                  _buildBottomContainer(context),
+                  _buildBottomContainer(context, _kelmbloc, _kitmbloc),
                 ],
               ),
             ),
@@ -193,7 +177,8 @@ class _KitchenItemDetailsScreenState
     );
   }
 
-  BluredContainer _buildBottomContainer(BuildContext context) {
+  BluredContainer _buildBottomContainer(
+      BuildContext context, _kelmbloc, _kitmbloc) {
     return BluredContainer(
       margin: EdgeInsets.symmetric(horizontal: 8),
       // height: 340,
@@ -259,10 +244,10 @@ class _KitchenItemDetailsScreenState
                             ElevatedButton(
                               child: Text('Ok'),
                               onPressed: () {
-                                BlocProvider.of<KitchenItemBloc>(context)
-                                    .add(UpdateKitchenItemEvent(
-                                  _kitchenItem,
-                                ));
+                                _kitmbloc.add(UpdateKitchenItemEvent(
+                                    _kitchenItem.copyWith(
+                                  dateExpired: _expiryDate,
+                                )));
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -282,7 +267,8 @@ class _KitchenItemDetailsScreenState
     );
   }
 
-  BluredContainer _buildTopContainer(BuildContext context) {
+  BluredContainer _buildTopContainer(
+      BuildContext context, _kelmbloc, _kitmbloc) {
     return BluredContainer(
       margin: EdgeInsets.symmetric(horizontal: 8),
       height: 200,
@@ -297,116 +283,14 @@ class _KitchenItemDetailsScreenState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        // Dialogs.botomUpDialog(
-                        //   context,
-                        //   UpdateKitchenElement(
-                        //     kitchenElement: widget.kitchenElement,
-                        //   ),
-                        // );
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (mctx) => Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4.0)),
-                                child: Stack(
-                                  //overflow: Overflow.visible,
-                                  clipBehavior: Clip.none,
-                                  fit: StackFit.passthrough,
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Container(
-                                      height: 130,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 70, 10, 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            ElevatedButton(
-                                              style: MThemeData
-                                                  .raisedButtonStyleSave,
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Save',
-                                              ),
-                                            ),
-                                            // const SizedBox(width: 10),
-                                            ElevatedButton(
-                                              style: MThemeData
-                                                  .raisedButtonStyleCancel,
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Cancel',
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                        top: -60,
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          // AppConstants.primaryColor,
-
-                                          ///Color.fromARGB(255, 55, 152, 216),
-                                          radius: 60,
-                                          child: Availibility(
-                                            radius: 120,
-                                            initialValue: widget.kitchenElement
-                                                .kitchenElement.availability!,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _availability = value;
-                                              });
-                                            },
-                                          ),
-                                        )),
-                                  ],
-                                )));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ProgressWidget(
-                                kitchenElement: widget.kitchenElement,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Status: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white.withOpacity(0.3)),
-                              ),
-                              Text(
-                                'tap here to change status ... ! ',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                  AvailabilityChangeWidget(
+                    initialValue:
+                        widget.kitchenElement.kitchenElement.availability!,
+                    onSaved: (newVal) {
+                      _kelmbloc.add(UpdateKitchenElementEvent(
+                          kitchenElement: widget.kitchenElement.kitchenElement
+                              .copyWith(availability: newVal)));
+                    },
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -503,9 +387,123 @@ class _KitchenItemDetailsScreenState
   }
 }
 
-// final priorityRatingProvider = StateProvider<double>((ref) {
-//   return 0;
-// });
+class AvailabilityChangeWidget extends StatefulWidget {
+  const AvailabilityChangeWidget({
+    Key? key,
+    required this.onSaved,
+    required this.initialValue,
+  }) : super(key: key);
+  final void Function(double) onSaved;
+  final double initialValue;
+
+  @override
+  State<AvailabilityChangeWidget> createState() =>
+      _AvailabilityChangeWidgetState();
+}
+
+class _AvailabilityChangeWidgetState extends State<AvailabilityChangeWidget> {
+  double availability = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: GestureDetector(
+        onTap: () {
+          showDialog<double>(
+              barrierDismissible: true,
+              context: context,
+              builder: (mctx) => Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0)),
+                  child: Stack(
+                    //overflow: Overflow.visible,
+                    clipBehavior: Clip.none,
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
+                        height: 130,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                style: MThemeData.raisedButtonStyleSave,
+                                onPressed: () {
+                                  widget.onSaved(availability);
+                                  Navigator.of(context).pop(availability);
+                                },
+                                child: Text(
+                                  'Save',
+                                ),
+                              ),
+                              // const SizedBox(width: 10),
+                              ElevatedButton(
+                                style: MThemeData.raisedButtonStyleCancel,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'Cancel',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          top: -60,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 60,
+                            child: Availibility(
+                              radius: 120,
+                              initialValue: widget.initialValue,
+                              onChanged: (newVal) {
+                                setState(() {
+                                  availability = newVal;
+                                });
+                              },
+                            ),
+                          )),
+                    ],
+                  ))).then((value) => value);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ProgressWidget(
+                  availability: widget.initialValue,
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Status: ',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1!
+                      .copyWith(color: Colors.white.withOpacity(0.3)),
+                ),
+                Text(
+                  'tap here to change status ... ! ',
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class PiorityRatingWidget extends StatelessWidget {
   const PiorityRatingWidget({

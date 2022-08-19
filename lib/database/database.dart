@@ -391,6 +391,18 @@ class Database {
     }
   }
 
+  /// delete bulk of kitchen items
+  Future<void> deleteKitchenItems(List<KitchenItemModel> kitchenItems) async {
+    try {
+      for (var item in kitchenItems) {
+        await _users.collection(_collectionKitchenItems).doc(item.id).delete();
+      }
+    } catch (e) {
+      Exception(e);
+      rethrow;
+    }
+  }
+
   Future<void> deleteShop(ShopModel shopToDelete) async {
     try {
       _users.collection(DBTables.shops).doc(shopToDelete.id).delete();
@@ -400,6 +412,7 @@ class Database {
     }
   }
 
+  /// delete item in db
   Future<void> deleteItem(ItemModel item) async {
     try {
       _users.collection(DBTables.goods).doc(item.id).delete();
@@ -409,9 +422,34 @@ class Database {
     }
   }
 
+  /// dlete bulk of items in db
+  Future<void> deleteItems(List<ItemModel> items) async {
+    try {
+      for (var item in items) {
+        _users.collection(DBTables.goods).doc(item.id).delete();
+      }
+    } catch (e) {
+      Exception(e);
+      rethrow;
+    }
+  }
+
+  /// delete payment in db
   Future<void> deletePayment(PaymentModel payment) async {
     try {
       _users.collection(DBTables.payments).doc(payment.id).delete();
+    } catch (e) {
+      Exception(e);
+      rethrow;
+    }
+  }
+
+  /// delete bulk of payments in db
+  Future<void> deletePayments(List<PaymentModel> payments) async {
+    try {
+      for (var payment in payments) {
+        _users.collection(DBTables.payments).doc(payment.id).delete();
+      }
     } catch (e) {
       Exception(e);
       rethrow;

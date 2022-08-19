@@ -1,6 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/kitchenelementbloc/kitchen_element_bloc.dart';
-import 'package:lkarnet/providers/authproviders/database_providers.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -83,64 +83,72 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           ),
         ],
         gradientColors: AppConstants.myGradients,
-        centerWidget: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            elevation: 0,
-            shadowColor: Colors.transparent,
-            excludeHeaderSemantics: true,
-            toolbarHeight: 40,
-            backgroundColor: AppConstants.whiteOpacity,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(AppConstants.radius),
-                bottom: Radius.circular(AppConstants.radius),
+        centerWidget: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  KitchenElementBloc(GetIt.I<DatabaseOperations>())
+                    ..add(GetKitchenElementsEvent()),
+            ),
+          ],
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              excludeHeaderSemantics: true,
+              toolbarHeight: 40,
+              backgroundColor: AppConstants.whiteOpacity,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(AppConstants.radius),
+                  bottom: Radius.circular(AppConstants.radius),
+                ),
+              ),
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              title: Text(
+                widget.kitchenElement != null ? "تعديل المادة" : "اضافة مادة",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
             ),
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            title: Text(
-              widget.kitchenElement != null ? "تعديل المادة" : "اضافة مادة",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: StreamBuilder<List<KitchenElementModel>>(
-                stream: ref.read(databaseProvider).kitchenElementsStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    _kitchenElements = snapshot.data!;
-                  }
-                  return SizedBox(
-                    height: 500,
-                    //width: 200,
-                    child: BluredContainer(
-                      margin: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          _buildTitle(context),
-                          _buildKitchenItemName(),
-                          _buildElementName(context),
-                          _buildPriority(context),
-                          _buildDivider(),
-                          _buildAvailability(context),
-                          SizedBox(height: 40),
-                          _buildSave(context)
-                        ],
-                      ),
+            body: SingleChildScrollView(
+              child: BlocBuilder<KitchenElementBloc, KitchenElementState>(
+                  builder: (context, snapshot) {
+                if (snapshot.kitchenElements.isNotEmpty) {
+                  _kitchenElements = snapshot.kitchenElements;
+                }
+                return SizedBox(
+                  height: 500,
+                  //width: 200,
+                  child: BluredContainer(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        _buildTitle(context),
+                        _buildKitchenItemName(),
+                        _buildElementName(context),
+                        _buildPriority(context),
+                        _buildDivider(),
+                        _buildAvailability(context),
+                        SizedBox(height: 40),
+                        _buildSave(context)
+                      ],
                     ),
-                  );
-                }),
+                  ),
+                );
+              }),
+            ),
           ),
         ));
   }

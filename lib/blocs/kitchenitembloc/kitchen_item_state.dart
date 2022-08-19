@@ -7,6 +7,7 @@ enum KitchenItemStatus {
   added,
   updated,
   deleted,
+  allDeleted,
   error,
 }
 

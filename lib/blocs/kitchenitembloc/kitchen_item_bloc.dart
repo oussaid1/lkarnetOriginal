@@ -20,11 +20,14 @@ class KitchenItemBloc extends Bloc<KitchenItemEvent, KitchenItemState> {
     _databaseOperations = databaseOperations;
     on<GetKitchenItemsEvent>(_getKitchenItems);
     on<LoadKitchenItemsEvent>(_loadKitchenItems);
-
+    //////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////
     /// crud operations
     on<AddKitchenItemEvent>(_addKitchenItem);
     on<UpdateKitchenItemEvent>(_updateKitchenItem);
     on<DeleteKitchenItemEvent>(_deleteKitchenItem);
+    //////////////////////////////////////////////////////////////
+    on<DeleteAllKitchenItems>(_deleteAllKitchenItems);
   }
 
   /// on Get kitchen items from the database.
@@ -89,6 +92,21 @@ class KitchenItemBloc extends Bloc<KitchenItemEvent, KitchenItemState> {
       emit(state.copyWith(
         status: KitchenItemStatus.deleted,
         kitchenItem: event.kitchenItem,
+      ));
+    } catch (e) {
+      emit(
+          state.copyWith(status: KitchenItemStatus.error, error: e.toString()));
+    }
+  }
+
+///////////////////////////////////////////////!/
+  /// delete all kitchen items from the database.
+  _deleteAllKitchenItems(
+      DeleteAllKitchenItems event, Emitter<KitchenItemState> emit) async {
+    try {
+      await _databaseOperations.deleteKitchenItems(event.kitchenItems);
+      emit(state.copyWith(
+        status: KitchenItemStatus.deleted,
       ));
     } catch (e) {
       emit(

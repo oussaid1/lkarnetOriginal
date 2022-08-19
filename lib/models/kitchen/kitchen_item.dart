@@ -51,7 +51,7 @@ class KitchenItemModel {
     int? count,
     DateTime? dateBought,
     DateTime? dateExpired,
-    required String kitchenElementId,
+    String? kitchenElementId,
   }) {
     return KitchenItemModel(
         id: id ?? this.id,
@@ -64,7 +64,7 @@ class KitchenItemModel {
         count: count ?? this.count,
         dateBought: dateBought ?? this.dateBought,
         dateExpired: dateExpired,
-        kitchenElementId: kitchenElementId);
+        kitchenElementId: kitchenElementId ?? this.kitchenElementId);
   }
 
   Map<String, dynamic> toMap() {

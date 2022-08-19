@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../components.dart';
-import '../models/kitchen/kitchen_element_data.dart';
 
 class ProgressWidget extends StatelessWidget {
   const ProgressWidget({
     Key? key,
-    required this.kitchenElement,
+    required this.availability,
   }) : super(key: key);
-  final KitchenElementDataModel kitchenElement;
+  final double availability;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class ProgressWidget extends StatelessWidget {
         // backgroundColor: Colors.white,
         axes: <RadialAxis>[
           RadialAxis(
-            labelFormat: '${kitchenElement.kitchenElement.availability}',
+            labelFormat: '$availability',
             labelOffset: 15,
             labelsPosition: ElementsPosition.inside,
             axisLabelStyle:
@@ -38,7 +37,7 @@ class ProgressWidget extends StatelessWidget {
             pointers: <GaugePointer>[
               RangePointer(
                 color: Color.fromARGB(99, 255, 255, 255),
-                value: kitchenElement.kitchenElement.availability!,
+                value: availability,
                 width: 0.95,
                 pointerOffset: 0.05,
                 sizeUnit: GaugeSizeUnit.factor,

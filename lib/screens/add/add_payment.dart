@@ -26,7 +26,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   final GlobalKey<FormState> _formKeyPaidAmount = GlobalKey<FormState>();
   final TextEditingController _paidAmountController = TextEditingController();
   bool _canSave = false;
-  late DateTime _datePaid;
+  DateTime _datePaid = DateTime.now();
   String? _id;
   final FocusNode _paidAmountFocusNode = FocusNode();
   String? _shopName;
@@ -51,7 +51,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
 
   @override
   Widget build(BuildContext context) {
-    final pmntBloc = PaymentsBloc((GetIt.I.get<DatabaseOperations>()));
+    final pmntBloc = PaymentsBloc((GetIt.I<DatabaseOperations>()));
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -172,6 +172,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
 
   _buildDatePaid() {
     return SelectDate(
+      initialDate: widget.payment?.datePaid,
       onDateSelected: (value) {
         setState(() {
           _datePaid = value;
@@ -244,7 +245,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   }
 
   void _addPayment(context, PaymentModel payment, bloc) {
-    bloc.add(AddPayment(payment: payment));
+    bloc.add(AddPaymentEvent(payment));
     Navigator.of(context).pop();
   }
 

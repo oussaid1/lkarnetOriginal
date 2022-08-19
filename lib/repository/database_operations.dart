@@ -157,4 +157,16 @@ class DatabaseOperations implements Database {
   @override
   Future<void> deleteShopData(ShopData shopsData) =>
       _database.deleteShopData(shopsData);
+
+  @override
+  Future<void> deleteItems(List<ItemModel> items) =>
+      _database.deleteItems(items);
+
+  @override
+  Future<void> deleteKitchenItems(List<KitchenItemModel> kitchenItems) =>
+      _database.deleteKitchenItems(kitchenItems);
+
+  @override
+  Future<void> deletePayments(List<PaymentModel> payments) =>
+      _database.deletePayments(payments);
 }

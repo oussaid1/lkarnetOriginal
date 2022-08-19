@@ -7,7 +7,7 @@ abstract class KitchenElementEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAllKitchenElementsEvent extends KitchenElementEvent {}
+class GetKitchenElementsEvent extends KitchenElementEvent {}
 
 class LoadKitchenElementsEvent extends KitchenElementEvent {
   final List<KitchenElementModel> kitchenElements;

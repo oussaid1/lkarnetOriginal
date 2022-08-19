@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -26,7 +24,7 @@ class KitchenStockHomeView extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
-            ..add(GetAllKitchenElementsEvent()),
+            ..add(GetKitchenElementsEvent()),
         ),
         BlocProvider(
           create: (context) => KitchenItemBloc(GetIt.I<DatabaseOperations>())
@@ -63,7 +61,7 @@ class KitchenStockWidget extends StatelessWidget {
               kitchenElementList: _kitchenElements,
               kitchenItems: _kitchenItems,
             );
-            log('KitchenStockHome: _kitchenElementsData: ${kElmntsState.status}');
+            //  log('KitchenStockHome: _kitchenElementsData: ${kElmntsState.status}');
             //kitchenElements = KitchenElement.fakeKitchenElements;
             return Scaffold(
               backgroundColor: Colors.transparent,
@@ -265,7 +263,8 @@ class KitchenItemSquareTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ProgressWidget(
-                          kitchenElement: kitchenElement,
+                          availability:
+                              kitchenElement.kitchenElement.availability ?? 0,
                         ),
                       ),
                       Row(

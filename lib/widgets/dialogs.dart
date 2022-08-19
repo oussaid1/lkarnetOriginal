@@ -4,11 +4,16 @@ import '../const/constents.dart';
 
 class Dialogs {
   static Future<bool> confirmDialogue(context,
-      {String? title, VoidCallback? onOK, VoidCallback? onCancel}) async {
+      {String? title,
+      String? message,
+      VoidCallback? onOK,
+      VoidCallback? onCancel}) async {
     return await showDialog<bool>(
       context: context,
+      barrierDismissible: true,
       builder: (context) => AlertDialog(
         title: Text(title ?? 'Confirm !'),
+        content: Text(message ?? 'Are you sure ?'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           MaterialButton(

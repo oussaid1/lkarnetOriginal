@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import '../components.dart';
 import '../models/item/item.dart';
-import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_item.dart';
 import 'add_to_kitchen_from_item.dart';
 import 'dialogs.dart';

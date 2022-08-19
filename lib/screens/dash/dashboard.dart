@@ -5,6 +5,7 @@ import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
+import 'package:lkarnet/utils.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/itemsbloc/items_bloc.dart';
@@ -118,16 +119,72 @@ class _DashBoardPageState extends State<DashBoardPage>
           child: MultiBlocListener(
             listeners: [
               BlocListener<ItemsBloc, ItemsState>(
-                listener: (context, state) {},
+                listener: (context, state) {
+                  if (state.status == ItemsStatus.loaded) {
+                    Dialogs.snackBar('Items loaded');
+                  }
+                  if (state.status == ItemsStatus.added) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Item added successfully');
+                  }
+                  if (state.status == ItemsStatus.updated) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Item updated successfully');
+                  }
+                  if (state.status == ItemsStatus.deleted) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Item deleted successfully');
+                  }
+                  if (state.status == ItemsStatus.error) {
+                    GlobalFunctions.showErrorSnackBar(context, state.error);
+                  }
+                },
               ),
               BlocListener<ShopsBloc, ShopsState>(
                 listener: (context, state) {
-                  if (state.status == ShopsStatus.loaded) {}
+                  if (state.status == ShopsStatus.loaded) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Shops loaded successfully');
+                  }
+                  if (state.status == ShopsStatus.added) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Shop added successfully');
+                  }
+                  if (state.status == ShopsStatus.updated) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Shop updated successfully');
+                  }
+                  if (state.status == ShopsStatus.deleted) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Shop deleted successfully');
+                  }
+                  if (state.status == ShopsStatus.error) {
+                    GlobalFunctions.showErrorSnackBar(context, state.error);
+                  }
                 },
               ),
               BlocListener<PaymentsBloc, PaymentsState>(
                   listener: (context, state) {
-                if (state.status == PaymentsStatus.loaded) {}
+                if (state.status == PaymentsStatus.loaded) {
+                  GlobalFunctions.showSnackBar(
+                      context, 'Payments loaded successfully');
+                }
+
+                if (state.status == PaymentsStatus.added) {
+                  GlobalFunctions.showSnackBar(
+                      context, 'Payment added successfully');
+                }
+                if (state.status == PaymentsStatus.updated) {
+                  GlobalFunctions.showSnackBar(
+                      context, 'Payment updated successfully');
+                }
+                if (state.status == PaymentsStatus.deleted) {
+                  GlobalFunctions.showSnackBar(
+                      context, 'Payment deleted successfully');
+                }
+                if (state.status == PaymentsStatus.error) {
+                  GlobalFunctions.showErrorSnackBar(context, state.error);
+                }
               }),
             ],
             child: BlocBuilder<ItemsBloc, ItemsState>(

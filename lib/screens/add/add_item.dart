@@ -197,7 +197,7 @@ class _AddItemState extends ConsumerState<AddItem>
 
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
-                        _isUpdate ? update() : save();
+                        _isUpdate ? update() : save(context);
                       }
                     },
               style: MThemeData.raisedButtonStyleSave),
@@ -439,7 +439,7 @@ class _AddItemState extends ConsumerState<AddItem>
   }
 
   /// save the item to the database
-  save() {
+  save(context) {
     setState(() => _canSave = true);
     final ItemModel item = ItemModel(
       itemName: _itemNameController.text.trim(),
@@ -453,7 +453,7 @@ class _AddItemState extends ConsumerState<AddItem>
     _itmBloc.add(AddItemEvent(item));
     mBottomSheet(context, controller: _controller);
     clear();
-    Navigator.of(context).pop();
+    //  Navigator.of(context).pop();
   }
 
   /// update the item in the database

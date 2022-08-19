@@ -41,3 +41,11 @@ class DeleteKitchenItemEvent extends KitchenItemEvent {
   @override
   List<Object> get props => [kitchenItem];
 }
+
+/// delete all kitchen items event
+class DeleteAllKitchenItems extends KitchenItemEvent {
+  final List<KitchenItemModel> kitchenItems;
+  DeleteAllKitchenItems(this.kitchenItems);
+  @override
+  List<Object> get props => [kitchenItems];
+}

@@ -19,7 +19,7 @@ class KitchenElementBloc
           error: '',
         )) {
     this.databaseOperations = databaseOperations;
-    on<GetAllKitchenElementsEvent>(_onGetAllKitchenElements);
+    on<GetKitchenElementsEvent>(_onGetAllKitchenElements);
     on<LoadKitchenElementsEvent>(_onLoadKitchenElements);
     on<AddKitchenElementEvent>(_onAddKitchenElement);
     on<UpdateKitchenElementEvent>(_onUpdateKitchenElement);
@@ -27,8 +27,8 @@ class KitchenElementBloc
   }
 
   //////////////////////////////////////////////////////
-  _onGetAllKitchenElements(GetAllKitchenElementsEvent event,
-      Emitter<KitchenElementState> emit) async {
+  _onGetAllKitchenElements(
+      GetKitchenElementsEvent event, Emitter<KitchenElementState> emit) async {
     _kitchenElementSubscription = databaseOperations
         .kitchenElementsStream()
         .listen((kitchenElements) =>

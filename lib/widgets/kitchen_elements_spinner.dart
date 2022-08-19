@@ -14,7 +14,7 @@ class KitchenElementsSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => KitchenElementBloc(GetIt.I<DatabaseOperations>())
-        ..add(GetAllKitchenElementsEvent()),
+        ..add(GetKitchenElementsEvent()),
       child: KitchenElementsDropDown(
         onSelected: onSelected,
       ),
