@@ -1,11 +1,5 @@
 import 'package:lkarnet/components.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
 import 'item.dart';
-
-final itemsFilteredProvider = StateProvider<ItemsFiltered>((ref) {
-  var items = ref.watch(itemsProvider.state).state;
-  return new ItemsFiltered(items: items);
-});
 
 enum DateFilter { all, today, thisweek, thismonth, thisyear }
 

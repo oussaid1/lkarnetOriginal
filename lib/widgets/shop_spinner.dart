@@ -61,6 +61,8 @@ class _ShopDropDownState extends State<ShopDropDown> {
                   (shop) => shop.shopName == widget.initialValue,
                 )
                 .toList()[0];
+          } else {
+            _selectedShop = _shops[0];
           }
         }
         return Container(

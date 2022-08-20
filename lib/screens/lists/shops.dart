@@ -5,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lkarnet/const/constents.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/screens/add/add_shop.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import 'package:lkarnet/widgets/glasswidget.dart';
@@ -217,14 +216,8 @@ class ShopsList extends ConsumerWidget {
                                                                       .textTheme
                                                                       .headline3,
                                                                 ),
-                                                                onPressed: () => ref
-                                                                    .read(
-                                                                        operationsProvider)
-                                                                    .deleteShopData(
-                                                                        shopsData)
-                                                                    .then((value) =>
-                                                                        Navigator.of(context)
-                                                                            .pop()),
+                                                                onPressed:
+                                                                    () {},
                                                                 style: MThemeData
                                                                     .raisedButtonStyleSave,
                                                               ),

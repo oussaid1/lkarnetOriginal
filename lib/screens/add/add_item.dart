@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/providers/varproviders/var_providers.dart';
 import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
@@ -135,33 +134,36 @@ class _AddItemState extends ConsumerState<AddItem>
           ),
         ),
         body: SingleChildScrollView(
-          child: Center(
-            child: BluredContainer(
-              height: 460, // MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(
-                top: 40,
-                left: 10,
-                right: 10,
-                bottom: 20,
-              ),
-              child: Column(
-                children: [
-                  _buildShopSpinner(),
-                  BlocBuilder<ItemsBloc, ItemsState>(
-                    bloc: _itmBloc,
-                    builder: (context, state) {
-                      return _buildItemName(context, state.items);
-                    },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: BluredContainer(
+                    height: 460, // MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+
+                    child: Column(
+                      children: [
+                        _buildShopSpinner(),
+                        BlocBuilder<ItemsBloc, ItemsState>(
+                          bloc: _itmBloc,
+                          builder: (context, state) {
+                            return _buildItemName(context, state.items);
+                          },
+                        ),
+                        _buildItemPrice(),
+                        _buildSelectDateBought(),
+                        _buildQuantityFier(),
+                        SizedBox(height: 50),
+                        _buildUpdateButton(context),
+                      ],
+                    ),
                   ),
-                  _buildItemPrice(),
-                  _buildSelectDateBought(),
-                  _buildQuantityFier(),
-                  SizedBox(height: 50),
-                  _buildUpdateButton(context),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -373,7 +375,7 @@ class _AddItemState extends ConsumerState<AddItem>
               _itemNameController.text = suggestion.itemName;
               _itemPriceController.text = suggestion.itemPrice.toString();
               _quantity = suggestion.quantity;
-              ref.read(pickedDateTime.state).state = suggestion.dateBought;
+              _dateBought = suggestion.dateBought;
             },
           ),
         ),

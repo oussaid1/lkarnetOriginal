@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
 import 'package:lkarnet/models/payment/payment_model.dart';
@@ -17,6 +18,7 @@ import '../../models/item/items_filtered.dart';
 import '../../models/payment/payments_filtered.dart';
 import '../../models/shop/shopdata_calculations.dart';
 import '../../models/shop/shops_data.dart';
+import '../../repository/database_operations.dart';
 import '../../widgets/item_listtile.dart';
 import '../../widgets/myappbar.dart';
 import '../../widgets/price_curency_widget.dart';
@@ -56,6 +58,8 @@ class _DashBoardPageState extends State<DashBoardPage>
   //late RecentOperation _recentOperation;
   @override
   Widget build(BuildContext context) {
+    GetIt.I.registerFactory<ItemsBloc>(
+        () => ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>()));
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: MyAppBar(

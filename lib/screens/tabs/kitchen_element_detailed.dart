@@ -10,6 +10,7 @@ import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/myappbar.dart';
 
+import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element_data.dart';
 import '../../models/kitchen/kitchen_item.dart';
@@ -87,8 +88,22 @@ class _KitchenItemDetailsScreenState
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddKitchenItem(
-                      kitchenElement: widget.kitchenElement.kitchenElement,
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => KitchenItemBloc(
+                            GetIt.I<DatabaseOperations>(),
+                          )..add(GetKitchenItemsEvent()),
+                        ),
+                        BlocProvider(
+                          create: (context) => ItemsBloc(
+                              databaseOperations: GetIt.I<DatabaseOperations>())
+                            ..add(GetItemsEvent()),
+                        ),
+                      ],
+                      child: AddKitchenItem(
+                        kitchenElement: widget.kitchenElement.kitchenElement,
+                      ),
                     ),
                   ),
                 );
@@ -133,6 +148,7 @@ class _KitchenItemDetailsScreenState
                               )),
                             }
                         });
+                    Navigator.pop(context);
                   },
                 ),
               ],
@@ -177,8 +193,8 @@ class _KitchenItemDetailsScreenState
     );
   }
 
-  BluredContainer _buildBottomContainer(
-      BuildContext context, _kelmbloc, _kitmbloc) {
+  /// this is the bottom container of the screen that contains the kitchen items
+  _buildBottomContainer(BuildContext context, _kelmbloc, _kitmbloc) {
     return BluredContainer(
       margin: EdgeInsets.symmetric(horizontal: 8),
       // height: 340,
@@ -211,6 +227,8 @@ class _KitchenItemDetailsScreenState
                     builder: (context) => AlertDialog(
                       title: ExpiredSwitch(
                         onChanged: (value) {
+                          /// if the item is not expired, then set the expiry date to null
+                          /// else set the expiry date to the picked date as expiry date
                           setState(() {
                             if (value['isExpired']) {
                               setState(() {

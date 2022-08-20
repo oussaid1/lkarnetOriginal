@@ -11,7 +11,6 @@ import '../../models/item/item.dart';
 import '../../models/payment/payment_model.dart';
 import '../../models/shop/shop_model.dart';
 import '../../models/shop/shops_data.dart';
-import '../../providers/varproviders/var_providers.dart';
 import '../../settings/theme.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/price_curency_widget.dart';
@@ -135,8 +134,6 @@ class PaymentTile extends ConsumerWidget {
                 icon: Icons.mode_edit,
                 label: 'Edit',
                 onPressed: (context) {
-                  ref.read(pickedDateTime.state).state = payment.datePaid;
-                  ref.read(pickedShop.state).state = payment.paidShopName;
                   Dialogs.botomUpDialog(
                       context,
                       AddPayment(

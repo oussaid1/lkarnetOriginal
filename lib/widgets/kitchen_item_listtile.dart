@@ -3,8 +3,6 @@ import 'package:lkarnet/settings/theme.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import '../components.dart';
 import '../models/kitchen/kitchen_item.dart';
-import '../providers/operationsprovider/operations_provider.dart';
-import '../providers/varproviders/var_providers.dart';
 import '../screens/add/add_kitchen_item.dart';
 import 'price_curency_widget.dart';
 
@@ -32,16 +30,11 @@ class KitchenItemTileWidget extends ConsumerWidget {
           SlidableAction(
             key: const Key('action-1'),
             backgroundColor: Colors.transparent,
-            onPressed: (context) {
-              ref.read(pickedDateTime.state).state = kitchenItem.dateBought;
-              ref.read(pickedShop.state).state = kitchenItem.shopName;
-              ref.watch(selectedQuantifierProvider.state).state =
-                  kitchenItem.quantifier;
-
+            onPressed: (contexti) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddKitchenItem(
+                  builder: (contexta) => AddKitchenItem(
                     kitchenItem: kitchenItem,
                   ),
                 ),
@@ -89,10 +82,7 @@ class KitchenItemTileWidget extends ConsumerWidget {
                                   'Ok',
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
-                                onPressed: () => ref
-                                    .read(operationsProvider)
-                                    .deleteKitchenItem(kitchenItem)
-                                    .then((value) => Navigator.pop(context)),
+                                onPressed: () {},
                                 style: MThemeData.raisedButtonStyleSave,
                               ),
                             ),

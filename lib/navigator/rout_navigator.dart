@@ -15,6 +15,18 @@ class RouteGenerator {
   static const String notFound = '*';
   static const String payment = '/payment';
   static const String dashboard = '/dashboard';
+  static const String kitchen = '/kitchen';
+  static const String stats = '/stats';
+  static const String settings = '/settings';
+
+  /// //////////////////////////////////////////////////////
+  /// fragments
+  static const String shopDetails = '/shopDetails';
+  static const String kitchenStock = '/kitchenStock';
+  static const String statsAll = '/statsAll';
+  static const String shopDetailsMain = '/shopDetailsMain';
+  static const String addKitchenElement = '/addKitchenElement';
+  static const String addKitchenItem = '/addKitchenItem';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed

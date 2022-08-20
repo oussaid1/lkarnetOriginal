@@ -37,6 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   /// Log out the user
   void _onLogOutRequested(
       LogOutRequestedEvent event, Emitter<LoginState> emit) async {
+    await _authService.signOut();
     _authBloc.add(NotAuthenticatedEvent());
     emit(LoggedOutState());
   }

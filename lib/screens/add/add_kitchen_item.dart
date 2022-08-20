@@ -1,32 +1,41 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
-import 'package:lkarnet/providers/operationsprovider/operations_provider.dart';
 import 'package:lkarnet/settings/theme.dart';
+import 'package:lkarnet/utils.dart';
 import 'package:lkarnet/widgets/date_picker.dart';
 import 'package:lkarnet/widgets/quantifier_spinner.dart';
 import 'package:lkarnet/widgets/shop_spinner.dart';
 import 'package:flutter/material.dart';
-
+import '../../blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import '../../components.dart';
 import '../../models/kitchen/kitchen_element.dart';
 import '../../models/kitchen/kitchen_item.dart';
-import '../../providers/streamproviders/items_stream_provider.dart';
 import '../../widgets/kitchen_elements_spinner.dart';
 
-class AddKitchenItem extends ConsumerStatefulWidget {
+/// this is used in three places:
+/// 1. - when adding new item to kitchen
+/// 2. - when editing existing item in kitchen
+/// 3. - when adding a normal item to to kitchen items of a selected kitchenElement
+class AddKitchenItem extends StatefulWidget {
+  AddKitchenItem({
+    Key? key,
+    this.kitchenItem,
+    this.kitchenElement,
+    this.item,
+  }) : super(key: key);
   final ItemModel? item;
   final KitchenItemModel? kitchenItem;
   final KitchenElementModel? kitchenElement;
-  AddKitchenItem({Key? key, this.kitchenItem, this.kitchenElement, this.item})
-      : super(key: key);
+
   @override
   _AddItemState createState() => _AddItemState();
 }
 
-class _AddItemState extends ConsumerState<AddKitchenItem> {
+class _AddItemState extends State<AddKitchenItem> {
   double _quantity = 1;
   String? _shop;
   String? _quantifier = 'واحدة';
@@ -40,9 +49,9 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   DateTime _dateBought = DateTime.now();
   DateTime? _dateExpired;
 
-  bool _isLoading = false;
+  bool _canSave = false;
 
-  void _update() {
+  void _init() {
     // check if we have a kitchen item then update the fields
     if (widget.kitchenItem != null) {
       _itemNameController.text = widget.kitchenItem!.itemName.toString();
@@ -78,7 +87,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   @override
   void initState() {
-    _update();
+    _init();
     super.initState();
   }
 
@@ -90,7 +99,10 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
 
   @override
   Widget build(BuildContext context) {
-    Iterable<ItemModel> _kOptions = ref.watch(itemsProvider.state).state;
+    final _itmBloc = context.read<KitchenItemBloc>();
+    _itmBloc..add(GetKitchenItemsEvent());
+    Iterable<ItemModel> _kOptions = context.watch<ItemsBloc>().state.items;
+    // List<ItemModel> _kOptions = _itmBloc.state.kitchenItems;
 
     return GlassMaterial(
       circleWidgets: [
@@ -119,35 +131,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
       gradientColors: AppConstants.myGradients,
       centerWidget: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          excludeHeaderSemantics: true,
-          toolbarHeight: 40,
-          backgroundColor: AppConstants.whiteOpacity,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppConstants.radius),
-              bottom: Radius.circular(AppConstants.radius),
-            ),
-          ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: Text(
-            widget.kitchenElement != null ? "تعديل المادة" : "اضافة مادة",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
-        ),
+        appBar: buildAppBar(context),
         body: BluredContainer(
           margin: EdgeInsets.all(12),
           child: SingleChildScrollView(
@@ -165,9 +149,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
                 SizedBox(
                   height: 40,
                 ),
-                widget.kitchenItem == null
-                    ? _buildSave(context)
-                    : _buildUpdate(context),
+                _buildSave(context, _itmBloc)
               ],
             ),
           ),
@@ -176,72 +158,39 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
     );
   }
 
-  Row _buildUpdate(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Cancel',
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: MThemeData.raisedButtonStyleCancel),
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      excludeHeaderSemantics: true,
+      toolbarHeight: 40,
+      backgroundColor: AppConstants.whiteOpacity,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.radius),
+          bottom: Radius.circular(AppConstants.radius),
         ),
-        Container(
-          width: 120,
-          child: ElevatedButton(
-              child: Text(
-                'Update',
-              ),
-              onPressed: _isLoading
-                  ? null
-                  : () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Updating...'),
-                      ));
-                      final _op = ref.read(operationsProvider);
-                      final _kitchenItem = KitchenItemModel(
-                        id: widget.kitchenItem!.id,
-                        besoinTitle: '',
-                        dateBought: _dateBought,
-                        itemName: _itemNameController.text.trim(),
-                        itemPrice:
-                            double.tryParse(_itemPriceController.text.trim())!,
-                        quantifier: _quantifier,
-                        quantity: _quantity,
-                        shopName: _shop,
-                        dateExpired: _dateExpired,
-                        kitchenElementId: widget.kitchenItem!.kitchenElementId,
-                      );
-                      log(_kitchenItem.toJson());
-
-                      if (_formKeyName.currentState!.validate() &&
-                          _formKeyPrice.currentState!.validate()) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        _op.updateKitchenItem(_kitchenItem);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: AppConstants.greenOpacity,
-                          content: Text('Item Updated'),
-                          duration: Duration(seconds: 1),
-                        ));
-                        Navigator.pop(context);
-                      }
-                      // pop
-                      //_op.addItem();
-                    },
-              style: MThemeData.raisedButtonStyleSave),
+      ),
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
         ),
-      ],
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      title: Text(
+        widget.kitchenElement != null ? "تعديل المادة" : "اضافة مادة",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
     );
   }
 
-  Row _buildSave(BuildContext context) {
+  _buildSave(BuildContext context, _itmBloc) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -259,46 +208,19 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         Container(
           width: 120,
           child: ElevatedButton(
-              child: Text(
-                'Save',
-              ),
-              onPressed: _isLoading
+              child: Text(widget.item != null ? 'Update' : 'Save'),
+              onPressed: !_canSave
                   ? null
                   : () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Saving...'),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                      final _op = ref.read(operationsProvider);
-                      final _kitchenItem = KitchenItemModel(
-                        besoinTitle: '',
-                        dateBought: _dateBought,
-                        itemName: _itemNameController.text.trim(),
-                        itemPrice:
-                            double.parse(_itemPriceController.text.trim()),
-                        quantifier: _quantifier,
-                        quantity: _quantity,
-                        shopName: _shop,
-                        dateExpired: _dateExpired,
-                        kitchenElementId: widget.item == null
-                            ? widget.kitchenElement!.id!
-                            : _kitchenElement!.id!,
-                      );
-                      // _kitchenItem.toPrint();
+                      setState(() {
+                        _canSave = false;
+                      });
+                      GlobalFunctions.showLoadingSnackBar(context, 'Saving...');
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        _op.addKitchenItem(_kitchenItem);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Please fill all fields'),
-                          ),
-                        );
+                        widget.kitchenItem == null
+                            ? _save(_itmBloc)
+                            : _update(_itmBloc);
                       }
                     },
               style: MThemeData.raisedButtonStyleSave),
@@ -381,6 +303,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         child: Row(
           children: [
             SelectDate(
+              initialDate: _dateBought,
               onDateSelected: (DateTime date) {
                 setState(() {
                   _dateBought = date;
@@ -461,7 +384,7 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
             textFieldConfiguration: TextFieldConfiguration(
               onChanged: (text) {
                 setState(() {
-                  _isLoading = false;
+                  _canSave = false;
                 });
               },
               controller: _itemNameController,
@@ -531,17 +454,15 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
   Row _buildShopSpinner() {
     return Row(
       children: [
-        Padding(
-          padding: EdgeInsets.all(4),
-          child: ShopSpinner(
-            onShopSelected: (shp) {
-              setState(() {
-                _shop = shp!.shopName;
-              });
+        ShopSpinner(
+          initialValue: _shop,
+          onShopSelected: (shp) {
+            setState(() {
+              _shop = shp!.shopName;
+            });
 
-              // ref.read(pickedShop.state).state = s;
-            },
-          ),
+            // ref.read(pickedShop.state).state = s;
+          },
         ),
       ],
     );
@@ -580,5 +501,52 @@ class _AddItemState extends ConsumerState<AddKitchenItem> {
         ),
       ),
     );
+  }
+
+  /// build save function
+  _save(_itmBloc) {
+    final _kitchenItem = KitchenItemModel(
+      besoinTitle: '',
+      dateBought: _dateBought,
+      itemName: _itemNameController.text.trim(),
+      itemPrice: double.parse(_itemPriceController.text.trim()),
+      quantifier: _quantifier,
+      quantity: _quantity,
+      shopName: _shop,
+      dateExpired: _dateExpired,
+      kitchenElementId: widget.item == null
+          ? widget.kitchenElement!.id!
+          : _kitchenElement!.id!,
+    );
+    // _kitchenItem.toPrint();
+
+    setState(() {
+      _canSave = true;
+    });
+    _itmBloc.add(UpdateKitchenItemEvent((_kitchenItem)));
+  }
+
+  /// build update function
+
+  _update(_itmBloc) {
+    final _kitchenItem = KitchenItemModel(
+      id: widget.item!.id,
+      besoinTitle: '',
+      dateBought: _dateBought,
+      itemName: _itemNameController.text.trim(),
+      itemPrice: double.parse(_itemPriceController.text.trim()),
+      quantifier: _quantifier,
+      quantity: _quantity,
+      shopName: _shop,
+      dateExpired: _dateExpired,
+      kitchenElementId: widget.item == null
+          ? widget.kitchenElement!.id!
+          : _kitchenElement!.id!,
+    );
+
+    setState(() {
+      _canSave = true;
+    });
+    _itmBloc.add(UpdateKitchenItemEvent((_kitchenItem)));
   }
 }

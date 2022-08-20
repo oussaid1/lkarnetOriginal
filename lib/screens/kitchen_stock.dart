@@ -85,7 +85,7 @@ class KitchenStockWidget extends StatelessWidget {
                 ],
                 leading: Icon(Icons.kitchen_outlined, color: Colors.black),
                 title: Text(
-                  'Kitchen Stock  ${_kitchenElementsData.kitchenElementList.length}',
+                  'Kitchen Stock',
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 elevation: 0,
@@ -123,7 +123,7 @@ class KitchenStockWidget extends StatelessWidget {
     );
   }
 
-  Container _buildBarChartWidget(List<KitchenElementModel> kitchenElements) {
+  _buildBarChartWidget(List<KitchenElementModel> kitchenElements) {
     return Container(
       margin: EdgeInsets.all(8),
       height: 200,
@@ -145,7 +145,7 @@ class KitchenStockWidget extends StatelessWidget {
     );
   }
 
-  Container _buildGridView(
+  _buildGridView(
       BuildContext context, KitchenElementsData _kitchenElementsData) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),

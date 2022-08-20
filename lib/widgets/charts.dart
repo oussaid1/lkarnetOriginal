@@ -77,7 +77,7 @@ class PeiWidget extends StatelessWidget {
           yValueMapper: (ItemsChartData data, _) =>
               data.itemCalculations.totalPrice,
           dataLabelMapper: (ItemsChartData data, _) =>
-              data.itemCalculations.totalCount.toString(),
+              data.itemCalculations.totalPrice.toString(),
           explode: false,
 
           explodeAll: true,

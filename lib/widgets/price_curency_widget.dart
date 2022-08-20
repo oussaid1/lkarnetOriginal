@@ -1,5 +1,4 @@
 import '../components.dart';
-import '../providers/varproviders/var_providers.dart';
 import 'package:flutter/material.dart';
 
 class PriceNumberZone extends StatelessWidget {
@@ -48,3 +47,7 @@ class PriceNumberZone extends StatelessWidget {
     );
   }
 }
+
+final currencyProvider = StateProvider<String>((ref) {
+  return 'ريال';
+});

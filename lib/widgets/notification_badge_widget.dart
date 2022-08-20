@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../blocs/kitchenelementbloc/kitchen_element_bloc.dart';
+import '../blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import '../components.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_element_data.dart';
 import '../models/kitchen/kitchen_item.dart';
-import '../providers/authproviders/database_providers.dart';
 import '../screens/lists/unavailiable_elements.dart';
 
 class NotificationsIconButton extends StatefulWidget {
@@ -17,65 +19,46 @@ class NotificationsIconButton extends StatefulWidget {
 }
 
 class _NotificationsIconBottonutate extends State<NotificationsIconButton> {
-  //  late AnimationController _animationController;
-  late List<KitchenElementModel> _kitchenElements;
-  late List<KitchenItemModel> _kitchenItems;
-  late KitchenElementsData _kitchenElementsData;
-  @override
-  void initState() {
-    _kitchenElements = [];
-    _kitchenItems = [];
-    // _animationController = AnimationController(
-    //   vsync: this,
-    //   duration: Duration(milliseconds: 500),
-    // );
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<KitchenItemModel>>(
-        stream: widget.ref.read(databaseProvider).kitchenItemsStream(),
-        builder: (context, snapshotItems) {
-          if (snapshotItems.hasData) {
-            _kitchenItems = snapshotItems.data!;
-          }
-          return StreamBuilder<List<KitchenElementModel>>(
-              stream: widget.ref.read(databaseProvider).kitchenElementsStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  _kitchenElements = snapshot.data!;
-                  _kitchenElementsData = KitchenElementsData(
-                    kitchenElementList: _kitchenElements,
-                    kitchenItems: _kitchenItems,
-                  );
-                  // _kitchenElementData = _kitchenElements
-                  //     .map((element) => KitchenElementDataModel(
-                  //           kitchenElement: element,
-                  //           kitchenItemList: _kitchenItems
-                  //               .where((item) =>
-                  //                   item.kitchenElementId == element.id)
-                  //               .toList(),
-                  //         ))
-                  //     .toList();
-                }
-                return NotificationBadgeWidget(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UnAvailiableElements(
-                              elementData:
-                                  _kitchenElementsData.unavaliableElements),
-                        ),
-                      );
-                    },
-                    count: KitchenElementsData(
-                      kitchenElementList: _kitchenElements,
-                      kitchenItems: _kitchenItems,
-                    ).unavaliableElements.length);
-              });
-        });
+    return BlocBuilder<KitchenItemBloc, KitchenItemState>(
+        builder: (context, kItemsState) {
+      return BlocBuilder<KitchenElementBloc, KitchenElementState>(
+          builder: (context, kElmntsState) {
+        List<KitchenElementModel> _kitchenElements =
+            kElmntsState.kitchenElements;
+        List<KitchenItemModel> _kitchenItems = kItemsState.kitchenItems;
+        KitchenElementsData _kitchenElementsData = KitchenElementsData(
+          kitchenElementList: _kitchenElements,
+          kitchenItems: _kitchenItems,
+        );
+
+        // _kitchenElementData = _kitchenElements
+        //     .map((element) => KitchenElementDataModel(
+        //           kitchenElement: element,
+        //           kitchenItemList: _kitchenItems
+        //               .where((item) =>
+        //                   item.kitchenElementId == element.id)
+        //               .toList(),
+        //         ))
+        //     .toList();
+
+        return NotificationBadgeWidget(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UnAvailiableElements(
+                      elementData: _kitchenElementsData.unavaliableElements),
+                ),
+              );
+            },
+            count: KitchenElementsData(
+              kitchenElementList: _kitchenElements,
+              kitchenItems: _kitchenItems,
+            ).unavaliableElements.length);
+      });
+    });
   }
 }
 

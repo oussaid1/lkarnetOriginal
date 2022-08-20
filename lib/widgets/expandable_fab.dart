@@ -97,7 +97,7 @@ class ExpandableFabState extends State<ExpandableFab>
           elevation: 12,
           onPressed: _toggle,
           child: const Icon(
-            Icons.add_shopping_cart_rounded,
+            Icons.add,
             color: Colors.white,
             // color: Colors.amber,
           ),

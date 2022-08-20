@@ -1,19 +1,8 @@
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
-
 import 'package:flutter/material.dart';
-import 'package:lkarnet/providers/streamproviders/items_stream_provider.dart';
-
+import 'package:lkarnet/widgets/search_by_widget.dart';
 import '../../widgets/item_listtile.dart';
-
-// filterPattern String from the search bar
-final filterPatternProvider = StateProvider<String>((ref) {
-  return '';
-});
-// filterType FilterType from the dropdown menu
-final filterTypeProvider = StateProvider<FilterType>((ref) {
-  return FilterType.all;
-});
 
 class ItemsList extends ConsumerStatefulWidget {
   final List<ItemModel> lista;
@@ -26,14 +15,40 @@ class ItemsList extends ConsumerStatefulWidget {
 }
 
 class _ItemsListState extends ConsumerState<ItemsList> {
-  final TextEditingController _filterController = TextEditingController();
-  // String _filterPattern = '';
-  //FilterType _filterType = FilterType.all;
+  String _filterPattern = '';
+  String _filterType = '';
+  List<ItemModel> _filteredList() {
+    List<ItemModel> lista = widget.lista;
+    switch (_filterType) {
+      case "name":
+        return lista
+            .where((item) => item.itemName
+                .toLowerCase()
+                .contains(_filterPattern.toLowerCase()))
+            .toList();
+      case "price":
+        return lista
+            .where((item) => item.itemPrice.toString().contains(_filterPattern))
+            .toList();
+      case "category":
+        return lista
+            .where((item) => item.besoinTitle!
+                .toLowerCase()
+                .contains(_filterPattern.toLowerCase()))
+            .toList();
+      case "shop":
+        return lista
+            .where((item) => item.shopName
+                .toLowerCase()
+                .contains(_filterPattern.toLowerCase()))
+            .toList();
+      default:
+    }
+    return lista;
+  }
+
   @override
   Widget build(BuildContext context) {
-    //var _shopsDataList = ref.watch(shopsDataListProvider.state).state;
-    var _list = ref.watch(itemsListNotifierProvider(widget.lista).state).state;
-
     return GlassMaterial(
       circleWidgets: [
         Positioned(
@@ -94,83 +109,22 @@ class _ItemsListState extends ConsumerState<ItemsList> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              Container(
-                width: 400,
-                height: 140,
-                decoration: BoxDecoration(
-                  color: AppConstants.whiteOpacity,
-                ),
-                child: Column(
-                  children: [
-                    // a text field and a dropdownbutton
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: TextField(
-                          controller: _filterController,
-                          onChanged: (value) {
-                            ref.read(filterPatternProvider.state).state = value;
-                          },
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.clear_all_rounded),
-                              onPressed: () {
-                                _filterController.clear();
-                                ref.read(filterPatternProvider.state).state =
-                                    '';
-                              },
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(AppConstants.radius),
-                            ),
-                            labelText: 'Search',
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(AppConstants.radius),
-                        color: AppConstants.whiteOpacity,
-                      ),
-                      width: 140,
-                      height: 50,
-                      child: DropdownButton<FilterType>(
-                        value: ref.watch(filterTypeProvider.state).state,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (FilterType? newValue) {
-                          ref.read(filterTypeProvider.state).state = newValue!;
-                        },
-                        items: FilterType.values.map((FilterType value) {
-                          return DropdownMenuItem<FilterType>(
-                            value: value,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
+              SearchByWidget(
+                listOfCategories: [],
+                onChanged: (catg, searchText) {
+                  setState(() {
+                    _filterPattern = searchText;
+                    _filterType = catg;
+                  });
+                },
               ),
               BluredContainer(
                 margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _list.length, // _shopsDataList.length,
+                  itemCount: _filteredList().length, // _shopsDataList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    ItemModel item = _list[index];
+                    ItemModel item = _filteredList()[index];
                     return ItemTileWidget(
                       item: item,
                     );
