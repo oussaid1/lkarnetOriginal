@@ -9,10 +9,11 @@ import '../../components.dart';
 import '../../cubits/userCubit/usermodel_cubit.dart';
 import '../../widgets/notifications_switch.dart';
 
-class SettingsPage extends ConsumerWidget {
+class SettingsPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     //  var appThemeState = ref.watch(appThemeStateNotifier);
+    //context.read<UserModelCubit>().loadUser();
     return BluredContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,

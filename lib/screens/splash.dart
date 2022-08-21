@@ -35,7 +35,7 @@ class SplashPage extends StatelessWidget {
         child: SizedBox(
           width: 320,
           height: 320,
-          child: GlassContainer(
+          child: BluredContainer(
             start: 0.2,
             end: 0.15,
             child: Center(

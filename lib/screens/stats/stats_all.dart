@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
@@ -57,7 +55,6 @@ class _StatsAllState extends State<StatsAll> {
                       _payments = paymentsState.payments;
                       _shops = shopsState.shops;
                       //////////////////////////////////////////////////////
-                      log('error build ${itemsState.items.length}');
 
                       /// //////////////////////////////////////////////////////
                       final ItemsData _itemsData = ItemsData(items: _items);

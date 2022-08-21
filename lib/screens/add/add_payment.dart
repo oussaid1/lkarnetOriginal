@@ -46,6 +46,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   @override
   void initState() {
     _update();
+    _canSave = _shopName != null;
     super.initState();
   }
 
@@ -159,6 +160,9 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
                   } else {
                     _updatePayment(context, _payment, pmntBloc);
                   }
+                  setState(() {
+                    _canSave = false;
+                  });
                 } else {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(Dialogs.snackBar('error'));
@@ -250,7 +254,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
   }
 
   void _updatePayment(context, PaymentModel payment, bloc) {
-    bloc.add(AddPaymentEvent(payment));
+    bloc.add(UpdatePaymentEvent(payment));
     Navigator.of(context).pop();
   }
 }

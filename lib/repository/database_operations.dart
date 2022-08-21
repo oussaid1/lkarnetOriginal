@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lkarnet/database/database.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
@@ -169,4 +170,8 @@ class DatabaseOperations implements Database {
   @override
   Future<void> deletePayments(List<PaymentModel> payments) =>
       _database.deletePayments(payments);
+
+  @override
+  // TODO: implement user
+  User? get user => throw UnimplementedError();
 }

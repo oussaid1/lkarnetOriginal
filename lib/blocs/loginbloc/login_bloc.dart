@@ -11,7 +11,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late AuthService _authService;
   // late UserCubit _userCubit;
   LoginBloc(AuthBloc authBloc, AuthService authService)
-      : super(LoginInitialState()) {
+      : super(LoginState(
+          status: LoginSattus.unauthenticated,
+          user: null,
+          error: 'unauthorized',
+        )) {
     _authBloc = authBloc;
     _authService = authService;
     on<LoginRequestedEvent>(_onLogInRequested);
@@ -21,16 +25,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onLogInRequested(
       LoginRequestedEvent event, Emitter<LoginState> emit) async {
-    emit(LoginLoadingState());
+    emit(LoginState(status: LoginSattus.loading, user: null, error: 'loading'));
     if (event.loginCredentials.isValid) {
       var response = await _authService.signInWithEmailAndPassword(
           loginCredentials: event.loginCredentials);
 
       _authBloc.add(AuthSuccessfulEvent(user: response));
-      emit(LogInSuccessfulState(user: response));
+      emit(LoginState(
+          status: LoginSattus.success, user: response, error: 'success'));
     } else {
-      emit(LoginCredentialsInvalidState(
-          loginCredentials: event.loginCredentials));
+      emit(LoginState(
+          status: LoginSattus.unauthenticated, user: null, error: ''));
     }
   }
 
@@ -39,10 +44,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LogOutRequestedEvent event, Emitter<LoginState> emit) async {
     await _authService.signOut();
     _authBloc.add(NotAuthenticatedEvent());
-    emit(LoggedOutState());
+    emit(LoginState(
+        status: LoginSattus.unauthenticated, user: null, error: 'logout'));
   }
 
   _onLoginLoading(LoginLoadingEvent event, Emitter<LoginState> emit) async {
-    emit(LoginLoadingState());
+    emit(LoginState(status: LoginSattus.loading, user: null, error: 'loading'));
   }
 }

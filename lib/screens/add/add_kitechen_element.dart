@@ -24,13 +24,14 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
   final TextEditingController _elementCategoryController =
       TextEditingController();
   final TextEditingController _itemNameController = TextEditingController();
-  bool _isLoading = false;
+
+  bool _canSave = false;
   void clear() {
     _elementCategoryController.clear();
     _itemNameController.clear();
   }
 
-  void _update() {
+  void _updatefeilds() {
     if (widget.kitchenElement != null) {
       _itemNameController.text = widget.kitchenElement!.title.toString();
       _elementCategoryController.text =
@@ -42,7 +43,8 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
 
   @override
   void initState() {
-    _update();
+    _updatefeilds();
+    _canSave = _itemNameController.text.isNotEmpty;
     super.initState();
   }
 
@@ -194,7 +196,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
               child: Text(
                 widget.kitchenElement == null ? 'Save' : 'Update',
               ),
-              onPressed: _isLoading
+              onPressed: !_canSave
                   ? null
                   : () {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -202,27 +204,9 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                         content: Text('Saving...'),
                       ));
 
-                      final kitchenElement = KitchenElementModel(
-                        id: widget.kitchenElement?.id,
-                        title: _itemNameController.text.trim(),
-                        priority: _priorityRating,
-                        availability: _availability,
-                        category: _elementCategoryController.text.trim(),
-                      );
-                      if (_formKeyTitle.currentState!.validate() &&
-                          _formKeyCat.currentState!.validate()) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-
-                        widget.kitchenElement == null
-                            ? bloc.add(AddKitchenElementEvent(
-                                kitchenElement: kitchenElement))
-                            : bloc.add(UpdateKitchenElementEvent(
-                                kitchenElement: kitchenElement));
-                        Navigator.of(context).pop();
-                      }
-                      ;
+                      widget.kitchenElement == null
+                          ? _save(bloc)
+                          : _update(bloc);
                     },
               style: MThemeData.raisedButtonStyleSave),
         ),
@@ -286,7 +270,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
             controller: _itemNameController,
             style: Theme.of(context).textTheme.headline6,
             onChanged: (x) => setState(() {
-              _isLoading = false;
+              _canSave = true;
             }),
             decoration: InputDecoration(
               prefixIcon: Icon(
@@ -333,7 +317,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
             hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
               onChanged: (x) => setState(() {
-                _isLoading = false;
+                _canSave = true;
               }),
               controller: _elementCategoryController,
               autofocus: true,
@@ -395,5 +379,44 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
         ),
       ),
     );
+  }
+
+  /// save the kitchen element to the database
+  void _save(bloc) {
+    final kitchenElement = KitchenElementModel(
+      title: _itemNameController.text.trim(),
+      priority: _priorityRating,
+      availability: _availability,
+      category: _elementCategoryController.text.trim(),
+    );
+    if (_formKeyTitle.currentState!.validate() &&
+        _formKeyCat.currentState!.validate()) {
+      setState(() {
+        _canSave = false;
+      });
+
+      bloc.add(AddKitchenElementEvent(kitchenElement: kitchenElement));
+      Navigator.pop(context);
+    }
+  }
+
+  /// update the kitchen element to the database
+  void _update(bloc) {
+    final kitchenElement = KitchenElementModel(
+      id: widget.kitchenElement?.id,
+      title: _itemNameController.text.trim(),
+      priority: _priorityRating,
+      availability: _availability,
+      category: _elementCategoryController.text.trim(),
+    );
+    if (_formKeyTitle.currentState!.validate() &&
+        _formKeyCat.currentState!.validate()) {
+      setState(() {
+        _canSave = false;
+      });
+      bloc.add(UpdateKitchenElementEvent(kitchenElement: kitchenElement));
+
+      Navigator.of(context).pop();
+    }
   }
 }

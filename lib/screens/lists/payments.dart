@@ -11,20 +11,18 @@ import '../../models/item/item.dart';
 import '../../models/payment/payment_model.dart';
 import '../../models/shop/shop_model.dart';
 import '../../models/shop/shops_data.dart';
-import '../../settings/theme.dart';
-import '../../widgets/dialogs.dart';
-import '../../widgets/price_curency_widget.dart';
-import '../add/add_payment.dart';
+import '../../widgets/payment_listtile.dart';
+import '../../widgets/search_by_widget.dart';
 
-class PaymentsList extends ConsumerWidget {
+class ViewPaymentsList extends StatelessWidget {
   final List<PaymentModel>? lista;
-  PaymentsList({
+  ViewPaymentsList({
     Key? key,
     this.lista,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return BlocBuilder<ItemsBloc, ItemsState>(
       builder: (context, itemsState) {
         return BlocBuilder<PaymentsBloc, PaymentsState>(
@@ -73,8 +71,13 @@ class PaymentsList extends ConsumerWidget {
                               Container(
                                 height: 300,
                                 width: 400,
-                                child: PayList(
-                                  lista: shopsData.payments,
+                                child: ListView.builder(
+                                  itemCount: lista!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    PaymentModel payment = lista![index];
+                                    return PaymentTile(payment: payment);
+                                  },
                                 ),
                               ),
                             ],
@@ -93,178 +96,135 @@ class PaymentsList extends ConsumerWidget {
   }
 }
 
-class PayList extends ConsumerWidget {
-  final List<PaymentModel>? lista;
-  PayList({
+class PaymentsList extends StatefulWidget {
+  final List<PaymentModel> lista;
+  PaymentsList({
     Key? key,
-    this.lista,
+    required this.lista,
   }) : super(key: key);
-
   @override
-  Widget build(BuildContext context, ref) {
-    return Container(
-      margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-      child: ListView.builder(
-        itemCount: lista!.length,
-        itemBuilder: (BuildContext context, int index) {
-          PaymentModel payment = lista![index];
-          return PaymentTile(payment: payment);
-        },
-      ),
-    );
-  }
+  State<PaymentsList> createState() => _PaymentsListState();
 }
 
-class PaymentTile extends ConsumerWidget {
-  const PaymentTile({
-    Key? key,
-    required this.payment,
-  }) : super(key: key);
-
-  final PaymentModel payment;
+class _PaymentsListState extends State<PaymentsList> {
+  String _filterPattern = '';
+  String _filterType = '';
+  List<PaymentModel> _filteredList() {
+    List<PaymentModel> lista = widget.lista;
+    switch (_filterType) {
+      case "date":
+        return lista
+            .where((item) =>
+                item.datePaid.ddmmyyyy().contains(_filterPattern.toLowerCase()))
+            .toList();
+      case "price":
+        return lista
+            .where(
+                (item) => item.paidAmount.toString().contains(_filterPattern))
+            .toList();
+      case "category":
+        return lista
+            .where((item) => item.besoinTitle!
+                .toLowerCase()
+                .contains(_filterPattern.toLowerCase()))
+            .toList();
+      case "shop":
+        return lista
+            .where((item) => item.paidShopName!
+                .toLowerCase()
+                .contains(_filterPattern.toLowerCase()))
+            .toList();
+      default:
+    }
+    return lista;
+  }
 
   @override
-  Widget build(BuildContext context, ref) {
-    return Slidable(
-        startActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-                backgroundColor: Colors.transparent,
-                icon: Icons.mode_edit,
-                label: 'Edit',
-                onPressed: (context) {
-                  Dialogs.botomUpDialog(
-                      context,
-                      AddPayment(
-                        payment: payment,
-                      ));
-                }),
-          ],
+  Widget build(BuildContext context) {
+    return GlassMaterial(
+      circleWidgets: [
+        Positioned(
+          width: 100,
+          height: 100,
+          left: 10,
+          top: 120,
+          child: AppAssets.pinkCircleWidget,
         ),
-        endActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              icon: Icons.delete_forever,
-              label: 'Delete',
-              backgroundColor: Colors.transparent,
-              onPressed: (context2) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Cancel',
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                style: MThemeData.raisedButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {
-                                  BlocProvider.of<PaymentsBloc>(context)
-                                      .add(DeletePaymentEvent(payment));
-                                  Navigator.pop(context);
-                                },
-                                style: MThemeData.raisedButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
-              },
-            ),
-          ],
+        Positioned(
+          width: 180,
+          height: 180,
+          right: 80,
+          top: 200,
+          child: AppAssets.purpleCircleWidget,
         ),
-        child: Card(
+        Positioned(
+          width: 140,
+          height: 140,
+          left: 30,
+          bottom: 80,
+          child: AppAssets.blueCircleWidget,
+        ),
+      ],
+      gradientColors: AppConstants.myGradients,
+      centerWidget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          actions: [
+            // IconButton(
+            //   icon: Icon(Icons.add_box_outlined),
+            //   onPressed: () async {
+            //     var logger = Logger();
+            //     for (var item in items!) {
+            //       logger.d(item.toMap());
+            //     }
+            //   },
+            // ),
+          ],
+          leading: Icon(Icons.menu, color: Colors.black),
+          title: Text(
+            'All Items',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          excludeHeaderSemantics: true,
+          toolbarHeight: 40,
+          backgroundColor: AppConstants.whiteOpacity,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radius),
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.secondary,
-              width: 1,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius),
+              bottom: Radius.circular(AppConstants.radius),
             ),
           ),
-          color: AppConstants.whiteOpacity,
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color:
-                            Color.fromARGB(255, 255, 137, 59).withOpacity(0.2),
-                        // : Color(0xA4E6218D),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(AppConstants.radius),
-                          bottomLeft: Radius.circular(AppConstants.radius),
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.attach_money_outlined,
-                        color: Colors.white.withOpacity(0.5),
-                        size: 30,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                  ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              SearchByWidget(
+                withCategory: true,
+                listOfCategories: ['date', 'price', 'category', 'shop'],
+                onChanged: (catg, searchText) {
+                  setState(() {
+                    _filterPattern = searchText;
+                    _filterType = catg;
+                  });
+                },
+              ),
+              BluredContainer(
+                margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
+                child: ListView.builder(
+                  itemCount: _filteredList().length,
+                  itemBuilder: (BuildContext context, int index) {
+                    PaymentModel payment = _filteredList()[index];
+                    return PaymentTile(payment: payment);
+                  },
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            '${payment.paidShopName}',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            '${payment.datePaid.formatted()}',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: PriceNumberZone(
-                                price: payment.paidAmount,
-                                style: Theme.of(context).textTheme.headline4,
-                                withDollarSign: true,
-                              )),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

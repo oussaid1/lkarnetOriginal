@@ -25,48 +25,50 @@ class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
   // bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('Select kitchen Element to add item to',
-              style: Theme.of(context).textTheme.subtitle2),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            KitchenElementsSpinner(
-              onSelected: (element) {
-                setState(() {
-                  _kitchenElement = element;
-                });
-              },
-            ),
-            Container(
-              width: 120,
-              child: ElevatedButton(
-                  child: Text(
-                    'Save',
-                  ),
-                  onPressed: _kitchenElement == null
-                      ? null
-                      : () {
-                          final kElBloc =
-                              KitchenItemBloc(GetIt.I<DatabaseOperations>());
-                          kElBloc.add(AddKitchenItemEvent(
-                              KitchenItemModel.fromItem(
-                                  widget.item, _kitchenElement!)));
-                          Navigator.of(context).pop();
-                        },
-                  style: MThemeData.raisedButtonStyleSave),
-            ),
-            // const SizedBox(width: 4),
-          ],
-        ),
-        const SizedBox(height: 40),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Select kitchen Element to add item to',
+                style: Theme.of(context).textTheme.subtitle2),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              KitchenElementsSpinner(
+                onSelected: (element) {
+                  setState(() {
+                    _kitchenElement = element;
+                  });
+                },
+              ),
+              Container(
+                width: 120,
+                child: ElevatedButton(
+                    child: Text(
+                      'Save',
+                    ),
+                    onPressed: _kitchenElement == null
+                        ? null
+                        : () {
+                            final kElBloc =
+                                KitchenItemBloc(GetIt.I<DatabaseOperations>());
+                            kElBloc.add(AddKitchenItemEvent(
+                                KitchenItemModel.fromItem(
+                                    widget.item, _kitchenElement!)));
+                            Navigator.of(context).pop();
+                          },
+                    style: MThemeData.raisedButtonStyleSave),
+              ),
+              // const SizedBox(width: 4),
+            ],
+          ),
+          const SizedBox(height: 40),
+        ],
+      ),
     );
   }
 }

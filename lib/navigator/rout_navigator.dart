@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lkarnet/models/item/item.dart';
+import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/root.dart';
+import 'package:lkarnet/screens/add/add_item.dart';
+import 'package:lkarnet/screens/add/add_shop.dart';
 import 'package:lkarnet/screens/auth/login.dart';
 import 'package:lkarnet/screens/auth/signup.dart';
 import 'package:lkarnet/screens/home.dart';
@@ -27,29 +31,49 @@ class RouteGenerator {
   static const String shopDetailsMain = '/shopDetailsMain';
   static const String addKitchenElement = '/addKitchenElement';
   static const String addKitchenItem = '/addKitchenItem';
+  ////////////////////////////////////////////////////////
+  /// Crud operations /////////////////////////////////////
+  static const String addItem = '/addItem';
+  static const String editItem = '/editItem';
+  static const String addShop = '/addShop';
+  static const String editShop = '/edit_shop';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed
-    // final args = settings.arguments;
+    final args = settings.arguments;
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
     switch (settings.name) {
-      case root:
+      case splash:
         return MaterialPageRoute(builder: (_) => SplashPage());
-      case home:
-        return MaterialPageRoute(builder: (_) => HomePage());
       case login:
         return MaterialPageRoute(builder: (_) => LoginPage());
       case signup:
         return MaterialPageRoute(builder: (_) => SignUpPage());
-      case splash:
+      case root:
         return MaterialPageRoute(builder: (_) => SplashPage());
+      ////////////////////////////////////////////////////////////////
+      ///mainViews////////////////////////////////////////////////////
+      case home:
+        return MaterialPageRoute(builder: (_) => HomePage());
+      ////////////////////////////////////////////////////////////////
+      /// fragments////////////////////////////////////////////////////
+      case addItem:
+        return MaterialPageRoute(builder: (_) => AddItem());
+      case editItem:
+        return MaterialPageRoute(
+            builder: (_) => AddItem(
+                  item: args as ItemModel,
+                ));
+      case editShop:
+        return MaterialPageRoute(
+            builder: (_) => AddShop(shop: args as ShopModel));
+
+      ////////////////////////////////////////////////////////////////
+      ///error handling////////////////////////////////////////////////////
       case error:
         return _errorRoute();
-      // case notFound:
-      //   return MaterialPageRoute(builder: (_) => NotFoundPage());
-      // case payment:
-      //   return MaterialPageRoute(builder: (_) => PaymentPage());
-      // case dashboard:
-      //   return MaterialPageRoute(builder: (_) => DashboardPage());
       default:
         return MaterialPageRoute(builder: (_) => Root());
     }

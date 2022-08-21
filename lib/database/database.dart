@@ -6,8 +6,10 @@ import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:lkarnet/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../components.dart';
 import '../models/kitchen/kitchen_element.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../providers/authproviders/auth_services.dart';
 
 class DBTables {
   static const String users = 'users';
@@ -27,6 +29,11 @@ class DBTables {
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? get user {
+    final FirebaseAuthService _firebaseAuth = FirebaseAuthService();
+    return _firebaseAuth.currentUser ?? null;
+  }
+
   var _setOptions = SetOptions(merge: true);
   final String _collectionKitchenElements = "KitchenElements";
   final String _collectionKitchenItems = "KitchenItems";
@@ -37,7 +44,7 @@ class Database {
   ///////// user CRUD  //////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
   DocumentReference get _users =>
-      _firestore.collection(DBTables.users).doc(uid);
+      _firestore.collection(DBTables.users).doc(user?.uid);
   String? uid = '';
   Database({required this.uid});
 
@@ -73,9 +80,7 @@ class Database {
 
   Future<UserModel?> getUser() async {
     UserModel? _user;
-    await _firestore
-        .collection(DBTables.users)
-        .doc(uid)
+    await _users
         .get()
         .then((value) =>
             _user = UserModel.fromDocumentSnapshot(documentSnapshot: value))

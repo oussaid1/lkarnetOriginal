@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/itemsbloc/items_bloc.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:lkarnet/settings/theme.dart';
@@ -212,15 +211,15 @@ class _AddItemState extends State<AddKitchenItem> {
               onPressed: !_canSave
                   ? null
                   : () {
-                      setState(() {
-                        _canSave = false;
-                      });
                       GlobalFunctions.showLoadingSnackBar(context, 'Saving...');
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
                         widget.kitchenItem == null
                             ? _save(_itmBloc)
                             : _update(_itmBloc);
+                        setState(() {
+                          _canSave = false;
+                        });
                       }
                     },
               style: MThemeData.raisedButtonStyleSave),

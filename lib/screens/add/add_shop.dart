@@ -46,8 +46,9 @@ class _AddShopState extends ConsumerState<AddShop> {
 
   @override
   void initState() {
-    super.initState();
     _updateControllers();
+    _canSave = _shopNameController.text.isNotEmpty;
+    super.initState();
   }
 
   @override
@@ -370,6 +371,7 @@ class _AddShopState extends ConsumerState<AddShop> {
       _canSave = false;
     });
     var shop = ShopModel(
+      id: widget.shop?.id,
       shopName: _shopNameController.text.trim(),
       email: _shopEmailController.text.trim(),
       phone: _shopPhoneController.text.trim(),

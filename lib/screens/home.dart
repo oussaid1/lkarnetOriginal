@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
 
         /// userCubit
         BlocProvider(
-          create: (context) => UserModelCubit(),
+          create: (context) => UserModelCubit()..loadUser(),
         ),
       ],
       child: HomeScreen(),

@@ -170,7 +170,7 @@ class _AddItemState extends ConsumerState<AddItem>
     );
   }
 
-  Row _buildUpdateButton(BuildContext context) {
+  _buildUpdateButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -199,6 +199,9 @@ class _AddItemState extends ConsumerState<AddItem>
 
                       if (_formKeyName.currentState!.validate() &&
                           _formKeyPrice.currentState!.validate()) {
+                        setState(() {
+                          _canSave = false;
+                        });
                         _isUpdate ? update() : save(context);
                       }
                     },

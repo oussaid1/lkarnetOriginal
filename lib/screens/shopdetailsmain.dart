@@ -31,6 +31,13 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   List<ShopModel> _shops = [];
   int filter = 0;
   int groupValue = 0;
+  Map<int, String> _groupValueMap = {
+    0: 'All',
+    1: 'Daily',
+    //2: 'Weekly',
+    3: 'Monthly',
+    4: 'Yearly',
+  };
 
   @override
   void initState() {
@@ -51,6 +58,14 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
         return _list = _distinctDates
             .map((dstDate) => Tagged(
                   tag: dstDate,
+                  items: _items,
+                  payments: _payments,
+                ))
+            .toList();
+      case 1:
+        return _list = _distinctDates
+            .map((dstDate) => Tagged(
+                  tag: dstDate,
                   items: _items
                       .where((item) => item.dateBought.isMatchDay(dstDate))
                       .toList(),
@@ -59,7 +74,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                       .toList(),
                 ))
             .toList();
-      case 1:
+      case 3:
         return _list = _distinctMonths
             .map((dstDate) => Tagged(
                   tag: dstDate,
@@ -72,7 +87,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                       .toList(),
                 ))
             .toList();
-      case 2:
+      case 4:
         return _list = _distinctYears
             .map((dstDate) => Tagged(
                   tag: dstDate,
@@ -235,18 +250,14 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                       filter = newValue ?? 0;
                     });
                   },
-                  items: <int>[0, 1, 2]
+                  items: _groupValueMap.keys
                       .map<DropdownMenuItem<int>>((int value) =>
                           DropdownMenuItem<int>(
                             value: value,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18.0),
-                              child: Text(value == 0
-                                  ? 'Day'
-                                  : value == 1
-                                      ? 'Month'
-                                      : 'Year'),
+                              child: Text(_groupValueMap[value] ?? ''),
                             ),
                           ))
                       .toList(),

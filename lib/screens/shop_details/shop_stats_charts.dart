@@ -159,8 +159,8 @@ class ColumnChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     chartData
       ..sort((a, b) => b.itemCalculations.totalCount
-          .compareTo(a.itemCalculations.totalCount))
-      ..limit(10);
+          .compareTo(a.itemCalculations.totalCount));
+
     return SfCartesianChart(
       title: ChartTitle(
           text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
@@ -175,7 +175,7 @@ class ColumnChartWidget extends StatelessWidget {
         ColumnSeries<ItemsChartData, String>(
           enableTooltip: true,
           width: 0.4,
-          dataSource: chartData,
+          dataSource: chartData.limit(10),
           //color: AppConstants.whiteOpacity,
           color: Colors.white.withOpacity(0.5),
           xValueMapper: (ItemsChartData sales, _) => sales.tag,

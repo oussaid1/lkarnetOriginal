@@ -2,6 +2,8 @@ import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../../widgets/item_listtile.dart';
+import '../../widgets/payment_listtile.dart';
+import '../add/add_shop.dart';
 import '../lists/items.dart';
 import '../lists/payments.dart';
 
@@ -74,15 +76,38 @@ class ShopsDetailsBody extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${shopsData.shop.shopName}',
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                ],
+              const SizedBox(height: 20),
+              BluredContainer(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${shopsData.shop.shopName}',
+                        style: Theme.of(context).textTheme.headline2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    /// an iconbutton to edit the shop
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddShop(
+                              shop: shopsData.shop,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(height: 10),
               ShopItemsDetailsWidget(shopsData: shopsData),
               const SizedBox(height: 10),
               ShopPaymentsDetailWidget(shopsData: shopsData),
@@ -120,7 +145,7 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
                 _isExpanded = !isExpanded;
               });
             },
-            animationDuration: Duration(milliseconds: 1600),
+            animationDuration: Duration(milliseconds: 800),
             children: [
               ExpansionPanel(
                 isExpanded: _isExpanded,
@@ -193,19 +218,19 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
                     ),
                   );
                 },
-                body: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ItemTileWidget(
-                          item: widget.shopsData.items[index],
-                        );
-                      },
-                      itemCount: widget.shopsData.items.length,
-                    ),
-                  ],
+                body: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 400,
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ItemTileWidget(
+                        item: widget.shopsData.items[index],
+                      );
+                    },
+                    itemCount: widget.shopsData.items.length,
+                  ),
                 ),
               ),
             ]),
@@ -241,7 +266,7 @@ class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
                 _isExpanded = !isExpanded;
               });
             },
-            animationDuration: Duration(milliseconds: 1600),
+            animationDuration: Duration(milliseconds: 800),
             children: [
               ExpansionPanel(
                 isExpanded: _isExpanded,
@@ -314,19 +339,19 @@ class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
                     ),
                   );
                 },
-                body: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return PaymentTile(
-                          payment: widget.shopsData.payments[index],
-                        );
-                      },
-                      itemCount: widget.shopsData.payments.length,
-                    ),
-                  ],
+                body: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 400,
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return PaymentTile(
+                        payment: widget.shopsData.payments[index],
+                      );
+                    },
+                    itemCount: widget.shopsData.payments.length,
+                  ),
                 ),
               ),
             ]),

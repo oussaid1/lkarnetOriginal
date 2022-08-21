@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:lkarnet/widgets/search_by_widget.dart';
 import '../../widgets/item_listtile.dart';
 
-class ItemsList extends ConsumerStatefulWidget {
+class ItemsList extends StatefulWidget {
   final List<ItemModel> lista;
   ItemsList({
     Key? key,
     required this.lista,
   }) : super(key: key);
   @override
-  ConsumerState<ItemsList> createState() => _ItemsListState();
+  State<ItemsList> createState() => _ItemsListState();
 }
 
-class _ItemsListState extends ConsumerState<ItemsList> {
+class _ItemsListState extends State<ItemsList> {
   String _filterPattern = '';
   String _filterType = '';
   List<ItemModel> _filteredList() {
@@ -110,7 +110,8 @@ class _ItemsListState extends ConsumerState<ItemsList> {
             children: [
               const SizedBox(height: 20),
               SearchByWidget(
-                listOfCategories: [],
+                withCategory: true,
+                listOfCategories: ['name', 'price', 'category', 'shop'],
                 onChanged: (catg, searchText) {
                   setState(() {
                     _filterPattern = searchText;
@@ -128,55 +129,12 @@ class _ItemsListState extends ConsumerState<ItemsList> {
                     return ItemTileWidget(
                       item: item,
                     );
-                    //ShopData shopsData = _shopsDataList[index];
-                    // return  ExpansionTile(
-                    //   title: Text('${shopsData.shop.shopName}'),
-                    //   trailing: Text('${shopsData.countItems}'),
-                    //   leading: CircleAvatar(
-                    //     child: const Icon(
-                    //       Icons.account_circle,
-                    //       size: 40,
-                    //       color: Colors.grey,
-                    //     ),
-                    //     backgroundColor:
-                    //         Theme.of(context).colorScheme.secondary,
-                    //   ),
-                    //   expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Container(
-                    //       height: 300,
-                    //       width: 400,
-                    //       child: GoodsList(
-                    //         lista: shopsData.allItems,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // );
                   },
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class GoodsList extends ConsumerWidget {
-  final List<ItemModel>? lista;
-  GoodsList({Key? key, this.lista}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return Container(
-      margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-      child: ListView.builder(
-        itemCount: lista!.length,
-        itemBuilder: (BuildContext context, int index) {
-          ItemModel item = lista![index];
-          return ItemTileWidget(item: item);
-        },
       ),
     );
   }

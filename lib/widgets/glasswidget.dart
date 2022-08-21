@@ -72,7 +72,7 @@ class BluredContainer extends StatelessWidget {
     this.width,
     this.height,
     this.margin,
-    this.borderColorOpacity = 0.1,
+    this.borderColorOpacity = 0.3,
   }) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class BluredContainer extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(AppConstants.radius)),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
+        filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
         child: Container(
           margin: margin,
           width: width ?? MediaQuery.of(context).size.width,
@@ -97,7 +97,7 @@ class BluredContainer extends StatelessWidget {
               end: AlignmentDirectional.bottomEnd,
             ),
             border: Border.all(
-              width: 1.5,
+              width: 1,
               color: Colors.white.withOpacity(borderColorOpacity),
             ),
           ),

@@ -55,15 +55,18 @@ class _ShopDropDownState extends State<ShopDropDown> {
       builder: (context, state) {
         if (state.shops.isNotEmpty) {
           _shops = state.shops;
-          if (widget.initialValue != null) {
+          if (widget.initialValue != null &&
+              _shops.any((shop) => shop.shopName == widget.initialValue)) {
             _selectedShop = _shops
                 .where(
                   (shop) => shop.shopName == widget.initialValue,
                 )
                 .toList()[0];
-          } else {
-            _selectedShop = _shops[0];
           }
+          // else {
+          //   _selectedShop = _shops.isNotEmpty ? _shops[0] : null;
+          //   widget.onShopSelected.call(_selectedShop);
+          // }
         }
         return Container(
           decoration: BoxDecoration(

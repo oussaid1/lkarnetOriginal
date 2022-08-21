@@ -30,8 +30,7 @@ class AppConstants {
   static const double borderRadius = (6.0);
   static const double borderWidth = (2.0);
   static const double opacity = (0.2);
-  static final Color greenOpacity =
-      AppConstants.greenOpacity.withOpacity(opacity);
+  static final Color greenOpacity = Colors.green.withOpacity(opacity);
   static final Color whiteOpacity = Colors.white.withOpacity(opacity);
   static final Color blackOpacity = Colors.black.withOpacity(opacity);
   static final Color hintColor =

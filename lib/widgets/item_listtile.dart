@@ -8,7 +8,7 @@ import 'add_to_kitchen_from_item.dart';
 import 'dialogs.dart';
 import 'price_curency_widget.dart';
 
-class ItemTileWidget extends ConsumerWidget {
+class ItemTileWidget extends StatelessWidget {
   const ItemTileWidget({
     Key? key,
     required this.item,
@@ -20,7 +20,7 @@ class ItemTileWidget extends ConsumerWidget {
   final AnimationController? animationController;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return Slidable(
       //actionPane: SlidableDrawerActionPane(),
       //  actionExtentRatio: 0.25,
@@ -99,7 +99,7 @@ class ItemTileWidget extends ConsumerWidget {
               width: 1, // AppConstants.borderWidth,
             ),
           ),
-          color: AppConstants.whiteOpacity,
+          color: Color.fromARGB(255, 1, 149, 255).withOpacity(0.2),
           child: SizedBox(
             height: 50,
             child: Row(
@@ -113,7 +113,7 @@ class ItemTileWidget extends ConsumerWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color:
-                            Color.fromARGB(255, 224, 2, 253).withOpacity(0.2),
+                            Color.fromARGB(255, 1, 149, 255).withOpacity(0.2),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(AppConstants.radius),
                           bottomLeft: Radius.circular(AppConstants.radius),

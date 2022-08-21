@@ -16,13 +16,12 @@ class Root extends StatelessWidget {
     return BlocListener<AuthBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthStatus.authenticationFailed) {
-          GetIt.I<Database>().setUserUid(state.user!.uid);
-          context.read<UserModelCubit>().loadUser();
-          Navigator.of(context).pushReplacementNamed(RouteGenerator.home);
           GlobalFunctions.showSuccessSnackBar(
             context,
             'تم تسجيل الدخول بنجاح',
           );
+          // context.read<UserModelCubit>().loadUser();
+          Navigator.pushNamed(context, RouteGenerator.home);
         }
         if (state.status == AuthStatus.authenticationFailed) {
           GlobalFunctions.showErrorSnackBar(
@@ -40,16 +39,14 @@ class Root extends StatelessWidget {
         builder: (context, state) {
           if (state.status == AuthStatus.authenticated) {
             GetIt.I<Database>().setUserUid(state.user!.uid);
+
             return HomePage();
-          }
-          if (state.status == AuthStatus.authenticating) {
-            return SplashPage();
           }
 
           if (state.status == AuthStatus.unauthenticated) {
             return SplashPage();
           }
-          return Container();
+          return SplashPage();
         },
       ),
     );

@@ -111,7 +111,7 @@ class _KitchenItemDetailsScreenState
               child: Icon(Icons.add),
             ),
             appBar: MyAppBar(
-              title: Text('//${widget.kitchenElement.kitchenElement.title}'),
+              title: Text('${widget.kitchenElement.kitchenElement.title}'),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit),
@@ -541,20 +541,16 @@ class PiorityRatingWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         RatingBar.builder(
-          ignoreGestures: ignoreGestures,
-          initialRating:
-              initialRating, //ref.watch(priorityRatingProvider.state).state,
-          itemSize: itemSize,
-          minRating: 0,
-          direction: Axis.horizontal,
-          itemCount: 3,
-          itemBuilder: (context, _) =>
-              Icon(Icons.star_border_purple500, color: Colors.amber),
-          onRatingUpdate: (rating) {
-            //  ref.watch(priorityRatingProvider.state).state = rating;
-            onRatingChanged(rating);
-          },
-        ),
+            ignoreGestures: ignoreGestures,
+            initialRating:
+                initialRating, //ref.watch(priorityRatingProvider.state).state,
+            itemSize: itemSize,
+            minRating: 0,
+            direction: Axis.horizontal,
+            itemCount: 3,
+            itemBuilder: (context, _) =>
+                Icon(Icons.star_border_purple500, color: Colors.amber),
+            onRatingUpdate: onRatingChanged),
       ],
     );
   }

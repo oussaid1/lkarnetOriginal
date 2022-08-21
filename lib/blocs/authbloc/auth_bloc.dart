@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:lkarnet/services/auth_service.dart';
 
 import '../../components.dart';
@@ -40,6 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   /// on event of type AuthSuccessfulEvent
   Future<void> _authSuccessful(
       AuthSuccessfulEvent event, Emitter<AuthenticationState> emit) async {
+    log('AuthSuccessfulEvent');
     emit(state.copyWith(status: AuthStatus.authenticated, user: event.user));
   }
 

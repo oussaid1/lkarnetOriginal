@@ -58,17 +58,19 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             /// check the state and show snackbar using GlobalFunctions according to state
-            if (state is LoginLoadingState) {
+            if (state.status == LoginSattus.loading) {
               GlobalFunctions.showSnackBar(
                 context,
                 'جاري تسجيل الدخول',
               );
-            } else if (state is LoginFailedState) {
+            }
+            if (state.status == LoginSattus.error) {
               GlobalFunctions.showSnackBar(
                 context,
                 state.error,
               );
-            } else if (state is LogInSuccessfulState) {
+            }
+            if (state.status == LoginSattus.success) {
               GlobalFunctions.showSnackBar(
                 context,
                 'تم تسجيل الدخول بنجاح',
@@ -77,7 +79,23 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
-              return _buildLoginCard(context);
+              return SingleChildScrollView(
+                child: BluredContainer(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      Text('Login',
+                          style: Theme.of(context).textTheme.headline1),
+                      const SizedBox(height: 15),
+                      _buildLoginForm(context),
+                      buildLoginButton(context), //button: lo
+                      //  buildsignInwithGoogle(context), //button: login
+                      const SizedBox(height: 15),
+                      buildDontHaveAccount(context)
+                    ],
+                  ),
+                ),
+              );
             },
           ),
         ),
@@ -85,198 +103,225 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginCard(BuildContext context) {
+  _buildLoginForm(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GlassContainer(
-        start: 0.2,
-        end: 0.15,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _loginFormKey,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: Text('Login',
-                        style: Theme.of(context).textTheme.headline1),
-                  ), // title: login
-                  SizedBox(height: 10),
-                  Container(
-                    child: TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      validator: (text) {
-                        if (text!.trim().isEmpty) {
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          return "Please insert a valid email";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Email',
-                          //prefixIcon: Icon(Icons.email),
-                          icon: Icon(Icons.email)),
-                    ),
-                  ), //text field: email
-                  Container(
-                    child: TextFormField(
-                      controller: _passController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      validator: (text) {
-                        if (text!.trim().isEmpty) {
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          return "Please insert a valid password";
-                        }
-                        return null;
-                      },
-                      obscureText: _obscPass,
-                      decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscPass
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _obscPass = !_obscPass;
-                              });
-                            },
-                          ),
-                          icon: Icon(Icons.vpn_key)),
-                    ),
-                  ), //text field: password
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      child: Form(
+        key: _loginFormKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              validator: (text) {
+                if (text!.trim().isEmpty) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  return "Please insert a valid email";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                  labelText: 'Email',
+                  //prefixIcon: Icon(Icons.email),
+                  icon: Icon(Icons.email)),
+            ), //text field: email
+            TextFormField(
+              controller: _passController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              validator: (text) {
+                if (text!.trim().isEmpty) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  return "Please insert a valid password";
+                }
+                return null;
+              },
+              obscureText: _obscPass,
+              decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        _obscPass ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _obscPass = !_obscPass;
+                      });
+                    },
+                  ),
+                  icon: Icon(Icons.vpn_key)),
+            ), //text field: password
+          ],
+        ),
+      ),
+    );
+  }
 
-                  Container(
-                    margin: EdgeInsets.only(top: 40.0),
-                    width: 300,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.0),
-                        color: Color(0xFFEAB93C)),
-                    child: ElevatedButton(
-                      style: MThemeData.raisedButtonStyleSave,
-                      child: Text(
-                        'Login',
-                        style: Theme.of(context).textTheme.button,
-                      ),
-                      onPressed: _isLoading
-                          ? null
-                          : () {
-                              if (_loginFormKey.currentState!.validate()) {
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                                BlocProvider.of<LoginBloc>(context).add(
-                                    LoginRequestedEvent(
-                                        loginCredentials: LoginCredentials(
-                                            username: _emailController.text,
-                                            password: _passController.text)));
-                              }
-                              // ref.read(isLoadingProvider.state).state = true;
-                              // if (_loginFormKey.currentState!.validate()) {
-                              //   ref.read(isLoadingProvider.state).state = false;
-                              //   _auth
-                              //       .signIn(email: _email, password: _pass)
-                              //       .then(
-                              //         (value) => Navigator.push(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (context) => Root()),
-                              //         ),
-                              //       );
-                              // }
-                              // _auth.signInWithGoogle().then((value) => _auth.createNewUser(UserModel.fromUserCredential(value, value.user!.displayName.toString()) ));
-                            },
-                    ),
-                  ), //button: lo
-                  Container(
-                    margin: EdgeInsets.only(top: 16.0),
-                    width: 300,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: InkWell(
-                      child: Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: SizedBox(
-                                height: 35,
-                                width: 35,
-                                child: AppAssets.googleSvgIcon),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
-                              "Sign in with google",
-                              style: Theme.of(context).textTheme.button,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        // _auth.googleSignIn().then((value) => Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context) => Root()),
-                        //     ));
-
-                        // _auth.signInWithGoogle().then((value) => _auth.createNewUser(UserModel.fromUserCredential(value, value.user!.displayName.toString()) ));
-                      },
-                    ),
-                  ), //button: login
-                  Container(
-                      margin: EdgeInsets.only(
-                        left: 10.0,
-                        top: 20.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                              text: "Don't have an account? ",
-                              style: Theme.of(context).textTheme.bodyText1,
-                              children: [
-                                TextSpan(
-                                  text: "Sign up",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => SignUpPage()),
-                                      );
-                                    },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ))
-                ],
-              ),
+  buildForms(BuildContext context) {
+    return Form(
+      key: _loginFormKey,
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            alignment: Alignment.center,
+            width: double.infinity,
+            child: Text('Login', style: Theme.of(context).textTheme.headline1),
+          ), // title: login
+          SizedBox(height: 20),
+          Container(
+            child: TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              validator: (text) {
+                if (text!.trim().isEmpty) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  return "Please insert a valid email";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                  labelText: 'Email',
+                  //prefixIcon: Icon(Icons.email),
+                  icon: Icon(Icons.email)),
             ),
+          ), //text field: email
+          Container(
+            child: TextFormField(
+              controller: _passController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              validator: (text) {
+                if (text!.trim().isEmpty) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  return "Please insert a valid password";
+                }
+                return null;
+              },
+              obscureText: _obscPass,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        _obscPass ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _obscPass = !_obscPass;
+                      });
+                    },
+                  ),
+                  icon: Icon(Icons.vpn_key)),
+            ),
+          ), //text field: password
+        ],
+      ),
+    );
+  }
+
+  buildLoginButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 18.0),
+      child: MaterialButton(
+        minWidth: 300,
+        color: MThemeData.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          'Login',
+          style: Theme.of(context).textTheme.button,
+        ),
+        onPressed: _isLoading
+            ? null
+            : () {
+                if (_loginFormKey.currentState!.validate()) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  BlocProvider.of<LoginBloc>(context).add(LoginRequestedEvent(
+                      loginCredentials: LoginCredentials(
+                          username: _emailController.text,
+                          password: _passController.text)));
+                }
+              },
+      ),
+    );
+  }
+
+  buildDontHaveAccount(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RichText(
+          text: TextSpan(
+            text: "Don't have an account? ",
+            style: Theme.of(context).textTheme.bodyText2,
+            children: [
+              TextSpan(
+                text: "Sign up",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Theme.of(context).primaryColor),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                    );
+                  },
+              ),
+            ],
           ),
         ),
+      ],
+    );
+  }
+
+  buildsignInwithGoogle(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 16.0),
+      width: 300,
+      height: 45,
+      decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(50)),
+      child: InkWell(
+        child: Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SizedBox(
+                  height: 35, width: 35, child: AppAssets.googleSvgIcon),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: Text(
+                "Sign in with google",
+                style: Theme.of(context).textTheme.button,
+              ),
+            ),
+          ],
+        ),
+        onTap: () {
+          // _auth.googleSignIn().then((value) => Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => Root()),
+          //     ));
+
+          // _auth.signInWithGoogle().then((value) => _auth.createNewUser(UserModel.fromUserCredential(value, value.user!.displayName.toString()) ));
+        },
       ),
     );
   }

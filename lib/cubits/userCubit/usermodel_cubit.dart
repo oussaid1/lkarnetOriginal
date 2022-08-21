@@ -2,16 +2,25 @@
 
 import 'dart:developer';
 
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/database/database.dart';
 
 import '../../components.dart';
 import '../../models/user/user.dart';
 import '../../repository/database_operations.dart';
+import '../../services/auth_service.dart';
 
 class UserModelCubit extends Cubit<UserModel?> {
   UserModelCubit() : super(null) {
     _database = Database(uid: '');
+    _authService = GetIt.I<AuthService>();
+
+    _authService.currentUser.listen((event) async {
+      _database.uid = event?.uid;
+    });
+    loadUser();
   }
+  late final AuthService _authService;
   late final Database _database;
   static const String key = "user";
   late String uid = '';

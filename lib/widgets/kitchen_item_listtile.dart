@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/settings/theme.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lkarnet/blocs/kitchenitembloc/kitchen_item_bloc.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
 import '../components.dart';
 import '../models/kitchen/kitchen_item.dart';
+import '../repository/database_operations.dart';
 import '../screens/add/add_kitchen_item.dart';
 import 'price_curency_widget.dart';
 
-class KitchenItemTileWidget extends ConsumerWidget {
+class KitchenItemTileWidget extends StatelessWidget {
   final VoidCallback? onDoubleTap;
 
   const KitchenItemTileWidget({
@@ -18,7 +20,8 @@ class KitchenItemTileWidget extends ConsumerWidget {
   final KitchenItemModel kitchenItem;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
+    final _kitmBloc = KitchenItemBloc(GetIt.I<DatabaseOperations>());
     return Slidable(
       //actionPane: SlidableDrawerActionPane(),
       //  actionExtentRatio: 0.25,
@@ -55,41 +58,14 @@ class KitchenItemTileWidget extends ConsumerWidget {
               backgroundColor: Colors.transparent,
               label: 'Delete',
               onPressed: (context) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Cancel',
-                                ),
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: MThemeData.raisedButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {},
-                                style: MThemeData.raisedButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
+                Dialogs.confirmDialogue(context,
+                        title: 'Delete',
+                        message: 'Are you sure you want to delete this item?')
+                    .then((confirmed) {
+                  if (confirmed) {
+                    _kitmBloc.add(DeleteKitchenItemEvent(kitchenItem));
+                  }
+                });
               },
               icon: Icons.delete),
         ],

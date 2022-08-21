@@ -42,7 +42,7 @@ class ListTab extends ConsumerWidget {
             children: [
               ItemsList(lista: []),
               ShopsList(),
-              PaymentsList(),
+              ViewPaymentsList(),
             ],
           ),
         ),

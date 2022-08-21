@@ -10,7 +10,7 @@ class KitchenElementModel {
   String title;
   String? category = '';
   double? availability = 0;
-  double? priority = 1;
+  double? priority = 0;
 // constr
   KitchenElementModel({
     this.id,
