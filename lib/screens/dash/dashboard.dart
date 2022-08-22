@@ -298,26 +298,39 @@ class _DashBoardPageState extends State<DashBoardPage>
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Shops',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline3!.copyWith(
-                            color: Color.fromARGB(106, 255, 255, 255),
-                          )),
-                ),
-                IconButton(
-                  icon: Icon(Icons.list,
-                      color: Color.fromARGB(106, 255, 255, 255)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ShopsList(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text('Shops',
+                          style:
+                              Theme.of(context).textTheme.headline3!.copyWith(
+                                    color: Color.fromARGB(106, 255, 255, 255),
+                                  )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                      child: Text(
+                        'Tap the shop to see its details',
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
+                // IconButton(
+                //   icon: Icon(Icons.list,
+                //       color: Color.fromARGB(106, 255, 255, 255)),
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => ShopsList(),
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
             ),
             SizedBox(
@@ -418,6 +431,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                 return recentOperation.isItem
                     ? ItemTileWidget(
                         animationController: _animationController,
+                        withActions: true,
                         onTap: () {
                           Dialogs.dialogSimple(context,
                               title: 'do you want to save to kitchen',
@@ -432,6 +446,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                         item: recentOperation.item!,
                       )
                     : PaymentTile(
+                        withActions: true,
                         payment: recentOperation.payment!,
                       );
               },

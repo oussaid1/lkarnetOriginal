@@ -378,7 +378,7 @@ class _AddItemState extends ConsumerState<AddItem>
               _itemNameController.text = suggestion.itemName;
               _itemPriceController.text = suggestion.itemPrice.toString();
               _quantity = suggestion.quantity;
-              _dateBought = suggestion.dateBought;
+             // _dateBought = suggestion.dateBought;
             },
           ),
         ),

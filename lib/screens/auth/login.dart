@@ -52,10 +52,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
       alignment: Alignment.center,
-      centerWidget: SizedBox(
+      centerWidget: BluredContainer(
         width: 380,
         height: 420,
         child: BlocListener<LoginBloc, LoginState>(
+          listenWhen: (previous, current) => previous.status != current.status,
           listener: (context, state) {
             /// check the state and show snackbar using GlobalFunctions according to state
             if (state.status == LoginSattus.loading) {
@@ -80,20 +81,17 @@ class _LoginPageState extends State<LoginPage> {
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               return SingleChildScrollView(
-                child: BluredContainer(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 15),
-                      Text('Login',
-                          style: Theme.of(context).textTheme.headline1),
-                      const SizedBox(height: 15),
-                      _buildLoginForm(context),
-                      buildLoginButton(context), //button: lo
-                      //  buildsignInwithGoogle(context), //button: login
-                      const SizedBox(height: 15),
-                      buildDontHaveAccount(context)
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    Text('Login', style: Theme.of(context).textTheme.headline1),
+                    const SizedBox(height: 15),
+                    _buildLoginForm(context),
+                    buildLoginButton(context), //button: lo
+                    //  buildsignInwithGoogle(context), //button: login
+                    const SizedBox(height: 15),
+                    buildDontHaveAccount(context)
+                  ],
                 ),
               );
             },

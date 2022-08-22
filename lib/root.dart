@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:lkarnet/screens/splash.dart';
 
 import 'blocs/authbloc/auth_bloc.dart';
-import 'cubits/userCubit/usermodel_cubit.dart';
 import 'database/database.dart';
 import 'utils.dart';
 
@@ -14,8 +13,10 @@ class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthenticationState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.status == AuthStatus.authenticationFailed) {
+        if (state.status == AuthStatus.authenticated) {
+          print('auth failed');
           GlobalFunctions.showSuccessSnackBar(
             context,
             'تم تسجيل الدخول بنجاح',

@@ -64,20 +64,20 @@ class HomePage extends StatelessWidget {
           create: (context) => UserModelCubit()..loadUser(),
         ),
       ],
-      child: HomeScreen(),
+      child: HomeWidget(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({
+class HomeWidget extends StatefulWidget {
+  HomeWidget({
     Key? key,
   }) : super(key: key);
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeWidget> createState() => _HomeWidgetState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeWidgetState extends State<HomeWidget> {
   final PageController _pageController = PageController();
   @override
   void initState() {

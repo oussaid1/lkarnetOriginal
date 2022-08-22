@@ -13,166 +13,184 @@ class PaymentTile extends StatelessWidget {
   const PaymentTile({
     Key? key,
     required this.payment,
+    this.withActions = false,
+  }) : super(key: key);
+  final bool withActions;
+  final PaymentModel payment;
+
+  @override
+  Widget build(BuildContext context) {
+    return withActions
+        ? Slidable(
+            startActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                    backgroundColor: Colors.transparent,
+                    icon: Icons.mode_edit,
+                    label: 'Edit',
+                    onPressed: (context) {
+                      Dialogs.botomUpDialog(
+                          context,
+                          AddPayment(
+                            payment: payment,
+                          ));
+                    }),
+              ],
+            ),
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  icon: Icons.delete_forever,
+                  label: 'Delete',
+                  backgroundColor: Colors.transparent,
+                  onPressed: (context2) {
+                    Dialogs.dialogSimple(context,
+                        title: 'Are you sure !!?',
+                        widgets: [
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'Cancel',
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    style: MThemeData.raisedButtonStyleCancel,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Container(
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'Ok',
+                                      style:
+                                          Theme.of(context).textTheme.headline3,
+                                    ),
+                                    onPressed: () {
+                                      BlocProvider.of<PaymentsBloc>(context)
+                                          .add(DeletePaymentEvent(payment));
+                                      Navigator.pop(context);
+                                    },
+                                    style: MThemeData.raisedButtonStyleSave,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]);
+                  },
+                ),
+              ],
+            ),
+            child: PaymentListTileOnly(payment: payment))
+        : PaymentListTileOnly(payment: payment);
+  }
+}
+
+class PaymentListTileOnly extends StatelessWidget {
+  const PaymentListTileOnly({
+    Key? key,
+    required this.payment,
   }) : super(key: key);
 
   final PaymentModel payment;
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-        startActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-                backgroundColor: Colors.transparent,
-                icon: Icons.mode_edit,
-                label: 'Edit',
-                onPressed: (context) {
-                  Dialogs.botomUpDialog(
-                      context,
-                      AddPayment(
-                        payment: payment,
-                      ));
-                }),
-          ],
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.radius),
+        side: BorderSide(
+          color: AppConstants.whiteOpacity,
+          width: 1,
         ),
-        endActionPane: ActionPane(
-          motion: ScrollMotion(),
+      ),
+      color: Color.fromARGB(69, 255, 0, 102).withOpacity(0.2),
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SlidableAction(
-              icon: Icons.delete_forever,
-              label: 'Delete',
-              backgroundColor: Colors.transparent,
-              onPressed: (context2) {
-                Dialogs.dialogSimple(context,
-                    title: 'Are you sure !!?',
-                    widgets: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Cancel',
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                style: MThemeData.raisedButtonStyleCancel,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 120,
-                              child: ElevatedButton(
-                                child: Text(
-                                  'Ok',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                onPressed: () {
-                                  BlocProvider.of<PaymentsBloc>(context)
-                                      .add(DeletePaymentEvent(payment));
-                                  Navigator.pop(context);
-                                },
-                                style: MThemeData.raisedButtonStyleSave,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
-              },
-            ),
-          ],
-        ),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radius),
-            side: BorderSide(
-              color: AppConstants.whiteOpacity,
-              width: 1,
-            ),
-          ),
-          color: Color.fromARGB(69, 255, 0, 102).withOpacity(0.2),
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(69, 255, 0, 102).withOpacity(0.2),
-                        // : Color.fromRGBO(230, 33, 141, 0.643),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(69, 255, 0, 102).withOpacity(0.2),
+                    // : Color.fromRGBO(230, 33, 141, 0.643),
 
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(AppConstants.radius),
-                          bottomLeft: Radius.circular(AppConstants.radius),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.attach_money_outlined,
-                            color: Colors.white.withOpacity(0.5),
-                            size: 20,
-                          ),
-                          Text(
-                            'payment',
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(fontSize: 10),
-                          ),
-                        ],
-                      ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppConstants.radius),
+                      bottomLeft: Radius.circular(AppConstants.radius),
                     ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            '${payment.paidShopName}',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            '${payment.datePaid.formatted()}',
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
-                        ],
+                      Icon(
+                        Icons.attach_money_outlined,
+                        color: Colors.white.withOpacity(0.5),
+                        size: 20,
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: PriceNumberZone(
-                                price: payment.paidAmount,
-                                style: Theme.of(context).textTheme.headline4,
-                                withDollarSign: true,
-                              )),
-                          const SizedBox(width: 8),
-                        ],
+                      Text(
+                        'payment',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontSize: 10),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(width: 8),
               ],
             ),
-          ),
-        ));
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        '${payment.paidShopName}',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      Text(
+                        '${payment.datePaid.formatted()}',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: PriceNumberZone(
+                            price: payment.paidAmount,
+                            style: Theme.of(context).textTheme.headline4,
+                            withDollarSign: true,
+                          )),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
