@@ -29,10 +29,10 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
   List<ItemModel> _items = [];
   List<PaymentModel> _payments = [];
   List<ShopModel> _shops = [];
-  int filter = 0;
-  int groupValue = 0;
+  int filter = 1;
+  int groupValue = 1;
   Map<int, String> _groupValueMap = {
-    0: 'All',
+    // 0: 'All',
     1: 'Daily',
     //2: 'Weekly',
     3: 'Monthly',
@@ -54,14 +54,14 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
         _items.map((item) => item.dateBought.toYear()).toSet().toList();
     //////////////////////////////////////////////////////
     switch (filter) {
-      case 0:
-        return _list = _distinctDates
-            .map((dstDate) => Tagged(
-                  tag: dstDate,
-                  items: _items,
-                  payments: _payments,
-                ))
-            .toList();
+      // case 0:
+      //   return _list = _distinctDates
+      //       .map((dstDate) => Tagged(
+      //             tag: dstDate,
+      //             items: _items,
+      //             payments: _payments,
+      //           ))
+      //       .toList();
       case 1:
         return _list = _distinctDates
             .map((dstDate) => Tagged(

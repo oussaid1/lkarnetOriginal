@@ -27,7 +27,6 @@ import '../add/add_kitchen_item.dart';
 import '../add/add_payment.dart';
 import '../add/add_shop.dart';
 import '../lists/items.dart';
-import '../lists/shops.dart';
 import '../shop_details/shop_details.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -466,44 +465,40 @@ class _DashBoardPageState extends State<DashBoardPage>
     return BluredContainer(
       width: 390,
       height: 130,
-      child: SizedBox(
-        width: 390,
-        height: 130,
-        child: BluredContainer(
-          margin: const EdgeInsets.all(8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              //
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            //
 
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Spendings',
-                    style: Theme.of(context).textTheme.headline2!.copyWith(
-                          color: Color.fromRGBO(255, 255, 255, 1),
-                        ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  PriceNumberZone(
-                    right: const SizedBox.shrink(),
-                    withDollarSign: true,
-                    price: shopDataCalculations.itemsSumAfterPayment,
-                    style: Theme.of(context).textTheme.headline2!,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  buildCircularProgress(shopDataCalculations),
-                ],
-              ),
-            ],
-          ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Spendings',
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                      ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                PriceNumberZone(
+                  right: const SizedBox.shrink(),
+                  withDollarSign: true,
+                  price: shopDataCalculations.itemsSumAfterPayment,
+                  style: Theme.of(context).textTheme.headline2!,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                buildCircularProgress(shopDataCalculations),
+              ],
+            ),
+          ],
         ),
       ),
     );

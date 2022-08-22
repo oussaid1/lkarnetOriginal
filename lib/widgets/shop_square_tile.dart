@@ -19,29 +19,49 @@ class ShopSquareTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: BluredContainer(
-        margin: const EdgeInsets.all(8),
-        height: 100,
-        width: 160,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PriceNumberZone(
-              right: const SizedBox.shrink(),
-              withDollarSign: true,
-              price: shopData.shopDataCalculations.itemsSumAfterPayment,
-              style: Theme.of(context).textTheme.headline3!.copyWith(
-                    color: AppConstants.hintColor,
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(70, 227, 199, 250),
+            offset: Offset(4, 0),
+            blurStyle: BlurStyle.normal,
+            blurRadius: 10,
+          ),
+          BoxShadow(
+            color: Color.fromARGB(70, 227, 199, 250),
+            offset: Offset(-4, 4),
+            blurStyle: BlurStyle.normal,
+            blurRadius: 10,
+          ),
+        ]),
+        child: BluredContainer(
+          height: 100,
+          width: 160,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${shopData.shop.shopName}',
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-            ),
-            Text(
-              '${shopData.shop.shopName}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            //const SizedBox(height: 8),
-          ],
+                  PriceNumberZone(
+                    right: const SizedBox.shrink(),
+                    withDollarSign: true,
+                    price: shopData.shopDataCalculations.itemsSumAfterPayment,
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                          color: AppConstants.hintColor,
+                        ),
+                  ),
+                  //const SizedBox(height: 8),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

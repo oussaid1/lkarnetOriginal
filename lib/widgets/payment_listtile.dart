@@ -140,8 +140,8 @@ class PaymentListTileOnly extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.attach_money_outlined,
-                        color: Colors.white.withOpacity(0.5),
-                        size: 20,
+                        color: Color.fromARGB(159, 3, 3, 3),
+                        size: 18,
                       ),
                       Text(
                         'payment',
@@ -162,6 +162,9 @@ class PaymentListTileOnly extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         '${payment.paidShopName}',

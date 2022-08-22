@@ -16,11 +16,6 @@ class Root extends StatelessWidget {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == AuthStatus.authenticated) {
-          print('auth failed');
-          GlobalFunctions.showSuccessSnackBar(
-            context,
-            'تم تسجيل الدخول بنجاح',
-          );
           // context.read<UserModelCubit>().loadUser();
           Navigator.pushNamed(context, RouteGenerator.home);
         }

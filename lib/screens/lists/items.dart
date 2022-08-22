@@ -1,7 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/item/item.dart';
 import 'package:flutter/material.dart';
+import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/widgets/search_by_widget.dart';
+import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../widgets/item_listtile.dart';
 
 class ItemsList extends StatefulWidget {
@@ -74,65 +78,74 @@ class _ItemsListState extends State<ItemsList> {
         ),
       ],
       gradientColors: AppConstants.myGradients,
-      centerWidget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          actions: [
-            // IconButton(
-            //   icon: Icon(Icons.add_box_outlined),
-            //   onPressed: () async {
-            //     var logger = Logger();
-            //     for (var item in items!) {
-            //       logger.d(item.toMap());
-            //     }
-            //   },
-            // ),
-          ],
-          leading: Icon(Icons.menu, color: Colors.black),
-          title: Text(
-            'All Items',
-            style: Theme.of(context).textTheme.headline2,
-          ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          excludeHeaderSemantics: true,
-          toolbarHeight: 40,
-          backgroundColor: AppConstants.whiteOpacity,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppConstants.radius),
-              bottom: Radius.circular(AppConstants.radius),
+      centerWidget: BlocProvider(
+        create: (context) =>
+            ItemsBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            actions: [
+              // IconButton(
+              //   icon: Icon(Icons.add_box_outlined),
+              //   onPressed: () async {
+              //     var logger = Logger();
+              //     for (var item in items!) {
+              //       logger.d(item.toMap());
+              //     }
+              //   },
+              // ),
+            ],
+            leading: Icon(Icons.menu, color: Colors.black),
+            title: Text(
+              'All Items',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            excludeHeaderSemantics: true,
+            toolbarHeight: 40,
+            backgroundColor: AppConstants.whiteOpacity,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppConstants.radius),
+                bottom: Radius.circular(AppConstants.radius),
+              ),
             ),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              SearchByWidget(
-                withCategory: true,
-                listOfCategories: ['name', 'price', 'category', 'shop'],
-                onChanged: (catg, searchText) {
-                  setState(() {
-                    _filterPattern = searchText;
-                    _filterType = catg;
-                  });
-                },
-              ),
-              BluredContainer(
-                margin: EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _filteredList().length, // _shopsDataList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    ItemModel item = _filteredList()[index];
-                    return ItemTileWidget(
-                      item: item,
-                    );
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                SearchByWidget(
+                  withCategory: true,
+                  listOfCategories: ['name', 'price', 'category', 'shop'],
+                  onChanged: (catg, searchText) {
+                    setState(() {
+                      _filterPattern = searchText;
+                      _filterType = catg;
+                    });
                   },
                 ),
-              ),
-            ],
+                BluredContainer(
+                  margin:
+                      EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _filteredList().length, // _shopsDataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      ItemModel item = _filteredList()[index];
+                      return ItemTileWidget(
+                        withActions: true,
+                        item: item,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
           ),
         ),
       ),

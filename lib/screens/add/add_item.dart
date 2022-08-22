@@ -37,8 +37,12 @@ class _AddItemState extends ConsumerState<AddItem>
   bool _isUpdate = false, _canSave = false;
   ItemModel? _localItem;
   void clear() {
-    _itemNameController.clear();
-    _itemPriceController.clear();
+    setState(() {
+      _dateBought = DateTime.now();
+      _itemNameController.clear();
+      _itemPriceController.clear();
+      _quantity = 1;
+    });
   }
 
   void _update() {
@@ -378,7 +382,7 @@ class _AddItemState extends ConsumerState<AddItem>
               _itemNameController.text = suggestion.itemName;
               _itemPriceController.text = suggestion.itemPrice.toString();
               _quantity = suggestion.quantity;
-             // _dateBought = suggestion.dateBought;
+              // _dateBought = suggestion.dateBought;
             },
           ),
         ),

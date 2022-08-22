@@ -210,8 +210,9 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ItemsList(lista: widget.shopsData.items),
+                            builder: (context) => ItemsList(
+                              lista: widget.shopsData.items,
+                            ),
                           ),
                         );
                       },

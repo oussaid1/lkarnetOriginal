@@ -188,7 +188,7 @@ class LineChartWidgetDate extends StatelessWidget {
           enableTooltip: true,
           // name: 'Home',
           dataLabelSettings: DataLabelSettings(
-              isVisible: true,
+              isVisible: false,
               labelPosition: ChartDataLabelPosition.inside,
               // Renders background rectangle and fills it with series color
               useSeriesColor: true),
