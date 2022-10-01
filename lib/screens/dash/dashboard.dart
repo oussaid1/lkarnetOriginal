@@ -306,7 +306,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                       child: Text('Shops',
                           style:
                               Theme.of(context).textTheme.headline3!.copyWith(
-                                    color: Color.fromARGB(106, 255, 255, 255),
+                                    color: Color.fromARGB(141, 255, 255, 255),
                                   )),
                     ),
                     Padding(
@@ -464,7 +464,7 @@ class _DashBoardPageState extends State<DashBoardPage>
       {List<ItemModel>? items}) {
     return BluredContainer(
       width: 390,
-      height: 130,
+      height: 120,
       child: Container(
         margin: const EdgeInsets.all(8),
         child: Row(

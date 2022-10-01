@@ -132,7 +132,9 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 //////////////////////////////////////////////////////
                 ////////////////////////////////////////////////
                 //////////////////////////////////////////////////////
-                var _shopDataList = shopsDataList(_shops, _tagged);
+                var _shopDataList = shopsDataList(_shops, _tagged)
+                  ..removeWhere((element) =>
+                      element.shopDataCalculations.itemsSumAfterPayment == 0);
                 //////////////////////////////////////////////////////
                 // _tagged == null ? _listOfTagged[0] : _tagged;
                 return BluredContainer(
@@ -189,7 +191,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                                             crossAxisSpacing: 10),
                                     itemCount: _shopDataList.length,
                                     itemBuilder: (context, index) {
-                                      return ShopSquareTile(
+                                      return SimpleShopSquareTile(
                                         onTap: () => Navigator.push(
                                           context,
                                           MaterialPageRoute(

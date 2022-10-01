@@ -1,6 +1,5 @@
-import 'dart:math';
-import 'package:intl/intl.dart' as df;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lkarnet/components.dart';
 
 class ShopModel {
   String? id;
@@ -10,11 +9,9 @@ class ShopModel {
   String? email;
   String? phone;
   double? limit;
-
-  double roundDouble(double value, int places) {
-    num mod = pow(10.0, places);
-    return ((value * mod).round().toDouble() / mod);
-  }
+////////////////////////////////////////////////////
+  double get dailyLimit =>
+      ((limit ?? 1) / (DateTime.now().daysInMonth)).toPrecision(2);
 
   ShopModel.forMap(
       {this.id,
@@ -53,9 +50,5 @@ class ShopModel {
     email = documentSnapshot['email'];
     phone = documentSnapshot['phone'];
     limit = documentSnapshot['limit'];
-  }
-  String formatIt(DateTime date) {
-    final df.DateFormat _formatter = df.DateFormat('yyyy-MM-dd');
-    return _formatter.format(date);
   }
 }

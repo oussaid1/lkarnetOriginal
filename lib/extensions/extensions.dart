@@ -113,6 +113,13 @@ extension DtExtension on DateTime {
         month == DateTime.now().month &&
         year == DateTime.now().year;
   }
+
+  /// get number of days in the month from the date
+  int get daysInMonth {
+    return DateTime(this.year, this.month + 1, 1)
+        .difference(DateTime(this.year, this.month, 1))
+        .inDays;
+  }
 }
 
 /// extension on [List<T>] to limit the list size to [limit]
