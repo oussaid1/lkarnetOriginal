@@ -285,6 +285,8 @@ class _DashBoardPageState extends State<DashBoardPage>
   }
 
   buildShopsWidget(BuildContext context, List<ShopData> _shopsDataList) {
+    _shopsDataList
+      ..removeWhere((e) => e.shopDataCalculations.itemsSumAfterPayment <= 0);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(

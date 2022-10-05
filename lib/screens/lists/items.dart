@@ -112,10 +112,12 @@ class _ItemsListState extends State<ItemsList> {
               ),
             ),
           ),
-          body: SingleChildScrollView(
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 SearchByWidget(
                   withCategory: true,
                   listOfCategories: ['name', 'price', 'category', 'shop'],
@@ -126,19 +128,23 @@ class _ItemsListState extends State<ItemsList> {
                     });
                   },
                 ),
-                BluredContainer(
-                  margin:
-                      EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _filteredList().length, // _shopsDataList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      ItemModel item = _filteredList()[index];
-                      return ItemTileWidget(
-                        withActions: true,
-                        item: item,
-                      );
-                    },
+                const SizedBox(height: 15),
+                Expanded(
+                  child: BluredContainer(
+                    margin:
+                        EdgeInsets.only(top: 10, left: 4, right: 4, bottom: 8),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount:
+                          _filteredList().length, // _shopsDataList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ItemModel item = _filteredList()[index];
+                        return ItemTileWidget(
+                          withActions: true,
+                          item: item,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
