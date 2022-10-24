@@ -1,3 +1,4 @@
+import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shops_data.dart';
 import 'package:flutter/material.dart';
 import '../../components.dart';
@@ -82,6 +83,13 @@ class ShopsDetailsBody extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Expanded(
+                      child: Text(
+                        '${shopsData.shopDataCalculations.itemsSumAfterPayment}',
+                        style: Theme.of(context).textTheme.headline2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     Expanded(
                       child: Text(
                         '${shopsData.shop.shopName}',
@@ -347,8 +355,13 @@ class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
+                      widget.shopsData.payments
+                          .sort((b, a) => a.datePaid.compareTo(b.datePaid));
+                      final PaymentModel payment =
+                          widget.shopsData.payments[index];
                       return PaymentTile(
-                        payment: widget.shopsData.payments[index],
+                        withActions: true,
+                        payment: payment,
                       );
                     },
                     itemCount: widget.shopsData.payments.length,

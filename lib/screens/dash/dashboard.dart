@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,10 +11,13 @@ import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/utils.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../blocs/payments/payments_bloc.dart';
 import '../../blocs/shopsbloc/shops_bloc.dart';
+import '../../models/backup.dart';
 import '../../models/data_sink.dart';
 import '../../models/item/item.dart';
 import '../../models/item/items_filtered.dart';
@@ -41,7 +48,8 @@ class _DashBoardPageState extends State<DashBoardPage>
   late AnimationController _animationController;
   //late List<KitchenElement> _kitchenElements;
   // /late List<KitchenItem> _kitchenItems;
-
+  List<ItemModel> _items = [];
+  String? path;
   @override
   void initState() {
     _animationController = AnimationController(
@@ -51,6 +59,57 @@ class _DashBoardPageState extends State<DashBoardPage>
 
     super.initState();
   }
+
+  void exportAsExcel() {
+    var excel =
+        Excel.createExcel(); // automatically creates 1 empty sheet: Sheet1
+
+    CellStyle cellStyle = CellStyle(
+        backgroundColorHex: "#1AFF1A",
+        fontFamily: getFontFamily(FontFamily.Calibri));
+    Sheet sheetObject = excel['SheetName'];
+    cellStyle.underline = Underline.Single; // or Underline.Double
+    for (int i = 0; i < _items.length; i++) {
+      var cell1 = sheetObject.cell(CellIndex.indexByString("A${i + 1}"));
+      cell1.value = _items[i].itemName; // dynamic values support provided;
+      ////////////////////////////////////////
+      var cell2 = sheetObject.cell(CellIndex.indexByString("B${i + 1}"));
+      cell2.value = _items[i].quantity;
+      //////////////////
+      var cell3 = sheetObject.cell(CellIndex.indexByString("C${i + 1}"));
+      cell3.value = _items[i].itemPrice;
+      ;
+      // cell.cellStyle = cellStyle;
+      // if (i > 10) break;
+    }
+    // var cell = sheetObject.cell(CellIndex.indexByString("A1"));
+
+    // // printing cell-type
+    // print("CellType: " + cell.cellType.toString());
+    excel.save();
+    saveToFile(bytes: excel.encode() ?? []);
+  }
+
+  void saveToFile({required List<int> bytes}) {
+    if (path != null) {
+      File("$path/backup${DateFormat.yMMMd().format(DateTime.now())}.xlsx")
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(bytes);
+    }
+  }
+  // Future<List<Directory>?> getExternalStorageDirectories({
+  //   /// Optional parameter. See [StorageDirectory] for more informations on
+  //   /// how this type translates to Android storage directories.
+  //   StorageDirectory? type,
+  // }) async {
+  //   final List<String>? paths = await Platform
+  //     ..getExternalStoragePaths(type: type);
+  //   if (paths == null) {
+  //     return null;
+  //   }
+
+  //   return paths.map((String path) => Directory(path)).toList();
+  // }
 
   //late RecentOperation _recentOperation;
   @override
@@ -62,8 +121,35 @@ class _DashBoardPageState extends State<DashBoardPage>
       appBar: MyAppBar(
         title: Text(
           'Dashboard',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme.headline3,
         ),
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.save),
+        //     onPressed: () async {
+        //       // var status = await Permission.storage.request().isGranted;
+        //       // if (!status) {
+        //       //   Dialogs.snackBar('Please grant storage permission');
+        //       // }
+        //       // //Directory docsDirectory = await getExternalStorageDirectories();
+        //       // Directory? dir = await getExternalStorageDirectory();
+        //       // setState(() {
+        //       //   path = dir!.path;
+        //       // });
+        //       // log(path ?? '');
+
+        //       // if (path != null) {
+        //       //   // exportAsExcel();
+        //       //   Dialogs.snackBar(path ?? '');
+        //       //   final backup =
+        //       //       Backup(path: path, date: DateTime.now(), items: _items);
+        //       //   backup.exportAsExcel();
+        //       //   // .then((value) =>
+        //       //   Dialogs.snackBar('Backup created');
+        //       // }
+        //     },
+        //   ),
+        // ],
         //  actions: [
         // IconButton(
         //   icon: Icon(Icons.add),
@@ -112,171 +198,217 @@ class _DashBoardPageState extends State<DashBoardPage>
           onPressed: () {},
         ),
       ),
-      body: GlassContainer(
-        start: 0,
-        end: 0,
-        //borderColorOpacity: 0,
-        child: SingleChildScrollView(
-          child: MultiBlocListener(
-            listeners: [
-              BlocListener<ItemsBloc, ItemsState>(
-                listener: (context, state) {
-                  if (state.status == ItemsStatus.loaded) {
-                    Dialogs.snackBar('Items loaded');
-                  }
-                  if (state.status == ItemsStatus.added) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Item added successfully');
-                  }
-                  if (state.status == ItemsStatus.updated) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Item updated successfully');
-                  }
-                  if (state.status == ItemsStatus.deleted) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Item deleted successfully');
-                  }
-                  if (state.status == ItemsStatus.error) {
-                    GlobalFunctions.showErrorSnackBar(context, state.error);
-                  }
-                },
-              ),
-              BlocListener<ShopsBloc, ShopsState>(
-                listener: (context, state) {
-                  if (state.status == ShopsStatus.loaded) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Shops loaded successfully');
-                  }
-                  if (state.status == ShopsStatus.added) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Shop added successfully');
-                  }
-                  if (state.status == ShopsStatus.updated) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Shop updated successfully');
-                  }
-                  if (state.status == ShopsStatus.deleted) {
-                    GlobalFunctions.showSnackBar(
-                        context, 'Shop deleted successfully');
-                  }
-                  if (state.status == ShopsStatus.error) {
-                    GlobalFunctions.showErrorSnackBar(context, state.error);
-                  }
-                },
-              ),
-              BlocListener<PaymentsBloc, PaymentsState>(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: GlassContainer(
+          start: 0,
+          end: 0,
+          //borderColorOpacity: 0,
+          child: SingleChildScrollView(
+            child: MultiBlocListener(
+              listeners: [
+                BlocListener<ItemsBloc, ItemsState>(
                   listener: (context, state) {
-                if (state.status == PaymentsStatus.loaded) {
-                  GlobalFunctions.showSnackBar(
-                      context, 'Payments loaded successfully');
-                }
-
-                if (state.status == PaymentsStatus.added) {
-                  GlobalFunctions.showSnackBar(
-                      context, 'Payment added successfully');
-                }
-                if (state.status == PaymentsStatus.updated) {
-                  GlobalFunctions.showSnackBar(
-                      context, 'Payment updated successfully');
-                }
-                if (state.status == PaymentsStatus.deleted) {
-                  GlobalFunctions.showSnackBar(
-                      context, 'Payment deleted successfully');
-                }
-                if (state.status == PaymentsStatus.error) {
-                  GlobalFunctions.showErrorSnackBar(context, state.error);
-                }
-              }),
-            ],
-            child: BlocBuilder<ItemsBloc, ItemsState>(
-              builder: (context, itemsState) {
-                return BlocBuilder<PaymentsBloc, PaymentsState>(
-                  builder: (context, paymentsState) {
-                    return BlocBuilder<ShopsBloc, ShopsState>(
-                      builder: (context, shopsState) {
-                        return BlocBuilder<DateFilterBloc, DateFilterState>(
-                          builder: (context, filterState) {
-                            return BlocBuilder<ItemsBloc, ItemsState>(
-                              builder: (context, state) {
-                                if (state.items.isNotEmpty) {
-                                  //////////////////////////////////////////////////////
-                                  //////////////////////////////////////////////////////
-                                  //////////////////////////////////////////////////////
-                                  //////////////////////////////////////////////////////
-
-                                  //////////////////////////////////////////////////////
-                                  /// filtered items
-                                  ItemsFiltered _filteredItems =
-                                      ItemsFiltered(items: itemsState.items);
-
-                                  /// filtered payments
-                                  PaymentsFiltered _filteredPayments =
-                                      PaymentsFiltered(
-                                          payments: paymentsState.payments);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                  List<ItemModel> _items =
-                                      _filteredItems.itemsByDateFilter;
-                                  //////////////////////////////////////////////////////
-                                  List<PaymentModel> _payments =
-                                      _filteredPayments.paymentsByDateFilter;
-                                  List<ShopModel> _shops = shopsState.shops;
-                                  //////////////////////////////////////////////////////
-                                  var dataSink = DataSink(
-                                      items: _items,
-                                      payments: _payments,
-                                      shops: _shops);
-                                  //////////////////////////////////////////////////////
-                                  ///////////////////////////////////////////////////////
-                                  ShopDataCalculations _shopDataCalculations =
-                                      ShopDataCalculations(
-                                    items: itemsState.items,
-                                    payments: paymentsState.payments,
-                                  );
-                                  ///////////////////////////////////////////////////////
-                                  ///////////////////////////////////////////////////////
-                                  return Column(
-                                    children: [
-                                      const SizedBox(height: 8),
-                                      buildTopWidget(_shopDataCalculations,
-                                          items: state.items),
-                                      buildShopsWidget(
-                                          context, dataSink.allShopsData),
-                                      buildRecentOpeerationsWidget(
-                                        context,
-                                        RecentOperation(itemsState.items,
-                                            paymentsState.payments),
-                                      )
-                                    ],
-                                  );
-                                } else {
-                                  return SizedBox(
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text('no items... Add new ones'),
-                                        const SizedBox(height: 40),
-                                        SpinKitSquareCircle(
-                                          color: Color.fromARGB(
-                                              190, 255, 255, 255),
-                                          size: 50.0,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              },
-                            );
-                          },
-                        );
-                      },
-                    );
+                    if (state.status == ItemsStatus.loaded) {
+                      Dialogs.snackBar('Items loaded');
+                    }
+                    if (state.status == ItemsStatus.added) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Item added successfully');
+                    }
+                    if (state.status == ItemsStatus.updated) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Item updated successfully');
+                    }
+                    if (state.status == ItemsStatus.deleted) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Item deleted successfully');
+                    }
+                    if (state.status == ItemsStatus.error) {
+                      GlobalFunctions.showErrorSnackBar(context, state.error);
+                    }
                   },
-                );
-              },
+                ),
+                BlocListener<ShopsBloc, ShopsState>(
+                  listener: (context, state) {
+                    if (state.status == ShopsStatus.loaded) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Shops loaded successfully');
+                    }
+                    if (state.status == ShopsStatus.added) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Shop added successfully');
+                    }
+                    if (state.status == ShopsStatus.updated) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Shop updated successfully');
+                    }
+                    if (state.status == ShopsStatus.deleted) {
+                      GlobalFunctions.showSnackBar(
+                          context, 'Shop deleted successfully');
+                    }
+                    if (state.status == ShopsStatus.error) {
+                      GlobalFunctions.showErrorSnackBar(context, state.error);
+                    }
+                  },
+                ),
+                BlocListener<PaymentsBloc, PaymentsState>(
+                    listener: (context, state) {
+                  if (state.status == PaymentsStatus.loaded) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Payments loaded successfully');
+                  }
+
+                  if (state.status == PaymentsStatus.added) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Payment added successfully');
+                  }
+                  if (state.status == PaymentsStatus.updated) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Payment updated successfully');
+                  }
+                  if (state.status == PaymentsStatus.deleted) {
+                    GlobalFunctions.showSnackBar(
+                        context, 'Payment deleted successfully');
+                  }
+                  if (state.status == PaymentsStatus.error) {
+                    GlobalFunctions.showErrorSnackBar(context, state.error);
+                  }
+                }),
+              ],
+              child: BlocBuilder<ItemsBloc, ItemsState>(
+                builder: (context, itemsState) {
+                  return BlocBuilder<PaymentsBloc, PaymentsState>(
+                    builder: (context, paymentsState) {
+                      return BlocBuilder<ShopsBloc, ShopsState>(
+                        builder: (context, shopsState) {
+                          return BlocBuilder<DateFilterBloc, DateFilterState>(
+                            builder: (context, filterState) {
+                              return BlocBuilder<ItemsBloc, ItemsState>(
+                                builder: (context, state) {
+                                  if (state.items.isNotEmpty) {
+                                    //////////////////////////////////////////////////////
+                                    //////////////////////////////////////////////////////
+                                    //////////////////////////////////////////////////////
+                                    //////////////////////////////////////////////////////
+
+                                    //////////////////////////////////////////////////////
+                                    /// filtered items
+                                    ItemsFiltered _filteredItems =
+                                        ItemsFiltered(items: itemsState.items);
+
+                                    /// filtered payments
+                                    PaymentsFiltered _filteredPayments =
+                                        PaymentsFiltered(
+                                            payments: paymentsState.payments);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    List<ItemModel> _items =
+                                        _filteredItems.itemsByDateFilter;
+                                    //////////////////////////////////////////////////////
+                                    List<PaymentModel> _payments =
+                                        _filteredPayments.paymentsByDateFilter;
+                                    List<ShopModel> _shops = shopsState.shops;
+                                    //////////////////////////////////////////////////////
+                                    var dataSink = DataSink(
+                                        items: itemsState.items,
+                                        payments: paymentsState.payments,
+                                        shops: _shops);
+                                    //////////////////////////////////////////////////////
+                                    List<ShopData> allShopsData =
+                                        dataSink.allShopsData;
+                                    ///////////////////////////////////////////////////////
+                                    ShopDataCalculations _shopDataCalculations =
+                                        ShopDataCalculations(
+                                      items: itemsState.items,
+                                      payments: paymentsState.payments,
+                                    );
+                                    ///////////////////////////////////////////////////////
+                                    ///////////////////////////////////////////////////////
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        // SizedBox(
+                                        //     height: 18,
+                                        //     child: ElevatedButton(
+                                        //       onPressed: () async {
+                                        //         var status = await Permission
+                                        //             .storage
+                                        //             .request()
+                                        //             .isGranted;
+                                        //         if (!status) {
+                                        //           Dialogs.snackBar(
+                                        //               'Please grant storage permission');
+                                        //         }
+                                        //         //Directory docsDirectory = await getExternalStorageDirectories();
+                                        //         Directory? dir =
+                                        //             await getExternalStorageDirectory();
+                                        //         setState(() {
+                                        //           path = dir!.path;
+                                        //         });
+                                        //         log(path ?? '');
+
+                                        //         if (path != null) {
+                                        //           // exportAsExcel();
+                                        //           Dialogs.snackBar(path ?? '');
+                                        //           final backup = Backup(
+                                        //               path: path,
+                                        //               date: DateTime.now(),
+                                        //               shopsDataList:
+                                        //                   allShopsData);
+                                        //           backup.exportAsExcel();
+                                        //           //backup.store; // .then((value) =>
+                                        //           GlobalFunctions.showSnackBar(
+                                        //             context,
+                                        //             'backup created',
+                                        //           );
+                                        //         }
+                                        //       },
+                                        //       child: Text('save'),
+                                        //     )),
+                                        buildTopWidget(_shopDataCalculations,
+                                            items: state.items),
+                                        buildShopsWidget(context, allShopsData),
+                                        buildRecentOpeerationsWidget(
+                                          context,
+                                          RecentOperation(itemsState.items,
+                                              paymentsState.payments),
+                                        )
+                                      ],
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                              'no items... Add new ones'),
+                                          const SizedBox(height: 40),
+                                          SpinKitSquareCircle(
+                                            color: Color.fromARGB(
+                                                190, 255, 255, 255),
+                                            size: 50.0,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -285,8 +417,7 @@ class _DashBoardPageState extends State<DashBoardPage>
   }
 
   buildShopsWidget(BuildContext context, List<ShopData> _shopsDataList) {
-    _shopsDataList
-      ..removeWhere((e) => e.shopDataCalculations.itemsSumAfterPayment <= 0);
+    //_shopsDataList..removeWhere((e) => e.shopDataCalculations.itemsSumAfterPayment <= 0);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(

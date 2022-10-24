@@ -106,6 +106,7 @@ class ItemModel {
   /// from json method
   ItemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    //itemName = json['itemName'] == 'زيت لعود' ? 'زيت العود' : json['itemName'];
     itemName = json['itemName'];
     quantifier = json['quantifier'];
     besoinTitle = json['besoinTitle'];

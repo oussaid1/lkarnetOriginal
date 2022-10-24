@@ -24,6 +24,7 @@ class _SelectDateState extends State<SelectDate> {
       lastDate: DateTime(2025),
     ))!;
     if (picked != DateTime.now()) {
+      _selectedDate = picked;
       widget.onDateSelected(picked);
     }
   }
