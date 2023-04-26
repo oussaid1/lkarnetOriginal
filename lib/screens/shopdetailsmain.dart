@@ -377,7 +377,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
                     price: tagged.shopDataCalculations.itemsSum,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: AppConstants.hintColor,
                         ),
                   ),
@@ -400,7 +400,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
                     price: tagged.shopDataCalculations.paymentsSum,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: AppConstants.hintColor,
                         ),
                   ),
@@ -423,7 +423,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
                     price: tagged.shopDataCalculations.countItems.toDouble(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: AppConstants.hintColor,
                         ),
                   ),
@@ -446,7 +446,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     right: const SizedBox.shrink(),
                     withDollarSign: true,
                     price: tagged.shopDataCalculations.countPayments.toDouble(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: AppConstants.hintColor,
                         ),
                   ),

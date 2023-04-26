@@ -460,7 +460,7 @@ class _AddItemState extends ConsumerState<AddItem>
     );
     _localItem = item;
     _itmBloc.add(AddItemEvent(item));
-    mBottomSheet(context, controller: _controller);
+    //  mBottomSheet(context, controller: _controller);
     clear();
     //  Navigator.of(context).pop();
   }

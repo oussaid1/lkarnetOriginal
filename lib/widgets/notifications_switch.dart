@@ -24,24 +24,24 @@ class NotificationsSwitch extends ConsumerWidget {
   }
 
   void _showNotifications(BuildContext context) async {
-    AwesomeNotifications().createdStream.listen((notification) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(
-          'Notification Created on ${notification.channelKey}',
-        ),
-      ));
-    });
+    // AwesomeNotifications().createdStream.listen((notification) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     backgroundColor: Colors.green,
+    //     content: Text(
+    //       'Notification Created on ${notification.channelKey}',
+    //     ),
+    //   ));
+    // });
 
-    AwesomeNotifications().actionStream.listen((notification) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (_) => HomePage(),
-        ),
-        (route) => route.isFirst,
-      );
-    });
+    // AwesomeNotifications().actionStream.listen((notification) {
+    //   Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (_) => HomePage(),
+    //     ),
+    //     (route) => route.isFirst,
+    //   );
+    // });
   }
 
   void _cancelNotification(BuildContext context) async {

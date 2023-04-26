@@ -85,7 +85,7 @@ class _KitchenElementsDropDownState
                         child: Text(
                           element.title,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     ),

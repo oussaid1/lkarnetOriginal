@@ -220,7 +220,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Availability', style: Theme.of(context).textTheme.bodyText1),
+          Text('Availability', style: Theme.of(context).textTheme.bodyLarge),
           Availibility(
             initialValue: _availability,
             onChanged: (value) {
@@ -243,7 +243,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child:
-                Text('Priority', style: Theme.of(context).textTheme.bodyText1),
+                Text('Priority', style: Theme.of(context).textTheme.bodyLarge),
           ),
           PiorityRatingWidget(
             initialRating: _priorityRating,
@@ -287,7 +287,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                 },
               ),
               hintText: 'element name',
-              hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+              hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.grey,
                   ),
 
@@ -368,7 +368,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     child: Text(
                       suggestion.title,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ));
             },

@@ -437,7 +437,7 @@ class _AddItemState extends State<AddKitchenItem> {
                     child: Text(
                       suggestion.itemName,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ));
             },
@@ -491,7 +491,7 @@ class _AddItemState extends State<AddKitchenItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Add Kitchen Item to :',
-                style: Theme.of(context).textTheme.bodyText1),
+                style: Theme.of(context).textTheme.bodyLarge),
             widget.kitchenElement != null
                 ? Text('${widget.kitchenElement!.title}',
                     style: Theme.of(context).textTheme.headline4)
