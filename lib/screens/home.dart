@@ -57,30 +57,30 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _notificationsPermition(BuildContext context) async {
-    AwesomeNotifications().createdStream.listen((notification) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.teal,
-        content: Text(
-          'Notification Created on ${notification.channelKey}',
-        ),
-      ));
-    });
+    // AwesomeNotifications().createdStream.listen((notification) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     backgroundColor: Colors.teal,
+    //     content: Text(
+    //       'Notification Created on ${notification.channelKey}',
+    //     ),
+    //   ));
+    // });
 
-    AwesomeNotifications().actionStream.listen((notification) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (_) => KitchenStockHome(),
-        ),
-        (route) => route.isFirst,
-      );
-    });
+    // AwesomeNotifications().actionStream.listen((notification) {
+    //   Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (_) => KitchenStockHome(),
+    //     ),
+    //     (route) => route.isFirst,
+    //   );
+    // });
   }
 
   @override
   void dispose() {
-    AwesomeNotifications().actionSink.close();
-    AwesomeNotifications().createdSink.close();
+    // AwesomeNotifications().actionSink.close();
+    // AwesomeNotifications().createdSink.close();
     super.dispose();
   }
 

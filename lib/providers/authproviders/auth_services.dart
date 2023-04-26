@@ -114,6 +114,7 @@ class AuthenticationService {
         .catchError((error) {
       _done = false;
       print("Failed to add user: $error");
+      return false;
     });
     return _done;
   }

@@ -31,9 +31,10 @@ class Database {
         .doc(uid)
         .set(user.toMap(), SetOptions(merge: true))
         .then((value) => _done = true)
-        .catchError((error) {
+        .catchError((error) async {
       _done = false;
       print("Failed to add user: $error");
+      return false;
     });
     return _done;
   }
@@ -46,9 +47,10 @@ class Database {
         .doc(uid)
         .set({'token': token}, SetOptions(merge: true))
         .then((value) => _done = true)
-        .catchError((error) {
+        .catchError((error)async {
           _done = false;
           print("Failed to add token: $error");
+          return false;
         });
     return _done;
   }

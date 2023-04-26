@@ -12,27 +12,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  awesome_notifications: ^0.6.21
+  awesome_notifications: ^0.7.4+1
   bottom_navy_bar: ^6.0.0
-  cloud_firestore: ^3.1.15
+  cloud_firestore: ^4.5.2
   cupertino_icons: ^1.0.2
-  firebase_app_check: ^0.0.6+12
-  firebase_auth: ^3.3.18
-  firebase_core: ^1.17.0
-  firebase_messaging: ^11.4.0
+  firebase_app_check: ^0.1.2+2
+  firebase_auth: ^4.4.2
+  firebase_core: ^2.10.0
+  firebase_messaging: ^14.4.1
   flutter_rating_bar: ^4.0.1
-  flutter_riverpod:  ^1.0.4
-  flutter_slidable: ^1.2.1
-  flutter_svg: ^1.0.3
+  flutter_riverpod: ^2.3.6
+  flutter_slidable: ^2.0.0
+  flutter_svg: ^2.0.5
   flutter_typeahead: ^4.0.0
-  google_fonts: ^2.3.2
+  google_fonts: ^4.0.3
   #google_sign_in: ^5.2.3
   logger: ^1.1.0
   percent_indicator: ^4.2.2
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   shared_preferences: ^2.0.15
-  syncfusion_flutter_charts: ^20.1.56
-  syncfusion_flutter_gauges: ^20.1.56
+  syncfusion_flutter_charts: ^21.1.41
+  syncfusion_flutter_gauges: ^21.1.41
   workmanager: ^0.5.0
 
 dev_dependencies:
