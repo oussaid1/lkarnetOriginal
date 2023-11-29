@@ -325,7 +325,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     // tagged == _tagged ? Text('Selected') : Text(''),
                     Text(
                       mtagged.date.ddmmyyyy(),
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -351,13 +351,13 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                 children: [
                   Text(
                     'Total-amount',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   PriceNumberZone(
                       right: const SizedBox.shrink(),
                       withDollarSign: true,
                       price: tagged.shopDataCalculations.itemsSumAfterPayment,
-                      style: Theme.of(context).textTheme.headline3!),
+                      style: Theme.of(context).textTheme.displaySmall!),
                 ],
               ),
             ),
@@ -370,7 +370,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     'Total sum of items',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
+                        .bodyLarge!
                         .copyWith(color: AppConstants.whiteOpacity),
                   ),
                   PriceNumberZone(
@@ -393,7 +393,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     'Total sum of payments',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
+                        .bodyLarge!
                         .copyWith(color: AppConstants.whiteOpacity),
                   ),
                   PriceNumberZone(
@@ -416,7 +416,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     'Total number of items',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
+                        .bodyLarge!
                         .copyWith(color: AppConstants.whiteOpacity),
                   ),
                   PriceNumberZone(
@@ -439,7 +439,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     'Total number of payments',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
+                        .bodyLarge!
                         .copyWith(color: AppConstants.whiteOpacity),
                   ),
                   PriceNumberZone(

@@ -171,11 +171,11 @@ class _KitchenItemDetailsScreenState
                           children: [
                             Text(
                               'Items',
-                              style: Theme.of(context).textTheme.headline3,
+                              style: Theme.of(context).textTheme.displaySmall,
                             ),
                             Text(
                               'Long press to set the expiration date ! if Item expired !',
-                              style: Theme.of(context).textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ],
                         ),
@@ -319,7 +319,7 @@ class _KitchenItemDetailsScreenState
                         child: Text(
                           widget.kitchenElement.kitchenElement.title.toString(),
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline2,
+                          style: Theme.of(context).textTheme.displayMedium,
                         ),
                       ),
                       PiorityRatingWidget(
@@ -341,7 +341,7 @@ class _KitchenItemDetailsScreenState
               children: [
                 Text(
                   '${widget.kitchenElement.kitchenElement.category}',
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.displaySmall,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(width: 10),
@@ -386,7 +386,7 @@ class _KitchenItemDetailsScreenState
                   'Date expired : ',
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle1!
+                      .titleMedium!
                       .copyWith(color: Colors.white.withOpacity(0.3)),
                 ),
                 Text(
@@ -507,12 +507,12 @@ class _AvailabilityChangeWidgetState extends State<AvailabilityChangeWidget> {
                   'Status: ',
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle1!
+                      .titleMedium!
                       .copyWith(color: Colors.white.withOpacity(0.3)),
                 ),
                 Text(
                   'tap here to change status ... ! ',
-                  style: Theme.of(context).textTheme.subtitle2,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
             ),

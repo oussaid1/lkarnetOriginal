@@ -494,7 +494,7 @@ class _AddItemState extends State<AddKitchenItem> {
                 style: Theme.of(context).textTheme.bodyLarge),
             widget.kitchenElement != null
                 ? Text('${widget.kitchenElement!.title}',
-                    style: Theme.of(context).textTheme.headline4)
+                    style: Theme.of(context).textTheme.headlineMedium)
                 : const SizedBox.shrink(),
           ],
         ),

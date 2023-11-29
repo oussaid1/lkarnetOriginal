@@ -32,7 +32,7 @@ class _StateAddToKitchenFromItem extends State<AddToKitchenFromItem> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text('Select kitchen Element to add item to',
-                style: Theme.of(context).textTheme.subtitle2),
+                style: Theme.of(context).textTheme.titleSmall),
           ),
           const SizedBox(height: 10),
           Row(

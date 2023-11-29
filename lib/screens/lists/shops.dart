@@ -126,12 +126,12 @@ class ShopsList extends ConsumerWidget {
                                             Text("Shops",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .headline3),
+                                                    .displaySmall),
                                             Text(
                                                 "see all the shops, add new ones, edit them, delete them, etc.",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .subtitle2),
+                                                    .titleSmall),
                                           ],
                                         ),
                                       ),
@@ -175,7 +175,7 @@ class ShopsList extends ConsumerWidget {
                                                 Icons.delete_forever,
                                                 size: 30,
                                                 color: Theme.of(context)
-                                                    .errorColor,
+                                                    .colorScheme.error,
                                               ),
                                               color: Colors.transparent,
                                               onPressed: () {
@@ -214,7 +214,7 @@ class ShopsList extends ConsumerWidget {
                                                                   style: Theme.of(
                                                                           context)
                                                                       .textTheme
-                                                                      .headline3,
+                                                                      .displaySmall,
                                                                 ),
                                                                 onPressed:
                                                                     () {},
@@ -261,7 +261,7 @@ class ShopsList extends ConsumerWidget {
                                                   ' ${shopsData.shop.shopName}',
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .headline4,
+                                                      .headlineMedium,
                                                 ),
                                                 trailing: Column(
                                                   mainAxisAlignment:
@@ -271,13 +271,13 @@ class ShopsList extends ConsumerWidget {
                                                       '${(shopsData.shop.limit)}',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4,
+                                                          .headlineMedium,
                                                     ),
                                                     Text(
                                                       'limit',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .subtitle2,
+                                                          .titleSmall,
                                                     ),
                                                   ],
                                                 ),

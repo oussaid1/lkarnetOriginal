@@ -33,7 +33,7 @@ class AppInfoWidget extends ConsumerWidget {
       title: const Text('About'),
       subtitle: Text(
         'version : ${info.value!.version}',
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {

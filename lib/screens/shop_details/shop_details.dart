@@ -86,14 +86,14 @@ class ShopsDetailsBody extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${shopsData.shopDataCalculations.itemsSumAfterPayment}',
-                        style: Theme.of(context).textTheme.headline2,
+                        style: Theme.of(context).textTheme.displayMedium,
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Expanded(
                       child: Text(
                         '${shopsData.shop.shopName}',
-                        style: Theme.of(context).textTheme.headline2,
+                        style: Theme.of(context).textTheme.displayMedium,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -181,7 +181,7 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'count :',
-                              style: Theme.of(context).textTheme.subtitle2!),
+                              style: Theme.of(context).textTheme.titleSmall!),
                           TextSpan(
                               text:
                                   ' ${widget.shopsData.shopDataCalculations.countItems}',
@@ -196,7 +196,7 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'total :',
-                              style: Theme.of(context).textTheme.subtitle2!),
+                              style: Theme.of(context).textTheme.titleSmall!),
                           TextSpan(
                               text:
                                   ' ${widget.shopsData.shopDataCalculations.itemsSum}',
@@ -303,7 +303,7 @@ class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'count :',
-                              style: Theme.of(context).textTheme.subtitle2!),
+                              style: Theme.of(context).textTheme.titleSmall!),
                           TextSpan(
                               text:
                                   ' ${widget.shopsData.shopDataCalculations.countPayments}',
@@ -318,7 +318,7 @@ class _ShopPaymentsDetailWidgetState extends State<ShopPaymentsDetailWidget> {
                             text: TextSpan(children: [
                           TextSpan(
                               text: 'total :',
-                              style: Theme.of(context).textTheme.subtitle2!),
+                              style: Theme.of(context).textTheme.titleSmall!),
                           TextSpan(
                               text:
                                   ' ${widget.shopsData.shopDataCalculations.paymentsSum}',

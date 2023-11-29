@@ -99,7 +99,7 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                 },
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
+                    .titleLarge!
                     .copyWith(color: Theme.of(context).colorScheme.primary),
                 decoration: InputDecoration(
                   disabledBorder: const OutlineInputBorder(

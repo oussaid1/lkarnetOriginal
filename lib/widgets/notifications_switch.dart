@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lkarnet/screens/home.dart';
 import 'package:lkarnet/settings/theme/theme_provider.dart';
 
 import '../components.dart';

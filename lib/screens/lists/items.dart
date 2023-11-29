@@ -98,7 +98,7 @@ class _ItemsListState extends State<ItemsList> {
             leading: Icon(Icons.menu, color: Colors.black),
             title: Text(
               'All Items',
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             elevation: 0,
             shadowColor: Colors.transparent,

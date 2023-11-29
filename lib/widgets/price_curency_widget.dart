@@ -35,7 +35,7 @@ class PriceNumberZone extends StatelessWidget {
                   final _currency = ref.watch(currencyProvider.state);
                   return Text(
                     _currency.state.toString(),
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontSize: 8,
                         ),
                   );

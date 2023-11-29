@@ -84,7 +84,7 @@ class SplashPage extends StatelessWidget {
       child: SelectableText(
         'dev.bourheem\n copyright\n 2021',
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }

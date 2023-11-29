@@ -147,12 +147,12 @@ class ItemsListTileOnly extends StatelessWidget {
                     children: [
                       Text(
                         '${item.quantity}',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                       Text(
                         '${item.quantifier}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -165,17 +165,17 @@ class ItemsListTileOnly extends StatelessWidget {
                   children: [
                     Text(
                       '${item.itemName}',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Row(
                       children: [
                         Text(
                           '${item.shopName}',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         Text(
                           '  ${item.dateBought.formatted()}',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
@@ -189,7 +189,7 @@ class ItemsListTileOnly extends StatelessWidget {
                     padding: EdgeInsets.all(4.0),
                     child: PriceNumberZone(
                       price: item.itemPrix,
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headlineMedium,
                       withDollarSign: true,
                     )),
                 const SizedBox(width: 8),

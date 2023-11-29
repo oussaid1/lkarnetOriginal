@@ -72,7 +72,7 @@ class PaymentTile extends StatelessWidget {
                                     child: Text(
                                       'Ok',
                                       style:
-                                          Theme.of(context).textTheme.headline3,
+                                          Theme.of(context).textTheme.displaySmall,
                                     ),
                                     onPressed: () {
                                       BlocProvider.of<PaymentsBloc>(context)
@@ -147,7 +147,7 @@ class PaymentListTileOnly extends StatelessWidget {
                         'payment',
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle2!
+                            .titleSmall!
                             .copyWith(fontSize: 10),
                       ),
                     ],
@@ -168,11 +168,11 @@ class PaymentListTileOnly extends StatelessWidget {
                     children: [
                       Text(
                         '${payment.paidShopName}',
-                        style: Theme.of(context).textTheme.headline4,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
                         '${payment.datePaid.formatted()}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),
@@ -182,7 +182,7 @@ class PaymentListTileOnly extends StatelessWidget {
                           padding: EdgeInsets.all(4.0),
                           child: PriceNumberZone(
                             price: payment.paidAmount,
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headlineMedium,
                             withDollarSign: true,
                           )),
                       const SizedBox(width: 8),

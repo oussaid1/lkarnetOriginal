@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 15),
-                    Text('Login', style: Theme.of(context).textTheme.headline1),
+                    Text('Login', style: Theme.of(context).textTheme.displayLarge),
                     const SizedBox(height: 15),
                     _buildLoginForm(context),
                     buildLoginButton(context), //button: lo
@@ -168,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
             margin: const EdgeInsets.only(top: 20),
             alignment: Alignment.center,
             width: double.infinity,
-            child: Text('Login', style: Theme.of(context).textTheme.headline1),
+            child: Text('Login', style: Theme.of(context).textTheme.displayLarge),
           ), // title: login
           SizedBox(height: 20),
           Container(
@@ -237,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Text(
           'Login',
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
         onPressed: _isLoading
             ? null
@@ -263,13 +263,13 @@ class _LoginPageState extends State<LoginPage> {
         RichText(
           text: TextSpan(
             text: "Don't have an account? ",
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
             children: [
               TextSpan(
                 text: "Sign up",
                 style: Theme.of(context)
                     .textTheme
-                    .headline4!
+                    .headlineMedium!
                     .copyWith(color: Theme.of(context).primaryColor),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
@@ -307,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.only(left: 4.0),
               child: Text(
                 "Sign in with google",
-                style: Theme.of(context).textTheme.button,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           ],

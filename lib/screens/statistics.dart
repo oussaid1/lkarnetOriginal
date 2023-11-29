@@ -52,7 +52,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
         appBar: MyAppBar(
           title: Text(
             'Statistics ',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
           leading: IconButton(
             icon: Icon(Icons.bar_chart),
@@ -97,7 +97,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                             '${widget.shopsData!.shop.shopName}',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline2),
+                                                .displayMedium),
                                         Container(
                                           width: 100,
                                           height: 40,
@@ -111,7 +111,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                             child: Text('Today',
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .headline3!
+                                                    .displaySmall!
                                                 // .copyWith(color: Colors.white),
                                                 ),
                                           ),
@@ -137,19 +137,19 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                                   Text('Items',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline3!
+                                                          .displaySmall!
                                                       // .copyWith(color: Colors.white),
                                                       ),
                                                   Text(
                                                       'count :${widget.shopsData!.shopDataCalculations.countItems} ',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4),
+                                                          .headlineMedium),
                                                   Text(
                                                       'total : ${widget.shopsData!.shopDataCalculations.itemsSum} ',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4),
+                                                          .headlineMedium),
                                                 ],
                                               ),
                                             ),
@@ -188,19 +188,19 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                                   Text('Payments',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline3!
+                                                          .displaySmall!
                                                       // .copyWith(color: Colors.white),
                                                       ),
                                                   Text(
                                                       'count :${widget.shopsData!.shopDataCalculations.countPayments} ',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4),
+                                                          .headlineMedium),
                                                   Text(
                                                       'total : ${widget.shopsData!.shopDataCalculations.paymentsSum} ',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4),
+                                                          .headlineMedium),
                                                 ],
                                               ),
                                             ),
@@ -278,7 +278,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                 children: [
                   Text(
                     '${payment.datePaid.formatted()}',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Row(
                     children: [
@@ -286,12 +286,12 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
                           '${payment.paidAmount.toPrecision(2)}',
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ),
                       Text(
                         'DH',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const SizedBox(width: 8),
                     ],

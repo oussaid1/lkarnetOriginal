@@ -64,7 +64,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
           leading: Icon(Icons.menu, color: Colors.black),
           title: Text(
             'Out of Stock',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
@@ -159,7 +159,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
 
                     Text(
                       'To be bought',
-                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
                             color: Color.fromRGBO(255, 255, 255, 1),
                           ),
                     ),
@@ -168,7 +168,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                       right: const SizedBox.shrink(),
                       withDollarSign: true,
                       price: total,
-                      style: Theme.of(context).textTheme.headline2!,
+                      style: Theme.of(context).textTheme.displayMedium!,
                     ),
                     const SizedBox(width: 10),
                   ],
@@ -179,7 +179,7 @@ class _ItemsListState extends ConsumerState<UnAvailiableElements> {
                   children: [
                     Text(
                       'with a total of',
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           // color: Color.fromRGBO(255, 255, 255, 1),
                           ),
                     ),

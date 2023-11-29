@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:excel/excel.dart';
@@ -11,13 +10,10 @@ import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/utils.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../blocs/payments/payments_bloc.dart';
 import '../../blocs/shopsbloc/shops_bloc.dart';
-import '../../models/backup.dart';
 import '../../models/data_sink.dart';
 import '../../models/item/item.dart';
 import '../../models/item/items_filtered.dart';
@@ -121,7 +117,7 @@ class _DashBoardPageState extends State<DashBoardPage>
       appBar: MyAppBar(
         title: Text(
           'Dashboard',
-          style: Theme.of(context).textTheme.headline3,
+          style: Theme.of(context).textTheme.displaySmall,
         ),
         // actions: [
         //   IconButton(
@@ -438,7 +434,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text('Shops',
                           style:
-                              Theme.of(context).textTheme.headline3!.copyWith(
+                              Theme.of(context).textTheme.displaySmall!.copyWith(
                                     color: Color.fromARGB(141, 255, 255, 255),
                                   )),
                     ),
@@ -446,7 +442,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                       child: Text(
                         'Tap the shop to see its details',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
                   ],
@@ -521,7 +517,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text('Recent Operations',
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                        style: Theme.of(context).textTheme.displaySmall!.copyWith(
                               color: Color.fromARGB(106, 255, 255, 255),
                             )),
                   ),
@@ -529,7 +525,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                     child: Text(
                       'double tap to add the item to kitchen !',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                 ],
@@ -611,7 +607,7 @@ class _DashBoardPageState extends State<DashBoardPage>
               children: [
                 Text(
                   'Spendings',
-                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         color: Color.fromRGBO(255, 255, 255, 1),
                       ),
                 ),
@@ -622,7 +618,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                   right: const SizedBox.shrink(),
                   withDollarSign: true,
                   price: shopDataCalculations.itemsSumAfterPayment,
-                  style: Theme.of(context).textTheme.headline2!,
+                  style: Theme.of(context).textTheme.displayMedium!,
                 ),
               ],
             ),
@@ -647,7 +643,7 @@ class _DashBoardPageState extends State<DashBoardPage>
       lineWidth: 6.0,
       percent: dataSink.spendingsUnitinterval,
       center: new Text("${dataSink.spendingsPecentage} %",
-          style: Theme.of(context).textTheme.headline6),
+          style: Theme.of(context).textTheme.titleLarge),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: Colors.white,
       backgroundColor: Colors.white.withOpacity(0.2),
@@ -686,12 +682,12 @@ class _DashBoardPageState extends State<DashBoardPage>
                     children: [
                       Text(
                         '${operation.quantity}',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                       Text(
                         '${operation.quantifier}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -704,11 +700,11 @@ class _DashBoardPageState extends State<DashBoardPage>
                   children: [
                     Text(
                       '${operation.title}',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       '${operation.date!.formatted()}',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ],
                 ),
@@ -720,12 +716,12 @@ class _DashBoardPageState extends State<DashBoardPage>
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     '${operation.amount!.toPrecision(2)}',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
                 Text(
                   '$currency',
-                  style: Theme.of(context).textTheme.subtitle2,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(width: 8),
               ],

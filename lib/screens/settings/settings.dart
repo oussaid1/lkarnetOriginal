@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
         appBar: MyAppBar(
           title: Text(
             'Settings',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -67,7 +67,7 @@ class SettingsPage extends StatelessWidget {
                       ),
                       Text(
                         'Update your settings like profile edit, change password etc.',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       )
                     ],
                   ),
@@ -85,7 +85,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                     title: Text(
                       '${state.email}',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     trailing: Icon(
                       Icons.arrow_forward_ios_rounded,
@@ -101,11 +101,11 @@ class SettingsPage extends StatelessWidget {
                       children: [
                         Text(
                           'Change Password',
-                          style: Theme.of(context).textTheme.headline3,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         Text(
                           'change your password',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
@@ -125,11 +125,11 @@ class SettingsPage extends StatelessWidget {
                       children: [
                         Text(
                           'Share to Friends',
-                          style: Theme.of(context).textTheme.headline3,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         Text(
                           'change your account information ',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
@@ -149,11 +149,11 @@ class SettingsPage extends StatelessWidget {
                       children: [
                         Text(
                           'Activate Notification',
-                          style: Theme.of(context).textTheme.headline3,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         Text(
                           'Turn on/off notification',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
@@ -170,11 +170,11 @@ class SettingsPage extends StatelessWidget {
                       children: [
                         Text(
                           'Logout',
-                          style: Theme.of(context).textTheme.headline3,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         Text(
                           'logout and try different login',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),

@@ -18,8 +18,8 @@ Future<void> main() async {
   await FirebaseAppCheck.instance
       // Your personal reCaptcha public key goes here:
       .activate(
-    webRecaptchaSiteKey: '6D035D8A-1A94-4DBD-927D-9A21F4C36730',
-  );
+          // webRecaptchaSiteKey: '6D035D8A-1A94-4DBD-927D-9A21F4C36730',
+          );
   AwesomeNotifications()
     ..initialize('resource://drawable/res_notification_app_icon',
         MNotificationModel.channels);

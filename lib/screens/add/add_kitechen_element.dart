@@ -159,7 +159,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     return Padding(
         padding: EdgeInsets.only(top: 20, bottom: 8),
         child: Text('Add Kitchen Element',
-            style: Theme.of(context).textTheme.headline3));
+            style: Theme.of(context).textTheme.displaySmall));
   }
 
   Padding _buildDivider() {
@@ -268,7 +268,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
           child: TextField(
             textAlign: TextAlign.center,
             controller: _itemNameController,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
             onChanged: (x) => setState(() {
               _canSave = true;
             }),

@@ -61,15 +61,14 @@ class MThemeData {
   );
 
   static final ButtonStyle raisedButtonStyleCancel = ElevatedButton.styleFrom(
-    textStyle: _textTheme.button!,
+    textStyle: _textTheme.labelLarge!, backgroundColor: Colors.transparent,
     // backgroundColor: Colors.transparent,
-    onSurface: primaryColor,
+    disabledForegroundColor: primaryColor.withOpacity(0.38), disabledBackgroundColor: primaryColor.withOpacity(0.12),
     // minimumSize: const Size(100, 50),
     animationDuration: const Duration(milliseconds: 200),
     shadowColor: primaryColor,
     enableFeedback: true,
     elevation: 0,
-    primary: Colors.transparent,
     fixedSize: const Size(100, 40),
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
@@ -78,8 +77,8 @@ class MThemeData {
     ),
   );
   static final ButtonStyle raisedButtonStyleSave = ElevatedButton.styleFrom(
-    textStyle: _textTheme.button,
-    onSurface: primaryColor,
+    textStyle: _textTheme.labelLarge,
+    disabledForegroundColor: primaryColor.withOpacity(0.38), disabledBackgroundColor: primaryColor.withOpacity(0.12),
     animationDuration: const Duration(milliseconds: 200),
     shadowColor: primaryColor,
     enableFeedback: true,
@@ -127,8 +126,6 @@ class MThemeData {
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
       dialogBackgroundColor: colorScheme.secondary,
-      colorScheme: colorScheme,
-      backgroundColor: colorScheme.background,
       typography: Typography(),
       // elevatedButtonTheme: ElevatedButtonThemeData(
       //   style: ElevatedButton.styleFrom(
@@ -204,7 +201,7 @@ class MThemeData {
           _lightFillColor.withOpacity(0.80),
           _darkFillColor,
         ),
-        contentTextStyle: _textTheme.subtitle1!.apply(color: _darkFillColor),
+        contentTextStyle: _textTheme.titleMedium!.apply(color: _darkFillColor),
       ),
       //cardTheme: CardTheme(color: colorScheme.primary),
       tooltipTheme: TooltipThemeData(
@@ -212,12 +209,12 @@ class MThemeData {
           //color: secondaryColor,
           borderRadius: BorderRadius.circular(4),
         ),
-        textStyle: _textTheme.bodyText2!.apply(color: primaryColor),
+        textStyle: _textTheme.bodyMedium!.apply(color: primaryColor),
         padding: const EdgeInsets.symmetric(horizontal: 8),
         waitDuration: const Duration(milliseconds: 100),
         showDuration: const Duration(milliseconds: 50),
         preferBelow: true,
-      ),
+      ), colorScheme: colorScheme.copyWith(background: colorScheme.background),
     );
   }
 
@@ -228,44 +225,44 @@ class MThemeData {
   static const _light = FontWeight.w300;
 
   static final TextTheme _textTheme = TextTheme(
-      headline1: GoogleFonts.sansita(
+      displayLarge: GoogleFonts.sansita(
           fontWeight: _bold, fontSize: 28.0, color: Colors.black),
       /***************************** */
-      headline2: GoogleFonts.sansita(
+      displayMedium: GoogleFonts.sansita(
           fontWeight: _semiBold, fontSize: 24.0, color: Colors.black),
       /***************************** */
-      headline3: GoogleFonts.sansita(
+      displaySmall: GoogleFonts.sansita(
           fontWeight: _semiBold, fontSize: 20.0, color: Colors.black),
       /***************************** */
-      headline4: GoogleFonts.sansita(
+      headlineMedium: GoogleFonts.sansita(
           fontWeight: _medium, fontSize: 18.0, color: Colors.black),
       /***************************** */
-      headline5: GoogleFonts.sansita(
+      headlineSmall: GoogleFonts.sansita(
           fontWeight: _regular, fontSize: 16.0, color: Colors.black),
       /***************************** */
-      headline6: GoogleFonts.sansita(
+      titleLarge: GoogleFonts.sansita(
           fontWeight: _regular, fontSize: 16.0, color: Colors.black),
       /***************************** */
-      subtitle1: GoogleFonts.sansita(
+      titleMedium: GoogleFonts.sansita(
           fontWeight: _regular, fontSize: 14.0, color: Colors.black),
       /***************************** */
-      subtitle2: GoogleFonts.sansita(
+      titleSmall: GoogleFonts.sansita(
           fontWeight: _light, fontSize: 12.0, color: hintColor),
       /***************************** */
-      caption: GoogleFonts.sansita(
+      bodySmall: GoogleFonts.sansita(
           fontWeight: _light, fontSize: 12.0, color: Colors.black),
       /***************************** */
-      overline: GoogleFonts.sansita(
+      labelSmall: GoogleFonts.sansita(
           fontWeight: _light, fontSize: 12.0, color: hintColor),
       /***************************** */
-      bodyText1: GoogleFonts.sansita(
+      bodyLarge: GoogleFonts.sansita(
           fontWeight: _regular, fontSize: 16.0, color: Colors.black),
       /***************************** */
-      bodyText2: GoogleFonts.robotoMono(
+      bodyMedium: GoogleFonts.robotoMono(
           fontWeight: _regular, fontSize: 14.0, color: Colors.black),
       /***************************** */
 
-      button: GoogleFonts.sansita(
+      labelLarge: GoogleFonts.sansita(
         fontWeight: _semiBold,
         fontSize: 16.0,
       ));

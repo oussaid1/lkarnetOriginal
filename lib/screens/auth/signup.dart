@@ -243,7 +243,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: <Widget>[
                         Text(
                           'Already Registered? ',
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                         InkWell(
                           splashColor:

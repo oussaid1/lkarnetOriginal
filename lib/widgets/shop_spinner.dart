@@ -123,7 +123,7 @@ class _ShopDropDownState extends State<ShopDropDown> {
                   value: shop,
                   child: Text(
                     shop.shopName ?? '',
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 );
               }).toList(),

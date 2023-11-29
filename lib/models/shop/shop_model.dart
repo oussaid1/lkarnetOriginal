@@ -15,7 +15,7 @@ class ShopModel {
 
   ShopModel.forMap(
       {this.id,
-      final this.count = 1,
+      this.count = 1,
       this.shopName,
       this.besoinTitle,
       this.email,

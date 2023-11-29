@@ -32,7 +32,7 @@ class ShopSquareTile extends StatelessWidget {
                   child: Text(
                     '${shopData.shop.shopName}',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ),
               ],
@@ -63,17 +63,17 @@ class ShopSquareTile extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                       'limit',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   RichText(
                     text: TextSpan(
                       text: '${shopData.shop.dailyLimit}',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                       children: <TextSpan>[
                         TextSpan(
                           text: '/',
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         TextSpan(text: '${shopData.shop.limit}'),
                       ],
@@ -121,7 +121,7 @@ class SimpleShopSquareTile extends StatelessWidget {
                   child: Text(
                     '${shopData.shop.shopName}',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ),
               ],
@@ -130,7 +130,7 @@ class SimpleShopSquareTile extends StatelessWidget {
               right: const SizedBox.shrink(),
               withDollarSign: true,
               price: shopData.shopDataCalculations.itemsSumAfterPayment,
-              style: Theme.of(context).textTheme.headline2!.copyWith(
+              style: Theme.of(context).textTheme.displayMedium!.copyWith(
                     color: AppConstants.hintColor,
                   ),
             ),
