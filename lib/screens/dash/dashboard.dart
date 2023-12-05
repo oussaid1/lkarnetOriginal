@@ -21,7 +21,6 @@ import '../../models/payment/payments_filtered.dart';
 import '../../models/shop/shopdata_calculations.dart';
 import '../../models/shop/shops_data.dart';
 import '../../widgets/item_listtile.dart';
-import '../../widgets/myappbar.dart';
 import '../../widgets/payment_listtile.dart';
 import '../../widgets/price_curency_widget.dart';
 import '../../widgets/shop_square_tile.dart';
@@ -67,13 +66,14 @@ class _DashBoardPageState extends State<DashBoardPage>
     cellStyle.underline = Underline.Single; // or Underline.Double
     for (int i = 0; i < _items.length; i++) {
       var cell1 = sheetObject.cell(CellIndex.indexByString("A${i + 1}"));
-      cell1.value = _items[i].itemName; // dynamic values support provided;
+      cell1.value =
+          _items[i].itemName as CellValue?; // dynamic values support provided;
       ////////////////////////////////////////
       var cell2 = sheetObject.cell(CellIndex.indexByString("B${i + 1}"));
-      cell2.value = _items[i].quantity;
+      cell2.value = _items[i].quantity as CellValue?;
       //////////////////
       var cell3 = sheetObject.cell(CellIndex.indexByString("C${i + 1}"));
-      cell3.value = _items[i].itemPrice;
+      cell3.value = _items[i].itemPrice as CellValue?;
       ;
       // cell.cellStyle = cellStyle;
       // if (i > 10) break;
@@ -114,7 +114,7 @@ class _DashBoardPageState extends State<DashBoardPage>
     //     () => ItemsBloc(databaseOperations: GetIt.I.get<DatabaseOperations>()));
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: MyAppBar(
+      appBar: AppBar(
         title: Text(
           'Dashboard',
           style: Theme.of(context).textTheme.displaySmall,
@@ -433,10 +433,12 @@ class _DashBoardPageState extends State<DashBoardPage>
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text('Shops',
-                          style:
-                              Theme.of(context).textTheme.displaySmall!.copyWith(
-                                    color: Color.fromARGB(141, 255, 255, 255),
-                                  )),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(
+                                color: Color.fromARGB(141, 255, 255, 255),
+                              )),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
@@ -517,9 +519,10 @@ class _DashBoardPageState extends State<DashBoardPage>
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text('Recent Operations',
-                        style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                              color: Color.fromARGB(106, 255, 255, 255),
-                            )),
+                        style:
+                            Theme.of(context).textTheme.displaySmall!.copyWith(
+                                  color: Color.fromARGB(106, 255, 255, 255),
+                                )),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8),

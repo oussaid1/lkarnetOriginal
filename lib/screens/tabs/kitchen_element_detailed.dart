@@ -8,7 +8,6 @@ import 'package:lkarnet/repository/database_operations.dart';
 import 'package:lkarnet/screens/add/add_kitchen_item.dart';
 import 'package:lkarnet/screens/add/add_kitechen_element.dart';
 import 'package:lkarnet/settings/theme.dart';
-import 'package:lkarnet/widgets/myappbar.dart';
 
 import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../components.dart';
@@ -110,7 +109,7 @@ class _KitchenItemDetailsScreenState
               },
               child: Icon(Icons.add),
             ),
-            appBar: MyAppBar(
+            appBar: AppBar(
               title: Text('${widget.kitchenElement.kitchenElement.title}'),
               actions: <Widget>[
                 IconButton(

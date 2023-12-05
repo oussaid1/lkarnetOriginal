@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 
 import '../../components.dart';
 import '../../widgets/add_to_kitchen_from_item.dart';
-import '../../widgets/item_listtile.dart';
 import '../../widgets/number_incrementer.dart';
 
 class AddItem extends ConsumerStatefulWidget {
@@ -157,6 +156,7 @@ class _AddItemState extends ConsumerState<AddItem>
                             return _buildItemName(context, state.items);
                           },
                         ),
+                        //  MyAutocomplete(),
                         _buildItemPrice(),
                         _buildSelectDateBought(),
                         _buildQuantityFier(),
@@ -319,70 +319,96 @@ class _AddItemState extends ConsumerState<AddItem>
         child: SizedBox(
           height: 50,
           child: TypeAheadField<ItemModel>(
-            suggestionsBoxDecoration: SuggestionsBoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            autoFlipDirection: true,
-            minCharsForSuggestions: 2,
-            direction: AxisDirection.up,
-            hideSuggestionsOnKeyboardHide: true,
             textFieldConfiguration: TextFieldConfiguration(
-              focusNode: _itemNameFocusNode,
-              onChanged: (value) => setState(() {
-                _canSave = _itemNameController.text.trim().trim().isNotEmpty;
-              }),
-              controller: _itemNameController,
-              autofocus: true,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
+              controller: _textEditingController,
               decoration: InputDecoration(
-                //no borders,
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
-                fillColor: AppConstants.whiteOpacity,
-                filled: true,
-                hintText: 'title',
-                //alignLabelWithHint: true,
-
-                prefixIcon: Icon(
-                  Icons.shopping_basket,
-                  color: Color.fromARGB(117, 212, 211, 211),
-                ),
-                suffix: IconButton(
-                  icon: Icon(
-                    Icons.clear_outlined,
-                    size: 18,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _itemNameController.clear();
-                    });
-                  },
-                ),
-                // border: OutlineInputBorder(),
+                labelText: 'Type a fruit',
+                border: OutlineInputBorder(),
               ),
             ),
-            suggestionsCallback: (pattern) async {
-              return _kOptions
-                  .where((item) => item.itemName
-                      .toLowerCase()
-                      .startsWith(pattern.toLowerCase()))
-                  .toList(growable: true);
+            suggestionsCallback: (String pattern) {
+              return _kOptions.where((String option) =>
+                  option.toLowerCase().contains(pattern.toLowerCase()));
             },
-            itemBuilder: (context, suggestion) {
-              return SizedBox(
-                width: 300,
-                child: ItemTileWidget(
-                  item: suggestion,
+            itemBuilder: (BuildContext context, String option) {
+              return ListTile(
+                title: Text(option),
+              );
+            },
+            onSuggestionSelected: (String selection) {
+              print('You just selected $selection');
+            },
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              return _kOptions;
+              // .((ItemModel option) => option.itemName.trim());
+              //.contains(textEditingValue.text.trim()));
+            },
+            onSelected: (ItemModel selection) {
+              print('You just selected ${selection.itemName}');
+            },
+            fieldViewBuilder: (BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted) {
+              return TextField(
+                // controller: _itemNameController,
+                focusNode: focusNode,
+                onSubmitted: (String value) {
+                  onFieldSubmitted();
+                },
+                decoration: InputDecoration(
+                  labelText: 'type a product',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(
+                    Icons.shopping_basket,
+                    color: Color.fromARGB(117, 212, 211, 211),
+                  ),
+                  suffix: IconButton(
+                    icon: Icon(
+                      Icons.clear_outlined,
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _itemNameController.clear();
+                      });
+                    },
+                  ),
                 ),
               );
             },
-            onSuggestionSelected: (suggestion) {
-              _itemNameController.text = suggestion.itemName;
-              _itemPriceController.text = suggestion.itemPrice.toString();
-              _quantity = suggestion.quantity;
-              // _dateBought = suggestion.dateBought;
+            optionsViewBuilder: (BuildContext context,
+                AutocompleteOnSelected<ItemModel> onSelected,
+                Iterable<ItemModel> options) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4.0,
+                  child: Container(
+                    width: 200,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: options.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final ItemModel option = options.elementAt(index);
+                        return GestureDetector(
+                          onTap: () {
+                            onSelected(option);
+                            _itemNameController.text = option.itemName;
+                            _itemPriceController.text =
+                                option.itemPrice.toString();
+                            _quantity = option.quantity;
+                            // _dateBought = suggestion.dateBought;
+                          },
+                          child: ListTile(
+                            title: Text(option.itemName),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
             },
           ),
         ),
@@ -482,5 +508,84 @@ class _AddItemState extends ConsumerState<AddItem>
     //mBottomSheet(context, controller: _controller);
     clear();
     Navigator.of(context).pop();
+  }
+}
+
+class MyAutocomplete extends StatefulWidget {
+  @override
+  _MyAutocompleteState createState() => _MyAutocompleteState();
+}
+
+class _MyAutocompleteState extends State<MyAutocomplete> {
+  final List<String> suggestions = [
+    'Apple',
+    'Banana',
+    'Cherry',
+    'Date',
+    'Fig',
+    'Grape'
+  ];
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        return suggestions.where((String option) =>
+            option.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+      },
+      onSelected: (String selection) {
+        print('You just selected $selection');
+      },
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController textEditingController,
+          FocusNode focusNode,
+          VoidCallback onFieldSubmitted) {
+        return TextField(
+          controller: _textEditingController,
+          focusNode: focusNode,
+          onSubmitted: (String value) {
+            onFieldSubmitted();
+          },
+          decoration: InputDecoration(
+            labelText: 'Type a fruit',
+            border: OutlineInputBorder(),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: 200,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final String option = options.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: ListTile(
+                      title: Text(option),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

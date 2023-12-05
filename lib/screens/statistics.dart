@@ -8,7 +8,6 @@ import '../blocs/shopsbloc/shops_bloc.dart';
 import '../models/payment/payment_model.dart';
 import '../models/shop/shops_data.dart';
 import '../widgets/item_listtile.dart';
-import '../widgets/myappbar.dart';
 
 class StatisticsWidget extends StatefulWidget {
   const StatisticsWidget({Key? key, this.shopsData}) : super(key: key);
@@ -49,7 +48,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
         //floatingActionButton: MyExpandableFab(),
         //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         backgroundColor: Colors.transparent,
-        appBar: MyAppBar(
+        appBar: AppBar(
           title: Text(
             'Statistics ',
             style: Theme.of(context).textTheme.displayMedium,

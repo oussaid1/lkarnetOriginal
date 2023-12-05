@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lkarnet/models/statistics/tagged.dart';
 import 'package:lkarnet/widgets/charts.dart';
-import 'package:lkarnet/widgets/myappbar.dart';
 import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/itemsbloc/items_bloc.dart';
 import '../../blocs/payments/payments_bloc.dart';
@@ -29,7 +28,7 @@ class _StatsAllState extends State<StatsAll> {
     // var chartData = ref.watch(frequentItemsProvider.state).state;
     // var chartData2 = ref.watch(shopsChartsDataProvider.state).state;
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: AppBar(
         title: Text("All Statistics"),
       ),
       backgroundColor: Colors.transparent,

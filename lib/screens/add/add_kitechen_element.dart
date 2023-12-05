@@ -138,7 +138,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
                     child: Column(
                       children: [
                         _buildTitle(context),
-                        _buildKitchenItemName(),
+                        // _buildKitchenItemName(),
                         _buildElementName(context),
                         _buildPriority(context),
                         _buildDivider(),
@@ -302,84 +302,84 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     );
   }
 
-  Widget _buildKitchenItemName() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Form(
-        key: _formKeyCat,
-        child: SizedBox(
-          height: 50,
-          child: TypeAheadField<KitchenElementModel>(
-            noItemsFoundBuilder: (context) => Text('No Items Found'),
-            autoFlipDirection: true,
-            minCharsForSuggestions: 2,
-            direction: AxisDirection.up,
-            hideSuggestionsOnKeyboardHide: true,
-            textFieldConfiguration: TextFieldConfiguration(
-              onChanged: (x) => setState(() {
-                _canSave = true;
-              }),
-              controller: _elementCategoryController,
-              autofocus: true,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
-                fillColor: AppConstants.whiteOpacity,
-                filled: true,
-                hintText: 'title',
-                //alignLabelWithHint: true,
+  // Widget _buildKitchenItemName() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Form(
+  //       key: _formKeyCat,
+  //       child: SizedBox(
+  //         height: 50,
+  //         child: TypeAheadField<KitchenElementModel>(
+  //           // noItemsFoundBuilder: (context) => Text('No Items Found'),
+  //           autoFlipDirection: true,
+  //           // minCharsForSuggestions: 2,
+  //           direction: VerticalDirection.up,
+  //           // hideSuggestionsOnKeyboardHide: true,
+  //           decorationBuilder: TextFieldConfiguration(
+  //             onChanged: (x) => setState(() {
+  //               _canSave = true;
+  //             }),
+  //             controller: _elementCategoryController,
+  //             autofocus: true,
+  //             textAlign: TextAlign.center,
+  //             style: Theme.of(context).textTheme.bodyMedium,
+  //             decoration: InputDecoration(
+  //               contentPadding: EdgeInsets.only(top: 4, right: 4, left: 4),
+  //               fillColor: AppConstants.whiteOpacity,
+  //               filled: true,
+  //               hintText: 'title',
+  //               //alignLabelWithHint: true,
 
-                prefixIcon: Icon(
-                  Icons.category,
-                  color: Color.fromARGB(117, 212, 211, 211),
-                ),
-                suffix: IconButton(
-                  icon: Icon(
-                    Icons.clear_outlined,
-                    size: 18,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _elementCategoryController.clear();
-                    });
-                  },
-                ),
-                // border: OutlineInputBorder(),
-              ),
-            ),
-            suggestionsCallback: (pattern) {
-              return _kitchenElements
-                  .where((item) => item.title
-                      .toLowerCase()
-                      .startsWith(pattern.toLowerCase()))
-                  .toList(growable: true);
-            },
-            itemBuilder: (context, suggestion) {
-              return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppConstants.whiteOpacity,
-                  ),
-                  height: 40,
-                  width: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      suggestion.title,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ));
-            },
-            onSuggestionSelected: (suggestion) {
-              _elementCategoryController.text = suggestion.title;
-            },
-          ),
-        ),
-      ),
-    );
-  }
+  //               prefixIcon: Icon(
+  //                 Icons.category,
+  //                 color: Color.fromARGB(117, 212, 211, 211),
+  //               ),
+  //               suffix: IconButton(
+  //                 icon: Icon(
+  //                   Icons.clear_outlined,
+  //                   size: 18,
+  //                 ),
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _elementCategoryController.clear();
+  //                   });
+  //                 },
+  //               ),
+  //               // border: OutlineInputBorder(),
+  //             ),
+  //           ),
+  //           suggestionsCallback: (pattern) {
+  //             return _kitchenElements
+  //                 .where((item) => item.title
+  //                     .toLowerCase()
+  //                     .startsWith(pattern.toLowerCase()))
+  //                 .toList(growable: true);
+  //           },
+  //           itemBuilder: (context, suggestion) {
+  //             return Container(
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(20),
+  //                   color: AppConstants.whiteOpacity,
+  //                 ),
+  //                 height: 40,
+  //                 width: 100,
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.all(8.0),
+  //                   child: Text(
+  //                     suggestion.title,
+  //                     textAlign: TextAlign.center,
+  //                     style: Theme.of(context).textTheme.bodyLarge,
+  //                   ),
+  //                 ));
+  //           },
+  //           onSelected: (suggestion) {
+  //             _elementCategoryController.text = suggestion.title;
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// save the kitchen element to the database
   void _save(bloc) {

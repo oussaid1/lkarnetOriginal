@@ -17,16 +17,18 @@ class SettingsPage extends StatelessWidget {
     return BluredContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: MyAppBar(
-          title: Text(
-            'Settings',
-            style: Theme.of(context).textTheme.displayMedium,
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+        appBar: AppBar(
+          flexibleSpace: MyAppBar(
+            title: Text(
+              'Settings',
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ),
         ),
         body:

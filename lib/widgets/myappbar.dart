@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../const/constents.dart';
 
-class MyAppBar extends StatelessWidget with PreferredSizeWidget {
+class MyAppBar extends StatelessWidget {
   const MyAppBar({
     Key? key,
     this.title,
@@ -31,7 +31,4 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(40);
 }

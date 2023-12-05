@@ -146,8 +146,10 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     // floatingActionButton: MyExpandableFab(),
                     // floatingActionButtonLocation:
                     //     FloatingActionButtonLocation.endFloat,
-                    appBar: MyAppBar(
-                      title: Text('Shop Details'),
+                    appBar: AppBar(
+                      flexibleSpace: MyAppBar(
+                        title: Text('Shop Details'),
+                      ),
                     ),
 
                     // Next, create a SliverList
