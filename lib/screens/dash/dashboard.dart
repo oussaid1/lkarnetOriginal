@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lkarnet/components.dart';
 import 'package:lkarnet/models/operations_adapter.dart';
-import 'package:lkarnet/models/payment/payment_model.dart';
 import 'package:lkarnet/models/shop/shop_model.dart';
 import 'package:lkarnet/utils.dart';
 import 'package:lkarnet/widgets/dialogs.dart';
@@ -115,6 +114,7 @@ class _DashBoardPageState extends State<DashBoardPage>
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text(
           'Dashboard',
           style: Theme.of(context).textTheme.displaySmall,
@@ -298,11 +298,11 @@ class _DashBoardPageState extends State<DashBoardPage>
                                         PaymentsFiltered(
                                             payments: paymentsState.payments);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                    List<ItemModel> _items =
-                                        _filteredItems.itemsByDateFilter;
+                                    //  List<ItemModel> _items =
+                                    _filteredItems.itemsByDateFilter;
                                     //////////////////////////////////////////////////////
-                                    List<PaymentModel> _payments =
-                                        _filteredPayments.paymentsByDateFilter;
+                                    //  List<PaymentModel> _payments =
+                                    _filteredPayments.paymentsByDateFilter;
                                     List<ShopModel> _shops = shopsState.shops;
                                     //////////////////////////////////////////////////////
                                     var dataSink = DataSink(

@@ -96,8 +96,8 @@ class FirebaseAuthService {
         .set(user.toMap())
         .then((value) => _done = true)
         .catchError((error) {
-      _done = false;
       print("Failed to add user: $error");
+      return _done = false;
     });
     return _done;
   }

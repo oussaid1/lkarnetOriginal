@@ -32,7 +32,7 @@ class PriceNumberZone extends StatelessWidget {
           ),
           withDollarSign
               ? Consumer(builder: (context, ref, _) {
-                  final _currency = ref.watch(currencyProvider.state);
+                  final _currency = ref.watch(currencyProvider.notifier);
                   return Text(
                     _currency.state.toString(),
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(

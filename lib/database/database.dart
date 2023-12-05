@@ -57,8 +57,8 @@ class Database {
         .set(user.toMap(), _setOptions)
         .then((value) => _done = true)
         .catchError((error) {
-      _done = false;
       print("Failed to add user: $error");
+      return _done = false;
     });
     return _done;
   }
@@ -72,21 +72,16 @@ class Database {
         .set({'token': token}, _setOptions)
         .then((value) => _done = true)
         .catchError((error) {
-          _done = false;
           print("Failed to add token: $error");
+          return _done = false;
         });
     return _done;
   }
 
   Future<UserModel?> getUser() async {
     UserModel? _user;
-    await _users
-        .get()
-        .then((value) =>
-            _user = UserModel.fromDocumentSnapshot(documentSnapshot: value))
-        .catchError((error) {
-      print("Failed to get user: $error");
-    });
+    await _users.get().then((value) =>
+        _user = UserModel.fromDocumentSnapshot(documentSnapshot: value));
     return _user;
   }
 
@@ -99,8 +94,8 @@ class Database {
         .set(user.toMap(), _setOptions)
         .then((value) => _done = true)
         .catchError((error) {
-      _done = false;
       print("Failed to update user: $error");
+      return _done = false;
     });
     return _done;
   }

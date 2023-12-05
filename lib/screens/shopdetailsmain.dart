@@ -147,6 +147,7 @@ class _ShopDetailsState extends ConsumerState<ShopDetailsMain> {
                     // floatingActionButtonLocation:
                     //     FloatingActionButtonLocation.endFloat,
                     appBar: AppBar(
+                      backgroundColor: Colors.transparent,
                       flexibleSpace: MyAppBar(
                         title: Text('Shop Details'),
                       ),

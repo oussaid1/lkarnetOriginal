@@ -29,6 +29,7 @@ class _StatsAllState extends State<StatsAll> {
     // var chartData2 = ref.watch(shopsChartsDataProvider.state).state;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text("All Statistics"),
       ),
       backgroundColor: Colors.transparent,

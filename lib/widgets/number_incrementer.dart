@@ -8,12 +8,13 @@ import '../const/constents.dart';
 class NumberIncrementer extends StatefulWidget {
   final Function(double) onDecrement;
   final Function(double) onIncrement;
-  final double? initialValue;
+
+  final double? value;
   NumberIncrementer({
     Key? key,
     required this.onDecrement,
     required this.onIncrement,
-    this.initialValue,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -24,14 +25,14 @@ class _NumberIncrementerState extends State<NumberIncrementer> {
   double _quantity = 1;
   @override
   void dispose() {
-    _quantity = 1;
+    _quantity = widget.value ?? 1;
     super.dispose();
   }
 
   @override
   void initState() {
-    if (widget.initialValue != null) {
-      _quantity = widget.initialValue ?? 1;
+    if (widget.value != null) {
+      _quantity = widget.value ?? 1;
     }
     super.initState();
   }
@@ -65,7 +66,7 @@ class _NumberIncrementerState extends State<NumberIncrementer> {
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text(_quantity.toString()),
+                    child: Text(widget.value.toString()),
                   ),
                 ),
                 IconButton(

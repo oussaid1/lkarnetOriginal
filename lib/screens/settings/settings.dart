@@ -18,6 +18,7 @@ class SettingsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           flexibleSpace: MyAppBar(
             title: Text(
               'Settings',
