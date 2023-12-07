@@ -1,44 +1,35 @@
-// stateless numberIncrementer
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../const/constents.dart';
+import '../components.dart';
 
-@immutable
 class NumberIncrementer extends StatefulWidget {
   final Function(double) onDecrement;
   final Function(double) onIncrement;
+  final double initialValue;
 
-  final double? value;
   NumberIncrementer({
     Key? key,
     required this.onDecrement,
     required this.onIncrement,
-    this.value,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
-  State<NumberIncrementer> createState() => _NumberIncrementerState();
+  _NumberIncrementerState createState() => _NumberIncrementerState();
 }
 
 class _NumberIncrementerState extends State<NumberIncrementer> {
-  double _quantity = 1;
-  @override
-  void dispose() {
-    _quantity = widget.value ?? 1;
-    super.dispose();
-  }
+  late double _quantity;
 
   @override
   void initState() {
-    if (widget.value != null) {
-      _quantity = widget.value ?? 1;
-    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _quantity = widget.initialValue;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -51,34 +42,29 @@ class _NumberIncrementerState extends State<NumberIncrementer> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                    icon: Icon(
-                      CupertinoIcons.minus_circle,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (_quantity > 0.5) {
-                          _quantity -= 0.5;
-                          widget.onDecrement(_quantity);
-                        }
-                      });
-                    }),
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(widget.value.toString()),
-                  ),
+                  icon: Icon(CupertinoIcons.minus_circle),
+                  onPressed: () {
+                    setState(() {
+                      if (_quantity > 0.5) {
+                        _quantity -= 0.5;
+                        widget.onDecrement(_quantity);
+                      }
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(_quantity.toString()),
                 ),
                 IconButton(
-                    icon: Icon(
-                      CupertinoIcons.plus_circle,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _quantity += 0.5;
-                        widget.onIncrement(_quantity);
-                      });
-                    }),
+                  icon: Icon(CupertinoIcons.plus_circle),
+                  onPressed: () {
+                    setState(() {
+                      _quantity += 0.5;
+                      widget.onIncrement(_quantity);
+                    });
+                  },
+                ),
               ],
             ),
           ),

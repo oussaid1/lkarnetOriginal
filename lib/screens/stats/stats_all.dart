@@ -90,7 +90,7 @@ class _StatsAllState extends State<StatsAll> {
                             const SizedBox(width: 12),
                             BluredContainer(
                               margin: EdgeInsets.all(8),
-                              width: 400,
+                              width: MediaQuery.of(context).size.width,
                               height: 220,
                               child: ColumnChartWidget(
                                 chartData: _dataByShops,
@@ -110,7 +110,7 @@ class _StatsAllState extends State<StatsAll> {
                             ),
                             BluredContainer(
                                 margin: EdgeInsets.all(8),
-                                width: 410,
+                                width: MediaQuery.of(context).size.width,
                                 height: 300,
                                 child: PeiWidget(
                                   chartData: _itemsData.itemsByNameChartData,

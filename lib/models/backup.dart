@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:excel/excel.dart';
-
 import '../components.dart';
 import 'shop/shops_data.dart';
 
@@ -113,33 +112,33 @@ class Backup {
     for (var shopData in shopsDataList) {
       Sheet sheetObject = excel['${shopData.shop.shopName}'];
       ////////////////////////////////////////
-      // var cell1 = sheetObject.cell(CellIndex.indexByString("A1"));
-      // cell1.value = 'ItemName';
-      // cell1.cellStyle = cellStyleItemName;
-      // /////////////////////////////////////////// ////////////////////////////////////////
-      // var cell2 = sheetObject.cell(CellIndex.indexByString("B1"));
-      // cell2.value = 'Date';
-      // cell2.cellStyle = cellStyleDate;
-      // /////////////////////////////////////////// ////////////////////////////////////////
-      // var cell3 = sheetObject.cell(CellIndex.indexByString("C1"));
-      // cell3.value = 'Quantity';
-      // cell3.cellStyle = cellStyleQuantity;
-      // /////////////////////////////////////////// ////////////////////////////////////////
-      // var cell4 = sheetObject.cell(CellIndex.indexByString("D1"));
-      // cell4.value = 'Price';
-      // cell4.cellStyle = cellStylePrice;
-      // ////////////////////////////////////////////////////////////
-      // var cell5 = sheetObject.cell(CellIndex.indexByString("E1"));
-      // cell5.value = 'TotalPrice';
-      // cell5.cellStyle = cellStyleTotalPrice;
-      // ////////////////////////////////////////
-      // var cellx1 = sheetObject.cell(CellIndex.indexByString("G1"));
-      // cellx1.value = 'Payment Date';
-      // cellx1.cellStyle = cellStyleTotalPrice;
-      // ///////////////////////////////////////////////
-      // var cellx2 = sheetObject.cell(CellIndex.indexByString("I1"));
-      // cellx2.value = 'Paid Amount';
-      // cellx2.cellStyle = cellStyleTotalPrice;
+      var cell1 = sheetObject.cell(CellIndex.indexByString("A1"));
+      cell1.value = 'ItemName' as CellValue;
+      cell1.cellStyle = cellStyleItemName;
+      /////////////////////////////////////////// ////////////////////////////////////////
+      var cell2 = sheetObject.cell(CellIndex.indexByString("B1"));
+      cell2.value = 'Date' as CellValue;
+      cell2.cellStyle = cellStyleDate;
+      /////////////////////////////////////////// ////////////////////////////////////////
+      var cell3 = sheetObject.cell(CellIndex.indexByString("C1"));
+      cell3.value = 'Quantity' as CellValue;
+      cell3.cellStyle = cellStyleQuantity;
+      /////////////////////////////////////////// ////////////////////////////////////////
+      var cell4 = sheetObject.cell(CellIndex.indexByString("D1"));
+      cell4.value = 'Price' as CellValue;
+      cell4.cellStyle = cellStylePrice;
+      ////////////////////////////////////////////////////////////
+      var cell5 = sheetObject.cell(CellIndex.indexByString("E1"));
+      cell5.value = 'TotalPrice' as CellValue;
+      cell5.cellStyle = cellStyleTotalPrice;
+      ////////////////////////////////////////
+      var cellx1 = sheetObject.cell(CellIndex.indexByString("G1"));
+      cellx1.value = 'Payment Date' as CellValue;
+      cellx1.cellStyle = cellStyleTotalPrice;
+      ///////////////////////////////////////////////
+      var cellx2 = sheetObject.cell(CellIndex.indexByString("I1"));
+      cellx2.value = 'Paid Amount' as CellValue;
+      cellx2.cellStyle = cellStyleTotalPrice;
       ///////////////////////////////////////////
       // var cellx3 = sheetObject.cell(CellIndex.indexByString("G1"));
       // cellx3.value = 'TotalPrice';
@@ -148,32 +147,32 @@ class Backup {
       // or Underline.Double
       ////////////////////////////// Payments ///////////////////////////////
       for (int i = 0; i < shopData.payments.length; i++) {
-        // var cell1 = sheetObject.cell(CellIndex.indexByString("G${i + 2}"));
-        // cell1.value = shopData
-        //     .payments[i].formattedDate; // dynamic values support provided;
-        // ////////////////////////////////////////
-        // var cell2 = sheetObject.cell(CellIndex.indexByString("I${i + 2}"));
-        // cell2.value = shopData.payments[i].paidAmount;
+        var cell1 = sheetObject.cell(CellIndex.indexByString("G${i + 2}"));
+        cell1.value = shopData.payments[i].formattedDate
+            as CellValue; // dynamic values support provided;
+        ////////////////////////////////////////
+        var cell2 = sheetObject.cell(CellIndex.indexByString("I${i + 2}"));
+        cell2.value = shopData.payments[i].paidAmount as CellValue;
         ////////////////////////////////////////
       }
       /////////////////////////// Items /////////////////////////
       for (int i = 0; i < shopData.items.length; i++) {
         var cell1 = sheetObject.cell(CellIndex.indexByString("A${i + 2}"));
-        // cell1.value =
-        //     shopData.items[i].itemName; // dynamic values support provided;
-        // ////////////////////////////////////////
-        // var cell2 = sheetObject.cell(CellIndex.indexByString("B${i + 2}"));
-        // cell2.value = shopData.items[i].formattedDate;
-        // ////////////////////////////////////////
-        // var cell3 = sheetObject.cell(CellIndex.indexByString("C${i + 2}"));
-        // cell3.value = shopData.items[i].quantity;
-        // //////////////////
-        // var cell4 = sheetObject.cell(CellIndex.indexByString("D${i + 2}"));
-        // cell4.value = shopData.items[i].itemPrice;
-        // //////////////////
-        // var cell5 = sheetObject.cell(CellIndex.indexByString("E${i + 2}"));
-        // cell5.value = shopData.items[i].itemPrix;
-        // cell5.cellStyle = cellStyle;
+        cell1.value = shopData.items[i].itemName
+            as CellValue; // dynamic values support provided;
+        ////////////////////////////////////////
+        var cell2 = sheetObject.cell(CellIndex.indexByString("B${i + 2}"));
+        cell2.value = shopData.items[i].formattedDate as CellValue; //
+        ////////////////////////////////////////
+        var cell3 = sheetObject.cell(CellIndex.indexByString("C${i + 2}"));
+        cell3.value = shopData.items[i].quantity as CellValue;
+        //////////////////
+        var cell4 = sheetObject.cell(CellIndex.indexByString("D${i + 2}"));
+        cell4.value = shopData.items[i].itemPrice as CellValue;
+        //////////////////
+        var cell5 = sheetObject.cell(CellIndex.indexByString("E${i + 2}"));
+        cell5.value = shopData.items[i].itemPrix as CellValue;
+        cell5.cellStyle = cellStyle;
 
         // cell.cellStyle = cellStyle;
         // if (i > 10) break;

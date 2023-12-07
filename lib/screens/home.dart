@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lkarnet/blocs/payments/payments_bloc.dart';
@@ -16,7 +13,6 @@ import '../blocs/shopsbloc/shops_bloc.dart';
 import '../cubits/userCubit/usermodel_cubit.dart';
 import '../models/item/items_filtered.dart';
 import '../repository/database_operations.dart';
-import 'kitchen_stock.dart';
 import 'shopdetailsmain.dart';
 import 'stats/stats_all.dart';
 import 'package:flutter/material.dart';
@@ -81,55 +77,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   final PageController _pageController = PageController();
   @override
   void initState() {
-    // _notificationsPermition(context);
-    // Workmanager().initialize(
-    //     callbackDispatcher, // The top level function, aka callbackDispatcher
-    //     isInDebugMode:
-    //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-    //     );
-    // _getToken();
     super.initState();
-  }
-
-// get device token and insert it in firebase
-  Future<String?> getToken() async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    if (fcmToken != null) {
-      log("FCM Token: $fcmToken");
-      // ref.read(databaseProvider).insertToken(fcmToken);
-      log("token inserted $fcmToken");
-      return fcmToken;
-    } else {
-      log("FCM Token: null");
-      return null;
-    }
-  }
-
-  void notificationsPermition(BuildContext context) async {
-    // AwesomeNotifications().createdStream.listen((notification) {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     backgroundColor: Colors.teal,
-    //     content: Text(
-    //       'Notification Created on ${notification.channelKey}',
-    //     ),
-    //   ));
-    // });
-
-    // AwesomeNotifications().actionStream.listen((notification) {
-    //   Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (_) => KitchenStockHomeView(),
-    //     ),
-    //     (route) => route.isFirst,
-    //   );
-    // });
   }
 
   @override
   void dispose() {
-    //AwesomeNotifications().actionSink.close();
-    //AwesomeNotifications().createdSink.close();
     super.dispose();
   }
 
@@ -200,7 +152,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               ShopDetailsMain(),
               // ListTab(),
               //ShopsList(),
-              KitchenStockHomeView(),
+              //   KitchenStockHomeView(),
               StatsAll(),
               SettingsPage(),
             ],
@@ -234,11 +186,11 @@ class _HomeWidgetState extends State<HomeWidget> {
           label: 'Dashboard',
           backgroundColor: Color.fromARGB(144, 224, 126, 101),
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.kitchen),
-          label: 'Kitchen',
-          backgroundColor: Color.fromARGB(136, 224, 101, 121),
-        ),
+        // BottomNavigationBarItem(
+        //   icon: const Icon(Icons.kitchen),
+        //   label: 'Kitchen',
+        //   backgroundColor: Color.fromARGB(136, 224, 101, 121),
+        // ),
         const BottomNavigationBarItem(
           icon: const Icon(Icons.add_chart),
           label: 'Stats',

@@ -257,7 +257,7 @@ class _AddItemState extends ConsumerState<AddItem>
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         NumberIncrementer(
-          value: widget.item?.quantity ?? _quantity,
+          initialValue: widget.item?.quantity ?? _quantity,
           onDecrement: (value) {
             setState(() {
               _quantity = value;
@@ -306,6 +306,8 @@ class _AddItemState extends ConsumerState<AddItem>
         onShopSelected: (value) {
           setState(() {
             _shop = value!.shopName ?? '';
+
+            _canSave = _itemNameController.text.trim().trim().isNotEmpty;
           });
         },
       ),
@@ -327,6 +329,7 @@ class _AddItemState extends ConsumerState<AddItem>
             hideOnEmpty: true,
             controller: _itemNameController,
             autoFlipDirection: true,
+            autoFlipMinHeight: 100,
 
             direction: VerticalDirection.up,
             focusNode: _itemNameFocusNode,
@@ -379,20 +382,22 @@ class _AddItemState extends ConsumerState<AddItem>
               }
               return [];
             },
+
             itemBuilder: (context, suggestion) {
               return SizedBox(
-                width: 300,
+                width: 200,
+                //height: 200,
                 child: ItemTileWidget(
                   item: suggestion,
                 ),
               );
             },
             onSelected: (suggestion) {
-              _itemNameController.text = suggestion.itemName;
-              _itemPriceController.text = suggestion.itemPrice.toString();
-
               setState(() {
+                _itemNameController.text = suggestion.itemName;
+                _itemPriceController.text = suggestion.itemPrice.toString();
                 _quantity = suggestion.quantity;
+                _canSave = _itemNameController.text.trim().trim().isNotEmpty;
               });
               // _dateBought = suggestion.dateBought;
             },

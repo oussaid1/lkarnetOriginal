@@ -53,7 +53,6 @@ class _ShopDetailsState extends State<ShopDetails> {
   }
 
 // build custom listTile
-
 }
 
 class ShopsDetailsBody extends StatelessWidget {
@@ -99,6 +98,17 @@ class ShopsDetailsBody extends StatelessWidget {
                     ),
 
                     /// an iconbutton to edit the shop
+                    // IconButton(
+                    //   icon: Icon(Icons.bar_chart),
+                    //   onPressed: () => Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => ShopDetailsTab(
+                    //         shopData: shopsData,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {

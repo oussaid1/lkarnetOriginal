@@ -18,7 +18,7 @@ class ShopSquareTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: BluredContainer(
-        height: 100,
+        height: 140,
         width: 160,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,7 +28,7 @@ class ShopSquareTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 18.0),
                   child: Text(
                     '${shopData.shop.shopName}',
                     textAlign: TextAlign.center,
@@ -48,7 +48,7 @@ class ShopSquareTile extends StatelessWidget {
             //const SizedBox(height: 8),
             AnimatedContainer(
               duration: const Duration(milliseconds: 500),
-              height: 40,
+              height: 50,
               width: 158,
               decoration: BoxDecoration(
                   color: Color.fromARGB(59, 255, 255, 255),
@@ -56,31 +56,27 @@ class ShopSquareTile extends StatelessWidget {
                     bottomLeft: Radius.circular(6),
                     bottomRight: Radius.circular(6),
                   )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      'limit',
-                      style: Theme.of(context).textTheme.titleSmall,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text: '${shopData.shop.dailyLimit}',
+                        style: Theme.of(context).textTheme.titleSmall,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '/',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          TextSpan(text: '${shopData.shop.limit}'),
+                        ],
+                      ),
                     ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      text: '${shopData.shop.dailyLimit}',
-                      style: Theme.of(context).textTheme.titleSmall,
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: '/',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        TextSpan(text: '${shopData.shop.limit}'),
-                      ],
-                    ),
-                  ),
-                  Icon(Icons.play_arrow_rounded, color: Colors.green),
-                ],
+                    Icon(Icons.play_arrow_rounded, color: Colors.green),
+                  ],
+                ),
               ),
             ),
           ],

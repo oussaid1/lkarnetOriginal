@@ -75,7 +75,7 @@ class _ShopDropDownState extends State<ShopDropDown> {
           ),
           margin: EdgeInsets.all(8),
           height: 45,
-          width: 200,
+          width: 300,
           child: ButtonTheme(
             // focusColor: Colors.red,
             //highlightColor: Colors.red,

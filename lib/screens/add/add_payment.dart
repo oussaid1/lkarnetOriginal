@@ -111,8 +111,10 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
         ),
         body: SingleChildScrollView(
           child: BluredContainer(
-            width: 400,
-            height: 400,
+            height: 460, // MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.all(20),
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -187,7 +189,7 @@ class _AddPaymentState extends ConsumerState<AddPayment> {
 
   _buildAmountPaid() {
     return SizedBox(
-      width: 215,
+      width: 300,
       child: Form(
         key: _formKeyPaidAmount,
         child: Padding(

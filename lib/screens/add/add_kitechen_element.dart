@@ -53,6 +53,7 @@ class _AddItemState extends ConsumerState<AddKitchenElement> {
     super.dispose();
   }
 
+  // ignore: unused_field
   List<KitchenElementModel> _kitchenElements = [];
   double _priorityRating = 1;
   double _availability = 1;

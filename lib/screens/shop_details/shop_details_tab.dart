@@ -40,19 +40,26 @@ class ShopDetailsTab extends StatelessWidget {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              elevation: 0,
-              leading: Container(),
+              elevation: 8,
+              title: Text(
+                'Dashboard',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              //leading: Container(),
               backgroundColor: Colors.transparent,
-              flexibleSpace: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TabBar(
-                    unselectedLabelColor: Theme.of(context).dividerColor,
-                    tabs: [
-                      Tab(text: 'Items & Payments'),
-                      Tab(text: 'Stats'),
-                    ],
-                  ),
+              bottom: TabBar(
+                unselectedLabelColor: Theme.of(context).dividerColor,
+                tabs: [
+                  Tab(
+                      child: Text(
+                    'Items & Payments',
+                    style: Theme.of(context).textTheme.displaySmall,
+                  )),
+                  Tab(
+                      child: Text(
+                    'Stats',
+                    style: Theme.of(context).textTheme.displaySmall,
+                  )),
                 ],
               ),
             ),

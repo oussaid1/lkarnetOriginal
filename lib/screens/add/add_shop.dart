@@ -117,26 +117,25 @@ class _AddShopState extends ConsumerState<AddShop> {
           ),
         ),
         body: SingleChildScrollView(
-          child: SizedBox(
-            width: 400,
-            height: 460,
-            child: BluredContainer(
-              child: Form(
-                key: _formKeyShop,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      buildShopName(),
-                      buildEmail(),
-                      buildPhoneNumber(),
-                      buildCategory(),
-                      buildLimit(),
-                      SizedBox(height: 50),
-                      buildSaveButton(context)
-                    ],
-                  ),
+          child: BluredContainer(
+            margin: EdgeInsets.only(top: 20),
+            height: 460, // MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Form(
+              key: _formKeyShop,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    buildShopName(),
+                    buildEmail(),
+                    buildPhoneNumber(),
+                    buildCategory(),
+                    buildLimit(),
+                    SizedBox(height: 50),
+                    buildSaveButton(context)
+                  ],
                 ),
               ),
             ),
@@ -232,6 +231,7 @@ class _AddShopState extends ConsumerState<AddShop> {
       child: TextFormField(
         controller: _shopBesoinController,
         maxLength: 10,
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
           counterText: '',
           hintText: 'category',
@@ -262,6 +262,7 @@ class _AddShopState extends ConsumerState<AddShop> {
           // }
           return null;
         },
+        textAlign: TextAlign.center,
         maxLength: 10,
         decoration: InputDecoration(
           counterText: '',
@@ -294,6 +295,7 @@ class _AddShopState extends ConsumerState<AddShop> {
           return null;
         },
         maxLength: 50,
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
           counterText: '',
           hintText: 'email',
