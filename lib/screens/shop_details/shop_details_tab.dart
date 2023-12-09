@@ -42,7 +42,7 @@ class ShopDetailsTab extends StatelessWidget {
             appBar: AppBar(
               elevation: 8,
               title: Text(
-                'Dashboard',
+                '',
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               //leading: Container(),

@@ -111,6 +111,20 @@ class ItemsData {
     return _list;
   }
 
+  //// get chartData for each item name Daily
+  List<ItemsChartData> get itemsByNameDailyChartData {
+    var _list = <ItemsChartData>[];
+    for (var element in distinctDays) {}
+    for (var it in distinctItemNames) {
+      _list.add(ItemsChartData(
+          tag: it,
+          items: items
+              .where((element) => element.itemName.trim() == it.trim())
+              .toList()));
+    }
+    return _list;
+  }
+
 ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////
   /// get this most recent items bought

@@ -108,8 +108,8 @@ class LineChartWidgetDate extends StatelessWidget {
   Widget build(BuildContext context) {
     chartData.sort((b, a) => a.date.compareTo(b.date));
     return SfCartesianChart(
-      title: ChartTitle(
-          text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
+      //  title: ChartTitle(
+      //    text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
       margin: EdgeInsets.zero,
       legend: Legend(
         isVisible: true,
@@ -125,7 +125,9 @@ class LineChartWidgetDate extends StatelessWidget {
       series: <ChartSeries>[
         SplineSeries<ItemsChartData, DateTime>(
           // sortingOrder: SortingOrder.ascending,
-          legendItemText: 'Item Price',
+          //legendItemText: 'Item Price',
+          name: 'Items Price',
+          // legendIconType: LegendIconType.seriesType,
           dataSource: chartData,
           xValueMapper: (ItemsChartData data, _) => data.date,
           yValueMapper: (ItemsChartData data, _) =>
@@ -137,6 +139,7 @@ class LineChartWidgetDate extends StatelessWidget {
           enableTooltip: true,
           // name: 'Home',
           dataLabelSettings: DataLabelSettings(
+              textStyle: Theme.of(context).textTheme.bodySmall,
               isVisible: false,
               labelPosition: ChartDataLabelPosition.inside,
               // Renders background rectangle and fills it with series color
