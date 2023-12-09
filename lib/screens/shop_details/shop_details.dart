@@ -154,7 +154,7 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
       children: [
         ExpansionPanelList(
             elevation: 0,
@@ -167,7 +167,7 @@ class _ShopItemsDetailsWidgetState extends State<ShopItemsDetailsWidget> {
             children: [
               ExpansionPanel(
                 isExpanded: _isExpanded,
-                canTapOnHeader: true,
+                canTapOnHeader: false,
                 backgroundColor: AppConstants.whiteOpacity,
                 headerBuilder: (context, isExpanded) {
                   return ListTile(

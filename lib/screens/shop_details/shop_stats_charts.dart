@@ -72,7 +72,7 @@ class PeiWidget extends StatelessWidget {
           text: title ?? '', textStyle: Theme.of(context).textTheme.bodySmall),
       series: <CircularSeries>[
         PieSeries<ItemsChartData, String>(
-          radius: '70%',
+          radius: '90%',
           dataSource: chartData.limit(10),
           xValueMapper: (ItemsChartData data, _) => data.tag,
           yValueMapper: (ItemsChartData data, _) =>
