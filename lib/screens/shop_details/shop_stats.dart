@@ -16,7 +16,7 @@ class _ShopStatsPageState extends State<ShopStatsPage> {
   /////////////////
   ShopData? _shopData;
   /////////////////
-  int _filter = 0;
+  //int _filter = 0;
   List<ItemsChartData<dynamic>> _chartData = [];
   @override
   void initState() {

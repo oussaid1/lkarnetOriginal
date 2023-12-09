@@ -114,7 +114,9 @@ class ItemsData {
   //// get chartData for each item name Daily
   List<ItemsChartData> get itemsByNameDailyChartData {
     var _list = <ItemsChartData>[];
-    for (var element in distinctDays) {}
+    for (var element in distinctDays) {
+      element;
+    }
     for (var it in distinctItemNames) {
       _list.add(ItemsChartData(
           tag: it,

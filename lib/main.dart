@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -13,11 +14,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseFirestore.instance.settings = const Settings();
-  // await FirebaseAppCheck.instance
-  //     // Your personal reCaptcha public key goes here:
-  //     .activate(
-  //         // webRecaptchaSiteKey: '6D035D8A-1A94-4DBD-927D-9A21F4C36730',
-  //         );
+  await FirebaseAppCheck.instance
+      // Your personal reCaptcha public key goes here:
+      .activate(
+          // webRecaptchaSiteKey: '6D035D8A-1A94-4DBD-927D-9A21F4C36730',
+          );
 
   /// register Database singleton
   GetIt.I.registerSingleton<Database>(Database(uid: null));
