@@ -13,6 +13,9 @@ class ShopModel {
   double get dailyLimit =>
       ((limit ?? 1) / (DateTime.now().daysInMonth)).toPrecision(2);
 
+  ///
+  double get limitReached => limit! / dailyLimit;
+
   ShopModel.forMap(
       {this.id,
       this.count = 1,

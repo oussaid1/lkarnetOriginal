@@ -67,13 +67,12 @@ class _DashBoardPageState extends State<DashBoardPage>
             onPressed: () {},
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: GlassContainer(
-            start: 0,
-            end: 0,
-            //borderColorOpacity: 0,
-            child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GlassContainer(
+              start: 0,
+              end: 0,
               child: MultiBlocListener(
                 listeners: [
                   BlocListener<ItemsBloc, ItemsState>(
@@ -168,7 +167,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                                   PaymentsFiltered _filteredPayments =
                                       PaymentsFiltered(
                                           payments: paymentsState.payments);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                   //  List<ItemModel> _items =
                                   _filteredItems.itemsByDateFilter;
                                   //////////////////////////////////////////////////////
@@ -192,6 +191,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                                   ///////////////////////////////////////////////////////
                                   ///////////////////////////////////////////////////////
                                   return Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       SizedBox(height: 8),
                                       buildTopWidget(_shopDataCalculations,

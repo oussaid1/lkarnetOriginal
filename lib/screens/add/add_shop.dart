@@ -118,7 +118,7 @@ class _AddShopState extends ConsumerState<AddShop> {
         ),
         body: SingleChildScrollView(
           child: BluredContainer(
-            margin: EdgeInsets.only(top: 20),
+            margin: EdgeInsets.all(20),
             height: 460, // MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Form(

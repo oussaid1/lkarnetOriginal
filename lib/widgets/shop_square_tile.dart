@@ -13,8 +13,15 @@ class ShopSquareTile extends StatelessWidget {
   final VoidCallback? onTap;
   final ShopData shopData;
 
+  Color calculateProgressColor(double progress) {
+    // Example: Interpolating between red (0.0) and green (1.0) based on progress
+    return Color.lerp(Colors.red, Colors.green, progress) ?? Colors.red;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Color progressColor = calculateProgressColor(1);
+
     return GestureDetector(
       onTap: onTap,
       child: BluredContainer(
@@ -51,11 +58,12 @@ class ShopSquareTile extends StatelessWidget {
               height: 50,
               width: 158,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(59, 255, 255, 255),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(6),
-                    bottomRight: Radius.circular(6),
-                  )),
+                // color: progressColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(6),
+                  bottomRight: Radius.circular(6),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: Row(
@@ -64,17 +72,19 @@ class ShopSquareTile extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                         text: '${shopData.shop.dailyLimit}',
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context).textTheme.bodyLarge,
                         children: <TextSpan>[
                           TextSpan(
-                            text: '/',
+                            text: ' => ',
+                          ),
+                          TextSpan(
+                            text: '${shopData.shop.limit}',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
-                          TextSpan(text: '${shopData.shop.limit}'),
                         ],
                       ),
                     ),
-                    Icon(Icons.play_arrow_rounded, color: Colors.green),
+                    Icon(Icons.arrow_circle_up_sharp, color: Colors.green),
                   ],
                 ),
               ),
