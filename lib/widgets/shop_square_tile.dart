@@ -20,7 +20,7 @@ class ShopSquareTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color progressColor = calculateProgressColor(1);
+    calculateProgressColor(1);
 
     return GestureDetector(
       onTap: onTap,

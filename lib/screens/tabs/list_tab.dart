@@ -23,9 +23,9 @@ class ListTab extends ConsumerWidget {
               IconButton(icon: Icon(Icons.search), onPressed: () {}),
             ],
             bottom: TabBar(
-              overlayColor: MaterialStateColor.resolveWith(
-                  (Set<MaterialState> states) =>
-                      states.contains(MaterialState.selected)
+              overlayColor: WidgetStateColor.resolveWith(
+                  (Set<WidgetState> states) =>
+                      states.contains(WidgetState.selected)
                           ? Colors.white
                           : Colors.transparent),
               indicatorColor: Colors.white,

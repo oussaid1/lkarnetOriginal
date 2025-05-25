@@ -31,9 +31,7 @@ class MThemeData {
     primaryContainer: primaryVarient,
     secondary: secondaryColor,
     secondaryContainer: secondaryColor,
-    background: almostWhiteColor,
     surface: white,
-    onBackground: black,
     error: errorColor,
     onError: white,
     onPrimary: almostWhiteColor,
@@ -48,9 +46,7 @@ class MThemeData {
     primaryContainer: primaryVarientDark,
     secondary: secondaryColorDark,
     secondaryContainer: secondaryColor,
-    background: black,
     surface: almostBlackColorDark,
-    onBackground: white,
     error: errorColor,
     onError: white,
     onPrimary: white,
@@ -63,7 +59,8 @@ class MThemeData {
   static final ButtonStyle raisedButtonStyleCancel = ElevatedButton.styleFrom(
     textStyle: _textTheme.labelLarge!, backgroundColor: Colors.transparent,
     // backgroundColor: Colors.transparent,
-    disabledForegroundColor: primaryColor.withOpacity(0.38), disabledBackgroundColor: primaryColor.withOpacity(0.12),
+    disabledForegroundColor: primaryColor.withOpacity(0.38),
+    disabledBackgroundColor: primaryColor.withOpacity(0.12),
     // minimumSize: const Size(100, 50),
     animationDuration: const Duration(milliseconds: 200),
     shadowColor: primaryColor,
@@ -78,7 +75,8 @@ class MThemeData {
   );
   static final ButtonStyle raisedButtonStyleSave = ElevatedButton.styleFrom(
     textStyle: _textTheme.labelLarge,
-    disabledForegroundColor: primaryColor.withOpacity(0.38), disabledBackgroundColor: primaryColor.withOpacity(0.12),
+    disabledForegroundColor: primaryColor.withOpacity(0.38),
+    disabledBackgroundColor: primaryColor.withOpacity(0.12),
     animationDuration: const Duration(milliseconds: 200),
     shadowColor: primaryColor,
     enableFeedback: true,
@@ -125,7 +123,6 @@ class MThemeData {
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
-      dialogBackgroundColor: colorScheme.secondary,
       typography: Typography(),
       // elevatedButtonTheme: ElevatedButtonThemeData(
       //   style: ElevatedButton.styleFrom(
@@ -150,7 +147,7 @@ class MThemeData {
 
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: colorScheme.secondary,
-        foregroundColor: colorScheme.onBackground,
+        foregroundColor: colorScheme.onSurface,
         elevation: 0,
         shape: const CircleBorder(),
       ),
@@ -167,7 +164,7 @@ class MThemeData {
       // ),
       textTheme: _textTheme,
       // Matches manifest.json colors and background color.
-      primaryColor: colorScheme.background,
+      primaryColor: colorScheme.surface,
       // appBarTheme: AppBarTheme(
       //   //toolbarHeight: 80,
       //   // titleTextStyle: _textTheme.headline6!.copyWith(
@@ -185,15 +182,12 @@ class MThemeData {
       // ),
       // tabBarTheme: TabBarTheme(labelColor: ),
       iconTheme: IconThemeData(color: colorScheme.surface),
-      canvasColor: colorScheme.background,
-      scaffoldBackgroundColor: colorScheme.background,
+      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: colorScheme.surface,
       highlightColor: Colors.transparent,
       focusColor: focusColor,
       cardColor: colorScheme.surface,
-      cardTheme: CardTheme(
-        elevation: 0,
-        color: colorScheme.surface,
-      ),
+
       //iconTheme: IconThemeData(color: Color.fromARGB(255, 27, 27, 27)),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
@@ -214,7 +208,9 @@ class MThemeData {
         waitDuration: const Duration(milliseconds: 100),
         showDuration: const Duration(milliseconds: 50),
         preferBelow: true,
-      ), colorScheme: colorScheme.copyWith(background: colorScheme.background),
+      ),
+      colorScheme: colorScheme.copyWith(surface: colorScheme.surface),
+      dialogTheme: DialogThemeData(backgroundColor: colorScheme.secondary),
     );
   }
 
